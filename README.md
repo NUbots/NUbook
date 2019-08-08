@@ -1,15 +1,14 @@
-# Gatsby Starter MDX Basic
+# NUbook
 
-View this starter [live on Netlify](https://gatsby-starter-mdx-basic.netlify.com/)
+Documentation coming soon. Meanwhile:
 
-This starter build MDX support into the
-[gatsby-default-starter](https://github.com/gatsbyjs/gatsby-starter-default). Its
-README also applies here.
+## Developing
 
-1. Create a new Gatsby site using this starter
+1. Clone repo and `cd` into the cloned directory
 
 ```sh
-gatsby new my-site https://github.com/ChristopherBiscardi/gatsby-starter-mdx-basic
+git clone https://github.com/NUbots/NUbook.git
+cd NUbook
 ```
 
 2. Install dependencies
@@ -18,10 +17,10 @@ gatsby new my-site https://github.com/ChristopherBiscardi/gatsby-starter-mdx-bas
 yarn
 ```
 
-3. Run the develop script
+3. Run the Gatsby development server
 
 ```sh
-yarn develop
+yarn dev
 ```
 
-4. Edit Page 2 in `src/pages/page-2.mdx`
+4. In a browser, go to [localhost:8080](http://localhost:8080)
