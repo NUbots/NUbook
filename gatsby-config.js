@@ -2,10 +2,9 @@ const path = require('path')
 
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Starter MDX Basic',
-    description:
-      'Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.',
-    author: '@chrisbiscardi',
+    title: 'NUbook',
+    description: 'NUbots team documentation.',
+    author: '@nubots',
   },
   plugins: [
     {
@@ -14,6 +13,7 @@ module.exports = {
         defaultLayouts: { default: path.resolve('./src/components/layout.js') },
       },
     },
+    `gatsby-plugin-postcss`,
     'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-source-filesystem`,
@@ -34,15 +34,23 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: 'gatsby-default-mdx-basic',
-        short_name: 'starter',
+        name: 'NUbook',
+        short_name: 'nubook',
         start_url: '/',
-        background_color: '#663399',
-        theme_color: '#663399',
+        background_color: '#24292E',
+        theme_color: '#F9A50D',
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png', // This path is relative to the root of the site.
+        icon: 'src/images/nubots-icon.png', // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: "gatsby-plugin-react-svg",
+      options: {
+        rule: {
+          include: /\.svg$/,
+        }
+      }
+    }
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',
