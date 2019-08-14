@@ -17,8 +17,6 @@ const MDXComponents = {
 }
 
 const Layout = ({ children, pageContext }) => {
-  console.log(pageContext);
-
   return <>
     <SEO title={pageContext.frontmatter.title} keywords={['nubots', 'team', 'handbook', 'help', 'documentation']} />
     <Header />
