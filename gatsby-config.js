@@ -1,29 +1,10 @@
-const path = require('path')
-
 module.exports = {
   siteMetadata: {
     title: 'NUbook',
-    description: 'NUbots team documentation.',
+    description: 'The NUbots team handbook.',
     author: '@nubots',
   },
   plugins: [
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
-    {
-      resolve: 'gatsby-plugin-mdx',
-      options: {
-        defaultLayouts: { default: path.resolve('./src/components/layout/layout.jsx') },
-        gatsbyRemarkPlugins: [
-          {
-            resolve: 'gatsby-remark-images',
-            options: {
-              maxWidth: 800,
-              sizeByPixelDensity: true,
-            },
-          },
-        ],
-      },
-    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -38,8 +19,34 @@ module.exports = {
         path: `${__dirname}/src/pages`,
       }
     },
-    'gatsby-plugin-postcss',
+    // Exposes helper functions for processing images with the
+    // `sharp` package from npm. Used by other plugins.
+    'gatsby-plugin-sharp',
+    // Identifies file nodes that are images and transforms them
+    // to create new `ImageSharp` nodes. Those nodes can then
+    // be resized and transformed using queries.
+    'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-plugin-mdx',
+      options: {
+        extensions: [`.mdx`, `.md`],
+        defaultLayouts: { default: `${__dirname}/src/components/layout/layout.jsx` },
+        remarkPlugins: [require('remark-unwrap-images')],
+        gatsbyRemarkPlugins: [
+          'gatsby-remark-copy-linked-files',
+        ],
+      },
+    },
     'gatsby-plugin-react-helmet',
+    'gatsby-plugin-postcss',
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.svg$/,
+        }
+      }
+    },
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
@@ -49,19 +56,8 @@ module.exports = {
         background_color: '#24292E',
         theme_color: '#F9A50D',
         display: 'minimal-ui',
-        icon: 'src/images/nubots-icon.png', // This path is relative to the root of the site.
+        icon: 'src/images/nubots-icon.png', // Relative to site root
       },
     },
-    {
-      resolve: "gatsby-plugin-react-svg",
-      options: {
-        rule: {
-          include: /\.svg$/,
-        }
-      }
-    }
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.app/offline
-    // 'gatsby-plugin-offline',
   ],
 }
