@@ -1,3 +1,5 @@
+@import '~katex/dist/katex.min.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -296,5 +298,13 @@
         @apply border-gray-300;
       }
     }
+  }
+
+  /* ============================
+   * Math
+   * ============================ */
+  .katex-display {
+    margin: 0;
+    margin-top: 1.5rem;
   }
 }

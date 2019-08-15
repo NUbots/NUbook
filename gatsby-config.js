@@ -41,6 +41,12 @@ module.exports = {
         remarkPlugins: [require('remark-unwrap-images')],
         gatsbyRemarkPlugins: [
           'gatsby-remark-copy-linked-files',
+          {
+            resolve: 'gatsby-remark-katex',
+            options: {
+              strict: 'ignore',
+            },
+          },
         ],
       },
     },

@@ -35,7 +35,7 @@ const PageNavigation = ({ next, previous }) => (
       </div>
     }
     { next &&
-      <div className='w-1/2 pl-1 flex'>
+      <div className='w-1/2 pl-1 flex ml-auto'>
         <Link
           to={next.slug}
           title={next.description}
