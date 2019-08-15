@@ -179,6 +179,13 @@
     @apply text-lg;
   }
 
+  > h5, h5& {
+    @apply text-primary;
+    @apply leading-snug;
+    @apply font-semibold;
+    @apply text-base;
+  }
+
   > h1 + p {
     @apply mt-8;
   }
@@ -186,16 +193,21 @@
   > h1 > code,
   > h2 > code,
   > h3 > code,
-  > h4 > code {
-    @apply text-purple-600;
+  > h4 > code,
+  > h5 > code {
+    @apply text-red-500;
     @apply font-mono;
   }
 
   > h3 > code {
-    @apply text-lg px-1 bg-gray-100;
+    @apply text-lg px-1 bg-gray-100 rounded;
   }
 
   > h4 > code {
+    @apply text-base px-1 bg-gray-100 rounded;
+  }
+
+  > h5 > code {
     @apply text-base px-1 bg-gray-100;
   }
 
