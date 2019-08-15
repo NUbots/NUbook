@@ -5,9 +5,8 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import Layout from './layout/layout'
 
 export default (props) => {
-  console.log('page context and data', props)
   return (
-    <Layout pageContext={props.data.mdx}>
+    <Layout pageContext={props.pageContext} data={props.data}>
       <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
     </Layout>
   )

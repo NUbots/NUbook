@@ -31,7 +31,7 @@ const Header = ({ siteTitle }) => (
     {/*<nav className='container min-h-screen pt-24 pb-6 absolute z-10' style={{backgroundColor: 'rgba(36,41,46,0.85)', backdropFilter: 'blur(20px)' }}>
       <section className='mb-6'>
         <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Introduction</h3>
-        <a className='block py-2 font-semibold text-nubots' href='#none'>Introduction to NUbots</a>
+        <a className='block py-2 font-semibold text-nubots-500' href='#none'>Introduction to NUbots</a>
         <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Areas of Research</a>
       </section>
 

@@ -22,7 +22,7 @@
 
   > ul > * + *,
   > ol > * + * {
-    @apply mt-4;
+    @apply mt-3;
   }
 
   /* ============================
@@ -41,21 +41,21 @@
   > ul li a,
   > ol li a,
   a& {
-    @apply text-blue-500;
-    @apply underline;
-    @apply font-medium;
+    @apply text-nubots-700;
+    @apply font-semibold;
 
     &:hover {
-      @apply text-blue-700;
+      @apply underline;
     }
 
     strong {
-      @apply text-blue-500;
+      @apply font-bold;
     }
 
     code {
-      @apply underline;
-      @apply text-blue-500;
+      @apply p-1;
+      @apply font-semibold;
+      @apply text-nubots-700;
     }
   }
 
@@ -100,12 +100,29 @@
    * ============================ */
   > pre, pre& {
     @apply font-mono;
-    @apply rounded-lg;
+    @apply rounded;
     @apply font-normal;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
       display: none;
+    }
+
+    code {
+      overflow-x: auto;
+
+      &::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        @apply bg-nubots-200;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        @apply bg-nubots-400;
+      }
     }
   }
 
@@ -113,9 +130,12 @@
    * Blockquotes
    * ============================ */
   > blockquote, blockquote& {
+    @apply bg-gray-100;
+    @apply p-4;
+    @apply border-l border-l-4 border-gray-200;
     @apply italic;
     @apply text-primary;
-    @apply text-sm;
+    @apply text-base;
   }
 
   /* ============================
@@ -146,7 +166,7 @@
     @apply mt-12 -mb-3;
     @apply text-primary;
     @apply leading-tight;
-    @apply font-medium;
+    @apply font-semibold;
     @apply text-xl;
   }
 
@@ -155,7 +175,7 @@
     @apply mb-0;
     @apply text-primary;
     @apply leading-snug;
-    @apply font-medium;
+    @apply font-semibold;
     @apply text-lg;
   }
 
@@ -180,7 +200,7 @@
   }
 
   > p, p&,
-  > blockquote > p {
+  > blockquote > p:not(:first-child) {
     @apply text-base;
     @apply mt-6;
   }
@@ -192,13 +212,13 @@
     @apply pl-0 list-none;
 
     li {
-      @apply relative pl-5;
+      @apply relative pl-10;
 
       &::before {
-        @apply absolute left-0 top-0;
+        @apply absolute left-0 top-0 ml-4;
         @apply inline-block mr-3;
-        @apply text-gray-500 text-lg;
-        content: "\2022";
+        @apply text-icon;
+        content: "\25CF";
       }
     }
   }
@@ -212,7 +232,7 @@
     }
 
     > li::before {
-      @apply absolute top-0 left-0 mt-px;
+      @apply absolute top-0 left-0 mt-px ml-1;
       @apply flex items-center justify-center;
       @apply h-6 w-6 bg-gray-300 rounded-full;
       @apply text-primary text-xs font-bold;

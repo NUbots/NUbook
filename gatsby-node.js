@@ -18,12 +18,14 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           next {
             frontmatter {
               title
+              description
               slug
             }
           }
           previous {
             frontmatter {
               title
+              description
               slug
             }
           }
