@@ -11,7 +11,9 @@ import SEO from '../seo'
 import './layout.css'
 
 const MDXComponents = {
-  img: (props) => <Image src={props.src}>{props.alt}</Image>,
+  img: (props) => (
+    <Image src={props.src} alt={props.alt}>{props.title || props.alt}</Image>
+  ),
   a: ({ href, children, ...other }) => (
     <Link to={href} {...other}>{children}</Link>
   ),
