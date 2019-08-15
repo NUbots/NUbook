@@ -10,7 +10,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           node {
             id
             frontmatter {
-              section
+              chapter
               title
               slug
             }
@@ -45,17 +45,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   // Populate the menu
   posts.forEach(({ node }) => {
-    const section = menu[node.frontmatter.section] || {
-      title: node.frontmatter.section,
+    const chapter = menu[node.frontmatter.chapter] || {
+      title: node.frontmatter.chapter,
       pages: [],
     }
 
-    section.pages.push({
+    chapter.pages.push({
       title: node.frontmatter.title,
       slug: node.frontmatter.slug,
     })
 
-    menu[section.title] = section
+    menu[chapter.title] = chapter
   })
 
   // Create a page for each MDX file

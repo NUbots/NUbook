@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
 
+import Code from '../code'
 import Header from '../header/header'
 import Image from '../image'
 import Link from '../link'
@@ -13,7 +14,8 @@ const MDXComponents = {
   img: (props) => <Image src={props.src}>{props.alt}</Image>,
   a: ({ href, children, ...other }) => (
     <Link to={href} {...other}>{children}</Link>
-  )
+  ),
+  code: Code,
 }
 
 const Layout = ({ children, pageContext }) => {

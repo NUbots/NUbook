@@ -20,7 +20,7 @@ export const query = graphql`
       body
       tableOfContents(maxDepth: 4)
       frontmatter {
-        section
+        chapter
         title
         description
         slug

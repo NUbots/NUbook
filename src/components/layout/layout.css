@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-.table-collapse {
-  border-collapse: collapse !important;
-}
-
 .markdown {
+  /* ============================
+   * Base text color and line height
+   * ============================ */
   @apply text-primary;
   @apply leading-relaxed;
 
+  /* ============================
+   * Vertical rythm
+   * ============================ */
   > *:first-child {
     @apply mt-0;
   }
@@ -23,12 +25,25 @@
     @apply mt-4;
   }
 
+  /* ============================
+   * Separator
+   * ============================ */
   > hr {
-    @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200 my-16;
+    @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200;
+    @apply my-16;
   }
 
-  > a, > p a, > ul li a, > ol li a, a& {
-    @apply text-blue-500 underline font-medium;
+  /* ============================
+   * Links
+   * ============================ */
+  > a,
+  > p a,
+  > ul li a,
+  > ol li a,
+  a& {
+    @apply text-blue-500;
+    @apply underline;
+    @apply font-medium;
 
     &:hover {
       @apply text-blue-700;
@@ -39,14 +54,22 @@
     }
 
     code {
-      @apply underline text-blue-500;
+      @apply underline;
+      @apply text-blue-500;
     }
   }
 
-  > p strong, > ul strong {
+  /* ============================
+   * Bold text
+   * ============================ */
+  > p strong,
+  > ul strong {
     @apply font-semibold;
   }
 
+  /* ============================
+   * Inline code
+   * ============================ */
   > p code,
   > ul li *:not(pre) code,
   > ul li > code,
@@ -63,19 +86,22 @@
     @apply text-purple-600;
     @apply font-mono;
     @apply align-baseline;
-    font-weight: 400;
+    @apply font-normal;
   }
 
   > p strong code,
   > ul li strong code,
   > ol li strong code {
-    font-weight: 600;
+    @apply font-semibold;
   }
 
+  /* ============================
+   * Code blocks
+   * ============================ */
   > pre, pre& {
     @apply font-mono;
     @apply rounded-lg;
-    font-weight: 400;
+    @apply font-normal;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -83,12 +109,18 @@
     }
   }
 
+  /* ============================
+   * Blockquotes
+   * ============================ */
   > blockquote, blockquote& {
     @apply italic;
     @apply text-primary;
     @apply text-sm;
   }
 
+  /* ============================
+   * Headings
+   * ============================ */
   > h1, h1& {
     @apply mb-1;
     @apply leading-none;
@@ -147,19 +179,25 @@
     @apply text-base px-1 bg-gray-100;
   }
 
-  > p, p&, > blockquote > p {
+  > p, p&,
+  > blockquote > p {
     @apply text-base;
     @apply mt-6;
   }
 
-  > ul:not(.list-none) {
+  /* ============================
+   * Lists
+   * ============================ */
+  > ul {
     @apply pl-0 list-none;
 
     li {
       @apply relative pl-5;
 
       &::before {
-        @apply absolute left-0 top-0 text-gray-500 inline-block mr-3 text-lg;
+        @apply absolute left-0 top-0;
+        @apply inline-block mr-3;
+        @apply text-gray-500 text-lg;
         content: "\2022";
       }
     }
@@ -191,17 +229,25 @@
     @apply leading-normal;
   }
 
-  > pre, pre&, > ul li pre, > ol li pre {
-    @apply flex p-0 bg-gray-800;
+  > pre, pre&,
+  > ul li pre,
+  > ol li pre {
+    @apply flex p-0;
     @apply text-sm leading-normal;
   }
 
-  > pre code, pre code&, > ul li pre code, > ol li pre code {
+  > pre code, pre code&,
+  > ul li pre code,
+  > ol li pre code {
     @apply p-4;
   }
 
+  /* ============================
+   * Tables
+   * ============================ */
   > table {
-    @apply w-full text-left table-collapse;
+    @apply w-full text-left;
+    border-collapse: collapse !important;
 
     th {
       @apply text-sm font-semibold text-primary p-2 bg-gray-100;
@@ -220,4 +266,3 @@
     }
   }
 }
-
