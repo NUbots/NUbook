@@ -1,0 +1,93 @@
+.icon {
+  position: relative;
+  height: 16px;
+  width: 20px;
+}
+
+.bar {
+  position: absolute;
+  top: 7px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.54);
+  height: 2px;
+  border-radius: 1px;
+}
+
+.top-bar {
+  transform: translateY(-6px);
+  transition: transform 0.2s ease;
+}
+
+/*
+.animate-top-to-center {
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-name: top-bar;
+  animation-direction: alternate;
+}
+
+.animate-bottom-to-center {
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-name: bottom-bar;
+  animation-direction: alternate;
+}
+
+.animate-fade-middle {
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+  animation-name: middle-bar;
+  animation-direction: alternate;
+}
+
+@keyframes middle-bar {
+  /*  Start fully opaque  *\/
+  from {
+    opacity: 1;
+  }
+
+  /* Go to middle *\/
+  50% {
+    opacity: 0;
+  }
+
+  /* Fade out *\/
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes top-bar {
+  /*  Start at top  *\/
+  from {
+    transform: translateY(-6px);
+  }
+
+  /*  Go back to middle  *\/
+  50% {
+    transform: translateY(0);
+  }
+
+  /*  Rotate to x  *\/
+  to {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes bottom-bar {
+   /*  Start at top  *\/
+  from {
+    transform: translateY(6px);
+  }
+
+  /*  Go back to middle  *\/
+  50% {
+    transform: translateY(0);
+  }
+
+  /*  Rotate to x  *\/
+  to {
+    transform: rotate(-45deg);
+  }
+}
+*/
