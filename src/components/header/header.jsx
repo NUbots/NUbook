@@ -1,11 +1,43 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { Link } from 'gatsby'
 
 import MenuIcon from './menu-icon.svg'
 import NUbotsIcon from './nubots-icon.svg'
 import SearchIcon from './search-icon.svg'
 
-const Header = ({ siteTitle }) => (
+const HeaderMenu = ({ menu }) => {
+  const style = {
+    backgroundColor: 'rgba(36,41,46,0.85)',
+    backdropFilter: 'blur(20px)',
+  }
+  const getLinkProps = ({ isCurrent }) => {
+    return {
+      className: `block py-2 font-semibold ${isCurrent ? 'text-nubots-500' : 'text-primary-inverted'}`
+    }
+  }
+  return <nav className='container min-h-screen pt-24 pb-6 absolute z-10' style={style}>
+    {
+      menu.concat(menu).concat(menu).map(chapter => {
+        return <section className='mb-6' key={chapter.title}>
+          <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>
+            { chapter.title }
+          </h3>
+          {
+            chapter.pages.map(page => (
+              <Link
+                to={page.slug}
+                key={page.slug}
+                getProps={getLinkProps}
+              >{ page.title }</Link>
+            ))
+          }
+        </section>
+      })
+    }
+  </nav>
+}
+
+const Header = ({ menu }) => (
   <>
     <div className='w-full bg-gray-900 fixed z-20'>
       <div className='container h-16 flex items-center'>
@@ -27,69 +59,8 @@ const Header = ({ siteTitle }) => (
         </div>
       </div>
     </div>
-
-    {/*<nav className='container min-h-screen pt-24 pb-6 absolute z-10' style={{backgroundColor: 'rgba(36,41,46,0.85)', backdropFilter: 'blur(20px)' }}>
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Introduction</h3>
-        <a className='block py-2 font-semibold text-nubots-500' href='#none'>Introduction to NUbots</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Areas of Research</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Joining NUbots</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>How to Join NUbots</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Team History</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>RoboCup</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>NUbots History</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Current Team</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>System</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Software Overview</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Hardware Overview</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Team History</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>RoboCup</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>NUbots History</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Current Team</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Team History</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>RoboCup</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>NUbots History</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Current Team</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Team History</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>RoboCup</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>NUbots History</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Current Team</a>
-      </section>
-
-      <section className='mb-6'>
-        <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>Team History</h3>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>RoboCup</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>NUbots History</a>
-        <a className='block py-2 font-semibold text-primary-inverted' href='#none'>Current Team</a>
-      </section>
-    </nav>*/}
+    <HeaderMenu menu={menu} />
   </>
 )
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: '',
-}
 
 export default Header
