@@ -27,6 +27,7 @@ module.exports = {
         },
         primary: 'rgba(0, 0, 0, 0.87)',
         'primary-inverted': 'rgba(255, 255, 255, 0.87)',
+        'primary-muted': 'rgba(0, 0, 0, 0.60)',
         secondary: 'rgba(0, 0, 0, 0.54)',
         'secondary-inverted': 'rgba(255, 255, 255, 0.54)',
         icon: 'rgba(0, 0, 0, 0.54)',
