@@ -3,6 +3,9 @@ module.exports = {
     title: 'NUbook',
     description: 'The NUbots team handbook.',
     author: '@nubots',
+    githubUrl: 'https://github.com/NUbots/',
+    slackUrl: 'https://nubotsteam.slack.com',
+    facebookUrl: 'https://www.facebook.com/NubotsRobotics/',
   },
   plugins: [
     {

@@ -1,38 +1,31 @@
 import React, { useState } from 'react'
-import { Link } from 'gatsby'
 
+import Links from './links/links'
+import Logo from './logo/logo'
 import Menu from './menu'
-import MenuIcon from './menu-icon/menu-icon'
-import NUbotsIcon from './nubots-icon.svg'
-import SearchIcon from './search-icon.svg'
-import style from './header.module.css'
+import MenuToggle from './menu-toggle/menu-toggle'
+import Search from './search/search'
 
 const Header = ({ menu }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [ menuOpen, setMenuOpen ] = useState(false)
   return <>
     <div className='w-full bg-gray-900 fixed z-20'>
-      <div className='container h-16 flex items-center'>
-        <Link to='/' className='outline-none'>
-          <NUbotsIcon className='w-9 h-9 md:w-10 md:h-10 flex-shrink-0' />
-        </Link>
-        <div className='px-6 flex-grow'>
-          <div className={`${style.search} relative`}>
-            <input
-              placeholder='Search handbook...'
-              className='h-10 w-full pl-14 pr-4 rounded appearance-none text-lg bg-gray-800 placeholder-gray-500 text-white outline-none focus:bg-white focus:text-primary'
-            />
-            <SearchIcon
-              className={`${style.searchIcon} absolute top-0 left-0 w-6 h-6 ml-4 mt-2 text-icon-inverted pointer-events-none`}
-            />
+      <div className='max-w-screen-xl mx-auto px-6'>
+        <div className='-mx-6 h-16 flex items-center'>
+          <div className='px-6 lg:pr-8 lg:w-1/4 xl:w-1/5'>
+            <Logo />
           </div>
-        </div>
-        <div className='h-6'>
-          <button
-            className='w-6 h-6 flex items-center justify-center focus:outline-none'
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <MenuIcon open={menuOpen} />
-          </button>
+          <div className='flex flex-grow items-center lg:w-3/4 xl:w-4/5'>
+            <div className='w-full lg:px-6 xl:w-3/4 xl:px-12'>
+              <Search />
+            </div>
+            <div className='px-6 lg:hidden'>
+              <MenuToggle menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+            </div>
+            <div className='hidden lg:flex lg:items-center lg:justify-end xl:w-1/4 px-6'>
+              <Links />
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import style from './menu-icon.module.css'
+import style from './icon.module.css'
 
 const MenuIcon = ({ open }) => {
   return <div className={`${style.icon} ${open ? style.iconOpen : style.iconClosed}`}>
