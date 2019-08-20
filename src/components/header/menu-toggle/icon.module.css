@@ -6,15 +6,15 @@
 
 .icon-open {
   .top-bar {
-    animation-name: top-bar-open;
+    transform: translateY(0) rotate(45deg) scaleX(1.1);
   }
 
   .middle-bar {
-    animation-name: middle-bar-open;
+    opacity: 0;
   }
 
   .bottom-bar {
-    animation-name: bottom-bar-open;
+    transform: translateY(0) rotate(-45deg) scaleX(1.1);
   }
 }
 
@@ -25,114 +25,19 @@
   width: 100%;
   height: 2px;
   border-radius: 1px;
-  animation-duration: 0.3s;
-  animation-fill-mode: forwards;
+  transition-property: transform opacity;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
 }
 
 .top-bar {
   transform: translateY(-6px);
-  animation-name: top-bar-closed;
 }
 
 .middle-bar {
-  animation-name: middle-bar-closed;
+  opacity: 1;
 }
 
 .bottom-bar {
   transform: translateY(6px);
-  animation-name: bottom-bar-closed;
-}
-
-@keyframes top-bar-open {
-  /* Start at top */
-  0% {
-    transform: translateY(-6px);
-  }
-
-  /* Translate to middle */
-  50% {
-    transform: translateY(0);
-  }
-
-  /* Rotate to x */
-  100% {
-    transform: rotate(45deg) scaleX(1.1);
-  }
-}
-
-@keyframes top-bar-closed {
-  /* Start rotated */
-  0% {
-    transform: rotate(45deg) scaleX(1.1);
-  }
-
-  /* Undo rotation */
-  50% {
-    transform: rotate(0) scaleX(1);
-  }
-
-  /* Undo translation */
-  100% {
-    transform: translateY(-6px);
-  }
-}
-
-@keyframes middle-bar-open {
-  /* Start at full opacity */
-  0% {
-    opacity: 1;
-  }
-
-  /* Fade out */
-  50%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes middle-bar-closed {
-  /* Start at no opacity */
-  0%,
-  50% {
-    opacity: 0;
-  }
-
-  /* Fade in */
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes bottom-bar-open {
-  /* Start at bottom */
-  0% {
-    transform: translateY(6px);
-  }
-
-  /* Translate to middle */
-  50% {
-    transform: translateY(0);
-  }
-
-  /* Rotate to x */
-  100% {
-    transform: rotate(-45deg) scaleX(1.1);
-  }
-}
-
-@keyframes bottom-bar-closed {
-  /* Start rotated */
-  0% {
-    transform: rotate(-45deg) scaleX(1.1);
-  }
-
-  /* Undo rotation */
-  50% {
-    transform: rotate(0) scaleX(1);
-  }
-
-  /* Undo translation */
-  100% {
-    transform: translateY(6px);
-  }
 }
