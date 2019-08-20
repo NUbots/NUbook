@@ -13,6 +13,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               chapter
               title
               slug
+              hidden
             }
           }
           next {
@@ -20,6 +21,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               title
               description
               slug
+              hidden
             }
           }
           previous {
@@ -27,6 +29,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               title
               description
               slug
+              hidden
             }
           }
         }
@@ -46,31 +49,78 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const menu = {}
 
   // Populate the menu
-  posts.forEach(({ node }) => {
-    const chapter = menu[node.frontmatter.chapter] || {
-      title: node.frontmatter.chapter,
-      pages: [],
-    }
+  posts
+    .filter(({ node }) => !node.frontmatter.hidden)
+    .forEach(({ node }) => {
+      const chapter = menu[node.frontmatter.chapter] || {
+        title: node.frontmatter.chapter,
+        pages: [],
+      }
 
-    chapter.pages.push({
-      title: node.frontmatter.title,
-      slug: node.frontmatter.slug,
+      chapter.pages.push({
+        title: node.frontmatter.title,
+        slug: node.frontmatter.slug,
+      })
+
+      menu[chapter.title] = chapter
     })
-
-    menu[chapter.title] = chapter
-  })
 
   // Create a page for each MDX file
   posts.forEach(({ node, next, previous }, index) => {
+    const nextPage = getNext(next, posts, index)
+    const previousPage = getPrevious(previous, posts, index)
+
     actions.createPage({
       path: node.frontmatter.slug,
       component: path.resolve(`./src/components/page-template.jsx`),
       context: {
         id: node.id,
-        next: next ? next.frontmatter : null,
-        previous: previous ? previous.frontmatter : null,
+        next: nextPage ? nextPage.frontmatter : null,
+        previous: previousPage ? previousPage.frontmatter : null,
         menu: Object.values(menu),
       },
     })
   })
+}
+
+/**
+ * Get the next node, skipping any nodes in the chain that are hidden
+ */
+function getNext(nextNode, posts, index) {
+  if (!nextNode) {
+    return null
+  }
+
+  if (!nextNode.frontmatter.hidden) {
+    return nextNode
+  }
+
+  const next = posts[index + 1]
+
+  if (!next) {
+    return null
+  }
+
+  return getNext(next.node, posts, index + 1)
+}
+
+/**
+ * Get the previous node, skipping any nodes in the chain that are hidden
+ */
+function getPrevious(previousNode, posts, index) {
+  if (!previousNode) {
+    return null
+  }
+
+  if (!previousNode.frontmatter.hidden) {
+    return previousNode
+  }
+
+  const previous = posts[index - 1]
+
+  if (!previous) {
+    return null
+  }
+
+  return getPrevious(previous.node, posts, index - 1)
 }

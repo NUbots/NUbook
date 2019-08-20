@@ -22,7 +22,9 @@ export const query = graphql`
         chapter
         title
         description
+        keywords
         slug
+        hidden
       }
     }
   }

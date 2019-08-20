@@ -21,13 +21,28 @@ const Links = ({ links }) => (
     render={data => {
       const { githubUrl, slackUrl, facebookUrl } = data.site.siteMetadata
       return <>
-        <a href={githubUrl} target='_blank' className='text-icon-inverted mr-5'>
+        <a
+          className='text-icon-inverted mr-5'
+          href={githubUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <GithubIcon className='w-6 h-6' />
         </a>
-        <a href={slackUrl} target='_blank' className='text-icon-inverted mr-5'>
+        <a
+          className='text-icon-inverted mr-5'
+          href={slackUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <SlackIcon className='w-6 h-6' />
         </a>
-        <a href={facebookUrl} target='_blank' className='text-icon-inverted'>
+        <a
+          className='text-icon-inverted'
+          href={facebookUrl}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <FacebookIcon className='w-6 h-6' />
         </a>
       </>
