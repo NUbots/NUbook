@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'NUbook',
     description: 'The NUbots team handbook.',
-    author: '@nubots',
+    keywords: ['nubots', 'team', 'handbook', 'help', 'documentation'],
     githubUrl: 'https://github.com/NUbots/',
     slackUrl: 'https://nubotsteam.slack.com',
     facebookUrl: 'https://www.facebook.com/NubotsRobotics/',

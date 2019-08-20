@@ -8,8 +8,8 @@ function SEO({ description, lang, meta, keywords, title }) {
     <StaticQuery
       query={detailsQuery}
       render={data => {
-        const metaDescription =
-          description || data.site.siteMetadata.description
+        const metaDescription = description || data.site.siteMetadata.description
+        const pageKeywords = keywords.length > 0 ? keywords : data.site.siteMetadata.keywords
         return (
           <Helmet
             htmlAttributes={{
@@ -39,10 +39,6 @@ function SEO({ description, lang, meta, keywords, title }) {
                 content: 'summary',
               },
               {
-                name: 'twitter:creator',
-                content: data.site.siteMetadata.author,
-              },
-              {
                 name: 'twitter:title',
                 content: title,
               },
@@ -52,14 +48,15 @@ function SEO({ description, lang, meta, keywords, title }) {
               },
             ]
               .concat(
-                keywords.length > 0
+                pageKeywords.length > 0
                   ? {
                       name: 'keywords',
-                      content: keywords.join(', '),
+                      content: pageKeywords.join(', '),
                     }
                   : []
               )
-              .concat(meta)}
+              .concat(meta)
+            }
           />
         )
       }}
@@ -89,7 +86,7 @@ const detailsQuery = graphql`
       siteMetadata {
         title
         description
-        author
+        keywords
       }
     }
   }
