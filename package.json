@@ -7,9 +7,17 @@
   "dependencies": {
     "@mdx-js/mdx": "^1.1.5",
     "@mdx-js/react": "^1.1.5",
+    "babel-eslint": "^10.0.2",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-loader": "^2.2.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
     "focus-visible": "^5.0.2",
     "gatsby": "^2.13.50",
     "gatsby-image": "^2.2.8",
+    "gatsby-plugin-eslint": "^2.0.5",
     "gatsby-plugin-manifest": "^2.2.4",
     "gatsby-plugin-mdx": "^1.0.0",
     "gatsby-plugin-offline": "^2.2.4",
@@ -40,8 +48,9 @@
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
-    "format": "prettier --write \"src/**/*.{css,jsx,js}\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.{css,jsx,js}\" \"*.js\"",
+    "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\"",
+    "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
+    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

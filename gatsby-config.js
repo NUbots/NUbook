@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 module.exports = {
   siteMetadata: {
     title: 'NUbook',
@@ -82,6 +84,18 @@ module.exports = {
         theme_color: '#F9A50D',
         display: 'minimal-ui',
         icon: 'src/images/nubots-icon.png', // Relative to site root
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-eslint',
+      options: {
+        test: /\.js$|\.jsx|\.mdx$/,
+        exclude: /(node_modules|.cache|public)/,
+        stages: ['develop'],
+        options: {
+          emitWarning: true,
+          failOnError: false,
+        },
       },
     },
   ],
