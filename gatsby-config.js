@@ -20,17 +20,17 @@ module.exports = {
       options: {
         name: 'book',
         path: `${__dirname}/src/book`,
-      }
+      },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'pages',
         path: `${__dirname}/src/pages`,
-      }
+      },
     },
     // Exposes helper functions for processing images with the
-    // `sharp` package from npm. Used by other plugins.
+    // sharp package from npm. Used by other plugins.
     'gatsby-plugin-sharp',
     // Identifies file nodes that are images and transforms them
     // to create new `ImageSharp` nodes. Those nodes can then
@@ -39,15 +39,16 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-mdx',
       options: {
-        extensions: [`.mdx`, `.md`],
-        defaultLayouts: { default: `${__dirname}/src/components/layout/layout.jsx` },
+        extensions: ['.mdx', '.md'],
+        defaultLayouts: {
+          default: `${__dirname}/src/components/layout/layout.jsx`,
+        },
         remarkPlugins: [require('remark-unwrap-images')],
         gatsbyRemarkPlugins: [
           'gatsby-remark-copy-linked-files',
           {
-            resolve: `gatsby-remark-autolink-headers`,
+            resolve: 'gatsby-remark-autolink-headers',
             options: {
-              className: `custom-class`,
               maintainCase: false,
               removeAccents: true,
             },
@@ -68,8 +69,8 @@ module.exports = {
       options: {
         rule: {
           include: /\.svg$/,
-        }
-      }
+        },
+      },
     },
     {
       resolve: 'gatsby-plugin-manifest',

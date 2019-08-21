@@ -7,51 +7,51 @@ import style from './menu.module.css'
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${style.link} ${isCurrent ? style.linkActive : ''}`
+    className: `${style.link} ${isCurrent ? style.linkActive : ''}`,
   }
 }
 
 const Menu = ({ menu, open }) => {
-  return <>
-    <Helmet>
-      <body className={open ? 'overflow-y-hidden' : ''} />
-    </Helmet>
-    <CSSTransition
-      in={open}
-      timeout={300}
-      enter={true}
-      exit={true}
-      onEnter={onEnter}
-      onEntering={onEntering}
-      onEntered={onEntered}
-      onExit={onExit}
-      onExiting={onExiting}
-      unmountOnExit
-    >
-      <div className={style.wrapper}>
-        <nav className={style.menu}>
-          {
-            menu.map(chapter => {
-              return <section className='mb-6' key={chapter.title}>
-                <h3 className={style.chapterTitle}>
-                  { chapter.title }
-                </h3>
-                {
-                  chapter.pages.map(page => (
+  return (
+    <>
+      <Helmet>
+        <body className={open ? 'overflow-y-hidden' : ''} />
+      </Helmet>
+      <CSSTransition
+        in={open}
+        timeout={300}
+        enter={true}
+        exit={true}
+        onEnter={onEnter}
+        onEntering={onEntering}
+        onEntered={onEntered}
+        onExit={onExit}
+        onExiting={onExiting}
+        unmountOnExit
+      >
+        <div className={style.wrapper}>
+          <nav className={style.menu}>
+            {menu.map(chapter => {
+              return (
+                <section className='mb-6' key={chapter.title}>
+                  <h3 className={style.chapterTitle}>{chapter.title}</h3>
+                  {chapter.pages.map(page => (
                     <Link
                       to={page.slug}
                       key={page.slug}
                       getProps={getLinkProps}
-                    >{ page.title }</Link>
-                  ))
-                }
-              </section>
-            })
-          }
-        </nav>
-      </div>
-    </CSSTransition>
-  </>
+                    >
+                      {page.title}
+                    </Link>
+                  ))}
+                </section>
+              )
+            })}
+          </nav>
+        </div>
+      </CSSTransition>
+    </>
+  )
 }
 
 function onEnter(node) {

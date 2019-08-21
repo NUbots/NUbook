@@ -19,7 +19,11 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
     )
   }
 
-  return (<a href={to} {...other}>{children}</a>)
+  return (
+    <a href={to} {...other}>
+      {children}
+    </a>
+  )
 }
 
 export default Link

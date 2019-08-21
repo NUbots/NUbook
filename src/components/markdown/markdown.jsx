@@ -10,10 +10,14 @@ import { createHeading } from './heading/heading'
 
 const MDXComponents = {
   img: ({ src, alt, title }) => (
-    <Image src={src} alt={alt}>{title || alt}</Image>
+    <Image src={src} alt={alt}>
+      {title || alt}
+    </Image>
   ),
   a: ({ href, children, ...other }) => (
-    <Link to={href} {...other}>{children}</Link>
+    <Link to={href} {...other}>
+      {children}
+    </Link>
   ),
   code: Code,
   h1: createHeading('h1'),
@@ -26,9 +30,7 @@ const MDXComponents = {
 
 const Markdown = ({ children }) => (
   <div className={style.markdown}>
-    <MDXProvider components={MDXComponents}>
-      { children }
-    </MDXProvider>
+    <MDXProvider components={MDXComponents}>{children}</MDXProvider>
   </div>
 )
 

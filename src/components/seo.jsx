@@ -8,8 +8,10 @@ function SEO({ description, lang, meta, keywords, title }) {
     <StaticQuery
       query={detailsQuery}
       render={data => {
-        const metaDescription = description || data.site.siteMetadata.description
-        const pageKeywords = keywords.length > 0 ? keywords : data.site.siteMetadata.keywords
+        const metaDescription =
+          description || data.site.siteMetadata.description
+        const pageKeywords =
+          keywords.length > 0 ? keywords : data.site.siteMetadata.keywords
         return (
           <Helmet
             htmlAttributes={{
@@ -55,8 +57,7 @@ function SEO({ description, lang, meta, keywords, title }) {
                     }
                   : []
               )
-              .concat(meta)
-            }
+              .concat(meta)}
           />
         )
       }}

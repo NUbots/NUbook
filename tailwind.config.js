@@ -2,7 +2,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gray: {
+        'gray': {
           '100': '#f5f5f5',
           '200': '#eeeeee',
           '300': '#e0e0e0',
@@ -13,7 +13,7 @@ module.exports = {
           '800': '#424242',
           '900': '#212121',
         },
-        nubots: {
+        'nubots': {
           '100': '#FFF1D6',
           '200': '#FFEBC7',
           '300': '#FFDD9E',
@@ -34,8 +34,8 @@ module.exports = {
       padding: {
         '14': '3.5rem',
       },
-    }
+    },
   },
   variants: {},
-  plugins: []
+  plugins: [],
 }

@@ -6,13 +6,18 @@ export default ({ children, className }) => {
   const language = className.replace(/language-/, '')
 
   return (
-    <Highlight {...defaultProps} theme={theme} code={children.trim()} language={language}>
-      {({className, style, tokens, getLineProps, getTokenProps}) => (
+    <Highlight
+      {...defaultProps}
+      theme={theme}
+      code={children.trim()}
+      language={language}
+    >
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <code className={`${className} w-full p-4 rounded`} style={style}>
           {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({line, key: i})}>
+            <div key={i} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
-                <span key={key} {...getTokenProps({token, key})} />
+                <span key={key} {...getTokenProps({ token, key })} />
               ))}
             </div>
           ))}

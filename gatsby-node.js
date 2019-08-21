@@ -5,7 +5,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get the MDX pages sorted by file path (this is why we have the numeric prefixes)
   const result = await graphql(`
     query {
-      allMdx(sort: {fields: fileAbsolutePath}) {
+      allMdx(sort: { fields: fileAbsolutePath }) {
         edges {
           node {
             id
@@ -72,7 +72,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     actions.createPage({
       path: node.frontmatter.slug,
-      component: path.resolve(`./src/components/page-template.jsx`),
+      component: path.resolve('./src/components/page-template.jsx'),
       context: {
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,

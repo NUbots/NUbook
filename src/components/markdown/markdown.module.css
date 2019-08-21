@@ -90,7 +90,8 @@
   /* ============================
    * Code blocks
    * ============================ */
-  > pre, pre& {
+  > pre,
+  pre& {
     @apply font-mono;
     @apply rounded;
     @apply font-normal;
@@ -121,7 +122,8 @@
   /* ============================
    * Blockquotes
    * ============================ */
-  > blockquote, blockquote& {
+  > blockquote,
+  blockquote& {
     @apply bg-gray-100;
     @apply p-4;
     @apply border-l border-l-4 border-gray-200;
@@ -133,7 +135,8 @@
   /* ============================
    * Headings
    * ============================ */
-  > h1, h1& {
+  > h1,
+  h1& {
     @apply mb-1;
     @apply leading-none;
     @apply text-primary;
@@ -141,7 +144,8 @@
     @apply text-3xl;
   }
 
-  > h2, h2& {
+  > h2,
+  h2& {
     @apply mt-10;
     @apply mb-4;
     @apply text-primary;
@@ -154,7 +158,8 @@
     @apply mt-6;
   }
 
-  > h3, h3& {
+  > h3,
+  h3& {
     @apply mt-12 -mb-3;
     @apply text-primary;
     @apply leading-tight;
@@ -162,7 +167,8 @@
     @apply text-xl;
   }
 
-  > h4, h4& {
+  > h4,
+  h4& {
     @apply mb-0;
     @apply text-primary;
     @apply leading-snug;
@@ -170,7 +176,8 @@
     @apply text-lg;
   }
 
-  > h5, h5& {
+  > h5,
+  h5& {
     @apply text-primary;
     @apply leading-snug;
     @apply font-semibold;
@@ -202,7 +209,8 @@
     @apply text-base px-1 bg-gray-100;
   }
 
-  > p, p&,
+  > p,
+  p&,
   > blockquote > p:not(:first-child) {
     @apply text-base;
     @apply mt-6;
@@ -243,7 +251,7 @@
         @apply absolute left-0 top-0 ml-4;
         @apply inline-block mr-3;
         @apply text-icon;
-        content: "\25CF"; /* Bullet symbol */
+        content: '\25CF'; /* Bullet symbol */
       }
     }
   }
@@ -274,14 +282,16 @@
     @apply leading-normal;
   }
 
-  > pre, pre&,
+  > pre,
+  pre&,
   > ul li pre,
   > ol li pre {
     @apply flex p-0;
     @apply text-sm leading-normal;
   }
 
-  > pre code, pre code&,
+  > pre code,
+  pre code&,
   > ul li pre code,
   > ol li pre code {
     @apply p-4;

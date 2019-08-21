@@ -10,26 +10,22 @@ const getLinkProps = ({ isCurrent }) => {
 }
 
 const Sidebar = ({ menu }) => {
-  return <nav>
-    {
-      menu.map(chapter => {
-        return <section className='mb-6' key={chapter.title}>
-          <div className={style.chapterTitle}>
-            { chapter.title }
-          </div>
-          {
-            chapter.pages.map(page => (
-              <Link
-                to={page.slug}
-                key={page.slug}
-                getProps={getLinkProps}
-              >{ page.title }</Link>
-            ))
-          }
-        </section>
-      })
-    }
-  </nav>
+  return (
+    <nav>
+      {menu.map(chapter => {
+        return (
+          <section className='mb-6' key={chapter.title}>
+            <div className={style.chapterTitle}>{chapter.title}</div>
+            {chapter.pages.map(page => (
+              <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
+                {page.title}
+              </Link>
+            ))}
+          </section>
+        )
+      })}
+    </nav>
+  )
 }
 
 export default Sidebar

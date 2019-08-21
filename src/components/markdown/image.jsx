@@ -20,7 +20,7 @@ const NonStretchedImage = props => {
   return <GatsbyImg {...normalizedProps} />
 }
 
-const Image = (props) => (
+const Image = props => (
   <StaticQuery
     query={graphql`
       query {
@@ -41,7 +41,13 @@ const Image = (props) => (
       let Img
 
       if (/^https?:\/\//i.test(src)) {
-        Img = <img src={src} className='max-w-full h-auto mx-auto' alt={props.alt} />
+        Img = (
+          <img
+            src={src}
+            className='max-w-full h-auto mx-auto'
+            alt={props.alt}
+          />
+        )
       } else {
         const image = data.allImageSharp.edges.find(edge => {
           const path = src.split('/').pop()
@@ -55,12 +61,16 @@ const Image = (props) => (
         Img = <NonStretchedImage fluid={image.node.fluid} />
       }
 
-      return <figure className='p-2 bg-gray-100 leading-none'>
-        { Img }
-        { props.children &&
-          <figcaption className='pt-3 pb-1 italic text-base'>{props.children}</figcaption>
-        }
-      </figure>
+      return (
+        <figure className='p-2 bg-gray-100 leading-none'>
+          {Img}
+          {props.children && (
+            <figcaption className='pt-3 pb-1 italic text-base'>
+              {props.children}
+            </figcaption>
+          )}
+        </figure>
+      )
     }}
   />
 )
