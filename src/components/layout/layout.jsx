@@ -1,5 +1,4 @@
 import React from 'react'
-import Helmet from 'react-helmet'
 
 import Header from '../header/header'
 import Markdown from '../markdown/markdown'
@@ -17,26 +16,25 @@ const Layout = ({ children, data, pageContext }) => {
       title={title}
       description={description}
       keywords={keywords || []}
-    />
-    {
-      hidden && <Helmet
-        meta={[{
+      meta={
+        hidden ? [{
           name: 'robots',
           content: 'noindex,nofollow'
-        }]}
-      />
-    }
+        }] : []
+      }
+    />
     <Header menu={menu} />
-    <div className='w-full max-w-screen-xl mx-auto px-6 pt-24 pb-16'>
+    <div className='w-full max-w-screen-xl mx-auto px-6'>
       <div className='lg:flex -mx-6'>
-        <div
-          className='hidden inset-0 h-full bg-white w-full overflow-y-visible lg:block lg:w-1/4 xl:w-1/5'
-        >
-          <div className='pl-6 pr-8 pt-2'>
+        <div className='hidden w-1/4 lg:block xl:w-1/5'>
+          <div
+            className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 overflow-y-auto h-screen border-t border-t-transparent'
+            style={{ borderTopWidth: '4rem' }}
+          >
             <Sidebar menu={menu} />
           </div>
         </div>
-        <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
+        <div className='w-full lg:flex lg:w-3/4 xl:w-4/5 pt-24 pb-12'>
           <div
             className='px-6 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'
           >

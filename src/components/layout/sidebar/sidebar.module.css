@@ -8,8 +8,25 @@
 }
 
 .linkActive::before {
-  content: '';
-  left: -20px;
-  top: 14px;
   @apply absolute bg-nubots-500 rounded w-2 h-2;
+  content: '';
+  left: -16px;
+  top: 12px;
+  animation: fade-and-scale-in 0.3s ease;
+
+  @screen xl {
+    left: -20px;
+  }
+}
+
+@keyframes fade-and-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
