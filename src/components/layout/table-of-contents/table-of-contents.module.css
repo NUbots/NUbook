@@ -1,0 +1,8 @@
+.link {
+  @apply block py-1 font-semibold truncate text-primary-muted text-base;
+
+  &:hover,
+  &:global(.focus-visible) {
+    @apply text-nubots-700;
+  }
+}

@@ -17,7 +17,7 @@ export const query = graphql`
     mdx(id: { eq: $id }) {
       id
       body
-      tableOfContents(maxDepth: 4)
+      tableOfContents(maxDepth: 3)
       frontmatter {
         chapter
         title

@@ -14,9 +14,9 @@ const Sidebar = ({ menu }) => {
     {
       multiplyMenu(menu, 2).map(chapter => {
         return <section className='mb-6' key={chapter.title}>
-          <h3 className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
+          <div className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
             { chapter.title }
-          </h3>
+          </div>
           {
             chapter.pages.map(page => (
               <Link

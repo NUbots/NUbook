@@ -6,6 +6,7 @@ import Image from '../image'
 import Link from '../link'
 
 import style from './markdown.module.css'
+import { createHeading } from './heading/heading'
 
 const MDXComponents = {
   img: ({ src, alt, title }) => (
@@ -15,6 +16,12 @@ const MDXComponents = {
     <Link to={href} {...other}>{children}</Link>
   ),
   code: Code,
+  h1: createHeading('h1'),
+  h2: createHeading('h2'),
+  h3: createHeading('h3'),
+  h4: createHeading('h4'),
+  h5: createHeading('h5'),
+  h6: createHeading('h6'),
 }
 
 const Markdown = ({ children }) => (

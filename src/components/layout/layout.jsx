@@ -7,6 +7,7 @@ import SEO from '../seo'
 import ArticleHeader from './article-header'
 import ArticleNavigation from './article-navigation/article-navigation'
 import Sidebar from './sidebar/sidebar'
+import TableOfContents from './table-of-contents/table-of-contents'
 
 const Layout = ({ children, data, pageContext }) => {
   const { title, description, keywords, hidden } = data.mdx.frontmatter
@@ -34,16 +35,25 @@ const Layout = ({ children, data, pageContext }) => {
             <Sidebar menu={menu} />
           </div>
         </div>
-        <div className='w-full lg:flex lg:w-3/4 xl:w-4/5 pt-24 pb-12'>
+        <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
           <div
-            className='px-6 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'
+            className='px-6 pt-24 pb-12 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'
           >
             <ArticleHeader title={title} description={description} />
             <Markdown>{ children }</Markdown>
             <ArticleNavigation next={next} previous={previous} />
           </div>
           <div className='hidden xl:block xl:w-1/4 xl:px-6'>
-            Table of contents
+            {
+              data.mdx.tableOfContents.items && (
+                <div
+                  className='pt-10 pb-6 sticky top-0 left-0 h-screen'
+                  style={{ borderTopWidth: '4rem' }}
+                >
+                  <TableOfContents contents={data.mdx.tableOfContents} />
+                </div>
+              )
+            }
           </div>
         </div>
       </div>

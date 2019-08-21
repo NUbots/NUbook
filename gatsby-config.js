@@ -45,6 +45,14 @@ module.exports = {
         gatsbyRemarkPlugins: [
           'gatsby-remark-copy-linked-files',
           {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              className: `custom-class`,
+              maintainCase: false,
+              removeAccents: true,
+            },
+          },
+          {
             resolve: 'gatsby-remark-katex',
             options: {
               strict: 'ignore',
