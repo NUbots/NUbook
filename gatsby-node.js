@@ -1,7 +1,6 @@
 /*eslint-env node*/
 
 const path = require('path')
-const { createFilePath } = require('gatsby-source-filesystem')
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get the MDX pages sorted by file path (this is why we have the numeric prefixes)

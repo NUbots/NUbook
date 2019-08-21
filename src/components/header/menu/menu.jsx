@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { CSSTransition } from 'react-transition-group'
 import { Link } from 'gatsby'
@@ -54,6 +55,23 @@ const Menu = ({ menu, open }) => {
   )
 }
 
+Menu.propTypes = {
+  menu: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      pages: PropTypes.arrayOf(
+        PropTypes.shape({
+          title: PropTypes.string.isRequired,
+          slug: PropTypes.string.isRequired,
+        })
+      ).isRequired,
+    })
+  ).isRequired,
+  open: PropTypes.bool.isRequired,
+}
+
+export default Menu
+
 function onEnter(node) {
   // Initialize max-height to a numeric value for the enter transition
   node.style.maxHeight = '0'
@@ -78,5 +96,3 @@ function onExiting(node) {
   // Exit to a max-height of 0
   node.style.maxHeight = '0'
 }
-
-export default Menu

@@ -5,7 +5,7 @@ import FacebookIcon from './facebook-icon.svg'
 import GithubIcon from './github-icon.svg'
 import SlackIcon from './slack-icon.svg'
 
-const Links = ({ links }) => (
+const Links = () => (
   <StaticQuery
     query={graphql`
       query SocialLinksQuery {

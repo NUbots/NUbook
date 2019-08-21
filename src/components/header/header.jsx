@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import Links from './links/links'
 import Logo from './logo/logo'
@@ -33,6 +34,10 @@ const Header = ({ menu }) => {
       <Menu menu={menu} open={menuOpen} />
     </>
   )
+}
+
+Header.propTypes = {
+  menu: PropTypes.array.isRequired,
 }
 
 export default Header

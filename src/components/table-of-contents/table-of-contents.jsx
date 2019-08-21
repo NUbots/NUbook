@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import style from './table-of-contents.module.css'
 
@@ -20,6 +21,19 @@ const Contents = ({ contents, level }) => {
   ))
 }
 
+Contents.propTypes = {
+  contents: PropTypes.shape({
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        items: PropTypes.array,
+      })
+    ),
+  }).isRequired,
+  level: PropTypes.number.isRequired,
+}
+
 const TableOfContents = ({ contents }) => (
   <div>
     <h3 className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
@@ -28,5 +42,9 @@ const TableOfContents = ({ contents }) => (
     <Contents contents={contents} level={0} />
   </div>
 )
+
+TableOfContents.propTypes = {
+  contents: PropTypes.object.isRequired,
+}
 
 export default TableOfContents

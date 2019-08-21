@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import style from './icon.module.css'
 
@@ -16,6 +17,10 @@ const MenuIcon = ({ open }) => {
       ></span>
     </div>
   )
+}
+
+MenuIcon.propTypes = {
+  open: PropTypes.bool.isRequired,
 }
 
 export default MenuIcon

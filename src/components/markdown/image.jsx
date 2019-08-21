@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StaticQuery, graphql } from 'gatsby'
 import GatsbyImg from 'gatsby-image'
 
@@ -18,6 +19,16 @@ const NonStretchedImage = props => {
   }
 
   return <GatsbyImg {...normalizedProps} />
+}
+
+NonStretchedImage.propTypes = {
+  fluid: PropTypes.shape({
+    presentationWidth: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+  }),
+  style: PropTypes.object,
 }
 
 const Image = props => (
@@ -74,5 +85,11 @@ const Image = props => (
     }}
   />
 )
+
+Image.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  children: PropTypes.node,
+}
 
 export default Image

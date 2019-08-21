@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const ArticleHeader = ({ title, description }) => (
   <div className='mb-8'>
@@ -8,5 +9,10 @@ const ArticleHeader = ({ title, description }) => (
     <div className='text-secondary text-base'>{description}</div>
   </div>
 )
+
+ArticleHeader.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+}
 
 export default ArticleHeader

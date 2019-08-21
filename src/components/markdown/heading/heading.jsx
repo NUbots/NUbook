@@ -1,13 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import LinkIcon from './link.svg'
 import style from './heading.module.css'
 
-export function createHeading(Heading) {
-  return ({ children }) => {
+export function createHeading(HeadingType) {
+  const Heading = ({ children }) => {
     const [anchor, ...title] = children
     return (
-      <Heading>
+      <HeadingType>
         <div
           id={anchor.props.href.replace('#', '')}
           className={style.anchor}
@@ -16,7 +17,13 @@ export function createHeading(Heading) {
           <LinkIcon />
         </a>
         {title}
-      </Heading>
+      </HeadingType>
     )
   }
+
+  Heading.propTypes = {
+    children: PropTypes.node.isRequired,
+  }
+
+  return Heading
 }

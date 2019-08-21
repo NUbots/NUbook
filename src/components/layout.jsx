@@ -1,11 +1,11 @@
 import React from 'react'
-
-import Header from './header/header'
-import Markdown from './markdown/markdown'
-import SEO from './seo'
+import PropTypes from 'prop-types'
 
 import ArticleHeader from './article-header'
 import ArticleNavigation from './article-navigation/article-navigation'
+import Header from './header/header'
+import Markdown from './markdown/markdown'
+import SEO from './seo'
 import Sidebar from './sidebar/sidebar'
 import TableOfContents from './table-of-contents/table-of-contents'
 
@@ -61,6 +61,26 @@ const Layout = ({ children, data, pageContext }) => {
       </div>
     </>
   )
+}
+
+Layout.propTypes = {
+  children: PropTypes.node,
+  data: PropTypes.shape({
+    mdx: PropTypes.shape({
+      frontmatter: PropTypes.shape({
+        title: PropTypes.string,
+        description: PropTypes.string,
+        keywords: PropTypes.arrayOf(PropTypes.string),
+        hidden: PropTypes.bool,
+      }).isRequired,
+      tableOfContents: PropTypes.object.isRequired,
+    }).isRequired,
+  }).isRequired,
+  pageContext: PropTypes.shape({
+    next: PropTypes.object,
+    previous: PropTypes.object,
+    menu: PropTypes.array,
+  }).isRequired,
 }
 
 export default Layout

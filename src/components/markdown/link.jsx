@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link as GatsbyLink } from 'gatsby'
 
 const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
@@ -24,6 +25,13 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
       {children}
     </a>
   )
+}
+
+Link.propTypes = {
+  children: PropTypes.node.isRequired,
+  to: PropTypes.string.isRequired,
+  activeClassName: PropTypes.string,
+  partiallyActive: PropTypes.bool,
 }
 
 export default Link

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import MenuIcon from './icon'
 
@@ -10,5 +11,10 @@ const MenuToggle = ({ menuOpen, setMenuOpen }) => (
     <MenuIcon open={menuOpen} />
   </button>
 )
+
+MenuToggle.propTypes = {
+  menuOpen: PropTypes.bool.isRequired,
+  setMenuOpen: PropTypes.func.isRequired,
+}
 
 export default MenuToggle
