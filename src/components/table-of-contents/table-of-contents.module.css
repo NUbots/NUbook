@@ -1,5 +1,5 @@
 .link {
-  @apply block py-1 font-semibold truncate text-primary-muted text-base;
+  @apply block py-1 font-medium truncate text-primary-muted;
 
   &:hover,
   &:global(.focus-visible) {

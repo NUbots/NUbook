@@ -2,7 +2,7 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
-import Layout from './layout/layout'
+import Layout from './layout'
 
 export default (props) => {
   return (

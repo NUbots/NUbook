@@ -12,7 +12,7 @@ const getLinkProps = ({ isCurrent }) => {
 const Sidebar = ({ menu }) => {
   return <nav>
     {
-      multiplyMenu(menu, 2).map(chapter => {
+      menu.map(chapter => {
         return <section className='mb-6' key={chapter.title}>
           <div className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
             { chapter.title }
@@ -33,22 +33,3 @@ const Sidebar = ({ menu }) => {
 }
 
 export default Sidebar
-
-function multiplyMenu(menu, factor) {
-  const product = [...menu]
-
-  for (let i = 0; i < factor; i++) {
-    menu.forEach(chapter => {
-      product.push({
-        title: `${chapter.title} ${i + 1}`,
-        pages: chapter.pages.map(page => {
-          return Object.assign({}, page, {
-            title: `${page.title} ${i + 1}`
-          })
-        })
-      })
-    })
-  }
-
-  return product
-}

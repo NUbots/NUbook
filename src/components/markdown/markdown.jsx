@@ -1,9 +1,9 @@
 import React from 'react'
 import { MDXProvider } from '@mdx-js/react'
 
-import Code from '../code'
-import Image from '../image'
-import Link from '../link'
+import Code from './code'
+import Image from './image'
+import Link from './link'
 
 import style from './markdown.module.css'
 import { createHeading } from './heading/heading'

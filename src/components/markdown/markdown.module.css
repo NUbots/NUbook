@@ -38,11 +38,7 @@
   > ol li a,
   a& {
     @apply text-nubots-700;
-    @apply font-semibold;
-
-    &:hover {
-      @apply underline;
-    }
+    @apply underline;
 
     strong {
       @apply font-bold;
@@ -218,23 +214,19 @@
   > h4,
   > h5,
   > h6 {
-    position: relative;
+    @apply relative;
 
     a {
-      position: absolute;
+      @apply absolute flex items-center opacity-0 pl-2 w-8;
       left: -32px;
       top: -4px;
       bottom: -4px;
-      width: 32px;
-      display: flex;
-      align-items: center;
-      padding-left: 8px;
-      opacity: 0;
     }
 
     &:hover a,
-    a:hover {
-      opacity: 1;
+    a:hover,
+    a:focus {
+      @apply opacity-100;
     }
   }
 
@@ -251,7 +243,7 @@
         @apply absolute left-0 top-0 ml-4;
         @apply inline-block mr-3;
         @apply text-icon;
-        content: "\25CF";
+        content: "\25CF"; /* Bullet symbol */
       }
     }
   }
