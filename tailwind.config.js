@@ -1,9 +1,5 @@
 module.exports = {
   theme: {
-    container: {
-      center: true,
-      padding: '1.5rem',
-    },
     extend: {
       colors: {
         gray: {
@@ -25,14 +21,14 @@ module.exports = {
           '500': '#F9A50D',
           '700': '#CC880D',
         },
-        primary: 'rgba(0, 0, 0, 0.87)',
+        'primary': 'rgba(0, 0, 0, 0.87)',
         'primary-inverted': 'rgba(255, 255, 255, 0.87)',
         'primary-muted': 'rgba(0, 0, 0, 0.60)',
-        secondary: 'rgba(0, 0, 0, 0.54)',
+        'secondary': 'rgba(0, 0, 0, 0.54)',
         'secondary-inverted': 'rgba(255, 255, 255, 0.54)',
-        icon: 'rgba(0, 0, 0, 0.54)',
+        'icon': 'rgba(0, 0, 0, 0.54)',
         'icon-inverted': 'rgba(255, 255, 255, 0.7)',
-        hint: 'rgba(0, 0, 0, 0.38)',
+        'hint': 'rgba(0, 0, 0, 0.38)',
         'hint-inverted': 'rgba(255, 255, 255, 0.38)',
       },
       padding: {

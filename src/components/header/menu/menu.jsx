@@ -3,9 +3,11 @@ import Helmet from 'react-helmet'
 import { CSSTransition } from 'react-transition-group'
 import { Link } from 'gatsby'
 
+import style from './menu.module.css'
+
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `block py-2 font-semibold ${isCurrent ? 'text-nubots-500' : 'text-primary-inverted'}`
+    className: `${style.link} ${isCurrent ? style.linkActive : ''}`
   }
 }
 
@@ -26,18 +28,12 @@ const Menu = ({ menu, open }) => {
       onExiting={onExiting}
       unmountOnExit
     >
-      <div
-        className='h-screen w-full overflow-hidden fixed z-10'
-        style={{ transition: 'max-height 0.3s ease' }}
-      >
-        <nav
-          className='container h-screen overflow-y-auto pt-24 pb-6'
-          style={{ backgroundColor: 'rgba(36,41,46,0.9)', backdropFilter: 'blur(20px)' }}
-        >
+      <div className={style.wrapper}>
+        <nav className={style.menu}>
           {
             menu.map(chapter => {
               return <section className='mb-6' key={chapter.title}>
-                <h3 className='text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1'>
+                <h3 className={style.chapterTitle}>
                   { chapter.title }
                 </h3>
                 {

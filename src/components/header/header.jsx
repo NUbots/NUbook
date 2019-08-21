@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import Links from './links/links'
 import Logo from './logo/logo'
-import Menu from './menu'
+import Menu from './menu/menu'
 import MenuToggle from './menu-toggle/menu-toggle'
 import Search from './search/search'
 

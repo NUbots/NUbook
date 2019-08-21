@@ -5,7 +5,7 @@ import style from './sidebar.module.css'
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${style.link} ${isCurrent ? `${style.linkActive} text-primary` : 'text-primary-muted'}`,
+    className: `${style.link} ${isCurrent ? `${style.linkActive}` : ''}`,
   }
 }
 
@@ -14,7 +14,7 @@ const Sidebar = ({ menu }) => {
     {
       menu.map(chapter => {
         return <section className='mb-6' key={chapter.title}>
-          <div className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
+          <div className={style.chapterTitle}>
             { chapter.title }
           </div>
           {

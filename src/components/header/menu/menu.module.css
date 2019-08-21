@@ -1,0 +1,26 @@
+.wrapper {
+  @apply h-screen w-full overflow-hidden fixed z-10;
+  transition: max-height 0.3s ease;
+
+  @screen lg {
+    @apply hidden;
+  }
+}
+
+.menu {
+  @apply px-6 h-screen overflow-y-auto pt-24 pb-6;
+  background-color: rgba(36, 41, 46, 0.9);
+  backdrop-filter: blur(20px);
+}
+
+.chapterTitle {
+  @apply text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1;
+}
+
+.link {
+  @apply block py-2 font-semibold text-primary-inverted;
+}
+
+.linkActive {
+  @apply text-nubots-500;
+}
