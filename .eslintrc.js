@@ -8,4 +8,9 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:prettier/recommended',
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 }
