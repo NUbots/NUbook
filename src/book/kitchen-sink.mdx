@@ -18,33 +18,39 @@ This is a paragraph.
 This is a paragraph.
 ```
 
-Header 1
-========
+# Header 1
 
-Header 2
---------
+## Header 2
 
 ```md
-Header 1
-========
+# Header 1
 
-Header 2
---------
+## Header 2
 ```
 
 # Header 1
+
 ## Header 2 `OldWalkEngine` class
+
 ### Header 3 `some code`
+
 #### Header 4 `some code`
+
 ##### Header 5 `some code`
+
 ###### Header 6
 
 ```md
 # Header 1
+
 ## Header 2
+
 ### Header 3
+
 #### Header 4
+
 ##### Header 5
+
 ###### Header 6
 ```
 
@@ -62,15 +68,13 @@ Header 2
 - Green
 - Blue
 
-
-+ Red
-+ Green
-+ Blue
-
-
 * Red
 * Green
 * Blue
+
+- Red
+- Green
+- Blue
 
 1. Buy flour and salt
 1. Mix together with water
@@ -84,66 +88,65 @@ Code
 
 <!-- -->
 
+---
 
-* * *
+---
 
-***
+---
 
-*****
+---
 
-- - -
+---
 
----------------------------------------
-
-This is [an example](http://example.com "Example") link.
+This is [an example](http://example.com 'Example') link.
 
 [This link](http://example.com) has no title attr.
 
-This is [an example] [id] reference-style link.
+This is [an example][id] reference-style link.
 
-[id]: http://example.com "Optional Title"
+[id]: http://example.com 'Optional Title'
 
 ```md
-This is [an example](http://example.com "Example") link.
+This is [an example](http://example.com 'Example') link.
 
 [This link](http://example.com) has no title attr.
 
-This is [an example] [id] reference-style link.
+This is [an example][id] reference-style link.
 
-[id]: http://example.com "Optional Title"
+[id]: http://example.com 'Optional Title'
 ```
 
-*single asterisks*
+_single asterisks_
 
 _single underscores_
 
 **double asterisks**
 
-__double underscores__
+**double underscores**
 
 ```md
-*single asterisks*
+_single asterisks_
 
 _single underscores_
 
 **double asterisks**
 
-__double underscores__
+**double underscores**
 ```
 
 This paragraph has some `code` in it.
 
 ```md
 This paragraph has some `code` in it.
-````
-
-![Alt Text](http://placehold.it/200x50 "Image Title")
-
-```md
-![Alt Text](http://placehold.it/200x50 "Image Title")
 ```
 
-![Alt Text](nubots-icon.png "NUbots icon")
+![Alt Text](http://placehold.it/200x50 'Image Title')
+
+```md
+![Alt Text](http://placehold.it/200x50 'Image Title')
+```
+
+![Alt Text](nubots-icon.png 'NUbots icon')
 
 ```jsx
 import React from 'react'
@@ -154,12 +157,12 @@ export default ({ children, className }) => {
 
   return (
     <Highlight {...defaultProps} code={children.trim()} language={language}>
-      {({className, style, tokens, getLineProps, getTokenProps}) => (
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <code className={`${className} w-full p-4 rounded`} style={style}>
           {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({line, key: i})}>
+            <div key={i} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
-                <span key={key} {...getTokenProps({token, key})} />
+                <span key={key} {...getTokenProps({ token, key })} />
               ))}
             </div>
           ))}
@@ -184,7 +187,7 @@ $$
 
 # Table
 
-| First Header  | Second Header | Third Header |
-| ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
+| First Header | Second Header | Third Header |
+| ------------ | ------------- | ------------ |
+| Content Cell | Content Cell  | Content Cell |
+| Content Cell | Content Cell  | Content Cell |
