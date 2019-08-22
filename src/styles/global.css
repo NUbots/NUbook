@@ -1,7 +1,17 @@
 @import '~katex/dist/katex.min.css';
 
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * normalize.css and some additional base styles.
+ */
+/* purgecss start ignore */
 @tailwind base;
-@tailwind components;
+/* purgecss end ignore */
+
+/**
+ * This injects all of Tailwind's utility classes, generated based
+ * on the tailwind.config.js config file.
+ */
 @tailwind utilities;
 
 .max-w-screen-xl {
