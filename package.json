@@ -33,6 +33,7 @@
     "gatsby-source-filesystem": "^2.1.8",
     "gatsby-transformer-remark": "^2.6.14",
     "gatsby-transformer-sharp": "^2.2.5",
+    "gh-pages": "^2.1.1",
     "husky": "^3.0.4",
     "katex": "^0.11.0",
     "postcss-nested": "^4.1.2",
@@ -50,10 +51,11 @@
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
+    "clean": "rm -rf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\"",
     "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
     "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npm run lint && npm run clean && gatsby build --prefix-paths && gh-pages -d public"
   },
   "repository": {
     "type": "git",

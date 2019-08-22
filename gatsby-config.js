@@ -1,6 +1,8 @@
 /*eslint-env node*/
 
 module.exports = {
+  // Deployment path on gh-pages (matches repo name)
+  pathPrefix: '/NUbook',
   siteMetadata: {
     title: 'NUbook',
     description: 'The NUbots team handbook.',
@@ -88,8 +90,8 @@ module.exports = {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: 'NUbook',
-        short_name: 'nubook',
-        start_url: '/',
+        short_name: 'NUbook',
+        start_url: '/NUbook',
         background_color: '#24292E',
         theme_color: '#F9A50D',
         display: 'minimal-ui',
