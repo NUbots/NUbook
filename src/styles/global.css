@@ -1,12 +1,18 @@
 @import '~katex/dist/katex.min.css';
 
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * normalize.css and some additional base styles.
+ */
+/* purgecss start ignore */
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* purgecss end ignore */
 
-.max-w-screen-xl {
-  max-width: 1280px;
-}
+/**
+ * This injects all of Tailwind's utility classes, generated based
+ * on the tailwind.config.js config file.
+ */
+@tailwind utilities;
 
 /*
   This will hide the focus indicator if an element receives focus via the mouse,

@@ -36,6 +36,9 @@ module.exports = {
       padding: {
         '14': '3.5rem',
       },
+      maxWidth: {
+        'screen-xl': '1280px',
+      },
     },
   },
   variants: {},
