@@ -11,8 +11,12 @@
   }
 }
 
+.linkActive {
+  @apply text-primary;
+}
+
 .linkActive::before {
-  @apply absolute bg-nubots-500 rounded w-2 h-2 text-primary;
+  @apply absolute bg-nubots-500 rounded w-2 h-2;
   content: '';
   left: -16px;
   top: 12px;
