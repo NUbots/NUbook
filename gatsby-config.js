@@ -1,7 +1,7 @@
 /*eslint-env node*/
 
 module.exports = {
-  // Deployment path on gh-pages (matches repo name)
+  // Deployment path on Github Pages (matches repo name)
   pathPrefix: '/NUbook',
   siteMetadata: {
     title: 'NUbook',
