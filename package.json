@@ -51,8 +51,8 @@
     "build": "gatsby build",
     "dev": "gatsby develop",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\"",
-    "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
+    "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\" \"*.md\"",
+    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\" \"*.md\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
