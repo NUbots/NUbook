@@ -45,17 +45,18 @@
     "react-helmet": "^5.2.1",
     "react-transition-group": "^4.2.2",
     "remark-unwrap-images": "^1.0.0",
+    "rimraf": "^3.0.0",
     "tailwindcss": "^1.1.0"
   },
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
-    "clean": "rm -rf .cache/ public/",
+    "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\"",
     "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
     "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "deploy": "npm run lint && npm run clean && gatsby build --prefix-paths && gh-pages -d public"
+    "deploy": "node scripts/verify-deploy-branch.js && npm run lint && npm run clean && gatsby build --prefix-paths && gh-pages -d public"
   },
   "repository": {
     "type": "git",
