@@ -1,0 +1,31 @@
+---
+chapter: Getting Started
+title: Setting Up NUsight
+description: How to set up and run NUsight.
+slug: /setting-up-nusight
+---
+
+To build and start running NUsight you will need to enter in your console:
+
+```sh
+yarn
+yarn prod
+```
+
+NUsight should now be running. Navigate to [localhost:9090](http://localhost:9090/) on your browser to use NUsight.
+
+Go back to the console with the VM or robot and make sure NUsight is enabled. Enter
+
+```sh
+nano config/NUsight.yaml
+```
+
+Set the messages you want NUsight to get to true. This is usually sensor data and data points. Now when you next run something NUsight will show you what is happening. Depending on what you have enabled in the config for NUsight, you will be able to see the robot moving in localisation tab and graphs running in the chart tab.
+
+## NUsight Commands
+
+`yarn dev` - developing NUsight with virtual robots
+`yarn dev -t` - develop without typechecking
+`yarn storybook` - develop components
+`yarn test` - testing NUsight
+`yarn start --address 192.168.1.255 yarn prod --address 192.168.1.255` - configure NUclearNet connection address

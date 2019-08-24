@@ -1,0 +1,63 @@
+---
+chapter: Getting Started
+title: Troubleshooting
+description: If you run into a problem check here for a solution.
+slug: /troubleshooting
+---
+
+**Shared folders are not mounted?**
+If the shared folders are not mounted you may need to run the following command on the host machine.
+
+```sh
+vagrant plugin install vagrant-vbguest
+```
+
+**Multiple nubotsvm in NUsight?**
+This means someone else is also running a vm robot. You can modify the name of your vm robot by doing the following.
+
+```sh
+cd build
+nano config/NetworkConfiguration.yaml
+```
+
+**During vagrant provision, dpkg is locked?**
+
+This procedure should resolve most issues that may cause the dpkg to be locked (the lock file is like a mutex). Pay attention to the output of the apt-get commands and look for any further errors.
+
+```sh
+vagrant ssh
+sudo rm /var/lib/dpkg/lock
+sudo apt-get install -f
+sudo apt-get update
+sudo apt-get upgrade
+exit
+vagrant provision
+```
+
+Optional step: Run this after the "apt-get upgrade" command. This isn't necessary to resolve any problems, it will just free up some hard drive space.
+
+```sh
+sudo apt-get autoremove --purge
+```
+
+**Vagrant provision stopped on Grub?**
+Grub requires user input when updating but vagrant does not support the format it uses. To fix this, do ‘CTRL-C’ twice to stop the process. Run the following commands to update inside the vm and then exit to provision again.
+
+```sh
+ssh vagrant
+sudo rm /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock /var/cache/apt/archives/lock /var/cache/debconf/templates.dat /var/cache/debconf/passwords.dat /var/cache/debconf/config.dat
+sudo dpkg --configure -a
+sudo apt update
+sudo apt upgrade
+sudo apt dist-upgrade
+sudo apt autoremove --purge
+exit
+vagrant provision
+```
+
+**Something is wrong with the VM?**
+If your problem does not match any of the above, try exiting the VM and in your NUbots folder run 
+
+```sh
+vagrant provision
+```
