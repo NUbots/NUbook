@@ -111,7 +111,7 @@ slug: /
 ---
 ```
 
-- The frontmatter is written in YAML, with the following supported fields:
+- The frontmatter is written in [YAML](https://gettaurus.org/docs/YAMLTutorial/), with the following supported fields:
 
 | Field         | Type    | Presence | Description                                                                 |
 | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
@@ -135,7 +135,7 @@ If you need to, you can:
 
 ## Deploying
 
-> **Note:** deploys can only be run from `master`, after changes have been reviewed and merged via a PR.
+> **Note:** deploys can only be run from `master`, after changes have been reviewed and merged via a pull request.
 
 To deploy, run:
 
