@@ -18,6 +18,8 @@ const Layout = ({ children, data, pageContext }) => {
     hidden,
   } = data.mdx.frontmatter
   const { next, previous, menu } = pageContext
+  const currentSection =
+    menu.find(section => section.title === sectionTitle) || menu[0]
   return (
     <>
       <SEO
@@ -35,7 +37,7 @@ const Layout = ({ children, data, pageContext }) => {
             : []
         }
       />
-      <Header menu={menu} />
+      <Header menu={menu} currentSection={currentSection} />
       <div className='w-full max-w-screen-xl mx-auto px-6'>
         <div className='lg:flex -mx-6'>
           <div className='hidden w-1/4 lg:block xl:w-1/5'>
@@ -43,13 +45,7 @@ const Layout = ({ children, data, pageContext }) => {
               className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 overflow-y-auto h-screen border-t border-t-transparent'
               style={{ borderTopWidth: '4rem' }}
             >
-              <Sidebar
-                menu={menu}
-                currentSection={
-                  menu.find(section => section.title === sectionTitle) ||
-                  menu[0]
-                }
-              />
+              <Sidebar menu={menu} currentSection={currentSection} />
             </div>
           </div>
           <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
