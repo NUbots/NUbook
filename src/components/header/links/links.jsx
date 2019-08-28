@@ -26,6 +26,7 @@ const Links = () => (
         <>
           <a
             className='text-icon-inverted hover:text-white focus:text-white mr-6'
+            title='NUbots on GitHub'
             href={githubUrl}
             target='_blank'
             rel='noopener noreferrer'
@@ -34,6 +35,7 @@ const Links = () => (
           </a>
           <a
             className='text-icon-inverted hover:text-white focus:text-white mr-6'
+            title='NUbots on Slack'
             href={slackUrl}
             target='_blank'
             rel='noopener noreferrer'
@@ -42,6 +44,7 @@ const Links = () => (
           </a>
           <a
             className='text-icon-inverted hover:text-white focus:text-white mr-6'
+            title='NUbots on Facebook'
             href={facebookUrl}
             target='_blank'
             rel='noopener noreferrer'
@@ -50,6 +53,7 @@ const Links = () => (
           </a>
           <a
             className='text-icon-inverted hover:text-white focus:text-white'
+            title='NUbots Email'
             href={`mailto:${email}`}
           >
             <EmailIcon className='w-5 h-5' />
