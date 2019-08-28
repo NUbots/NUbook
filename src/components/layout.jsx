@@ -12,6 +12,7 @@ import TableOfContents from './table-of-contents/table-of-contents'
 const Layout = ({ children, data, pageContext }) => {
   const {
     section: sectionTitle,
+    chapter: chapterTitle,
     title,
     description,
     keywords,
@@ -20,6 +21,9 @@ const Layout = ({ children, data, pageContext }) => {
   const { next, previous, menu } = pageContext
   const currentSection =
     menu.find(section => section.title === sectionTitle) || menu[0]
+  const currentChapter = currentSection.chapters.find(
+    chapter => chapter.title === chapterTitle
+  )
   return (
     <>
       <SEO
@@ -60,7 +64,12 @@ const Layout = ({ children, data, pageContext }) => {
               )}
             </div>
             <div className='px-6 pt-24 pb-12 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'>
-              <ArticleHeader title={title} description={description} />
+              <ArticleHeader
+                section={currentSection}
+                chapter={currentChapter}
+                title={title}
+                description={description}
+              />
               <Markdown>{children}</Markdown>
               <ArticleNavigation next={next} previous={previous} />
             </div>
