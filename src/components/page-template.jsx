@@ -20,6 +20,7 @@ PageTemplate.propTypes = {
       body: PropTypes.string.isRequired,
       tableOfContents: PropTypes.object,
       frontmatter: PropTypes.shape({
+        section: PropTypes.string,
         chapter: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.string,
@@ -41,6 +42,7 @@ export const query = graphql`
       body
       tableOfContents(maxDepth: 3)
       frontmatter {
+        section
         chapter
         title
         description

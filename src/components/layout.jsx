@@ -10,7 +10,13 @@ import Sidebar from './sidebar/sidebar'
 import TableOfContents from './table-of-contents/table-of-contents'
 
 const Layout = ({ children, data, pageContext }) => {
-  const { title, description, keywords, hidden } = data.mdx.frontmatter
+  const {
+    section: sectionTitle,
+    title,
+    description,
+    keywords,
+    hidden,
+  } = data.mdx.frontmatter
   const { next, previous, menu } = pageContext
   return (
     <>
@@ -37,7 +43,13 @@ const Layout = ({ children, data, pageContext }) => {
               className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 overflow-y-auto h-screen border-t border-t-transparent'
               style={{ borderTopWidth: '4rem' }}
             >
-              <Sidebar menu={menu} />
+              <Sidebar
+                menu={menu}
+                currentSection={
+                  menu.find(section => section.title === sectionTitle) ||
+                  menu[0]
+                }
+              />
             </div>
           </div>
           <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
@@ -68,6 +80,7 @@ Layout.propTypes = {
   data: PropTypes.shape({
     mdx: PropTypes.shape({
       frontmatter: PropTypes.shape({
+        section: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.string,
         keywords: PropTypes.arrayOf(PropTypes.string),
