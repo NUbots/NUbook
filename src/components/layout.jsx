@@ -85,6 +85,7 @@ Layout.propTypes = {
   data: PropTypes.shape({
     mdx: PropTypes.shape({
       frontmatter: PropTypes.shape({
+        chapter: PropTypes.string,
         section: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.string,

@@ -20,6 +20,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           }
           next {
             frontmatter {
+              chapter
               title
               description
               slug
@@ -28,6 +29,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           }
           previous {
             frontmatter {
+              chapter
               title
               description
               slug
