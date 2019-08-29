@@ -11,7 +11,7 @@ import { createHeading } from './heading/heading'
 
 const Img = ({ src, alt, title }) => (
   <Image src={src} alt={alt}>
-    {title || alt}
+    {title}
   </Image>
 )
 
