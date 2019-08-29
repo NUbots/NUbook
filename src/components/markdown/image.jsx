@@ -29,6 +29,7 @@ NonStretchedImage.propTypes = {
     ]),
   }),
   style: PropTypes.object,
+  alt: PropTypes.string,
 }
 
 const Image = props => (
@@ -69,7 +70,7 @@ const Image = props => (
           throw new Error(`Image not found: ${src}.`)
         }
 
-        Img = <NonStretchedImage fluid={image.node.fluid} />
+        Img = <NonStretchedImage fluid={image.node.fluid} alt={props.alt} />
       }
 
       return (
