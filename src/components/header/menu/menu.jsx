@@ -12,7 +12,7 @@ const getLinkProps = ({ isCurrent }) => {
   }
 }
 
-const Menu = ({ menu, open }) => {
+const Menu = ({ menu, currentSection, open }) => {
   return (
     <>
       <Helmet>
@@ -32,7 +32,26 @@ const Menu = ({ menu, open }) => {
       >
         <div className={style.wrapper}>
           <nav className={style.menu}>
-            {menu.map(chapter => {
+            <div className='mb-8'>
+              {menu.map(section => {
+                const className = `${style.sectionLink} ${
+                  section.title === currentSection.title
+                    ? `${style.sectionLinkActive}`
+                    : ''
+                }`
+                return (
+                  <Link
+                    to={section.slug}
+                    key={section.slug}
+                    className={className}
+                  >
+                    {section.title}
+                  </Link>
+                )
+              })}
+            </div>
+
+            {currentSection.chapters.map(chapter => {
               return (
                 <section className='mb-6' key={chapter.title}>
                   <h3 className={style.chapterTitle}>{chapter.title}</h3>
@@ -59,14 +78,25 @@ Menu.propTypes = {
   menu: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      pages: PropTypes.arrayOf(
-        PropTypes.shape({
-          title: PropTypes.string.isRequired,
-          slug: PropTypes.string.isRequired,
-        })
-      ).isRequired,
+      slug: PropTypes.string.isRequired,
     })
   ).isRequired,
+  currentSection: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
+    chapters: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        slug: PropTypes.string.isRequired,
+        pages: PropTypes.arrayOf(
+          PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            slug: PropTypes.string.isRequired,
+          })
+        ).isRequired,
+      })
+    ).isRequired,
+  }),
   open: PropTypes.bool.isRequired,
 }
 

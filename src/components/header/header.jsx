@@ -7,7 +7,7 @@ import Menu from './menu/menu'
 import MenuToggle from './menu-toggle/menu-toggle'
 import Search from './search/search'
 
-const Header = ({ menu }) => {
+const Header = ({ menu, currentSection }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   return (
     <>
@@ -31,13 +31,14 @@ const Header = ({ menu }) => {
           </div>
         </div>
       </div>
-      <Menu menu={menu} open={menuOpen} />
+      <Menu menu={menu} currentSection={currentSection} open={menuOpen} />
     </>
   )
 }
 
 Header.propTypes = {
   menu: PropTypes.array.isRequired,
+  currentSection: PropTypes.object.isRequired,
 }
 
 export default Header

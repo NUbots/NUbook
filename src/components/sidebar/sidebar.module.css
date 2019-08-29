@@ -1,8 +1,4 @@
-.chapterTitle {
-  @apply text-hint text-sm uppercase tracking-wide font-semibold mb-2;
-}
-
-.link {
+.sectionLink {
   @apply relative block py-1 mb-1 font-semibold text-primary-muted;
 
   &:hover,
@@ -11,19 +7,52 @@
   }
 }
 
-.linkActive {
-  @apply text-primary;
+.sectionLinkActive {
+  &,
+  &:hover,
+  &:global(.focus-visible) {
+    @apply text-primary;
+  }
+
+  &::before {
+    @apply absolute bg-nubots-200 rounded h-full top-0;
+    content: '';
+    left: -12px;
+    right: -8px;
+    z-index: -1;
+  }
 }
 
-.linkActive::before {
-  @apply absolute bg-nubots-500 rounded w-2 h-2;
-  content: '';
-  left: -16px;
-  top: 12px;
-  animation: fade-and-scale-in 0.3s ease;
+.chapterTitle {
+  @apply text-hint text-sm uppercase tracking-wider font-semibold mb-2;
+}
 
-  @screen xl {
-    left: -20px;
+.link {
+  @apply relative block py-1 mb-2 font-semibold text-primary-muted leading-snug;
+
+  &:hover,
+  &:global(.focus-visible) {
+    @apply text-nubots-700;
+  }
+}
+
+.linkActive {
+  &,
+  &:hover,
+  &:global(.focus-visible) {
+    @apply text-primary;
+  }
+
+  &::before {
+    @apply absolute bg-nubots-500 rounded w-2 h-2;
+    content: '';
+    left: -16px;
+    top: 12px;
+    animation: fade-and-scale-in 0.3s ease;
+
+    @screen xl {
+      left: -20px;
+    }
   }
 }
 
