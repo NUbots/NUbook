@@ -10,6 +10,7 @@ module.exports = {
     githubUrl: 'https://github.com/NUbots/',
     slackUrl: 'https://nubotsteam.slack.com',
     facebookUrl: 'https://www.facebook.com/NubotsRobotics/',
+    email: 'nubots@newcastle.edu.au',
   },
   plugins: [
     {
