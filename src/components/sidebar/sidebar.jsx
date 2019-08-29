@@ -10,19 +10,34 @@ const getLinkProps = ({ isCurrent }) => {
   }
 }
 
-const Sidebar = ({ menu }) => {
+const Sidebar = ({ menu, currentSection }) => {
   return (
     <nav>
-      {menu.map(chapter => {
+      <div className='mb-8'>
+        {menu.map(section => {
+          const className = `${style.sectionLink} ${
+            section.title === currentSection.title
+              ? `${style.sectionLinkActive}`
+              : ''
+          }`
+          return (
+            <Link to={section.slug} key={section.slug} className={className}>
+              {section.title}
+            </Link>
+          )
+        })}
+      </div>
+
+      {currentSection.chapters.map(chapter => {
         return (
-          <section className='mb-6' key={chapter.title}>
+          <div className='mb-8' key={chapter.title}>
             <div className={style.chapterTitle}>{chapter.title}</div>
             {chapter.pages.map(page => (
               <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}
               </Link>
             ))}
-          </section>
+          </div>
         )
       })}
     </nav>
@@ -33,14 +48,25 @@ Sidebar.propTypes = {
   menu: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      pages: PropTypes.arrayOf(
-        PropTypes.shape({
-          title: PropTypes.string.isRequired,
-          slug: PropTypes.string.isRequired,
-        })
-      ).isRequired,
+      slug: PropTypes.string.isRequired,
     })
   ).isRequired,
+  currentSection: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    slug: PropTypes.string.isRequired,
+    chapters: PropTypes.arrayOf(
+      PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        slug: PropTypes.string.isRequired,
+        pages: PropTypes.arrayOf(
+          PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            slug: PropTypes.string.isRequired,
+          })
+        ).isRequired,
+      })
+    ).isRequired,
+  }),
 }
 
 export default Sidebar

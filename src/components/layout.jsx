@@ -10,8 +10,20 @@ import Sidebar from './sidebar/sidebar'
 import TableOfContents from './table-of-contents/table-of-contents'
 
 const Layout = ({ children, data, pageContext }) => {
-  const { title, description, keywords, hidden } = data.mdx.frontmatter
+  const {
+    section: sectionTitle,
+    chapter: chapterTitle,
+    title,
+    description,
+    keywords,
+    hidden,
+  } = data.mdx.frontmatter
   const { next, previous, menu } = pageContext
+  const currentSection =
+    menu.find(section => section.title === sectionTitle) || menu[0]
+  const currentChapter = currentSection.chapters.find(
+    chapter => chapter.title === chapterTitle
+  )
   return (
     <>
       <SEO
@@ -29,7 +41,7 @@ const Layout = ({ children, data, pageContext }) => {
             : []
         }
       />
-      <Header menu={menu} />
+      <Header menu={menu} currentSection={currentSection} />
       <div className='w-full max-w-screen-xl mx-auto px-6'>
         <div className='lg:flex -mx-6'>
           <div className='hidden w-1/4 lg:block xl:w-1/5'>
@@ -37,7 +49,7 @@ const Layout = ({ children, data, pageContext }) => {
               className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 h-screen overflow-y-auto border-t border-t-transparent'
               style={{ borderTopWidth: '4rem' }}
             >
-              <Sidebar menu={menu} />
+              <Sidebar menu={menu} currentSection={currentSection} />
             </div>
           </div>
           <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
@@ -52,7 +64,12 @@ const Layout = ({ children, data, pageContext }) => {
               )}
             </div>
             <div className='px-6 pt-24 pb-12 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'>
-              <ArticleHeader title={title} description={description} />
+              <ArticleHeader
+                section={currentSection}
+                chapter={currentChapter}
+                title={title}
+                description={description}
+              />
               <Markdown>{children}</Markdown>
               <ArticleNavigation next={next} previous={previous} />
             </div>
@@ -68,6 +85,8 @@ Layout.propTypes = {
   data: PropTypes.shape({
     mdx: PropTypes.shape({
       frontmatter: PropTypes.shape({
+        chapter: PropTypes.string,
+        section: PropTypes.string,
         title: PropTypes.string,
         description: PropTypes.string,
         keywords: PropTypes.arrayOf(PropTypes.string),

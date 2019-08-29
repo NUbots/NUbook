@@ -13,8 +13,24 @@
   backdrop-filter: blur(20px);
 }
 
+.sectionLink {
+  @apply relative block py-3 leading-none font-semibold text-primary-inverted;
+}
+
+.sectionLinkActive {
+  @apply text-primary;
+
+  &::before {
+    @apply absolute bg-nubots-300 rounded h-full top-0;
+    content: '';
+    left: -10px;
+    right: -10px;
+    z-index: -1;
+  }
+}
+
 .chapterTitle {
-  @apply text-hint-inverted text-sm uppercase tracking-wide font-semibold mb-1;
+  @apply text-hint-inverted text-sm uppercase tracking-wider font-semibold mb-1;
 }
 
 .link {

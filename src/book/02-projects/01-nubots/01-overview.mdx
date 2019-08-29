@@ -1,0 +1,24 @@
+---
+section: Projects
+chapter: NUbots
+title: Overview
+description: Introduction to the NUbots codebase and high-level architecture.
+slug: /projects/nubots/overview
+---
+
+The NUbots repository is the main codebase that runs on the robots. Its purpose is to control the robot during RoboCup matches. The NUbots codebase, along with all other NUbots code, is open source and can be [found on GitHub](https://github.com/NUbots/NUbots/). The primary language in the NUbots codebase is C++.
+
+The main parts of the NUbots codebase are behaviour, motion, vision, and localisation. Behaviours include strategy, planning and skills. Motion includes kicking, getting up, and walking. Vision includes ball, goal and field detectors. Localisation determines where the robot, ball and the field are in the world through odometry.
+
+At the top level, the robot will use strategy to decide what to do, such as whether it will act as a goalkeeper or if it will act like a striker.
+
+The next level down is planning. This includes planning the path to walk along to get to the ball facing the right goal.
+Below planning is skills. Skills include kicking, walking, getting up, and looking at objects.
+
+Next is motions. Motions include how the robot moves its feet to walk, and what movements it does to kick or get up.
+
+After motions is hardware IO. The hardware will output the commands and input the information from the world. This will then go through a sensor filter so that the robot can interpret the information. This information then influences strategy.
+
+All these modules are connected using NUClear which is a message passing software architecture. More can be found on NUClear [here](https://nuclear.readthedocs.io/en/latest/).
+
+![Flow of the NUbots codebase](../images/software-overview.png)

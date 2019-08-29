@@ -11,6 +11,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           node {
             id
             frontmatter {
+              section
               chapter
               title
               slug
@@ -19,6 +20,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           }
           next {
             frontmatter {
+              chapter
               title
               description
               slug
@@ -27,6 +29,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           }
           previous {
             frontmatter {
+              chapter
               title
               description
               slug
@@ -47,23 +50,19 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const posts = result.data.allMdx.edges
 
   // Create the navigation menu
-  const menu = {}
+  const menu = []
 
   // Populate the menu
   posts
     .filter(({ node }) => !node.frontmatter.hidden)
     .forEach(({ node }) => {
-      const chapter = menu[node.frontmatter.chapter] || {
-        title: node.frontmatter.chapter,
-        pages: [],
-      }
+      const section = findOrCreateSection(menu, node)
+      const chapter = findOrCreateChapter(section, node)
 
       chapter.pages.push({
         title: node.frontmatter.title,
         slug: node.frontmatter.slug,
       })
-
-      menu[chapter.title] = chapter
     })
 
   // Create a page for each MDX file
@@ -78,10 +77,58 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
-        menu: Object.values(menu),
+        menu,
       },
     })
   })
+}
+
+/**
+ * Get the section in the given menu that the given node belongs to,
+ * or create a new section if not found.
+ */
+function findOrCreateSection(menu, node) {
+  const section = menu.find(
+    section => section.title === node.frontmatter.section
+  )
+
+  if (section) {
+    return section
+  }
+
+  const newSection = {
+    title: node.frontmatter.section,
+    slug: node.frontmatter.slug,
+    chapters: [],
+  }
+
+  menu.push(newSection)
+
+  return newSection
+}
+
+/**
+ * Get the chapter in the given section that the given node belongs to,
+ * or create a new chapter if not found.
+ */
+function findOrCreateChapter(section, node) {
+  const chapter = section.chapters.find(
+    chapter => chapter.title === node.frontmatter.chapter
+  )
+
+  if (chapter) {
+    return chapter
+  }
+
+  const newChapter = {
+    title: node.frontmatter.chapter,
+    slug: node.frontmatter.slug,
+    pages: [],
+  }
+
+  section.chapters.push(newChapter)
+
+  return newChapter
 }
 
 /**
