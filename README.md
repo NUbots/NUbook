@@ -57,7 +57,7 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 - Reference images in Markdown:
 
 ```md
-![Image caption](../images/image.png)
+![Image caption](../../../images/image.png)
 ```
 
 ### Adding syntax-highlighted code blocks
