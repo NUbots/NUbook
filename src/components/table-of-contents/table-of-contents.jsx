@@ -36,7 +36,7 @@ Contents.propTypes = {
 
 const TableOfContents = ({ contents }) => (
   <div>
-    <h3 className='text-hint text-sm uppercase tracking-wide font-semibold mb-2'>
+    <h3 className='text-hint text-sm uppercase tracking-wider font-semibold mb-2'>
       On this page
     </h3>
     <Contents contents={contents} level={0} />
