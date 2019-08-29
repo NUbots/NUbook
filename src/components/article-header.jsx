@@ -4,16 +4,32 @@ import { Link } from 'gatsby'
 
 const ArticleHeader = ({ section, chapter, title, description }) => (
   <div className='mb-8'>
-    <div>
-      <Link to={section.slug} className='text-secondary hover:text-nubots-700'>
-        {section.title}
-      </Link>
-      <span className='text-secondary px-2'>›</span>
-      <Link to={chapter.slug} className='text-secondary hover:text-nubots-700'>
-        {chapter.title}
-      </Link>
-      <span className='text-secondary px-2'>›</span>
-    </div>
+    {(chapter || section) && (
+      <div>
+        {section && (
+          <>
+            <Link
+              to={section.slug}
+              className='text-secondary hover:text-nubots-700'
+            >
+              {section.title}
+            </Link>
+            <span className='text-secondary px-2'>›</span>
+          </>
+        )}
+        {chapter && (
+          <>
+            <Link
+              to={chapter.slug}
+              className='text-secondary hover:text-nubots-700'
+            >
+              {chapter.title}
+            </Link>
+            <span className='text-secondary px-2'>›</span>
+          </>
+        )}
+      </div>
+    )}
     <h1 className='text-3xl md:text-4xl leading-tight font-semibold mb-2'>
       {title}
     </h1>
