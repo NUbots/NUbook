@@ -8,7 +8,16 @@ slug: /projects/hardware/overview
 
 The platform used is the NUgus, based off the [igus® Humanoid Open Platform](http://www.nimbro.net/OP/). The NUgus robots are 3D printed using fused deposition modelling. Because of this, the components of the robot were split to allow for the size of the printer bed and the printer volume. The torso was also modified to have open shoulder covers for shoulder servo cable access.
 
-![Coronal image of the NUgus robot](../../../images/front-robot.png)
-![Sagittal image of the NUgus robot](../../../images/side-robot.png)
+![Coronal and sagittal image of the NUgus robot](../../../images/nugus.png)
 
-The arms and head of the NUgus robot use [MX64AR servos from Dynamixel](http://www.robotis.us/dynamixel-mx-64ar/). The legs use [MX106 servos from Dynamixel](http://support.robotis.com/en/product/actuator/dynamixel/mx_series/mx-106.htm). The robots use two [FLIR Blackfly S](https://flir.app.boxcn.net/s/x0r0bdsjstdkudjd2dwlxoa5fdvj2gpg/file/418603726810) cameras positioned in their head. In the torso lies the Intel NUC7i7bnh, 8GB RAM, 256GB SSD, Robotis CM740 subcontroller, and a 3850mAh 4s LiPo battery.
+## Servos
+
+The arms and head of the NUgus robot use [MX64AR servos from Dynamixel](http://www.robotis.us/dynamixel-mx-64ar/), with two in each shoulder, one in each elbow, and two in the neck. The legs use [MX106 servos from Dynamixel](http://support.robotis.com/en/product/actuator/dynamixel/mx_series/mx-106.htm), with two in each ankle, three in each hip, and one in each knee.
+
+## Cameras
+
+The robots use two [FLIR Blackfly S](https://flir.app.boxcn.net/s/x0r0bdsjstdkudjd2dwlxoa5fdvj2gpg/file/418603726810) USB3 cameras with a C-Mount lens positioned in their head, giving 170FPS. Two custom build S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180$^\circ$ fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/up-angle-a2.html) are used to connect the cameras to the robot's computer.
+
+## Computing
+
+The NUgus uses an Intel NUC7i7bnh with a Silverstone NT07-115X cooling fan. 8GB RAM, 256GB SSD, Robotis CM740 subcontroller, and a 3850mAh 4s LiPo battery.
