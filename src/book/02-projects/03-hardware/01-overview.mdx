@@ -6,9 +6,16 @@ description: Overview and specification of the hardware used by NUbots.
 slug: /projects/hardware/overview
 ---
 
-The platform used is the NUgus, based off the [igus® Humanoid Open Platform](http://www.nimbro.net/OP/). The NUgus robots are 3D printed using fused deposition modelling. Because of this, the components of the robot were split to allow for the size of the printer bed and the printer volume. The torso was also modified to have open shoulder covers for shoulder servo cable access.
+NUbots uses the NUgus hardware platform, a modification of the [igus® Humanoid Open Platform](http://www.nimbro.net/OP/). The NUgus robots are 3D printed using fused deposition modelling.
 
-![Coronal and sagittal image of the NUgus robot](../../../images/nugus.png)
+![Coronal and sagittal image of the NUgus robot](../../../images/nugus.png 'Coronal and sagittal image of the NUgus robot')
+
+## igus® Modifications
+
+The following modifications were made to fit our specific requirements:
+
+- The components of the robot were split to to fit the size of the printer bed and volume.
+- The torso was modified to have open shoulder covers for shoulder servo cable access.
 
 ## Servos
 
@@ -16,16 +23,16 @@ The arms and head of the NUgus robot use [MX64AR servos from Dynamixel](http://w
 
 ## Cameras
 
-The robots use two [FLIR Blackfly S](https://flir.app.boxcn.net/s/x0r0bdsjstdkudjd2dwlxoa5fdvj2gpg/file/418603726810) USB3 cameras with a C-Mount lens positioned in their head, giving 170FPS. Two custom build S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180$^\circ$ fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/up-angle-a2.html) are used to connect the cameras to the robot's computer.
+The NUgus robot uses two [FLIR Blackfly S](https://flir.app.boxcn.net/s/x0r0bdsjstdkudjd2dwlxoa5fdvj2gpg/file/418603726810) USB3 cameras with a C-Mount lens positioned in their head, producing images at 170FPS. Two custom-built S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180$^\circ$ fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/up-angle-a2.html) are used to connect the cameras to the robot's computer.
 
 ## Computing
 
-The NUgus uses an Intel NUC7i7bnh with a Silverstone NT07-115X cooling fan. It has 8GB RAM, 256GB SSD, and a Robotis CM740 Subcontroller.
+The NUgus robot uses the [Intel NUC7i7bnh](https://ark.intel.com/content/www/us/en/ark/products/95065/intel-nuc-kit-nuc7i7bnh.html) NUC with a [Silverstone NT07-115X](https://www.silverstonetek.com/product.php?pid=442&area=en) cooling fan. It has 8GB of RAM, a 256GB SSD, and a [Robotis CM740 Sub Controller](<http://support.robotis.com/en/product/robotis-op2/sub_controller(cm-740).htm>).
 
-## WiFi
+## Networking
 
-The robot has an Ethernet port as well as WiFi capability. It has two custom order 15cm MHF.4 to RP-SMA wireless antenna cables from the [RFShop](https://rfshop.com.au/), with two RP-SMA antennas which are around 1" long.
+The NUgus robot has an Ethernet port as well as WiFi capability. It has two custom-ordered 15cm MHF.4 to RP-SMA wireless antenna cables from the [RFShop](https://rfshop.com.au/), with two RP-SMA antennas which are around 1" long.
 
 ## Power
 
-The robot uses a 3850mAh 4s LiPo battery when not plugged into power. The NUgus uses a rebuilt Darwin power board and a custom 16A cylindrical fuse holder. It uses a custom NUC power board, which distributes power to the cooling fan and the NUC.
+The NUgus robot uses a 3850mAh 4s LiPo battery when not plugged into power. It uses a rebuilt Darwin power board and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
