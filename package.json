@@ -55,8 +55,7 @@
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"scripts/**/*.js\" \"src/**/*.{jsx,js}\" \"*.js\"",
     "format": "prettier --write \"scripts/**/*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "format:check": "prettier --check \"scripts/**/*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "deploy": "node scripts/verify-deploy-branch.js && npm run lint && npm run clean && gatsby build --prefix-paths && gh-pages -d public"
+    "format:check": "prettier --check \"scripts/**/*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"*.js\""
   },
   "repository": {
     "type": "git",
