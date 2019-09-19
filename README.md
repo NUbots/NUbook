@@ -1,6 +1,8 @@
 # NUbook
 
-NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at https://nubots.github.io/NUbook/.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d89a0d60-217a-4563-ad03-65ccc90b9222/deploy-status)](https://app.netlify.com/sites/nubook/deploys)
+
+NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at https://nubook.netlify.com/.
 
 Read on if you want to add or update content.
 
@@ -97,13 +99,14 @@ NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/do
 
 ## Organising pages
 
-Pages are written in MDX files in the [`src/book/`](src/book/) directory, and organised as follows:
+Pages are written in MDX files and stored in section and chapter folders in the [`src/book/`](src/book/) directory, and organised as follows:
 
 - Each page's filename is numbered to create the order that will be used for menus and the previous/next page navigation links.
 - Each page has "frontmatter" at the top of the file specifying details such as title and description:
 
 ```md
 ---
+section: The NUbots Team
 chapter: Introduction
 title: Introduction to NUbots
 description: Learn about what we do, key people, and where to find the lab.
@@ -115,7 +118,8 @@ slug: /
 
 | Field         | Type    | Presence | Description                                                                 |
 | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
-| `chapter`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
+| `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
+| `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
 | `title`       | String  | Required | The page title                                                              |
 | `description` | String  | Required | A short, one-sentence description of the page content                       |
 | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
@@ -135,18 +139,6 @@ If you need to, you can:
 
 ## Deploying
 
-> **Note:** deploys can only be run from `master`, after changes have been reviewed and merged via a pull request.
+Pull requests are automatically deployed as previews using [Netlify](https://netlify.com/), which will run code quality checks and report failures before a deploy.
 
-To deploy, run:
-
-```sh
-yarn deploy
-```
-
-Deploying does the following:
-
-- Verifies that the current Git branch is `master`.
-- Lints the code for formatting and other issues. The deploy will be aborted with an error if any issues are found.
-- Cleans Gatsby's `.cache` and `public` folders and runs a fresh build.
-- Copies the built artefacts from the `public` folder into the `gh-pages` branch.
-- Commits and pushes the changes, triggering an automatic deploy to the live site on GitHub Pages.
+When a pull request is merged into master, it is automatically deployed to the main site.
