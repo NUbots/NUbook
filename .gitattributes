@@ -1,1 +1,15 @@
-* text=auto eol=lf
+# Text files will have line endings normalised (i.e. convert CRLF to LF).
+# Binary files will be left untouched. Some files may not be seen as binary
+# by git and so are specified below as binary.
+*               text=auto
+
+*.gif           binary
+*.jpg           binary
+*.jpeg          binary
+*.png           binary
+*.mp3           binary
+*.mp4           binary
+*.zip           binary
+*.ggb 			binary
+*.ods 			binary
+*.ppm 			binary
