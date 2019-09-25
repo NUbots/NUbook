@@ -21,18 +21,25 @@ The following modifications were made to fit our specific requirements:
 
 The arms and head of the NUgus robot use [MX64AR servos from Dynamixel](http://www.robotis.us/dynamixel-mx-64ar/), with two in each shoulder, one in each elbow, and two in the neck. The legs use [MX106 servos from Dynamixel](http://support.robotis.com/en/product/actuator/dynamixel/mx_series/mx-106.htm), with two in each ankle, three in each hip, and one in each knee.
 
+There are custom made mounting brackets milled from aluminium for the flywheels and neck. There are 3D printed cable clamps on the back of the knees, angles and hip blocks. The NUgus robot uses servo-to-servo mounting brackets.
+
 ## Cameras
 
-The NUgus robot uses two [FLIR Blackfly S](https://flir.app.boxcn.net/s/x0r0bdsjstdkudjd2dwlxoa5fdvj2gpg/file/418603726810) USB3 cameras with a C-Mount lens positioned in their head, producing images at 170FPS. Two custom-built S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180° fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/up-angle-a2.html) are used to connect the cameras to the robot's computer.
+The NUgus robot uses two [FLIR Blackfly S](https://www.flir.com/products/blackfly-s-usb3?model=BFS-U3-13Y3C-C) USB3 cameras with a C-Mount lens positioned in their head, producing images at 170FPS. Two custom-built S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180° fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/parts/rr-aums-xxgr.html#RR-AUMS-20GR) are used to connect the cameras to the robot's computer.
 
 ## Computing
 
-The NUgus robot uses the [Intel NUC7i7bnh](https://ark.intel.com/content/www/us/en/ark/products/95065/intel-nuc-kit-nuc7i7bnh.html) NUC with a [Silverstone NT07-115X](https://www.silverstonetek.com/product.php?pid=442&area=en) cooling fan. It has 8GB of RAM, a 256GB SSD, and a [Robotis CM740 Sub Controller](<http://support.robotis.com/en/product/robotis-op2/sub_controller(cm-740).htm>).
+The NUgus robot uses the [Intel NUC7i7bnh](https://www.pccasegear.com/products/39044/intel-boxnuc7i7bnh-core-i7-7th-gen-nuc-barebone-kit) with a [Silverstone NT07-115X](https://www.silverstonetek.com/product.php?pid=442&area=en) cooling fan. The cooling fan's supporting arms were removed and extra skrew holes drilled to line up with the mounting points on the NUC. A copper spacing plate was milled to bridge the gap between the NUC processor and the fan.
+
+The USB and fan sense connectors are [Molex 53398-0471](https://au.element14.com/molex/53398-0471/connector-header-4pos-1row-1-25mm/dp/2426363) and the power connectors on the NUC and fan are [Molex 50-37-5043](https://au.element14.com/molex/50-37-5043/connector-rcpt-4pos-1row-2-5mm/dp/9979565). The CM740 to NUC power connector is a [Yeonho SMH250-02](http://www.yeonho.com/cn/product/product_view.asp?part=device&page=&idx=128&listview=list2).
+
+It has [8GB of RAM](https://www.pccasegear.com/products/33137/corsair-cmso8gx4m2a2133c15-8gb-2x4gb-ddr4-sodimm), a [256GB SSD](https://www.pccasegear.com/products/36613/intel-600p-series-256gb-m-2-ssd), and a [Robotis CM740 Sub Controller](<http://support.robotis.com/en/product/robotis-op2/sub_controller(cm-740).htm>).
 
 ## Networking
 
-The NUgus robot has an Ethernet port as well as WiFi capability. It has two custom-ordered 15cm MHF.4 to RP-SMA wireless antenna cables from the [RFShop](https://rfshop.com.au/), with two RP-SMA antennas which are around 1" long.
+The NUgus robot has an Ethernet port as well as WiFi capability. It has two custom-ordered 15cm MHF.4 to RP-SMA wireless antenna cables from the [RFShop](https://rfshop.com.au/), with two [RP-SMA antennas](https://au.element14.com/microchip/rn-sma-s-rp/antenna-2-4ghz-1inch-w-rpsma/dp/2143323) which are around 1" long.
 
 ## Power
 
-The NUgus robot uses a 3850mAh 4s LiPo battery when not plugged into power. It uses a rebuilt Darwin power board and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
+The NUgus robot has a [Cosel AC/DC Power Supply](https://www.powerbox.com.au/ac-dc-power-supplies/ac-dc-power-supply-cosel-pbb20c). It uses a [3850mAh 4S LiPo Battery](https://www.modelflight.com.au/dualsky-ultra-70-lipo-battery-3850mah-4s-70c.html) when not plugged into power. It uses a rebuilt Darwin power board and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
+The NUgus robot uses custom cables to provide power to the fan, the NUC, and sense and speed control to the fan.
