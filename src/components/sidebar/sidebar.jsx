@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
+
+import { getScrollParent, scrollIntoView } from './scroll.js'
 
 import style from './sidebar.module.css'
 
@@ -11,8 +13,24 @@ const getLinkProps = ({ isCurrent }) => {
 }
 
 const Sidebar = ({ menu, currentSection }) => {
+  const sidebarEl = useRef(null)
+
+  // Scroll to reveal the selected link on mount
+  useEffect(() => {
+    const selectedLink = sidebarEl.current.querySelector(`.${style.linkActive}`)
+
+    if (selectedLink) {
+      const parent = getScrollParent(selectedLink)
+
+      scrollIntoView(selectedLink, parent, {
+        marginTop: 0,
+        marginBottom: 64,
+      })
+    }
+  }, [])
+
   return (
-    <nav>
+    <nav ref={sidebarEl}>
       <div className='mb-8'>
         {menu.map(section => {
           const className = `${style.sectionLink} ${
