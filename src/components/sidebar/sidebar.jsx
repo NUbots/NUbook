@@ -15,14 +15,14 @@ const getLinkProps = ({ isCurrent }) => {
 const Sidebar = ({ menu, currentSection }) => {
   const sidebarEl = useRef(null)
 
-  // Scroll to reveal the selected link on mount
+  // Scroll to reveal the active link on mount
   useEffect(() => {
-    const selectedLink = sidebarEl.current.querySelector(`.${style.linkActive}`)
+    const activeLink = sidebarEl.current.querySelector(`.${style.linkActive}`)
 
-    if (selectedLink) {
-      const parent = getScrollParent(selectedLink)
+    if (activeLink) {
+      const parent = getScrollParent(activeLink)
 
-      scrollIntoView(selectedLink, parent, {
+      scrollIntoView(activeLink, parent, {
         marginTop: 0,
         marginBottom: 64,
       })
