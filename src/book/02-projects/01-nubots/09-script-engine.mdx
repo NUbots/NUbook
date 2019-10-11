@@ -5,3 +5,33 @@ title: Script Engine
 description: Introduction to scripting and how it works in the NUbots codebase.
 slug: /projects/nubots/script-engine
 ---
+
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move his joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+
+## Script Runner
+
+The script runner command will run a script. The command for this is
+
+```bash
+./scriptrunner Script.yaml
+```
+
+Where you would replace `Script.yaml` with the name of the script. All scripts can be found in the NUbots repository under `/module/motion/ScriptEngine/data/scripts/`.
+
+The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, if you were running `Stand.yaml` on `igus1`, the ScriptEngine would first look for `Stand.yaml` in the `/scripts/igus1/` folder, and if it found none, it would then check in the `/scripts/` folder.
+
+## Script Tuner
+
+Script tuner is an easy way to make scripts. To use script tuner, run
+
+```bash
+./scripttuner Script.yaml
+```
+
+Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script.
+
+You will then be able to tune the script.
+
+## Script Engine
+
+The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
