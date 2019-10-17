@@ -18,10 +18,10 @@ An **orthonormal basis (ONB)** is a basis which is orthogonal and each vector ha
 
 ## Vectors
 
-Any vector $\mathbf{u}$ can be expressed as a linear combination of the elements of a basis:
+Any vector $\mathbf{r}$ can be expressed as a linear combination of the elements of a basis:
 
 $$
-\mathbf{u} = u_1^a \mathbf{a_1} + u_2^a \mathbf{a_2} + u_3^a \mathbf{a_3}
+\mathbf{r} = r_1^a \mathbf{a_1} + r_2^a \mathbf{a_2} + r_3^a \mathbf{a_3}
 $$
 
 The scalars are the **coordinates** for the vector in the basis $a$.
@@ -29,10 +29,10 @@ The scalars are the **coordinates** for the vector in the basis $a$.
 In the NUbots codebase, vectors are written as `rABb` which denotes a vector from point $B$ to point $A$ in the basis (or **space**) $b$. These are column matrices of the coordinates of the vectors:
 
 $$
-\mathbf{u}^a = \begin{bmatrix}
-u_1^a \\
-u_2^a \\
-u_3^a \end{bmatrix}
+\mathbf{r}^a = \begin{bmatrix}
+r_1^a \\
+r_2^a \\
+r_3^a \end{bmatrix}
 $$
 
 To make computations such as inner product or cross product with coordinates, they must be relative to the same basis.
@@ -43,7 +43,7 @@ To describe the motion of the robot, we need a **reference frame** and a **coord
 
 The reference frame is the physical rigid body and the coordinate system is a mathematical concept, which is represented as a basis.
 
-**Rotations** are defined by a 3x3 matrix. If we have a vector $\mathbf{u}^a$, that is the vector $u$ in the coordinate system $a$, the rotation
+**Rotations** are defined by a 3x3 matrix. If we have a vector $\mathbf{r}^a$, that is the vector $r$ in the coordinate system $a$, the rotation
 
 $$
 \begin{bmatrix}
@@ -52,7 +52,7 @@ $$
 0 & 0 & 1 \end{bmatrix}
 $$
 
-will rotate $\mathbf{u}^a$ by $\psi$ around the coordinate axis $\mathbf{a_3}$.
+will rotate $\mathbf{r}^a$ by $\psi$ around the coordinate axis $\mathbf{a_3}$.
 
 The orientation of the basis $b$ relative to $a$ can be described by three consecutive rotations about the main axis. There are 12 different orders to do these rotations in, and each triplet of rotated angles is called a set of **Euler angles**. In robotics, the triplet is **yaw**, **pitch** and **roll** (Z-Y-X).
 
@@ -68,10 +68,10 @@ $$
 \text{det}(\mathbf{R}) = 1
 $$
 
-If we have a vector $\mathbf{u}$ (which goes from point C to point D) in a space $a$ and we want to rotate it from space $a$ to space $b$, we write:
+If we have a vector $\mathbf{r}$ (which goes from point C to point D) in a space $a$ and we want to rotate it from space $a$ to space $b$, we write:
 
 $$
-\mathbf{u}^b = \mathbf{R}^b_a \cdot \mathbf{u}^a
+\mathbf{r}^b = \mathbf{R}^b_a \cdot \mathbf{r}^a
 $$
 
 This is written in the NUbots codebase as `rCDb = Rba * rCDa`.
@@ -80,28 +80,28 @@ This is written in the NUbots codebase as `rCDb = Rba * rCDa`.
 
 A transformation matrix in three dimensions is a 4x4 matrix containing a **rotation** component and a **translation** component.
 
-If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{u}^b$, then we have a transformation matrix that transforms from space $a$ to space $b$:
+If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b$, then we have a transformation matrix that transforms from space $a$ to space $b$:
 
 $$
 \mathbf{H}_a^b = \begin{bmatrix}
-\mathbf{R}_a^b & \mathbf{u}_{BA}^b \\
+\mathbf{R}_a^b & \mathbf{r}_{BA}^b \\
 \mathbf{0} & 1
 \end{bmatrix}
 $$
 
 This is written in the NUbots codebase as `Hba`.
 
-The vector $\mathbf{u}_{BA}^b$ is the vector from A (the origin of space a) to B (the origin of space b) in b space, which would be written in the codebase as `rBAb`.
+The vector $\mathbf{r}_{BA}^b$ is the vector from A (the origin of space a) to B (the origin of space b) in b space, which would be written in the codebase as `rBAb`.
 
-The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system too. Thus, the translation vector is $\mathbf{u}_{BA}^b$.
+The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system too. Thus, the translation vector is $\mathbf{r}_{BA}^b$.
 
 Transformation matrices left multiply with vectors to get a vector in the new space.
 
 $$
-\mathbf{v}^b = \mathbf{H}^b_a \cdot \mathbf{v}^a
+\mathbf{r}^b = \mathbf{H}^b_a \cdot \mathbf{r}^a
 $$
 
-This is written in the codebase as `vCDb = Hba * vCDa`, if $\mathbf{v}$ represents a vector from point D to point C.
+This is written in the codebase as `rCDb = Hba * rCDa`, if $\mathbf{r}$ represents a vector from point D to point C.
 
 They also multiply together to get a new transformation matrix.
 
