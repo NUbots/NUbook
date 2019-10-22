@@ -84,16 +84,16 @@ If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r
 
 $$
 \mathbf{H}_a^b = \begin{bmatrix}
-\mathbf{R}_a^b & \mathbf{r}_{BA}^b \\
+\mathbf{R}_a^b & \mathbf{r}_{AB}^b \\
 \mathbf{0} & 1
 \end{bmatrix}
 $$
 
 This is written in the NUbots codebase as `Hba`.
 
-The vector $\mathbf{r}_{BA}^b$ is the vector from A (the origin of space a) to B (the origin of space b) in b space, which would be written in the codebase as `rBAb`.
+The vector $\mathbf{r}_{AB}^b$ is the vector from B (the origin of space b) to A (the origin of space a) in b space, which would be written in the codebase as `rABb`.
 
-The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system too. Thus, the translation vector is $\mathbf{r}_{BA}^b$.
+The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system. The vector is from B to A because a point (0, 0, 0) in space $a$ should be moved to the origin of $a$ in $b$ space after transformation. Thus, the translation vector is $\mathbf{r}_{AB}^b$.
 
 Transformation matrices left multiply with vectors to get a vector in the new space.
 
