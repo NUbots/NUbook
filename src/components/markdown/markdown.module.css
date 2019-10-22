@@ -95,7 +95,8 @@
    * Code blocks
    * ============================ */
   > pre,
-  pre& {
+  pre&,
+  pre {
     @apply font-mono;
     @apply rounded;
     @apply font-normal;
@@ -109,16 +110,16 @@
       overflow-x: auto;
 
       &::-webkit-scrollbar {
-        width: 0.5rem;
-        height: 0.5rem;
+        width: 0.7rem;
+        height: 0.7rem;
       }
 
       &::-webkit-scrollbar-track {
-        @apply bg-nubots-200;
+        @apply bg-gray-300;
       }
 
       &::-webkit-scrollbar-thumb {
-        @apply bg-nubots-400;
+        @apply bg-gray-500;
       }
     }
   }

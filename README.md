@@ -97,6 +97,27 @@ $$
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/docs/support_table.html for supported symbols and functions.
 
+### Showing content in grids
+
+You can show content such as images, code, and math equations side-by-side in a grid.
+
+The following example shows four images in a 2x2 grid with a caption:
+
+```mdx
+<Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
+
+![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
+![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
+![Dog](https://source.unsplash.com/featured/1600x900/?dog,1 'Dog')
+![Turtle](https://source.unsplash.com/featured/1600x900/?turtle,1 'Turtle')
+
+</Grid>
+```
+
+The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+
+See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
+
 ## Organising pages
 
 Pages are written in MDX files and stored in section and chapter folders in the [`src/book/`](src/book/) directory, and organised as follows:

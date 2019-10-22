@@ -14,7 +14,10 @@ const Code = ({ children, className }) => {
       language={language}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <code className={`${className} w-full p-4 rounded`} style={style}>
+        <code
+          className={`${className} w-full p-4 rounded block overflow-x-auto`}
+          style={style}
+        >
           {tokens.map((line, i) => (
             <div key={i} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
