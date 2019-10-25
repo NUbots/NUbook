@@ -115,6 +115,26 @@ This is written in the codebase as `Hca = Hcb * Hba`.
 
 Velocity of some object is represented relative to some space. If we have the velocity of object A moving relative to space b, then we write this in the codebase as `vAb`.
 
+## Programming Examples
+
+If you have a transformation matrix `Htw` and you want the matrix `Hwt`, this is can be achieved by calling `Htw.inverse()`. The inverse function swaps the letter order. The returned inverse matrix is not mutable.
+
+If you have a vector `rTWa` and you want the opposite letter order, this is done by negating the vector, `rWTa = -rTWa`. Note that negating does not change the space it is measured in!
+
+If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the inner two letters should be identical, ie the same space.
+
+```cpp
+Eigen::Affine3d Hac = Hab * Hbc
+```
+
+These two inner letters are canceled, with the outer two remaining. This also works for rotation matrices.
+
+If you have two vectors in the same space and their inner letters are both the same, then they can be canceled in a similar way to the transformation matrices.
+
+```cpp
+Eigen::Vector3d rXZa = rXYa + rYZa;
+```
+
 ## Summary
 
 **Hab**: Denotes a 3D affine transformation matrix going from space $b$ to space $a$.
