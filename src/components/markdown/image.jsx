@@ -77,7 +77,7 @@ const Image = props => (
         <figure className='p-2 bg-gray-100 leading-none'>
           {Img}
           {props.children && (
-            <figcaption className='pt-3 pb-1 italic text-base'>
+            <figcaption className='pt-3 italic text-base'>
               {props.children}
             </figcaption>
           )}
