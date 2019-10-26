@@ -5,3 +5,265 @@ title: Build System
 description: The NUbots build and continuous integration system.
 slug: /projects/nubots/build-system
 ---
+
+## The NUbots Build System
+
+### Overview
+
+The NUBots codebase uses a [CMake](www.cmake.org) build system based on the [NUClear Roles framework](https://github.com/Fastcode/NUClearRoles) and the [Ninja](https://ninja-build.org/) build system.
+
+[Docker](https://www.docker.com/) is used to containerise our build processes so that we may mimic the build environment of the robot and impose version control over our required 3rd party dependencies while also managing operating system level configuration to ensure that all users of our codebase can achieve repeatable results.
+
+### NUClear Roles
+
+Full documentation for NUClear Roles can be found in its github [README](https://github.com/Fastcode/NUClearRoles/blob/master/README.md).
+
+Six main directories are used in a NUClear Roles system:
+
+| Directory        | Usage                  |
+| ---------------- | ---------------------- |
+| module           | NUClear reactors       |
+| roles            | Declaration of roles   |
+| shared/extension | NUClear DSL extensions |
+| shared/message   | Protobuf messages      |
+| shared/utility   | Utility code           |
+| tools            | Extensions for `b`     |
+
+#### Modules
+
+The modules folder contains [NUClear reactors](https://nuclear.readthedocs.io/en/latest/components.html#reactors). Reactors are grouped into meta-modules. For instance, the `vision` meta-module groups together reactors that perform vision processing tasks (e.g. ball and goal detection), while the `input` meta-module groups togehter reactors that gather system inputs (e.g. camera and network inputs).
+
+#### Roles
+
+Role files define which modules should be grouped together in order to form a single role (a binary that performs a specific role).
+
+Role files live in the `roles` folder and have a `.role` extension.
+
+Every role file must call the `nuclear_role()` function. Each argument to the `nuclear_role()` function is a C++ namespaced path to a module that should be included in the role. For example, if the `KinematicsConfiguration` module in `module/motion/KinematicsConfiguration` should be included in the role then `motion::KinematicsConfiguration` should appear as an argument to `nuclear_role()`.
+
+---
+
+**NOTE**
+`module` is removed from the start of all module arguments as all modules must reside in the `modules` folder.
+
+---
+
+Ideally, all modules should be independant of each other and, as such, it should not matter which order modules are specified to `nuclear_role()`. In reality, there are a couple of modules which, if they are included in a role, should be passed to `nuclear_role()` first. These modules are:
+
+- `extension::FileWatcher`
+- `support::SignalCatcher`
+- `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`
+- `motion::KinematicsConfiguration`
+
+Below is an example of a role file. Any line preceeded by a `#` is a comment and will be ignored.
+
+```cmake
+nuclear_role(
+  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+  # and without it many roles do not run
+  extension::FileWatcher
+  # support::SignalCatcher
+  support::logging::ConsoleLogHandler
+  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+  motion::KinematicsConfiguration
+  support::configuration::GlobalConfig
+  support::configuration::NetworkConfiguration
+  platform::darwin::HardwareIO
+  platform::darwin::SensorFilter
+  support::NUsight
+)
+
+```
+
+#### Extensions
+
+[Extensions](https://nuclear.readthedocs.io/en/latest/extension.html) add new keywords to NUClear's dictionary, allowing you to be more expressive in writing [reactions](https://nuclear.readthedocs.io/en/latest/components.html#reactions).
+
+Two common extensions are `Configuration` and `Script`. `Configuration` allows modules to monitor their configuration file(s) and apply updates in real-time. `Script` provides similar functionality, but for script files.
+
+#### Messages
+
+Every message in the NUbots codebase is a [protobuf](https://developers.google.com/protocol-buffers) message and all protobuf messages live in the `shared/message` folder.
+
+The general convention is to groups message files into folders based on the meta-module which introduces the message to the system. For instance, `module/input/Camera` introduces `Image` messages to the system, so `Image.proto` lives in `shared/message/input`.
+
+NUClear Roles provides special wrappers for certain types. Vector and matrix types are mapped to [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) types. To use these mappings simply use `import Vector.proto;` and `import Matrix.proto;`. Some examples of types that you can use are:
+
+- `fvec3`: A vector with 3 components, maps to an `Eigen::Vector3f`
+- `vec3`: A vector with 3 components, maps to an `Eigen::Vector3d`
+- `mat3`: A 3x3 matrix, maps to an `Eigen::Matrix3d`
+
+All messages are packaged in a similar fashion to the C++ namespaces used for modules. For instance, `Image.proto` is in the `message.input` package.
+
+NUClear Roles creates a C++ wrapper class for each message to create a simpler interface for accessing and mutating message fields. The C++ namespace for a message follows its package. For instance, the `message.input.Image` message will have a C++ namespace of `message::input::Image`.
+
+#### Utilities
+
+Utilities are collections of functions that perform useful tasks. Typically, these functions are stateless and are (or feasibly could be) used by multiple different modules (or even other utilities).
+
+As is the case with modules and messages, utilities are grouped together into meta-utilities. For instance, utilities dealing with angles, coordinate system transforms, and geometrical constructs live in the `shared/utility/math` meta-utility.
+
+#### Tools and the `b` command
+
+NUClear Roles introduces the `b` command that wraps up all of the functionality needed to create modules and build the NUbots code.
+
+| Command   | Description                                       |
+| --------- | ------------------------------------------------- |
+| configure | Configure the CMake system for the current target |
+| build     | Build the currently configured code               |
+| edit      | Edit configuration files                          |
+| format    | Applies code formatting rules to codebase         |
+| install   | Install build code to specified robot             |
+| module    | Generate new modules                              |
+| run       | Run a role locally                                |
+| target    | Select a target to work on                        |
+
+##### Configure
+
+`./b configure` will ensure that a build folder is created in the current Docker image and will then run `cmake` on the source code ensuring that CMake creates all of the necessary build files inside of the build folder.
+
+It is possible to specify extra arguments to `cmake` to control the configuration process. For example, to enable the building of unit tests one would run
+
+```sh
+./b configure -- -DBUILD_TESTS=ON
+```
+
+---
+
+**NOTE**
+`--` is needed to prevent python from trying to process the argument itself
+
+---
+
+Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
+
+##### Build
+
+As one might expect, `./b build` will build all enabled modules using `ninja`.
+
+If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run (after first running `/b build`) to execute all of the unit tests.
+
+##### Edit
+
+If you are running roles on your local machine and you need to edit the configuration or data files for the modules in the role then the preferred method is to edit the file in the source tree and then rebuild the code using `./b build` to copy the edited file into the build folder.
+
+However, some modules generate their configuration file at build-time, making it impossible to edit the file in the source tree. In this situation, you can use `./b edit` to open an interactive window with a text editor allowing you to edit the configuration file in the build tree.
+
+One module that generates it configuration file at build time is `support::loggingg::DataLogging`, to edit the configuration file for `DataLogging` run
+
+```sh
+./b edit config/DataLogging.yaml
+```
+
+The `edit` command uses the editor that is defined in your host shell (using the `EDITOR` environment variable). If `EDITOR` is not set then it will default to `nano`. Currently, the only supported editors are `vim` and `nano`, with `nano` used as the fallback in all cases.
+
+##### Format
+
+NUbots uses three different code formatters. `clang-format` is used to format C++ and protobuf files, `black` and `isort` are used to format python files, and `cmake-format` is used to format CMake files.
+
+If you want to ensure that all files in the codebase are formatted according to our defined style run
+
+```sh
+./b format
+```
+
+##### Install
+
+Once code is built and you are ready to install it on a robot, you can run
+
+```sh
+./b install [options] <robot>
+```
+
+`<robot>` can either be a known robot designation (`n1` or `nugus1`, for instance) or an IP address of a robot.
+
+`[options]` may be one, or more, of the following
+
+| Option | Description                                                                    |
+| :----: | :----------------------------------------------------------------------------- |
+|   -u   | The user to install to on the target. Defaults to the user in the Docker image |
+|   -t   | Install toolchain to the target                                                |
+|  -cn   | Only install new config files. This is the default                             |
+|  -cu   | Update config files on the target that are older than the local files          |
+|  -co   | Overwrite all config files on the target                                       |
+|  -ci   | Ignore all changes to config files (installs no config files)                  |
+
+##### Module
+
+The `module` command allows you to generate a new module. To generate a new line detection module one would run
+
+```sh
+./b module generate vision/LineDetector
+```
+
+This will generate all necessary module files in the `module/vision/LineDetector` folder. This includes an empty configuration file, a basic C++ source and header file implementing the `LineDetector` reactor, and an empty unit test file.
+
+##### Run
+
+To run roles locally on your system use the `run` command of `b` as follows
+
+```sh
+./b run <name of role>
+```
+
+---
+
+**NOTE**
+Be sure that you are using the `generic` target for this (`./b target generic`), otherwise you role will likely crash.
+
+---
+
+##### Target
+
+The `target` command of `b` allows you to build code for a different target. Currently, only two targets are supported: `generic` and `nuc7i7bnh`.
+
+The `generic` target is useful if you would like to build and run code on your local machine.
+
+The `nuc7i7bnh` target should be used for building and running code on the robots.
+
+The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
+
+## Continuous Integration
+
+NUbots uses [Buildkite](buildkite.com) for its continuous integration pipeline. The Buildkite server will issue build jobs to one of our build clients (the Macs in the lab) as new jobs become available.
+
+The build flow that the NUbots uses a pull request system. Developers branch off of `master`, creating a new branch named `<last name>/<purpose of branch>`. Once development on the branch is complete, the developer makes a pull request and a job is issued to a Buildkite client. Each pull request must be reviewed by another member of the team and all build checks on the Buildkite client must pass before the pull request can be approved and merged into `master`.
+
+## The Configuration System
+
+The NUbots configuration system is based on a hierarchical [YAML](https://yaml.org/) file system.
+
+The hierarchical structure is as follows
+
+```text
+config/
+├── nugus1/
+│   └── ExampleModule.yaml
+├── nugus2/
+│   └── ExampleModule.yaml
+├── robocup/
+│   └── ExampleModule.yaml
+└── ExampleModule.yaml
+```
+
+The file `config/ExampleMoldule.yaml` must exit for every module. This file defines all of the configuration for the module. `config/nugus1/ExampleModule.yaml` is an optional file and allows you to provide robot-specific overrides for specific configuration values, in this case it would provide overrides for the `nugus1` robot. Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to further override configuration values.
+
+It is intended that all configuration values exist in the default configuration file and that only a subset of configuration values appear in the robot-specific and role-specific override files.
+
+The robot-specific override is intended to allow configuration values to be tweaked to account a slight variation in the robots hardware. For instance, the cameras on each robot have different serial numbers.
+
+The role-specific override is intended to change a modules behaviour based on which role is running. For instance, disabling the transmission of certain NUsight2 traffic while playing a competition game.
+
+## The Script System
+
+The script system follows a similar structure as the configuration system. However, default scripts are moved to a platform type folder and the overriding system is not used as it doesn't make much sense to try and merge two scripts.
+
+In the script system, we first check for a robot-specific script. If a robot-specific script does not exist, then we check for a platform-specific script.
+
+```text
+scripts/
+├── nugus/
+│   └── Stand.yaml
+└── nugus2/
+    └── Stand.yaml
+```
