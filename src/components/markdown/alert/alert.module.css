@@ -6,6 +6,10 @@
   @apply -mt-1;
 }
 
+.alertContent p {
+  @apply text-base mt-3;
+}
+
 .alertIcon {
   @apply mr-4 self-start;
 }
