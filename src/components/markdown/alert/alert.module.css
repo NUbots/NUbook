@@ -10,9 +10,6 @@
   @apply mr-4 self-start;
 }
 
-.alertIcon svg {
-}
-
 .alertInfo {
   background-color: rgba(33, 150, 243, 0.12);
 }
