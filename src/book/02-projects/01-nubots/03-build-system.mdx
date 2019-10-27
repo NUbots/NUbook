@@ -312,13 +312,22 @@ config/
 └── ExampleModule.yaml
 ```
 
-The file `config/ExampleMoldule.yaml` must exit for every module. This file defines all of the configuration for the module. `config/nugus1/ExampleModule.yaml` is an optional file and allows you to provide robot-specific overrides for specific configuration values, in this case it would provide overrides for the `nugus1` robot. Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to further override configuration values.
+The file `config/ExampleMoldule.yaml` must exit for every module. This file defines all of the configuration for the module.
+`config/nugus1/ExampleModule.yaml` is an optional file and allows you to provide robot-specific overrides for specific configuration values, in this case it would provide overrides for the `nugus1` robot.
+Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to further override configuration values.
 
 It is intended that all configuration values exist in the default configuration file and that only a subset of configuration values appear in the robot-specific and role-specific override files.
 
 The robot-specific override is intended to allow configuration values to be tweaked to account a slight variation in the robots hardware. For instance, the cameras on each robot have different serial numbers.
 
 The role-specific override is intended to change a modules behaviour based on which role is running. For instance, disabling the transmission of certain NUsight2 traffic while playing a competition game.
+
+To reiterate how the configuration system loads and merges configuration files
+
+1. The default configuration file `config/ModuleName.yaml` is loaded. This forms the base configuration for the module
+1. A check is made to see if `config/RobotName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
+1. A check is made to see if `config/RoleName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
+1. If any of these 3 configuration files are modified then 1-3 are run again
 
 ## The Script System
 
@@ -333,3 +342,14 @@ scripts/
 └── nugus2/
     └── Stand.yaml
 ```
+
+To reiterate how the script system loads script files
+
+1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded
+1. If it doesn't exist, then a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded
+
+## Docker Images
+
+## Flashing a Robot
+
+## Flashing a Robot
