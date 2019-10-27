@@ -65,10 +65,10 @@ Every role file must call the `nuclear_role()` function. Each argument to the `n
 
 Ideally, all modules should be independent of each other and, as such, it should not matter which order modules are specified to `nuclear_role()`. In reality, there are a couple of modules which, if they are included in a role, should be passed to `nuclear_role()` first. These modules are:
 
-- `extension::FileWatcher`
-- `support::SignalCatcher`
-- `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`
-- `motion::KinematicsConfiguration`
+- `extension::FileWatcher`: Needed before all other modules so that the configuration and script systems can work properly
+- `support::SignalCatcher`: Catches exceptions to print out useful stack traces. Needs to come before all other modules to allow debugging during module installation
+- `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`: Install before other modules so that log messages will get printed during module installation
+- `motion::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
 
 Below is an example of a role file. Any line preceeded by a `#` is a comment and will be ignored.
 
