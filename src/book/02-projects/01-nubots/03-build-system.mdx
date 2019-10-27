@@ -23,8 +23,9 @@ To build the NUbots code a couple of programs are needed on the host machine
 - Python3: A `requirements.txt` file exists in the root of the NUbots repository and in the `nuclear` folder. Install the required python modules using `sudo -H pip3 install requirements.txt` and `sudo -H pip3 install nuclear/requirements.txt`
 - Visual Studio Code: recommended, but not required
 
-<Alert type="warning">
-Windows support is still in its experimental stages. Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
+<Alert type='warning'>
+  Windows support is still in its experimental stages. Currently, Windows 10
+  Pro, Enterprise, or Education is needed to use Docker.
 </Alert>
 
 ### NUClear Roles
@@ -57,6 +58,7 @@ Every role file must call the `nuclear_role()` function. Each argument to the `n
 <Alert type="info">
 
 `module` is removed from the start of all module arguments as all modules must reside in the `modules` folder.
+
 </Alert>
 
 Ideally, all modules should be independent of each other and, as such, it should not matter which order modules are specified to `nuclear_role()`. In reality, there are a couple of modules which, if they are included in a role, should be passed to `nuclear_role()` first. These modules are:
@@ -163,6 +165,7 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` (use `.
 <Alert type="info">
 
 `--` is needed to prevent python from trying to process the argument itself. This is only needed if you are specifying arguments that start with a `-`.
+
 </Alert>
 
 Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
@@ -255,6 +258,7 @@ To run roles locally on your system use the `run` command of `b` as follows
 <Alert type="warning">
 
 Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are current using).
+
 </Alert>
 
 ##### Shell
@@ -275,6 +279,7 @@ For some reason, if you really, really, _REALLY_ need to access a terminal insid
 <Alert type="warning">
 
 Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build` directories will not persist after exiting the Docker shell.
+
 </Alert>
 
 </details>
@@ -296,9 +301,11 @@ NUbots uses [Buildkite](buildkite.com) for its continuous integration pipeline. 
 The build flow that the NUbots uses a pull request system.
 
 1. Developers branch off of `master`, creating a new branch named `<last name>/<purpose of branch>`. For example
-  - ```sh
-    git checkout -b biddulph/ball-detector
-    ```
+
+- ```sh
+  git checkout -b biddulph/ball-detector
+  ```
+
 1. Once development on the branch is complete, the developer makes a pull request and a job is issued to a Buildkite client.
 1. Each pull request must be reviewed by another member of the team and all build checks on the Buildkite client must pass before the pull request can be approved and merged into `master`.
 
@@ -336,8 +343,9 @@ To reiterate how the configuration system loads and merges configuration files
 1. A check is made to see if `config/RoleName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
 1. If any of these 3 configuration files are modified then 1-3 are run again
 
-<Alert type="info">
-It is permitted for a module to not have a configuration file. However, if the module does have configuration, the above rules need to be adhered to.
+<Alert type='info'>
+  It is permitted for a module to not have a configuration file. However, if the
+  module does have configuration, the above rules need to be adhered to.
 </Alert>
 
 ## The Script System
@@ -368,6 +376,7 @@ Apart from flags provided to the build tools and the compiler both images are id
 <Alert type="info">
 
 `nuc7i7bnh` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
+
 </Alert>
 
 The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the master branch is updated.
@@ -403,6 +412,7 @@ RUN install-from-source http://url.to.the.source.tarball.com \
 <Alert type="info">
 
 `\` is a line continuation operator, it allows a long line to be split over multiple lines to improve readability
+
 </Alert>
 
 If your library is not well-behaved you may need to do to a lot of googling and trawling through stackoverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
