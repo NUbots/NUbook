@@ -23,12 +23,9 @@ To build the NUbots code a couple of programs are needed on the host machine
 - Python3: A `requirements.txt` file exists in the root of the NUbots repository and in the `nuclear` folder. Install the required python modules using `sudo -H pip3 install requirements.txt` and `sudo -H pip3 install nuclear/requirements.txt`
 - Visual Studio Code: recommended, but not required
 
----
-
-**NOTE**
+<Alert type="warning">
 Windows support is still in its experimental stages. Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
-
----
+</Alert>
 
 ### NUClear Roles
 
@@ -57,12 +54,10 @@ Role files live in the `roles` folder and have a `.role` extension.
 
 Every role file must call the `nuclear_role()` function. Each argument to the `nuclear_role()` function is a C++ namespaced path to a module that should be included in the role. For example, if the `KinematicsConfiguration` module in `module/motion/KinematicsConfiguration` should be included in the role then `motion::KinematicsConfiguration` should appear as an argument to `nuclear_role()`.
 
----
+<Alert type="info">
 
-**NOTE**
 `module` is removed from the start of all module arguments as all modules must reside in the `modules` folder.
-
----
+</Alert>
 
 Ideally, all modules should be independent of each other and, as such, it should not matter which order modules are specified to `nuclear_role()`. In reality, there are a couple of modules which, if they are included in a role, should be passed to `nuclear_role()` first. These modules are:
 
@@ -161,12 +156,14 @@ It is possible to specify extra arguments to `cmake` to control the configuratio
 Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Debug`, while this is good while you are in active development of a module, you will get very poor (slow) runtime performance.
 To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` (use `./b configure -i` if you have already run configure) and then rebuild your code.
 
----
+```sh
+./b configure -- -DCMAKE_BUILD_TYPE=Release
+```
 
-**NOTE**
+<Alert type="info">
+
 `--` is needed to prevent python from trying to process the argument itself. This is only needed if you are specifying arguments that start with a `-`.
-
----
+</Alert>
 
 Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
 
@@ -255,12 +252,10 @@ To run roles locally on your system use the `run` command of `b` as follows
 ./b run <name of role>
 ```
 
----
+<Alert type="warning">
 
-**NOTE**
 Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are current using).
-
----
+</Alert>
 
 ##### Shell
 
@@ -277,12 +272,10 @@ For some reason, if you really, really, _REALLY_ need to access a terminal insid
 ./b shell
 ```
 
----
+<Alert type="warning">
 
-**NOTE**
 Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build` directories will not persist after exiting the Docker shell.
-
----
+</Alert>
 
 </details>
 
@@ -343,12 +336,9 @@ To reiterate how the configuration system loads and merges configuration files
 1. A check is made to see if `config/RoleName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
 1. If any of these 3 configuration files are modified then 1-3 are run again
 
----
-
-**NOTE**
+<Alert type="info">
 It is permitted for a module to not have a configuration file. However, if the module does have configuration, the above rules need to be adhered to.
-
----
+</Alert>
 
 ## The Script System
 
@@ -375,12 +365,10 @@ The NUbots codebase uses Docker images to containerise the build process.
 Two images are created, one intended for running code on your local machine named `generic`, and another intended for running code on the robots named `nuc7i7bnh`.
 Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
 
----
+<Alert type="info">
 
-**NOTE**
 `nuc7i7bnh` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
-
----
+</Alert>
 
 The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the master branch is updated.
 
@@ -412,12 +400,10 @@ RUN install-from-source http://url.to.the.source.tarball.com \
     -DCONFIGURE_FLAG=XXX
 ```
 
----
+<Alert type="info">
 
-**NOTE**
 `\` is a line continuation operator, it allows a long line to be split over multiple lines to improve readability
-
----
+</Alert>
 
 If your library is not well-behaved you may need to do to a lot of googling and trawling through stackoverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
 Another good source of information is the `PKGBUILD` scripts from the Arch Linux repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, the look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
