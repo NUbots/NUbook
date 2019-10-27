@@ -14,6 +14,21 @@ The NUBots codebase uses a [CMake](www.cmake.org) build system based on the [NUC
 
 [Docker](https://www.docker.com/) is used to containerise our build processes so that we may mimic the build environment of the robot and impose version control over our required 3rd party dependencies while also managing operating system level configuration to ensure that all users of our codebase can achieve repeatable results.
 
+#### Requirements
+
+To build the NUbots code a couple of programs are needed on the host machine
+
+- Git: You need this clone and work on the NUbots repository
+- Docker: On Linux and Mac you can just install Docker (and set up user permissions) and you are good to go. On Windows you will also need WSL
+- Python3: A `requirements.txt` file exists in the root of the NUbots repository and in the `nuclear` folder. Install the required python modules using `sudo -H pip3 install requirements.txt` and `sudo -H pip3 install nuclear/requirements.txt`
+
+---
+
+**NOTE**
+Windows support is still in its experimental stages. Currently, Windows 10 Pro (and Enterprise?) is needed to use Docker.
+
+---
+
 ### NUClear Roles
 
 Full documentation for NUClear Roles can be found in its github [README](https://github.com/Fastcode/NUClearRoles/blob/master/README.md).
