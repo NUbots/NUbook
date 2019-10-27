@@ -353,6 +353,81 @@ To reiterate how the script system loads script files
 
 ## Docker Images
 
+The NUbots codebase uses Docker images to containerise the build process.
+Two images are created, one intended for running code on your local machine named `generic`, and another internded for running code on the robots named `nuc7i7bnh`.
+Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
+
+---
+
+**NOTE**
+`nuc7i7bnh` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
+
+---
+
+The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the master branch is updated.
+
+The Docker images use [Arch Linux](https://www.archlinux.org/) as their operating system as it is lightweight, flexible, and up-to-date.
+
+The [docker folder](https://github.com/NUbots/NUbots/tree/master/docker) contains the Dockerfile as well as some utility scripts to ease the burden of compiling multiple different libraries. Other files in this folder end up inside of the image and control either the behaviour of the compiler or build system, or the runtime behaviour of the libraries that are built.
+
+If you need to add a new library of program to the Docker image you should add it to the end of the Dockerfile to minimise the amount of rebuilding that needs to happen. Look for the following marker
+
+```sh
+#######################################
+### ADD NEW PROGRAMS/LIBRARIES HERE ###
+#######################################
+```
+
+### Adding a new library to the robot toolchain
+
+If the intention is to have the new library running on the robot then you need to build the library from source. If the library you are building is well-behaved then it should be a simple matter of add a line like the following to the Dockerfile
+
+```docker
+RUN install-from-source http://url.to.the.source.tarball.com
+```
+
+---
+
+**SPOILER**
+Libraries are rarely ever well-behaved
+
+---
+
+This process generally requires so studying of either the libraries documentation or build system files to determine appropriate configure and build flags.
+If there are extra flags that need to be specified then modify the above command to
+
+```docker
+RUN install-from-source http://url.to.the.source.tarball.com \
+    -DCONFIGURE_FLAG=XXX
+```
+
+---
+
+**NOTE**
+`\` is a line continuation operator, it allows a long line to be split over multiple lines to improve readability
+
+---
+
+If your library is not well-behaved you may need to do to a lot of googling and trawling through stackoverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
+Another good source of information is the `PKGBUILD` scripts from the Arch Linux repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, the look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
+The `PKGBUILD` script will show you how Arch Linux builds the library including
+
+- necessary dependendies,
+- locations of source files and patches,
+- commands needed to prepare the source files for compilation,
+- commands needed to build the library, and
+- commands needed to install the library
+
+Borrowing commands from these scripts could help relieve your frustrations with the world.
+
+### Adding a new build utility
+
+If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile
+
+```docker
+RUN install-package <name of package>
+```
+
 ## Flashing a Robot
 
 ## Flashing a Robot
