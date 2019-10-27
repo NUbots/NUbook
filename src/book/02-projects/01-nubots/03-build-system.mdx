@@ -433,9 +433,12 @@ Borrowing commands from these scripts could help relieve your frustrations with 
 
 ### Adding a new build utility
 
-If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile
+If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile at the marker near the end of the file
 
 ```docker
+#######################################
+### ADD NEW PROGRAMS/LIBRARIES HERE ###
+#######################################
 RUN install-package <name of package>
 ```
 
