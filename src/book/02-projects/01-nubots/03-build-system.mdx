@@ -47,7 +47,7 @@ Six main directories are used in a NUClear Roles system:
 
 #### Modules
 
-The modules folder contains [NUClear reactors](https://nuclear.readthedocs.io/en/latest/components.html#reactors). Reactors are grouped into meta-modules. For instance, the `vision` meta-module groups together reactors that perform vision processing tasks (e.g. ball and goal detection), while the `input` meta-module groups togehter reactors that gather system inputs (e.g. camera and network inputs).
+The modules folder contains [NUClear reactors](https://nuclear.readthedocs.io/en/latest/components.html#reactors). Reactors are grouped into meta-modules. For instance, the `vision` meta-module groups together reactors that perform vision processing tasks (e.g. ball and goal detection), while the `input` meta-module groups together reactors that gather system inputs (e.g. camera and network inputs).
 
 #### Roles
 
@@ -71,7 +71,7 @@ Ideally, all modules should be independent of each other and, as such, it should
 - `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`: Install before other modules so that log messages will get printed during module installation
 - `motion::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
 
-Below is an example of a role file. Any line preceeded by a `#` is a comment and will be ignored.
+Below is an example of a role file. Any line preceded by a `#` is a comment and will be ignored.
 
 ```cmake
 nuclear_role(
@@ -164,7 +164,7 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` (use `.
 ---
 
 **NOTE**
-`--` is needed to prevent python from trying to process the argument itself. This is only needed if you are specifyign arguments that start with a `-`.
+`--` is needed to prevent python from trying to process the argument itself. This is only needed if you are specifying arguments that start with a `-`.
 
 ---
 
@@ -176,7 +176,7 @@ If you are running roles on your local machine and you need to edit the configur
 
 However, some modules generate their configuration file at build-time, making it impossible to edit the file in the source tree. In this situation, you can use `./b edit` to open an interactive window with a text editor allowing you to edit the configuration file in the build tree.
 
-One module that generates it configuration file at build time is `support::loggingg::DataLogging`, to edit the configuration file for `DataLogging` run
+One module that generates it configuration file at build time is `support::logging::DataLogging`, to edit the configuration file for `DataLogging` run
 
 ```sh
 ./b edit config/DataLogging.yaml
@@ -269,7 +269,7 @@ This is an undocumented and unsupported option.
 <details>
   <summary>I know what I am doing</summary>
 
-You probably don't knkow what you are doing. But why would you listen to me?
+You probably don't know what you are doing. But why would you listen to me?
 
 For some reason, if you really, really, _REALLY_ need to access a terminal inside of Docker you can run
 
@@ -323,7 +323,7 @@ config/
 └── ExampleModule.yaml
 ```
 
-The file `config/ExampleMoldule.yaml` must exit for every module. This file defines all of the configuration for the module.
+The file `config/ExampleModule.yaml` must exit for every module. This file defines all of the configuration for the module.
 `config/nugus1/ExampleModule.yaml` is an optional file and allows you to provide robot-specific overrides for specific configuration values, in this case it would provide overrides for the `nugus1` robot.
 Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to further override configuration values.
 
@@ -362,7 +362,7 @@ To reiterate how the script system loads script files
 ## Docker Images
 
 The NUbots codebase uses Docker images to containerise the build process.
-Two images are created, one intended for running code on your local machine named `generic`, and another internded for running code on the robots named `nuc7i7bnh`.
+Two images are created, one intended for running code on your local machine named `generic`, and another intended for running code on the robots named `nuc7i7bnh`.
 Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
 
 ---
@@ -420,7 +420,7 @@ If your library is not well-behaved you may need to do to a lot of googling and 
 Another good source of information is the `PKGBUILD` scripts from the Arch Linux repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, the look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
 The `PKGBUILD` script will show you how Arch Linux builds the library including
 
-- necessary dependendies,
+- necessary dependencies,
 - locations of source files and patches,
 - commands needed to prepare the source files for compilation,
 - commands needed to build the library, and
