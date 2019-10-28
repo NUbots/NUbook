@@ -1,4 +1,5 @@
-.markdown {
+.markdown,
+.markdown details {
   /* ============================
    * Base text color and line height
    * ============================ */
@@ -331,5 +332,29 @@
    * ============================ */
   :global(.katex-display) {
     margin-bottom: 0;
+  }
+
+  /* ============================
+   * Collapsible sections
+   * ============================ */
+  details {
+    border: 1px solid #eee;
+  }
+
+  details[open] {
+    padding: 16px;
+  }
+
+  summary {
+    background-color: #eee;
+    padding: 8px 16px;
+    user-select: none;
+    cursor: pointer;
+  }
+
+  details[open] > summary {
+    margin-top: -16px;
+    margin-left: -16px;
+    margin-right: -16px;
   }
 }
