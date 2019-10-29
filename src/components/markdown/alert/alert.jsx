@@ -17,7 +17,9 @@ const Alert = ({ children, type, hideIcon }) => {
           {type == 'info' ? <InfoIcon /> : <WarningIcon />}
         </div>
       )}
-      <div className={style.alertContent}>{children}</div>
+      <div data-alert className={style.alertContent}>
+        {children}
+      </div>
     </div>
   )
 }

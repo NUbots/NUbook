@@ -56,6 +56,8 @@ hidden: true
 
 ###### Header 6 `some code` here
 
+---
+
 # Paragraphs
 
 Lorem ipsum dolor sit amet, _consectetur adipisicing_ elit. Debitis ut necessitatibus alias amet blanditiis ullam asperiores totam a odio sint?
@@ -63,6 +65,8 @@ Lorem ipsum dolor sit amet, _consectetur adipisicing_ elit. Debitis ut necessita
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto pariatur debitis suscipit culpa `ratione expedita` obcaecati consectetur, voluptatum est nam aliquid **facilis assumenda veritatis** ad doloremque repellendus praesentium officia. Harum beatae tempora quae, id ipsam sapiente saepe ducimus quibusdam quisquam.
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptatibus nostrum nulla, [voluptates deserunt accusantium](#link) cum ipsam itaque nobis quaerat alias sapiente mollitia, laudantium possimus fugiat ipsa animi unde quae architecto ad ex debitis odio! Minus enim quisquam aliquam perferendis, rerum, voluptatum ex suscipit porro ad distinctio autem.
+
+---
 
 # Blockquotes
 
@@ -74,12 +78,13 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptati
 > hi there
 > ```
 >
-> <details>
->
-> <summary>More details</summary>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque
-    veniam, nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
-</details>
+> - Item 1
+>   1. Oh a nested item
+>   2. Other nested item
+> - Item 2
+> - Item 3
+
+---
 
 # Lists
 
@@ -87,9 +92,9 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptati
 - Green
 - Blue
 
-* Red
-* Green
-* Blue
+* Red Star
+* Green Star
+* Blue Star
 
 - Red
   - Nested list item
@@ -119,26 +124,33 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptati
       1. Further nested list item
       2. Further nested list item
 
-   3 Back to nested list item
+   3. Back to nested list item
 
 3. Bake
 
+```js
+const oven = Oven.acquire()
+const dough = Dough.acquire()
+oven
+  .prepare()
+  .preheat()
+  .place(dough)
+  .bake()
+// Pretty long comment line to force a scrollbar. Writing a random long sentence is not as easy as it may seem. You have to really string together words and phrases that somehow work without really saying anything.
+```
+
 4. Buy flour and salt
-5. Mix together with water
+5. **Mix together with water**
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
 6. Bake
 
-Code
-
-```
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-
-> Oh hai Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
-```
-
 ---
 
----
+# Links and inline formatting
 
 This is [an example](http://example.com 'Example') link.
 
@@ -148,15 +160,13 @@ This is [an example][id] reference-style link.
 
 [id]: http://example.com 'Optional Title'
 
-_single asterisks_
-
 _single underscores_
 
 **double asterisks**
 
-**double underscores**
-
 This paragraph has some `code` in it.
+
+---
 
 # Grid
 
@@ -235,7 +245,7 @@ $$
 
 </Grid>
 
-# Images seamless
+## Images seamless
 
 <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some possible pets" seamless>
 
@@ -246,6 +256,8 @@ $$
 
 </Grid>
 
+---
+
 # Alerts
 
 ## Info
@@ -253,9 +265,27 @@ $$
 <Alert type='info'>Single line info</Alert>
 
 <Alert type='info'>
-  Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
-  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
-  qui?
+
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+<details>
+  <summary>More details</summary>
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque veniam,
+  nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
+</details>
+
 </Alert>
 
 ## Warning
@@ -264,24 +294,37 @@ $$
 
 <Alert type='warning'>
 
-Be careful not to `lorem` ipsum dolor sit amet, consectetur adipisicing elit.
-Autem quo deserunt amet suscipit, fuga ullam cumque [accusamus doloremque](#) rem
-qui?
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 
-Be careful not to **lorem ipsum dolor** sit amet, consectetur adipisicing elit.
-Autem quo deserunt amet suscipit, _fuga ullam_ cumque accusamus doloremque rem
-qui?
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
 
-> Don't do this.
-> Pretty improtant
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+<details>
+  <summary>More details</summary>
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque veniam,
+  nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
+</details>
 
 </Alert>
 
-# Single images
+---
+
+# Images
 
 ![Architecture](https://source.unsplash.com/featured/1600x900/?modern+architecture 'Modern Architecture')
 
 ![NUbots icon](../images/nubots-icon.png 'NUbots icon')
+
+---
 
 # Code blocks
 
@@ -310,6 +353,8 @@ export default ({ children, className }) => {
 }
 ```
 
+---
+
 # Math
 
 ## Inline
@@ -322,12 +367,42 @@ $$
 e^{i\phi} = \cos(\phi) + i \sin(\phi)
 $$
 
+---
+
 # Table
 
 | First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
 | Content Cell | Content Cell  | Content Cell |
+
+---
+
+# Collapsible content
+
+<details>
+
+<summary>Show more details</summary>
+
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+</details>
+
+---
+
+The following headings fill out the table of contents to test the scroll bar.
 
 # 2000
 

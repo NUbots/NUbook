@@ -20,6 +20,16 @@
     }
   }
 
+  [data-alert] {
+    > *:first-child {
+      @apply mt-0;
+    }
+
+    > * + * {
+      @apply mt-4;
+    }
+  }
+
   ul > * + *,
   ol > * + * {
     @apply mt-3;
@@ -58,8 +68,7 @@
   /* ============================
    * Inline code
    * ============================ */
-  code,
-  *:not(pre) code {
+  :not(pre) > code {
     background-color: rgba(0, 0, 0, 0.04);
     @apply inline-block;
     @apply rounded-sm;
@@ -115,7 +124,6 @@
     @apply bg-gray-100;
     @apply p-4;
     @apply border-l border-l-4 border-gray-200;
-    @apply italic;
     @apply text-primary;
     @apply text-base;
   }
@@ -253,10 +261,31 @@
     > li::before {
       @apply absolute top-0 left-0 mt-px ml-1;
       @apply flex items-center justify-center;
-      @apply h-6 w-6 bg-gray-300 rounded-full;
+      @apply h-6 w-6 rounded-full;
       @apply text-primary text-xs font-bold;
+      background-color: rgba(0, 0, 0, 0.07);
       content: counter(item);
       counter-increment: item;
+    }
+  }
+
+  ol,
+  ul {
+    ul,
+    ol {
+      @apply mt-2;
+    }
+
+    p,
+    pre,
+    blockquote,
+    details,
+    figure {
+      @apply mt-3;
+
+      &:first-child {
+        margin-top: 0;
+      }
     }
   }
 
@@ -310,25 +339,25 @@
   /* ============================
    * Collapsible sections
    * ============================ */
-  :not(blockquote) details {
-    border: 1px solid #eee;
-  }
-
-  :not(blockquote) details[open] {
-    padding: 16px;
-  }
-
   details summary {
     user-select: none;
     cursor: pointer;
   }
 
-  :not(blockquote) details summary {
+  > details {
+    border: 1px solid #eee;
+  }
+
+  > details[open] {
+    padding: 16px;
+  }
+
+  > details summary {
     background-color: #eee;
     padding: 8px 16px;
   }
 
-  :not(blockquote) details[open] > summary {
+  > details[open] > summary {
     margin-top: -16px;
     margin-left: -16px;
     margin-right: -16px;
