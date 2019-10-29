@@ -1,0 +1,22 @@
+---
+section: Projects
+chapter: NUbots
+title: Continuous Integration System
+description: The NUbots continuous integration system.
+slug: /projects/nubots/ci-system
+---
+
+## Continuous Integration
+
+NUbots uses [Buildkite](buildkite.com) for its continuous integration pipeline. The Buildkite server will issue build jobs to one of our build clients (the Macs in the lab) as new jobs become available.
+
+The build flow that the NUbots uses a pull request system.
+
+1. Developers branch off of `master`, creating a new branch named `<last name>/<purpose of branch>`. For example
+
+   ```sh
+   git checkout -b biddulph/ball-detector
+   ```
+
+1. Once development on the branch is complete, the developer makes a pull request and a job is issued to a Buildkite client.
+1. Each pull request must be reviewed by another member of the team and all build checks on the Buildkite client must pass before the pull request can be approved and merged into `master`.
