@@ -454,14 +454,15 @@ The toolchain is a collection of libraries that are used by the NUbots codebase.
 
 In order to ensure that everyone is using the same versions of every library and that everyone has compiled the libraries in the same way (enabling the correct features, etc), we use Docker to automate the build process.
 Docker also ensures that all of the dependencies for the built libraries are either installed or are also built and that they are also built in the correct order.
+To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile)
 
-In order to improve runtime performance on the robots, all libraries that are build as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
+In order to improve runtime performance on the robots, all libraries that are built as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
 A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/master/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
 
 If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
 
 ```sh
-target=$(gcc -garch=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
+target=$(gcc -march=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
 diff -y --suppress-common-lines <(gcc -march=native -Q --help=target) <(gcc -march=${target} -Q --help=target)
 ```
 
@@ -473,17 +474,62 @@ The second command compares the compiler flags that compiling with `-march=nativ
 The output of this function could look like this
 
 ```sh
-  -mabm                       		[enabled]	      |	  -mabm                       		[disabled]
-  -mrtm                       		[enabled]	      |	  -mrtm                       		[disabled]
+-mabm        [enabled]	      |	  -mabm        [disabled]
+-mrtm        [enabled]	      |	  -mrtm        [disabled]
 ```
 
-The final piece of information we need is about the cache sizes
+The left column are instructions that are enabled/disabled when compiling using `-march=native` and the right column are the instructions that are enabled/disabled when compiling using `-march=skylake`.
+Combining both columns tells us that to get from a generic `skylake` CPU to the CPU that we are using we need to enable both the `abm` and the `rtm` instructions using `-mabm` and `-mrtm`.
+
+Note, if the output was actually
+
+```sh
+-mabm        [disabled]	      |	  -mabm        [enabled]
+-mrtm        [enabled]	      |	  -mrtm        [disabled]
+```
+
+Then we would need to disable `abm` using `-mno-abm` and enable `rtm` using `-mrtm`.
+
+The final piece of information we need is about the CPU cache sizes
 
 ```ssh
-gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g | grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"'
+gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"'
 ```
 
-Which means that the native CPU supports both `abm` and `rtm` instructions, whereas a generic `skylake` CPU does not support these.
+The output of this command will look like this
+
+```sh
+--param l1-cache-size=32
+--param l1-cache-line-size=64
+--param l2-cache-size=12288
+```
+
+<Alert type='warning'>
+
+If you get an error saying "zsh: bad pattern: -###", the wrap double-quotes
+around the `-###` in the above command.
+
+</Alert>
+
+Putting all of this together, the `targets` dict for our example target would be
+
+```python
+target = {
+    "flags": [
+        "-march=skylake",
+        "-mtune=skylake",
+        "-mabm",
+        "-mrtm",
+        "--param l1-cache-size=32",
+        "--param l1-cache-line-size=64",
+        "--param l2-cache-size=12288",
+        "-fPIC",
+    ],
+    "release_flags": ["-O3", "-DNDEBUG"],
+    "asm_flags": ["-DELF", "-D__x86_64__", "-DPIC"],
+    "asm_object": "elf64",
+}
+```
 
 ## Flashing a Robot
 
