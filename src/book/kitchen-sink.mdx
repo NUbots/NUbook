@@ -10,37 +10,8 @@ slug: /kitchen-sink
 hidden: true
 ---
 
-[View raw (TEST.md)](https://raw.github.com/adamschwartz/github-markdown-kitchen-sink/master/README.md)
+# Headers
 
-This is a paragraph.
-
-```md
-This is a paragraph.
-```
-
-# Header 1
-
-## Header 2
-
-```md
-# Header 1
-
-## Header 2
-```
-
-# Header 1
-
-## Header 2 `OldWalkEngine` class
-
-### Header 3 `some code`
-
-#### Header 4 `some code`
-
-##### Header 5 `some code`
-
-###### Header 6
-
-```md
 # Header 1
 
 ## Header 2
@@ -52,17 +23,65 @@ This is a paragraph.
 ##### Header 5
 
 ###### Header 6
-```
+
+---
+
+# Headers with links
+
+## Header 2 [a link](#some-link) here
+
+## Header 2 [a link](#some-link) here
+
+### Header 3 [a link](#some-link) here
+
+#### Header 4 [a link](#some-link) here
+
+##### Header 5 [a link](#some-link) here
+
+###### Header 6 [a link](#some-link) here
+
+---
+
+# Headers with code
+
+## Header 2 `some code` here
+
+## Header 2 `some code` here
+
+### Header 3 `some code` here
+
+#### Header 4 `some code` here
+
+##### Header 5 `some code` here
+
+###### Header 6 `some code` here
+
+# Paragraphs
+
+Lorem ipsum dolor sit amet, _consectetur adipisicing_ elit. Debitis ut necessitatibus alias amet blanditiis ullam asperiores totam a odio sint?
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto pariatur debitis suscipit culpa `ratione expedita` obcaecati consectetur, voluptatum est nam aliquid **facilis assumenda veritatis** ad doloremque repellendus praesentium officia. Harum beatae tempora quae, id ipsam sapiente saepe ducimus quibusdam quisquam.
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptatibus nostrum nulla, [voluptates deserunt accusantium](#link) cum ipsam itaque nobis quaerat alias sapiente mollitia, laudantium possimus fugiat ipsa animi unde quae architecto ad ex debitis odio! Minus enim quisquam aliquam perferendis, rerum, voluptatum ex suscipit porro ad distinctio autem.
+
+# Blockquotes
 
 > Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 >
 > Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
-
-```md
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 >
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
-```
+> ```
+> hi there
+> ```
+>
+> <details>
+>
+> <summary>More details</summary>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque
+    veniam, nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
+</details>
+
+# Lists
 
 - Red
 - Green
@@ -108,11 +127,7 @@ This is a paragraph.
 5. Mix together with water
 6. Bake
 
-Paragraph:
-
-```md
 Code
-```
 
 ```
 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
@@ -133,16 +148,6 @@ This is [an example][id] reference-style link.
 
 [id]: http://example.com 'Optional Title'
 
-```md
-This is [an example](http://example.com 'Example') link.
-
-[This link](http://example.com) has no title attr.
-
-This is [an example][id] reference-style link.
-
-[id]: http://example.com 'Optional Title'
-```
-
 _single asterisks_
 
 _single underscores_
@@ -151,21 +156,7 @@ _single underscores_
 
 **double underscores**
 
-```md
-_single asterisks_
-
-_single underscores_
-
-**double asterisks**
-
-**double underscores**
-```
-
 This paragraph has some `code` in it.
-
-```md
-This paragraph has some `code` in it.
-```
 
 # Grid
 
@@ -289,10 +280,6 @@ qui?
 # Single images
 
 ![Architecture](https://source.unsplash.com/featured/1600x900/?modern+architecture 'Modern Architecture')
-
-```md
-![Architecture](https://source.unsplash.com/featured/1600x900/?architecture 'Architecture')
-```
 
 ![NUbots icon](../images/nubots-icon.png 'NUbots icon')
 

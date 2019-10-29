@@ -1,5 +1,4 @@
-.markdown,
-.markdown details {
+.markdown {
   /* ============================
    * Base text color and line height
    * ============================ */
@@ -9,39 +8,32 @@
   /* ============================
    * Vertical rythm
    * ============================ */
-  > *:first-child {
-    @apply mt-0;
+  &,
+  blockquote,
+  details {
+    > *:first-child {
+      @apply mt-0;
+    }
+
+    > * + * {
+      @apply mt-6;
+    }
   }
 
-  > * + * {
-    @apply mt-6;
-  }
-
-  > ul > * + *,
-  > ol > * + * {
+  ul > * + *,
+  ol > * + * {
     @apply mt-3;
   }
 
   /* ============================
    * Separator
    * ============================ */
-  > hr {
+  hr {
     @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200;
     @apply my-16;
   }
 
-  /* ============================
-   * Links
-   * ============================ */
-  > a {
-    @apply block;
-  }
-
-  > a,
-  > p a,
-  > ul li a,
-  > ol li a,
-  a& {
+  a {
     @apply text-nubots-700;
     @apply underline;
 
@@ -59,22 +51,17 @@
   /* ============================
    * Bold text
    * ============================ */
-  > p strong,
-  > ul strong {
+  strong {
     @apply font-semibold;
   }
 
   /* ============================
    * Inline code
    * ============================ */
-  > p code,
-  > ul li *:not(pre) code,
-  > ul li > code,
-  > ol li *:not(pre) code,
-  > ol li > code,
-  p& code& {
+  code,
+  *:not(pre) code {
+    background-color: rgba(0, 0, 0, 0.04);
     @apply inline-block;
-    @apply bg-gray-100;
     @apply rounded-sm;
     @apply text-sm;
     @apply px-1;
@@ -86,17 +73,13 @@
     @apply font-normal;
   }
 
-  > p strong code,
-  > ul li strong code,
-  > ol li strong code {
+  strong code {
     @apply font-semibold;
   }
 
   /* ============================
    * Code blocks
    * ============================ */
-  > pre,
-  pre&,
   pre {
     @apply font-mono;
     @apply rounded;
@@ -128,8 +111,7 @@
   /* ============================
    * Blockquotes
    * ============================ */
-  > blockquote,
-  blockquote& {
+  blockquote {
     @apply bg-gray-100;
     @apply p-4;
     @apply border-l border-l-4 border-gray-200;
@@ -141,8 +123,7 @@
   /* ============================
    * Headings
    * ============================ */
-  > h1,
-  h1& {
+  h1 {
     @apply mb-1;
     @apply leading-none;
     @apply text-primary;
@@ -150,8 +131,7 @@
     @apply text-3xl;
   }
 
-  > h2,
-  h2& {
+  h2 {
     @apply mt-10;
     @apply mb-4;
     @apply text-primary;
@@ -160,12 +140,11 @@
     @apply text-2xl;
   }
 
-  > h2 + h3 {
+  h2 + h3 {
     @apply mt-6;
   }
 
-  > h3,
-  h3& {
+  h3 {
     @apply mt-12 -mb-3;
     @apply text-primary;
     @apply leading-tight;
@@ -173,8 +152,7 @@
     @apply text-xl;
   }
 
-  > h4,
-  h4& {
+  h4 {
     @apply mb-0;
     @apply text-primary;
     @apply leading-snug;
@@ -182,64 +160,66 @@
     @apply text-lg;
   }
 
-  > h5,
-  h5& {
+  h5 {
     @apply text-primary;
     @apply leading-snug;
     @apply font-semibold;
     @apply text-base;
   }
 
-  > h1 + p {
+  h1 + p {
     @apply mt-8;
   }
 
-  > h1 > code,
-  > h2 > code,
-  > h3 > code,
-  > h4 > code,
-  > h5 > code {
+  h1 > code,
+  h2 > code,
+  h3 > code,
+  h4 > code,
+  h5 > code {
+    font-size: inherit;
     @apply text-red-600;
     @apply font-mono;
   }
 
-  > h3 > code {
+  h3 > code {
     @apply text-lg px-1 bg-gray-100 rounded;
   }
 
-  > h4 > code {
+  h4 > code {
     @apply text-base px-1 bg-gray-100 rounded;
   }
 
-  > h5 > code {
+  h5 > code {
     @apply text-base px-1 bg-gray-100;
   }
 
-  > p,
-  p&,
-  > blockquote > p:not(:first-child) {
+  p {
     @apply text-base;
     @apply mt-6;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
-  > h1,
-  > h2,
-  > h3,
-  > h4,
-  > h5,
-  > h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply relative;
 
-    a {
+    a[data-anchor] {
       @apply absolute flex items-center opacity-0 pl-2 w-8;
       left: -32px;
       top: -4px;
       bottom: -4px;
     }
 
-    &:hover a,
-    a:hover,
-    a:focus {
+    &:hover a[data-anchor],
+    a[data-anchor]:hover,
+    a[data-anchor]:focus {
       @apply opacity-100;
     }
   }
@@ -247,10 +227,10 @@
   /* ============================
    * Lists
    * ============================ */
-  > ul {
+  ul {
     @apply pl-0 list-none;
 
-    li {
+    > li {
       @apply relative pl-10;
 
       &::before {
@@ -262,7 +242,7 @@
     }
   }
 
-  > ol {
+  ol {
     @apply list-none;
     counter-reset: item;
 
@@ -280,33 +260,26 @@
     }
   }
 
-  > :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
-  > ul code,
-  > ol code {
-    @apply bg-gray-100;
+  :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
+  ul code,
+  ol code {
     @apply text-sm;
     @apply leading-normal;
   }
 
-  > pre,
-  pre&,
-  > ul li pre,
-  > ol li pre {
+  pre {
     @apply flex p-0;
     @apply text-sm leading-normal;
   }
 
-  > pre code,
-  pre code&,
-  > ul li pre code,
-  > ol li pre code {
+  pre code {
     @apply p-4;
   }
 
   /* ============================
    * Tables
    * ============================ */
-  > table {
+  table {
     @apply w-full text-left;
     border-collapse: collapse !important;
 
@@ -337,22 +310,25 @@
   /* ============================
    * Collapsible sections
    * ============================ */
-  details {
+  :not(blockquote) details {
     border: 1px solid #eee;
   }
 
-  details[open] {
+  :not(blockquote) details[open] {
     padding: 16px;
   }
 
-  summary {
-    background-color: #eee;
-    padding: 8px 16px;
+  details summary {
     user-select: none;
     cursor: pointer;
   }
 
-  details[open] > summary {
+  :not(blockquote) details summary {
+    background-color: #eee;
+    padding: 8px 16px;
+  }
+
+  :not(blockquote) details[open] > summary {
     margin-top: -16px;
     margin-left: -16px;
     margin-right: -16px;
