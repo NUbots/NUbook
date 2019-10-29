@@ -156,10 +156,11 @@ It is possible to specify extra arguments to `cmake` to control the configuratio
 ```
 
 Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Debug`, while this is good while you are in active development of a module, you will get very poor (slow) runtime performance.
-To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` (use `./b configure -i` if you have already run configure) and then rebuild your code.
+To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and then rebuild your code using the following commands
 
 ```sh
 ./b configure -- -DCMAKE_BUILD_TYPE=Release
+./b build
 ```
 
 <Alert type="info">
