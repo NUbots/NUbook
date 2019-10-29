@@ -448,6 +448,43 @@ If a package does not exist in the Arch Linux repositories then you will need to
 
 See above for details on how to build a program/library from source.
 
+## The toolchain
+
+The toolchain is a collection of libraries that are used by the NUbots codebase. These libraries are essential for our code (if we don't have them then we are unable to compile anything).
+
+In order to ensure that everyone is using the same versions of every library and that everyone has compiled the libraries in the same way (enabling the correct features, etc), we use Docker to automate the build process.
+Docker also ensures that all of the dependencies for the built libraries are either installed or are also built and that they are also built in the correct order.
+
+In order to improve runtime performance on the robots, all libraries that are build as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
+A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/master/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
+
+If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
+
+```sh
+target=$(gcc -garch=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
+diff -y --suppress-common-lines <(gcc -march=native -Q --help=target) <(gcc -march=${target} -Q --help=target)
+```
+
+The first command will determine the codename of the CPU family (i.e. for an Intel CPU it might be `broadwell`, `haswell`, `skylake`, etc).
+
+For the rest of this example we will assume that `target=skylake`.
+
+The second command compares the compiler flags that compiling with `-march=native` would enable compared to using `-march=skylake`.
+The output of this function could look like this
+
+```sh
+  -mabm                       		[enabled]	      |	  -mabm                       		[disabled]
+  -mrtm                       		[enabled]	      |	  -mrtm                       		[disabled]
+```
+
+The final piece of information we need is about the cache sizes
+
+```ssh
+gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g | grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"'
+```
+
+Which means that the native CPU supports both `abm` and `rtm` instructions, whereas a generic `skylake` CPU does not support these.
+
 ## Flashing a Robot
 
 To install Arch Linux (our OS of choice) on to a robot perform the following instructions
