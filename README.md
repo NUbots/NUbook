@@ -118,6 +118,30 @@ The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-col
 
 See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
 
+### Showing alerts and warnings
+
+You can show an informational alert using:
+
+```mdx
+<Alert>
+  Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
+  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+  qui?
+</Alert>
+```
+
+You can also show a warning using:
+
+```mdx
+<Alert type='warning'>
+  Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
+  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+  qui.
+</Alert>
+```
+
+See what the alerts look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#alerts).
+
 ## Organising pages
 
 Pages are written in MDX files and stored in section and chapter folders in the [`src/book/`](src/book/) directory, and organised as follows:
