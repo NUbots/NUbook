@@ -58,7 +58,7 @@ The orientation of the basis $b$ relative to $a$ can be described by three conse
 
 In the NUbots codebase, we denote a rotation matrix from space $b$ to space $a$ as `Rab`.
 
-There rotation matrices belong to the **special orthogonal group of order 3**. These all have the following properties:
+The rotation matrices belong to the **special orthogonal group of order 3**. These all have the following properties:
 
 $$
 \mathbf{R}^{-1} = \mathbf{R}^T
@@ -71,16 +71,16 @@ $$
 If we have a vector $\mathbf{r}$ (which goes from point C to point D) in a space $a$ and we want to rotate it from space $a$ to space $b$, we write:
 
 $$
-\mathbf{r}^b = \mathbf{R}^b_a \cdot \mathbf{r}^a
+\mathbf{r}^b_{CD} = \mathbf{R}^b_a \cdot \mathbf{r}^a_{CD}
 $$
 
 This is written in the NUbots codebase as `rCDb = Rba * rCDa`.
 
-## Transformations
+## Homogeneous Transformations
 
 A transformation matrix in three dimensions is a 4x4 matrix containing a **rotation** component and a **translation** component.
 
-If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b$, then we have a transformation matrix that transforms from space $a$ to space $b$:
+If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b_{AB}$, then we have a transformation matrix that transforms from space $a$ to space $b$:
 
 $$
 \mathbf{H}_a^b = \begin{bmatrix}
