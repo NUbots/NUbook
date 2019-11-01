@@ -139,21 +139,18 @@ Eigen::Vector3d rXZa = rXYa + rYZa;
 
 ## Summary
 
-**Hab**: Denotes a 3D affine transformation matrix going from space $b$ to space $a$.
-
-**Rab**: Denotes a 3D rotation matrix from space $b$ to space $a$.
-
-**rABb**: Denotes a vector from point $B$ to point $A$ in space $a$.
-
-**vAb**: The velocity of $A$ in space $b$
-
-**rACc = Hcb \* rABb**
-
-**rABd = Rdc \* rABc**
-
-**Hac = Hab \* Hbc**
-
-**Euler Angles** are of the form Z-Y-X.
+| Item                | Description                                                                  |
+| ------------------- | ---------------------------------------------------------------------------- |
+| Hab                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
+| Rab                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
+| rABb                | Denotes a vector from point $B$ to point $A$ in space $a$.                   |
+| vAB                 | The velocity of $A$ in space $b$.                                            |
+| rXZa = rXYa + rYZa  | Create a new vector from two other vectors.                                  |
+| rACc = Hcb \* rABb  | Changing a vector from one space to another using a homogeneous transform.   |
+| rABd = Rdc \* rABc  | Changing a vector from one space to another using a rotation transform       |
+| Hba = Hab.inverse() | Inverting a matrix swaps the letter order.                                   |
+| Hac = Hab \* Hbc    | Creating a new transform from two other transforms.                          |
+| Euler Angles        | Are of the form Z-Y-X.                                                       |
 
 ## Useful Links
 
