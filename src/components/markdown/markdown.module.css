@@ -20,7 +20,7 @@
     }
   }
 
-  [data-alert] {
+  [data-alert-content] {
     > *:first-child {
       @apply mt-0;
     }
@@ -280,7 +280,8 @@
     pre,
     blockquote,
     details,
-    figure {
+    figure,
+    [data-alert] {
       @apply mt-3;
 
       &:first-child {

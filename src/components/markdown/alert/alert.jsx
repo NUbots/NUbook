@@ -8,6 +8,7 @@ import WarningIcon from './warning-icon.svg'
 const Alert = ({ children, type, hideIcon }) => {
   return (
     <div
+      data-alert
       className={`${style.alert} ${
         type == 'info' ? style.alertInfo : style.alertWarning
       }`}
@@ -17,7 +18,7 @@ const Alert = ({ children, type, hideIcon }) => {
           {type == 'info' ? <InfoIcon /> : <WarningIcon />}
         </div>
       )}
-      <div data-alert className={style.alertContent}>
+      <div data-alert-content className={style.alertContent}>
         {children}
       </div>
     </div>
