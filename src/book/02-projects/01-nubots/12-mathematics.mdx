@@ -109,7 +109,7 @@ This is written in the codebase as `rCBb = Hba * rCAa`.
   origin of the space they are measured in.
 </Alert>
 
-If you would like the vector only rotated, extract the rotational component of the transform and apply it to the vector. This does not hold the same restriction as above.
+If you would like the vector only rotated, extract the rotational component of the transform and apply it to the vector. This does not hold the same restriction as above, however the spaces do still need to match.
 
 ```cpp
 Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
