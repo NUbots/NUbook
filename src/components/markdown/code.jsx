@@ -36,4 +36,8 @@ Code.propTypes = {
   className: PropTypes.string,
 }
 
+Code.defaultProps = {
+  className: 'language-txt',
+}
+
 export default Code

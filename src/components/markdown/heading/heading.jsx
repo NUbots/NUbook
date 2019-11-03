@@ -13,7 +13,7 @@ export function createHeading(HeadingType) {
           id={anchor.props.href.replace('#', '')}
           className={style.anchor}
         ></div>
-        <a href={anchor.props.href}>
+        <a data-anchor href={anchor.props.href}>
           <LinkIcon />
         </a>
         {title}
