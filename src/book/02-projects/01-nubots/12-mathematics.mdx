@@ -37,10 +37,6 @@ $$
 
 To make computations such as inner product or cross product with coordinates, they must be relative to the same basis.
 
-So far we have expressed vectors as three dimensional vectors. However, they are really four dimensional. A vector is defined as $(x, y, z, 0)$. When it is multiplied with a homogeneous transformation matrix, it will only be rotated. A point is expressed as $(x, y, z, 1)$. When it is multiplied with a homogeneous transformation matrix, it will be rotated and then translated.
-
-In the codebase, vectors (written as `rABb`) are dealt with as if they are points. This means they will be rotated and translated when multiplied by a homogeneous transformation matrix. To use them as true vectors, multiply the vector by the rotation matrix. How to extract the rotation matrix from a homogeneous matrix is explained below in the **Homogeneous Transformations** section.
-
 ## Rotations
 
 To describe the motion of the robot, we need a **reference frame** and a **coordinate system**.
@@ -99,15 +95,27 @@ The vector $\mathbf{r}_{AB}^b$ is the vector from B (the origin of space b) to A
 
 The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system. The vector is from B to A because a point (0, 0, 0) in space $a$ should be moved to the origin of $a$ in $b$ space after transformation. Thus, the translation vector is $\mathbf{r}_{AB}^b$.
 
-Transformation matrices left multiply with vectors to get a vector in the new space.
+Transformation matrices left multiply with vectors to get a vector in the new space. This vector is rotated and then translated.
 
 $$
-\mathbf{r}^b = \mathbf{H}^b_a \cdot \mathbf{r}^a
+\mathbf{r}^b_{CB} = \mathbf{H}^b_a \cdot \mathbf{r}^a_{CA}
 $$
 
-This is written in the codebase as `rCDb = Hba * rCDa`, if $\mathbf{r}$ represents a vector from point D to point C.
+This is written in the codebase as `rCBb = Hba * rCAa`.
 
-They also multiply together to get a new transformation matrix.
+<Alert type='warning'>
+  Vectors should only be multiplied with a transformation matrix if the last two
+  letters match. That is, the position they are going from should match the
+  origin of the space they are measured in.
+</Alert>
+
+If you would like the vector only rotated, extract the rotational component of the transform and apply it to the vector. This does not hold the same restriction as above.
+
+```cpp
+Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
+```
+
+Homogeneous transformation matrices can be multiplied together to get a new homogemeous transformation matrix.
 
 $$
 \mathbf{H}_a^c = \mathbf{H}_b^c \cdot \mathbf{H}^b_a
@@ -118,6 +126,14 @@ This is written in the codebase as `Hca = Hcb * Hba`.
 ## Velocity
 
 Velocity of some object is represented relative to some space. If we have the velocity of object A moving relative to space b, then we write this in the codebase as `vAb`.
+
+Velocities can only be rotated, not translated. They should not be multiplied by a homogeneous transformation matrix, but they can be multiplied by a rotation matrix.
+
+If a velocity is multiplied with by time, it becomes a vector.
+
+```cpp
+Eigen::Vector3d rA_tAb = vAb * t;
+```
 
 ## Examples
 
