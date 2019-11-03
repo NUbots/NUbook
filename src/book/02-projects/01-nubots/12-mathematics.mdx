@@ -103,6 +103,19 @@ $$
 
 This is written in the codebase as `rCBb = Hba * rCAa`.
 
+This is equivalent to
+
+$$
+r_{CB}^b = r_{AB}^b + (R^b_a * r_{CA}^a)
+     = r_{AB}^b + r_{CA}^b
+$$
+
+or in code,
+
+```cpp
+rCBb = rABb + (Rba * rCAa)
+```
+
 <Alert type='warning'>
   Vectors should only be multiplied with a transformation matrix if the last two
   letters match. That is, the position they are going from should match the
@@ -112,7 +125,7 @@ This is written in the codebase as `rCBb = Hba * rCAa`.
 If you would like the vector only rotated, extract the rotational component of the transform and apply it to the vector. This does not hold the same restriction as above, however the spaces do still need to match.
 
 ```cpp
-Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
+Eigen::Vector3d rCDb = Hba.rotation() * rCDa
 ```
 
 Homogeneous transformation matrices can be multiplied together to get a new homogemeous transformation matrix.
@@ -132,7 +145,7 @@ Velocities can only be rotated, not translated. They should not be multiplied by
 If a velocity is multiplied with by time, it becomes a vector.
 
 ```cpp
-Eigen::Vector3d rA_tAb = vAb * t;
+Eigen::Vector3d rA_tAb = vAb * t
 ```
 
 ## Examples
@@ -144,12 +157,12 @@ If you have a vector `rTWa` and you want the opposite letter order, this is done
 If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the inner two letters should be identical, ie the same space.
 
 ```cpp
-Eigen::Affine3d Hac = Hab * Hbc
+Eigen::Affine3d Hac = Hab * Hbc;
 ```
 
 These two inner letters are canceled, with the outer two remaining. This also works for rotation matrices.
 
-If you have two vectors in the same space and their inner letters are both the same, then they can be canceled in a similar way to the transformation matrices.
+If you have two vectors in the same space and their inner letters are both the same then they can be canceled in a similar way to the transformation matrices.
 
 ```cpp
 Eigen::Vector3d rXZa = rXYa + rYZa;
@@ -162,7 +175,7 @@ Eigen::Vector3d rXZa = rXYa + rYZa;
 | `Hab`                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
 | `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
 | `rABb`                | Denotes a vector from point $B$ to point $A$ in space $a$.                   |
-| `vAB`                 | The velocity of $A$ in space $b$.                                            |
+| `vAb`                 | The velocity of $A$ in space $b$.                                            |
 | `rXZa = rXYa + rYZa`  | Create a new vector from two other vectors.                                  |
 | `rACc = Hcb * rABb`   | Changing a vector from one space to another using a homogeneous transform.   |
 | `rABd = Rdc * rABc`   | Changing a vector from one space to another using a rotation transform       |
