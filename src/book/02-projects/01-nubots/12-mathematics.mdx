@@ -117,10 +117,12 @@ rCBb = rABb + (Rba * rCAa)
 ```
 
 <Alert type='warning'>
-  Vectors should only be multiplied with a transformation matrix if the last two
-  letters match. That is, the position they are going from should match the
-  origin of the space they are measured in. This means that `Hab * rCBb` is
-  valid, but `Hab * rCDb` is invalid.
+
+Vectors should only be multiplied with a transformation matrix if the last two
+letters match. That is, the position they are going from should match the
+origin of the space they are measured in. This means that `Hab * rCBb` is
+valid, but `Hab * rCDb` is invalid. Note that the first vector is rC**B**b and the second is rC**D**b.
+
 </Alert>
 
 If you would like the vector only rotated, extract the rotational component of the transform and apply it to the vector. This does not hold the same restriction as above, however the spaces do still need to match.
