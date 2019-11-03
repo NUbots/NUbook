@@ -70,7 +70,7 @@ Ideally, all modules should be independent of each other and, as such, it should
 
 Below is an example of a role file. Any line preceded by a `#` is a comment and will be ignored.
 
-```cmake
+```bash
 nuclear_role(
   # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
   # and without it many roles do not run
@@ -139,7 +139,7 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`.
 If you only wish to build a single role (e.g. `sensortest`) then use the command
 
-```sh
+```bash
 ./b build sensortest
 ```
 
@@ -151,14 +151,14 @@ If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `
 
 It is possible to specify extra arguments to `cmake` to control the configuration process. For example, to enable the building of unit tests one would run
 
-```sh
+```bash
 ./b configure -- -DBUILD_TESTS=ON
 ```
 
 Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Debug`, while this is good while you are in active development of a module, you will get very poor (slow) runtime performance.
 To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and then rebuild your code using the following commands
 
-```sh
+```bash
 ./b configure -- -DCMAKE_BUILD_TYPE=Release
 ./b build
 ```
@@ -179,7 +179,7 @@ However, some modules generate their configuration file at build-time, making it
 
 One module that generates it configuration file at build time is `support::logging::DataLogging`, to edit the configuration file for `DataLogging` run
 
-```sh
+```bash
 ./b edit config/DataLogging.yaml
 ```
 
@@ -201,7 +201,7 @@ NUbots uses several different code formatters.
 
 If you want to ensure that all files in the codebase are formatted according to our defined style run
 
-```sh
+```bash
 ./b format
 ```
 
@@ -211,7 +211,7 @@ If you are using [Visual Studio Code](https://code.visualstudio.com/) with the w
 
 Once code is built and you are ready to install it on a robot, you can run
 
-```sh
+```bash
 ./b install [options] <robot>
 ```
 
@@ -241,7 +241,7 @@ one mentioned above, try running `sudo ldconfig` on the robot.
 
 The `module` command allows you to generate a new module. To generate a new line detection module one would run
 
-```sh
+```bash
 ./b module generate vision/LineDetector
 ```
 
@@ -263,7 +263,7 @@ The `nbs` command provides a couple of subcommands to help you work with NBS dat
 
 To run roles locally on your system use the `run` command of `b` as follows
 
-```sh
+```bash
 ./b run <name of role>
 ```
 
@@ -284,7 +284,7 @@ You probably don't know what you are doing. But why would you listen to me?
 
 For some reason, if you really, really, _REALLY_ need to access a terminal inside of Docker you can run
 
-```sh
+```bash
 ./b shell
 ```
 
@@ -384,7 +384,7 @@ The [docker folder](https://github.com/NUbots/NUbots/tree/master/docker) contain
 
 If you need to add a new library or program to the Docker image you should add it to the end of the Dockerfile to minimise the amount of rebuilding that needs to happen. Look for the following marker
 
-```sh
+```bash
 #######################################
 ### ADD NEW PROGRAMS/LIBRARIES HERE ###
 #######################################
@@ -428,7 +428,7 @@ Borrowing commands from these scripts could help relieve your frustrations with 
 
 If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile at the marker near the end of the file
 
-```docker
+```bash
 #######################################
 ### ADD NEW PROGRAMS/LIBRARIES HERE ###
 #######################################
@@ -437,7 +437,7 @@ RUN install-package <name of package>
 
 If a package does not exist in the Arch Linux repositories then you will need to build it from source. However, this time, you need to add it where the marker says
 
-```sh
+```bash
 ##############################################
 ### ADD NEW SYSTEM PROGRAMS/LIBRARIES HERE ###
 ##############################################
@@ -458,7 +458,7 @@ A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [
 
 If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
 
-```sh
+```bash
 target=$(gcc -march=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
 diff -y --suppress-common-lines <(gcc -march=native -Q --help=target) <(gcc -march=${target} -Q --help=target)
 ```
@@ -470,7 +470,7 @@ For the rest of this example we will assume that `target=skylake`.
 The second command compares the compiler flags that compiling with `-march=native` would enable compared to using `-march=skylake`.
 The output of this function could look like this
 
-```sh
+```bash
 -mabm        [enabled]	      |	  -mabm        [disabled]
 -mrtm        [enabled]	      |	  -mrtm        [disabled]
 ```
@@ -482,7 +482,7 @@ Combining both columns tells us that to get from a generic `skylake` CPU to the 
 
 If the output was actually
 
-```sh
+```bash
 -mabm        [disabled]       |    -mabm        [enabled]
 -mrtm        [enabled]        |    -mrtm        [disabled]
 ```
@@ -499,7 +499,7 @@ gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP 
 
 The output of this command will look like this
 
-```sh
+```bash
 --param l1-cache-size=32
 --param l1-cache-line-size=64
 --param l2-cache-size=12288
