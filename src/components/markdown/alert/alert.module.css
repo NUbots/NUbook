@@ -1,0 +1,48 @@
+.alert {
+  @apply max-w-full p-4 flex items-center;
+}
+
+.alertContent {
+  @apply -mt-1 w-full;
+}
+
+.alertContent p {
+  @apply text-base mt-3;
+}
+
+.alertContent p:first-child {
+  margin-top: 0;
+}
+
+.alertContent code {
+  @apply inline-block;
+  @apply rounded-sm;
+  @apply text-sm;
+  @apply px-1;
+  @apply leading-none;
+  @apply whitespace-no-wrap;
+  @apply text-red-600;
+  @apply font-mono;
+  @apply align-baseline;
+  @apply font-normal;
+}
+
+.alertIcon {
+  @apply mr-4 self-start;
+}
+
+.alertInfo {
+  background-color: rgba(33, 150, 243, 0.12);
+}
+
+.alertInfo .alertIcon {
+  @apply text-blue-600;
+}
+
+.alertWarning {
+  background-color: rgba(255, 152, 0, 0.12);
+}
+
+.alertWarning .alertIcon {
+  @apply text-orange-600;
+}
