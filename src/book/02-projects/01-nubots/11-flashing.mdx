@@ -120,6 +120,15 @@ The following files now need to be modified (using either `sudo nano` or `sudo v
 
 These 5 files need to be both renamed (replacing `eth0` or `wlan0` with the new interface name) and the contents of the files need to be edited, specifically the line that says `Name=eth0` or `Name=wlan0`.
 
+Finally, correct the `wpa_supplicant` service by running
+
+```sh
+sudo systemctl disable wpa_supplicant@wlan0
+sudo systemctl enable wpa_supplicant@new_interface
+```
+
+Be sure to replace `new_interface` with the name of the WiFi interface.
+
 Once these files have been fixed, reboot by typing `sudo systemctl reboot` and then login again. Hopefully, `ip addr` indicates that there is an active network connection (on `bond0`) and `ping -c 3 google.com` also indicates an active connection.
 
 ## Manually setting up a WiFi connection on the robot
