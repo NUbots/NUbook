@@ -25,26 +25,26 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
    - Intel Visual BIOS should appear
    - Navigate to "Advanced" menu
    - Navigate to "Power" then set "After Power Failure" to "Power On"
-     ![BIOS Power Menu](../../../images/flashing_bios_power.jpg 'BIOS Power Menu')
+     ![BIOS Power Menu](./images/flashing/bios_power.jpg 'BIOS Power Menu')
    - Navigate to "Boot" and then "Boot Configuration"
      - Ensure "Boot USB Devices First" is enabled in "UEFI Boot"
      - Ensure "USB" is enabled in "Boot Devices"
-       ![BIOS Boot Configuration Menu](../../../images/flashing_bios_boot_configuration.jpg 'BIOS Boot Configuration Menu')
+       ![BIOS Boot Configuration Menu](./images/flashing/bios_boot_configuration.jpg 'BIOS Boot Configuration Menu')
    - Navigate to "Secure Boot" and disable "Secure Boot"
-     ![BIOS Secure Boot Menu](../../../images/flashing_bios_secure_boot.jpg 'BIOS Secure Boot Menu')
+     ![BIOS Secure Boot Menu](./images/flashing/bios_secure_boot.jpg 'BIOS Secure Boot Menu')
    - Press F10 to save settings and exit and ensure you USB drive is plugged in
 
 1. If you are not using a brand new NUC, ensure your USB drive is plugged in and turn the NUC on
 
 1. Once the system has booted into the LiveUSB environment on the robot, ensure the robot has an active network connection
 
-   - ![LiveUSB Environment](../../../images/flashing_liveusb.jpg 'LiveUSB Environment')
+   - ![LiveUSB Environment](./images/flashing/liveusb.jpg 'LiveUSB Environment')
    - Run `ip addr` and look for a `inet` line that has a valid IP address on it. If you can't see one you don't have a network connection. Alternatively, run `ping -c 3 google.com` and look for a response time.
 
      <Grid columns='1fr 1fr' caption='Internet connection status'>
 
-     ![Internet connection](../../../images/flashing_internet.jpg 'Internet connection')
-     ![No internet connection](../../../images/flashing_no_internet.jpg 'No internet connection')
+     ![Internet connection](./images/flashing/internet.jpg 'Internet connection')
+     ![No internet connection](./images/flashing/no_internet.jpg 'No internet connection')
 
      </Grid>
 
@@ -100,7 +100,7 @@ Once installation is complete and you have booted into your shiny new OS, you sh
 
 First, login to system
 
-![Login](../../../images/flashing_login.jpg 'Login')
+![Login](./images/flashing/login.jpg 'Login')
 
 Now check for a network connection, the same as we did before. If `ip addr` indicates that there is no connection then it is likely that the secondary installation script made the wrong guess about the name of the network interfaces. Inspect the output from `ip link` and make note of the ethernet and wifi interface names.
 
@@ -139,7 +139,7 @@ To set up the WiFi interface you first need to know the name of the interface. T
 ip link
 ```
 
-![Known network interfaces](../../../images/flashing_known_interfaces.jpg 'Known network interfaces')
+![Known network interfaces](./images/flashing/known_interfaces.jpg 'Known network interfaces')
 
 and look for an interface starting with `wl`. On our robots it is usually `wlan0`.
 
