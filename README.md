@@ -55,11 +55,11 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 ### Adding images
 
-- Add image files in the [`src/images/`](src/images/) directory
+- Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
 ```md
-![Image caption](../../../images/image.png)
+![Image description for search engines and screen readers](./images/image.png 'Image caption')
 ```
 
 ### Adding syntax-highlighted code blocks
@@ -124,9 +124,11 @@ You can show an informational alert using:
 
 ```mdx
 <Alert>
-  Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
-  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
-  qui?
+
+Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui?
+
 </Alert>
 ```
 
@@ -134,9 +136,11 @@ You can also show a warning using:
 
 ```mdx
 <Alert type='warning'>
-  Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
-  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
-  qui.
+
+Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui.
+
 </Alert>
 ```
 
