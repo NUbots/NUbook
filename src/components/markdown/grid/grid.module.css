@@ -1,0 +1,29 @@
+.grid {
+  @apply w-full max-w-full leading-none p-2 bg-gray-100;
+}
+
+.gridSeamless {
+  @apply p-0 bg-transparent;
+}
+
+.gridContent {
+  display: grid;
+  grid-column-gap: 8px;
+  grid-row-gap: 8px;
+}
+
+.gridContent > * {
+  @apply p-0 m-0 min-w-0 min-h-0;
+}
+
+.gridSeamless .gridContent > figure {
+  @apply p-2;
+}
+
+.gridContent figure img {
+  @apply m-0;
+}
+
+.gridContent > pre code {
+  @apply h-full;
+}
