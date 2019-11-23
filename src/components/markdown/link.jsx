@@ -4,10 +4,13 @@ import { Link as GatsbyLink } from 'gatsby'
 
 const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
   // Assumes internal links start with /, everything else external
-  const internal = /^\/(?!\/)/.test(to)
+  const isInternal = /^\/(?!\/)/.test(to)
 
-  // Use Gatsby Link for internal links, and <a> for others
-  if (internal) {
+  // Assumes that file links end with an extension, e.g. ".pdf"
+  const isFile = /.*\..+/.test(to)
+
+  // Use Gatsby Link for internal links that are not files, and <a> for others
+  if (isInternal && !isFile) {
     return (
       <GatsbyLink
         to={to}

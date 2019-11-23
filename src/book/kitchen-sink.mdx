@@ -10,37 +10,8 @@ slug: /kitchen-sink
 hidden: true
 ---
 
-[View raw (TEST.md)](https://raw.github.com/adamschwartz/github-markdown-kitchen-sink/master/README.md)
+# Headers
 
-This is a paragraph.
-
-```md
-This is a paragraph.
-```
-
-# Header 1
-
-## Header 2
-
-```md
-# Header 1
-
-## Header 2
-```
-
-# Header 1
-
-## Header 2 `OldWalkEngine` class
-
-### Header 3 `some code`
-
-#### Header 4 `some code`
-
-##### Header 5 `some code`
-
-###### Header 6
-
-```md
 # Header 1
 
 ## Header 2
@@ -52,51 +23,179 @@ This is a paragraph.
 ##### Header 5
 
 ###### Header 6
-```
 
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
->
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+---
 
-```md
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+# Headers with links
+
+## Header 2 [a link](#some-link) here
+
+## Header 2 [a link](#some-link) here
+
+### Header 3 [a link](#some-link) here
+
+#### Header 4 [a link](#some-link) here
+
+##### Header 5 [a link](#some-link) here
+
+###### Header 6 [a link](#some-link) here
+
+---
+
+# Headers with code
+
+## Header 2 `some code` here
+
+## Header 2 `some code` here
+
+### Header 3 `some code` here
+
+#### Header 4 `some code` here
+
+##### Header 5 `some code` here
+
+###### Header 6 `some code` here
+
+---
+
+# Paragraphs
+
+Lorem ipsum dolor sit amet, _consectetur adipisicing_ elit. Debitis ut necessitatibus alias amet blanditiis ullam asperiores totam a odio sint?
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto pariatur debitis suscipit culpa `ratione expedita` obcaecati consectetur, voluptatum est nam aliquid **facilis assumenda veritatis** ad doloremque repellendus praesentium officia. Harum beatae tempora quae, id ipsam sapiente saepe ducimus quibusdam quisquam.
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Autem quam a voluptatibus nostrum nulla, [voluptates deserunt accusantium](#link) cum ipsam itaque nobis quaerat alias sapiente mollitia, laudantium possimus fugiat ipsa animi unde quae architecto ad ex debitis odio! Minus enim quisquam aliquam perferendis, rerum, voluptatum ex suscipit porro ad distinctio autem.
+
+---
+
+# Blockquotes
+
+> Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus. $\pi = 3.14$
 >
-> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
-```
+> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+>
+> ```
+> hi there
+> ```
+>
+> - Item 1
+>   1. Oh a nested item
+>   2. Other nested item
+> - Item 2
+> - Item 3
+>
+> $$
+> e^{i\phi} = \cos(\phi) + i \sin(\phi)
+> $$
+>
+> <Alert>
+>
+> Here's an alert in a blockquote. Including some math content for good measure:
+>
+> $$
+> e^{i\phi} = \cos(\phi) + i \sin(\phi)
+> $$
+>
+> </Alert>
+
+---
+
+# Lists
 
 - Red
 - Green
 - Blue
 
-* Red
-* Green
-* Blue
+* Red Star
+* Green Star
+* Blue Star
 
 - Red
+  - Nested list item
+  - Nested list item
+    - Further nested list item
+    - Further nested list item
+  - Back to nested list item
 - Green
+  - Nested list item
+    - Further nested list item
+  - Back to nested list item
 - Blue
 
 1. Buy flour and salt
-1. Mix together with water
-1. Bake
 
-Paragraph:
+   - Nested list item
+   - Nested list item
+     - Further nested list item
+     - Further nested list item
+   - Back to nested list item
 
-```md
-Code
-```
+2. Mix together with water
 
-<!-- -->
+   1. Nested list item
+   2. Nested list item
+
+      1. Further nested list item
+      2. Further nested list item
+
+   3. Back to nested list item
+
+3. Bake
+
+   ```js
+   const oven = Oven.acquire()
+   const dough = Dough.acquire()
+   oven
+     .prepare()
+     .preheat()
+     .place(dough)
+     .bake()
+   // Pretty long comment line to force a scrollbar. Writing a random long sentence is not as easy as it may seem. You have to really string together words and phrases that somehow work without really saying anything.
+   ```
+
+4. Buy flour and salt
+
+   $$
+   e^{i\phi} = \cos(\phi) + i \sin(\phi)
+   $$
+
+5. **Mix together with water**
+
+   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
+   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
+6. Bake
+
+   <Alert>
+
+   Here's an alert in a list. Including some math content for good measure.
+
+   $$
+   e^{i\phi} = \cos(\phi) + i \sin(\phi)
+   $$
+
+   </Alert>
+
+7. Profit
+
+   <details>
+
+   <summary>But how tho?</summary>
+
+   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
+   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos totam mollitia neque architecto, esse porro expedita et nostrum dolorem nisi!
+
+   $$
+   e^{i\phi} = \cos(\phi) + i \sin(\phi)
+   $$
+
+   </details>
 
 ---
 
----
-
----
-
----
-
----
+# Links and inline formatting
 
 This is [an example](http://example.com 'Example') link.
 
@@ -106,39 +205,13 @@ This is [an example][id] reference-style link.
 
 [id]: http://example.com 'Optional Title'
 
-```md
-This is [an example](http://example.com 'Example') link.
-
-[This link](http://example.com) has no title attr.
-
-This is [an example][id] reference-style link.
-
-[id]: http://example.com 'Optional Title'
-```
-
-_single asterisks_
-
 _single underscores_
 
 **double asterisks**
 
-**double underscores**
-
-```md
-_single asterisks_
-
-_single underscores_
-
-**double asterisks**
-
-**double underscores**
-```
-
 This paragraph has some `code` in it.
 
-```md
-This paragraph has some `code` in it.
-```
+---
 
 # Grid
 
@@ -217,7 +290,7 @@ $$
 
 </Grid>
 
-# Images seamless
+## Images seamless
 
 <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some possible pets" seamless>
 
@@ -228,15 +301,83 @@ $$
 
 </Grid>
 
-# Single images
+---
+
+# Alerts
+
+## Info
+
+<Alert type='info'>Single line info</Alert>
+
+<Alert type='info'>
+
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+<details>
+  <summary>More details</summary>
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque veniam,
+  nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
+</details>
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+</Alert>
+
+## Warning
+
+<Alert type='warning'>Single line warning</Alert>
+
+<Alert type='warning'>
+
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+<details>
+  <summary>More details</summary>
+  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus atque veniam,
+  nesciunt iste neque vero natus suscipit voluptas repudiandae odit?
+</details>
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+</Alert>
+
+---
+
+# Images
 
 ![Architecture](https://source.unsplash.com/featured/1600x900/?modern+architecture 'Modern Architecture')
 
-```md
-![Architecture](https://source.unsplash.com/featured/1600x900/?architecture 'Architecture')
-```
-
 ![NUbots icon](../images/nubots-icon.png 'NUbots icon')
+
+---
 
 # Code blocks
 
@@ -265,6 +406,8 @@ export default ({ children, className }) => {
 }
 ```
 
+---
+
 # Math
 
 ## Inline
@@ -277,12 +420,56 @@ $$
 e^{i\phi} = \cos(\phi) + i \sin(\phi)
 $$
 
+---
+
 # Table
 
 | First Header | Second Header | Third Header |
 | ------------ | ------------- | ------------ |
 | Content Cell | Content Cell  | Content Cell |
 | Content Cell | Content Cell  | Content Cell |
+
+---
+
+# Collapsible content
+
+<details>
+
+<summary>Show more details</summary>
+
+Lorem ipsum dolor sit amet, **consectetuer adipiscing** elit. Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus. [Vestibulum enim](#) wisi, viverra nec, fringilla in, laoreet vitae, risus. `Markdown.generate();`
+
+```
+hi there
+```
+
+- Item 1
+  1. Oh a nested item
+  2. Other nested item
+- Item 2
+- Item 3
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+<Alert>
+
+Here's an alert in collapsible content. Including some math content for good measure.
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+</Alert>
+
+</details>
+
+---
+
+The following headings fill out the table of contents to test the scroll bar.
 
 # 2000
 
