@@ -55,11 +55,11 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 ### Adding images
 
-- Add image files in the [`src/images/`](src/images/) directory
+- Add image files in an `image` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
 ```md
-![Image caption](../../../images/image.png)
+![Image description for search engines and screen readers](./images/image.png 'Image caption')
 ```
 
 ### Adding syntax-highlighted code blocks
