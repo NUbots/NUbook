@@ -191,3 +191,16 @@ If you need to, you can:
 Pull requests are automatically deployed as previews using [Netlify](https://netlify.com/), which will run code quality checks and report failures before a deploy.
 
 When a pull request is merged into master, it is automatically deployed to the main site.
+
+## Deploy previews
+
+As mentioned above, pull requests are automatically deployed as previews using Netlify.
+
+The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netlify.com/` where `[PR number]` is the pull request number. For example, `https://deploy-preview-21--nubook.netlify.com/` is the preview URL for pull request number 21.
+
+You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
+
+![Screenshot of deploy previews link](./deploy-previews.png)
+
+**We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
