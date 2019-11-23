@@ -55,7 +55,7 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 ### Adding images
 
-- Add image files in an `image` folder in the same directory as the file being edited
+- Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
 ```md
