@@ -2,11 +2,11 @@
 section: Projects
 chapter: NUbots
 title: Mathematics
-description: Detailed explanation of the mathematics used in the NUbots codebase.
+description: Detailed explanation of how mathematics is written in the NUbots codebase.
 slug: /projects/nubots/mathematics
 ---
 
-The NUbots codebase uses specific mathematical concepts and notation that is relevant to the field of robotics. This page details these concepts and notations. In the NUbots codebase there are many transforms between spaces. Specific notation is used for these transforms for better readability.
+The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. Specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
 
 We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
 
@@ -14,7 +14,7 @@ We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library 
 
 A **basis** is a **maximal** set of **linearly independent** vectors.
 
-In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, Any three dimensional vector $\mathbf{u}$ can be written as
+In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
 
 $$
 \mathbf{u} = a_1 \cdot \mathbf{b}_1 + a_2 \cdot \mathbf{b}_2 + a_3 \cdot \mathbf{b}_3
@@ -157,7 +157,7 @@ or in code,
 Eigen::Vector3d rCBb = rABb + (Rba * rCAa);
 ```
 
-<Alert type='warning'>
+<Alert>
 
 Vectors should only be multiplied with a transformation matrix if the **last two
 letters** of the vector match. That is, the position they are going from should match the
