@@ -2,8 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
-import { getScrollParent, scrollIntoView } from './scroll.js'
-
 import style from './sidebar.module.css'
 
 const getLinkProps = ({ isCurrent }) => {
@@ -20,12 +18,7 @@ const Sidebar = ({ menu, currentSection }) => {
     const activeLink = sidebarEl.current.querySelector(`.${style.linkActive}`)
 
     if (activeLink) {
-      const parent = getScrollParent(activeLink)
-
-      scrollIntoView(activeLink, parent, {
-        marginTop: 0,
-        marginBottom: 64,
-      })
+      activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
     }
   }, [])
 
