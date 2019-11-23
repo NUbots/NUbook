@@ -124,9 +124,11 @@ You can show an informational alert using:
 
 ```mdx
 <Alert>
-  Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
-  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
-  qui?
+
+Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui?
+
 </Alert>
 ```
 
@@ -134,9 +136,11 @@ You can also show a warning using:
 
 ```mdx
 <Alert type='warning'>
-  Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
-  Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
-  qui.
+
+Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui.
+
 </Alert>
 ```
 
