@@ -492,7 +492,7 @@ Then we would need to disable `abm` using `-mno-abm` and enable `rtm` using `-mr
 The final piece of information we need is about the CPU cache sizes
 
 ```ssh
-gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"'
+gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"
 ```
 
 The output of this command will look like this
