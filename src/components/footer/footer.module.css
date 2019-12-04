@@ -1,6 +1,6 @@
 .logo {
   @apply w-8 opacity-25;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   filter: grayscale(0.6);
 
   &:hover {

@@ -8,7 +8,7 @@ import NUbotsIcon from './nubots-icon.svg'
 
 const Footer = () => (
   <div className='max-w-screen-xl mx-auto px-8'>
-    <div className='pt-10 pb-16 border-t text-gray-500 text-center flex flex-col lg:flex-row lg:text-left'>
+    <div className='pt-12 pb-16 border-t border-gray-200 text-gray-500 text-center flex flex-col lg:flex-row lg:text-left'>
       <div className='mb-6 lg:mb-0 lg:w-1/3'>
         Copyright © {new Date().getFullYear()} NUbots -{' '}
         <a

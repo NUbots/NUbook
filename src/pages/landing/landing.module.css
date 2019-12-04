@@ -17,12 +17,8 @@
     height: 720px;
   }
 
-  @screen 2xl {
-    height: 800px;
-  }
-
   @screen 4xl {
-    height: 880px;
+    height: 840px;
   }
 }
 
