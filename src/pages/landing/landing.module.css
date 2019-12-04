@@ -1,0 +1,59 @@
+.cover {
+  height: 360px;
+  background-image: url('./background-darwins.jpg');
+  background-size: cover;
+  background-position: 50%;
+  position: relative;
+
+  @screen md {
+    height: 540px;
+  }
+
+  @screen lg {
+    height: 640px;
+  }
+
+  @screen xl {
+    height: 720px;
+  }
+
+  @screen 2xl {
+    height: 800px;
+  }
+
+  @screen 4xl {
+    height: 880px;
+  }
+}
+
+.cover::before {
+  content: '';
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  height: 40%;
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.cover::after {
+  content: '';
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 40%;
+  background-image: linear-gradient(
+    180deg,
+    rgba(196, 196, 196, 0) 0%,
+    rgba(0, 0, 0, 0.54) 100%
+  );
+}

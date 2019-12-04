@@ -3,6 +3,11 @@
 module.exports = {
   theme: {
     extend: {
+      screens: {
+        '2xl': '1440px',
+        '3xl': '1600px',
+        '4xl': '1920px',
+      },
       colors: {
         'gray': {
           '100': '#f5f5f5',

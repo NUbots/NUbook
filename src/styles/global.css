@@ -14,6 +14,11 @@
  */
 @tailwind utilities;
 
+/* Reset the body text color */
+body {
+  color: rgba(0, 0, 0, 0.87);
+}
+
 /*
   This will hide the focus indicator if an element receives focus via the mouse,
   but it will still show up on keyboard focus.

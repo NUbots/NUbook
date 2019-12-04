@@ -1,0 +1,11 @@
+.logo {
+  @apply w-8 opacity-25;
+  transition: all 0.2s;
+  filter: grayscale(0.6);
+
+  &:hover {
+    filter: none;
+    transform: rotate(40deg);
+    @apply opacity-100;
+  }
+}

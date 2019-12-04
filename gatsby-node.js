@@ -2,6 +2,11 @@
 
 const path = require('path')
 
+const menu = []
+
+/**
+ * Create the site pages from MDX files in /src/book
+ */
 exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get the MDX pages sorted by file path (this is why we have the numeric prefixes)
   const result = await graphql(`
@@ -49,9 +54,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get all MDX files
   const posts = result.data.allMdx.edges
 
-  // Create the navigation menu
-  const menu = []
-
   // Populate the menu
   posts
     .filter(({ node }) => !node.frontmatter.hidden)
@@ -81,6 +83,27 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     })
   })
+}
+
+/**
+ * Pass the menu through context to the landing page.
+ */
+exports.onCreatePage = ({ page, actions }) => {
+  if (page.path === '/') {
+    const { createPage, deletePage } = actions
+
+    // Delete the Gatsby-generated landing page
+    deletePage(page)
+
+    // Create a replacement page with the menu
+    createPage({
+      ...page,
+      context: {
+        ...page.context,
+        menu,
+      },
+    })
+  }
 }
 
 /**

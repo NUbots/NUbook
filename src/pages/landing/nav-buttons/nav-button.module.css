@@ -1,0 +1,11 @@
+.button {
+  min-height: 68px;
+  border: 2px solid #f9a50d;
+  color: #f9a50d;
+  @apply flex bg-white px-6 py-2 items-center justify-center rounded w-full;
+
+  &:hover,
+  &:focus {
+    background-color: rgba(249, 165, 13, 0.12);
+  }
+}
