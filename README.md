@@ -55,11 +55,11 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 ### Adding images
 
-- Add image files in the [`src/images/`](src/images/) directory
+- Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
 ```md
-![Image caption](../../../images/image.png)
+![Image description for search engines and screen readers](./images/image.png 'Image caption')
 ```
 
 ### Adding syntax-highlighted code blocks
@@ -118,6 +118,34 @@ The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-col
 
 See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
 
+### Showing alerts and warnings
+
+You can show an informational alert using:
+
+```mdx
+<Alert>
+
+Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui?
+
+</Alert>
+```
+
+You can also show a warning using:
+
+```mdx
+<Alert type='warning'>
+
+Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui.
+
+</Alert>
+```
+
+See what the alerts look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#alerts).
+
 ## Organising pages
 
 Pages are written in MDX files and stored in section and chapter folders in the [`src/book/`](src/book/) directory, and organised as follows:
@@ -163,3 +191,16 @@ If you need to, you can:
 Pull requests are automatically deployed as previews using [Netlify](https://netlify.com/), which will run code quality checks and report failures before a deploy.
 
 When a pull request is merged into master, it is automatically deployed to the main site.
+
+## Deploy previews
+
+As mentioned above, pull requests are automatically deployed as previews using Netlify.
+
+The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netlify.com/` where `[PR number]` is the pull request number. For example, `https://deploy-preview-21--nubook.netlify.com/` is the preview URL for pull request number 21.
+
+You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
+
+![Screenshot of deploy previews link](./deploy-previews.png)
+
+**We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
