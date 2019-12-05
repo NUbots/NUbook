@@ -1,0 +1,103 @@
+---
+section: System
+chapter: NUbots
+title: Script Engine
+description: Introduction to scripting and how it works in the NUbots codebase.
+slug: /system/nubots/script-engine
+---
+
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+
+## Script Runner
+
+The script runner command will run a script. The command for this is
+
+```bash
+./scriptrunner Script.yaml
+```
+
+Where you would replace `Script.yaml` with the name of the script. All scripts can be found in the NUbots repository under `/module/motion/ScriptEngine/data/scripts/`.
+
+The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, if you were running `Stand.yaml` on `nugus1`, the ScriptEngine would first look for `Stand.yaml` in the `/scripts/` folder, and then it would check in the `/scripts/nugus1/` folder for a `Stand.yaml` file. If it exists, it will override with that script.
+
+## Script Tuner
+
+Script tuner is an easy way to make scripts. To use script tuner, run
+
+```bash
+./scripttuner /path/to/Script.yaml
+```
+
+Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script. `/path/to/` is the path to the script. This may be `scripts/nugus/Script.yaml`, or `scripts/nugus*/Script.yaml` where `*` is the robot number for a robot specific script.
+
+You will then be able to tune the script. You will see the following interface for script editing.
+
+![First line states 'Scripts: scripts/nugus2/walk.yaml'. Next line says 'Frames:' with consecutive numbers from 1 to 44 laid out in a row. The number '1' is selected. The next line says 'Duration: 3000'. The next section is a table with the first column specifying servo names such as 'right shoulder pitch'. The second column specifies the angle of the servo. This is of the format 'Angle: +1.45'. Some of the rows have dashes instead of numbers for the angle, denoting an empty field. The third row states the gain of the servo. This is of the form 'Gain: 30.0'. Like the angle, some of these are blanked out with dashes. Empty angle and gain fields are paired. In the next section there are several keyboard commands which allow the user to use the interface.](../../../images/scripttuner.png)
+
+The first line tells you the name and path of the script you are creating or editing.
+
+The second line specifies the number of frames and the current frame, which is highlighted. Each frame specifies different joint positions, and when these frames are combined they result in a motion.
+
+The next line is duration. This determines how long the robot will take to move to the servo positions you have specified. This is measured in milliseconds.
+
+The next section is a table. These show the angle and gain for each servo for that frame.
+
+The bottom of the interface shows what commands are available. It does not show all the commands. All commands can be viewed by typing `:help`. Note that the letters are UPPERCASE.
+
+`,` - Moves to the frame that is left of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.
+
+`.` - Moves to the frame that is right of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.
+
+`N` - Creates a new frame after the frame you have currently selected. This frame will be a duplicate of the frame you have selected. It will be added in after the currently selected frame, and the selected frame will not change.
+
+`I` - Deletes the current frame you have selected. The new selected frame will be the frame after the deleted frame, or before if it was the last frame.
+
+`space` - This toggles locking and unlocking of servos. When the servo is locked, you will not be able to move that joint on the real robot and the angle it is at will be stored in the table on the script tuner interface. When it is unlocked, you are able to freely move that joint on the real robot to adjust the angle of the joint for that frame. Space is used to edit any field that is editable.
+
+`T` - Edits the duration that this frame plays for, in milliseconds. Press `space` to submit.
+
+`J` - Jumps to a specified frame. After pressing this key, type in the frame number you want to jump to and then hit `enter`.
+
+`G` - Opens interface for editing gain of entire script or frame. Allows changing of all servo gains, only the upper body gains (arms and head) or lower body gains (legs). Can specify for the entire script or for a particular frame. Use `X` to exit the edit gain interface.
+
+`P` - Plays the script from the first frame to the last frame.
+
+`S` - Saves the new script or saves the edited script.
+
+`A` - Saves the script with a particular name. After pressing this key, write the name of the script and press `enter`.
+
+`R` - Manual refresh view
+
+`M` - Mirrors the whole script
+
+`X` - Exits the help or exits gain editing
+
+`CTRL + C` - Quits script tuner
+
+`:help` - Lists all commands that can be used in script tuner
+
+## Script Engine
+
+The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
+
+## List of Scripts
+
+`KickLeft.yaml` - robot kicks with its left foot
+
+`KickRight.yaml` - robot kicks with its right foot
+
+`NodYes.yaml` - the robot nods its head
+
+`Relax.yaml` - the robot relaxes all of its joints
+
+`RelaxHead.yaml` - the robot relaxes its head joints
+
+`RollOverFront.yaml` - the robot rolls from its back onto its front
+
+`Stand.yaml` - the robot moves into a standing position
+
+`StandUpBack.yaml` - the robot gets up from its back and moves into a standing position
+
+`StandUpFront.yaml` - the robot gets up from its front and moves into a standing position
+
+`Zombie.yaml` - the robot moves into a standing zombie position, with arms straight out
