@@ -25,10 +25,10 @@ The script you are running needs to be on the robot in the `/scripts/` folder. T
 Script tuner is an easy way to make scripts. To use script tuner, run
 
 ```bash
-./scripttuner Script.yaml
+./scripttuner /path/to/Script.yaml
 ```
 
-Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script.
+Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script. `/path/to/` is the path to the script. This may be `scripts/nugus/Script.yaml`, or `scripts/nugus*/Script.yaml` where `*` is the robot number for a robot specific script.
 
 You will then be able to tune the script. You will see the following interface for script editing.
 
