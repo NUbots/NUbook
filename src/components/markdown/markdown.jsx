@@ -6,6 +6,8 @@ import Code from './code'
 import Image from './image'
 import Link from './link'
 
+import Alert from './alert/alert'
+import Grid from './grid/grid'
 import style from './markdown.module.css'
 import { createHeading } from './heading/heading'
 
@@ -42,6 +44,8 @@ const MDXComponents = {
   h4: createHeading('h4'),
   h5: createHeading('h5'),
   h6: createHeading('h6'),
+  Alert,
+  Grid,
 }
 
 const Markdown = ({ children }) => (
