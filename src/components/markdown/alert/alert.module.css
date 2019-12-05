@@ -1,13 +1,30 @@
 .alert {
-  @apply w-full max-w-full p-4 flex items-center;
+  @apply max-w-full p-4 flex items-center;
 }
 
 .alertContent {
-  @apply -mt-1;
+  @apply -mt-1 w-full;
 }
 
 .alertContent p {
   @apply text-base mt-3;
+}
+
+.alertContent p:first-child {
+  margin-top: 0;
+}
+
+.alertContent code {
+  @apply inline-block;
+  @apply rounded-sm;
+  @apply text-sm;
+  @apply px-1;
+  @apply leading-none;
+  @apply whitespace-no-wrap;
+  @apply text-red-600;
+  @apply font-mono;
+  @apply align-baseline;
+  @apply font-normal;
 }
 
 .alertIcon {
