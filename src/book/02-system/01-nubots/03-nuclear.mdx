@@ -6,23 +6,37 @@ description: Introduction to NUClear and how it is used in the NUbots codebase.
 slug: /system/nubots/nuclear
 ---
 
-NUClear is the software framework used in the main NUbots codebase. It is a message passing system designed to be modular and fast. The [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/) contains information about how to use NUClear.
+NUClear is the software framework used in the main NUbots codebase. It is a message passing system designed to be modular and fast. The [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/) contains a detailed description of NUClear, which this page is based off. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](/system/nubots/nuclear/#nuclear-roles) in this page is based off.
 
 # Components
 
 ## PowerPlant
 
+![A collection of Reactors around the PowerPlant in the center. Double ended arrows point to and from the PowerPlant to each Reactor.](images/power_plant.svg 'PowerPlant with Reactors. Image: https://nuclear.readthedocs.io/en/latest/components.html')
+
+The PowerPlant is the central message system through which reactors communicate. It takes ownership of any data emitted by reactors into the system and executes the required reactions. NUClear is [multi-threaded](<https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)>). The PowerPlant handles all threading logic.
+
 ## Reactors
 
-## Tasks
+A reactor can be thought of as a module. All modules in the NUClear system are an extension of `NUClear::Reactor`. Reactors define reactions and the conditions under which they will process. They may also emit data to the PowerPlant.
 
-# NUClear Roles
+## Reactions and Tasks
+
+Reactions run tasks when the required data is available and/or when certain conditions are true. A task is the current execution of a defined reaction within the system. These functions are bound by NUClear as callbacks, and it is the execution of these callbacks which will assign tasks to a thread.
+
+Reactions are created by subscribing to the PowerPlant through [DSL On Statements](/system/nubots/nuclear/#on-statements).
 
 # NUClear DSL
 
 ## On Statements
 
 ## Emit Statements
+
+# NUClear Roles
+
+The NUClear roles system is a build and messaging system for the NUClear framework. It uses [CMake](https://cmake.org/) and [Python](https://www.python.org/) to manage the construction of various executables made up of a selection of modules. These executables are called roles.
+
+CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun cmake so that it locates the new files.
 
 # Managing Reactions
 
