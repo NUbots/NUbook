@@ -77,11 +77,12 @@ Data can be emitted under varying scopes. These can be local or network emission
 
 These emissions send data to the local instance of the NUClear powerplant. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
 
-| Scope | Description |
-| LOCAL | When emitting data under this scope, tasks are distributed via the thread pool for execution. This is the default behaviour when emitting. |
-| DIRECT | When emitting data under this scope, the tasks created as a result of this emission will bypass the threadpool, and be executed immediately. |
-| INITIALISE | This scope emits data as the system starts up. |
-| DELAY | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks), dataType);`. |
+| Scope      | Description                                                                                                                                  |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| LOCAL      | When emitting data under this scope, tasks are distributed via the thread pool for execution. This is the default behaviour when emitting.   |
+| DIRECT     | When emitting data under this scope, the tasks created as a result of this emission will bypass the threadpool, and be executed immediately. |
+| INITIALISE | This scope emits data as the system starts up.                                                                                               |
+| DELAY      | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks), dataType);`.         |
 
 ### Network Emitting
 
