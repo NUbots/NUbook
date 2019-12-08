@@ -8,11 +8,13 @@ slug: /guides/nubots/getting-started
 
 ## Prerequisites
 
-A Linux operating system is recommended for running NUbots code, but any operating system should work. Currently Windows is unsupported but this may change in the future. You can find free downloads for [Ubuntu](https://ubuntu.com/) online. Instructions for getting started with NUbots code can also be found at [the NUbots repository](https://github.com/NUbots/NUbots).
+We recommend a Unix-based operating system like Linux or macOS for developing and running NUbots code. Currently Windows is not officially supported due to lack of support for the `termios` Python module that is used in the Docker build script. We hope to find a fix for this soon.
+
+You can find free downloads for [Ubuntu](https://ubuntu.com/), a user-friendly Linux distribution, at their website. Instructions for getting started with NUbots code can also be found at [the NUbots repository](https://github.com/NUbots/NUbots).
 
 ### Git
 
-To begin with, you will need to get the GitHub repository onto your computer. In Linux, to do this open a terminal. The following commands will install git and clone the repository.
+To begin, you will need to the [git](https://git-scm.com/) command-line tool and download the NUbots repository from GitHub. You can do this by running the following commands in a terminal:
 
 ```bash
 sudo apt install git
