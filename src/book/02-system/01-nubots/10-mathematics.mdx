@@ -230,11 +230,9 @@ In general, `t` is reserved for the **torso**, `w` for the **world**, `f` for th
 
 When measured relative to the robot the **x-axis** is **forward** out of the torso, the **y-axis** is to the **left** and the **z-axis** is **up** the neck. This is robot space, also called torso space. The origin of this space is the base of the torso between the legs.
 
-World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on.
+World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
 
-For measurements on the field we use field coordinates. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**.
-
-![A soccer field with a marker in the middle of the left half of the field labelled 'robot'. An arrow pointing up from this marker is labelled 'y', and an arrow pointing towards the other side of the field is labelled 'x'. The left side of the field is labelled as our side, whereas the other is the opponent's side.](./images/field-axis.svg 'Coordinates relative to a robot on the field')
+For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the center of the field.
 
 ## Summary
 
