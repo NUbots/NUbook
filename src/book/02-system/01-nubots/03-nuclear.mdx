@@ -6,7 +6,9 @@ description: Introduction to NUClear and how it is used in the NUbots codebase.
 slug: /system/nubots/nuclear
 ---
 
-NUClear is the software framework used in the main NUbots codebase. It is a message passing system designed to be modular and fast. The [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/) contains a detailed description of NUClear, which this page is based off. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](/system/nubots/nuclear/#nuclear-roles) in this page is based off.
+NUClear is the software framework used in the main NUbots codebase. It is a message passing system designed to be modular and fast.
+
+This page is intended to be a practical summary of the official [NUClear documentation](https://nuclear.readthedocs.io/en/latest/), which contains a detailed description of NUClear. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](/system/nubots/nuclear/#nuclear-roles) in this page is based off.
 
 # Components
 
@@ -42,40 +44,40 @@ This can be split into three parts. The first is the `on<...>` which is the DSL 
 
 ### DSL Request
 
-The DSL request can be fused together through any combination of DSL words. The combination of these words will define the kind of reaction which is being requested. For example, Trigger will define a reaction that should occur when a required data type is emitted, while Every will define periodic reactions.
+The DSL request is "fused" together by combining any number of DSL words. The combination of these words will define the kind of reaction which is being requested. For example, `Trigger` will define a reaction that should occur when a required data type is emitted, while `Every` will define periodic reactions.
 
-For reactions to occur, at least one Binding DSL word should be present in the DSL Request. From the provided DSL words, those which are binding are: Trigger, With, Every, Always, Startup, Shutdown, TCP, UDP and Network.
+For reactions to occur, at least one Binding DSL word should be present in the DSL Request. The binding DSL words are: `Trigger`, `With`, `Every`, `Always`, `Startup`, `Shutdown`, `TCP`, `UDP`, and `Network`.
 
 | DSL Word | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Trigger  | Is used to request data dependent reactions. `on<Trigger<T>>()` will execute the task whenever T is emitted into the system. Read only access to T is given via a callback. `on<Trigger<T1, T2, ... >>()` requires multiple types and will only trigger when all the trigger types have been emitted at least once since the last occurence of the event.                                                                                                  |
-| With     | This is used to define any extra data which should be provided to a subscribing a reaction. This shoud be fused with at least one other DSL word as the use of this word alone will not trigger a reaction within the system. `on<Trigger<T1>, With<T2>>()` will trigger when T1 is emitted into the system. It will give read-only access of T1 and T2 to the callback. If T2 is not present when T1 is emitted to the system, the reaction will not run. |
-| Last     | This instructs the powerplant to store the last n messages (of the associated type) to the cache and provide read-only access to the subscribing reaction. `on<Last<n, Trigger<T, ...>>>()` will store the next $n$ messages of each of the Trigger types in a list with the oldest element first. When the reaction is triggered again, the oldest copy will be dropped and the newest copy appended to the list.                                         |
-| Optional | This is used to signify any optional properties in the DSL request. `on<Trigger<T1>, Optional<With<T2>()` will run when T1 is emitted into the system. If T2 is available, then the reaction will be given read-only access to the most recent emission of T2.                                                                                                                                                                                             |
-| Single   | This is used to specify that only one instance of the associated reaction can execute during runtime. `on<Trigger<T, ...>, Single>()` will only allow one task for this reaction to be executed or in the queue at any given time. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                           |
-| Buffer   | This is used to specify that up to n instances of the associated reaction can execute during runtime. `on<Trigger<T, ...>, Buffer<n>>>()` will create and schedule a new task if there are less than $n$ existing tasks for this reaction. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                   |
-| Priority | This word assigns a priority to any tasks created to determine scheduling order in the PowerPlant. `on<Trigger<T, ...>, Priority::HIGH>()` will schedule the task with HIGH priority when the reaction is triggered. Available priority settings are REALTIME, HIGH, NORMAL, LOW, IDLE. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                      |
-| Sync     | This option sets the synchronisation for a group of tasks. `on<Trigger<T, ...>, Sync<Group>>()` will allow only one task from the `Group` to execute at any given time. This is similar to the `Single` word, but applying to multiple reactions. This word helps prevent race conditions. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                   |
-| Every    | This is used to request any periodic reactions in the system. `on<Every<2, std::chrono::seconds>()` will create a task every two seconds. `on<Every<2, Per<std::chrono::seconds>>()` will create a task two times per second.                                                                                                                                                                                                                              |
-| Always   | This is used to request any continuous reactions in the system. `on<Always>` will ensure a single instance of the associated reaction is running at all times.                                                                                                                                                                                                                                                                                             |
-| Startup  | This is used to specify reactions which should occur at startup. `on<Startup>()` will create a task after all reactors have been installed into the PowerPlant but before the system starts the main execution phase.                                                                                                                                                                                                                                      |
-| Shutdown | This is used to specify any reactions/tasks which should occur during shutdown. `on<Shutdown>()` will create a task after the shutdown command has been emitted and all existing tasks have been completed.                                                                                                                                                                                                                                                |
-| IO       | This is used to trigger reactions based on standard I/O operations using file descriptors. `on<IO>(file_descriptor)` will create a task when the communication line matches the descriptor.                                                                                                                                                                                                                                                                |
+| Trigger  | Is used to request data dependent reactions. `on<Trigger<T>>()` will execute the task whenever T is emitted into the system. Read only access to T is given via a callback. `on<Trigger<T1, T2, ... >>()` requires multiple types and will only trigger when all the trigger types have been emitted at least once since the last occurrence of the event.                                                                                                  |
+| With     | Is used to define any extra data which should be provided to a subscribing a reaction. This should be fused with at least one other DSL word as the use of this word alone will not trigger a reaction within the system. `on<Trigger<T1>, With<T2>>()` will trigger when T1 is emitted into the system. It will give read-only access of T1 and T2 to the callback. If T2 is not present when T1 is emitted to the system, the reaction will not run. |
+| Last     | Instructs the PowerPlant to store the last $n$ messages (of the associated type) to the cache and provide read-only access to the subscribing reaction. `on<Last<n, Trigger<T, ...>>>()` will store the next $n$ messages of each of the `Trigger` types in a list with the oldest message first. After $n$ messages are stored, the trigger of a new reaction will cause the oldest message to be dropped and the newest copy appended to the list.                                         |
+| Optional | Is used to signify any optional properties in the DSL request. `on<Trigger<T1>, Optional<With<T2>()` will run when T1 is emitted into the system. If T2 is available, then the reaction will be given read-only access to the most recent emission of T2.                                                                                                                                                                                             |
+| Single   | Is used to specify that only one instance of the associated reaction can execute at any given point during runtime. `on<Trigger<T, ...>, Single>()` will only allow one task for this reaction to be executed or in the queue at any given time. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                           |
+| Buffer   | Is used to specify that up to $n$ instances of the associated reaction can execute during runtime. `on<Trigger<T, ...>, Buffer<n>>>()` will create and schedule a new task if there are less than $n$ existing tasks for this reaction. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                   |
+| Priority | Assigns a priority to any tasks created to determine scheduling order in the PowerPlant. `on<Trigger<T, ...>, Priority::HIGH>()` will schedule the task with `HIGH` priority when the reaction is triggered. Available priority settings are `REALTIME`, `HIGH`, `NORMAL`, `LOW`, and `IDLE`. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                      |
+| Sync     | Sets the synchronisation for a group of tasks. `on<Trigger<T, ...>, Sync<Group>>()` will allow only one task from `Group` to execute at any given time. This is similar to the `Single` word, but applies to multiple reactions. This word helps prevent race conditions. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                   |
+| Every    | Used to request periodic reactions in the system. `on<Every<2, std::chrono::seconds>()` will create a task every two seconds. `on<Every<2, Per<std::chrono::seconds>>()` will create a task two times per second.                                                                                                                                                                                                                              |
+| Always   | Used to request continuous reactions in the system. `on<Always>` will ensure a single instance of the associated reaction is running at all times.                                                                                                                                                                                                                                                                                             |
+| Startup  | Used to specify reactions which should occur at startup. `on<Startup>()` will create a task after all reactors have been installed into the PowerPlant but before the system starts the main execution phase.                                                                                                                                                                                                                                      |
+| Shutdown | Used to specify any reactions/tasks which should occur during shutdown. `on<Shutdown>()` will create a task after the shutdown command has been emitted and all existing tasks have completed.                                                                                                                                                                                                                                                |
+| IO       | Used to trigger reactions based on standard I/O operations using file descriptors. `on<IO>(pipe/stream/comms, io_status)` will create a task when the communication line matches the given status. For example, `on<IO>(my_file_descriptor, IO::READ)` will create the task when the given file descriptor has data available to read.                                                                                                                                                                                                                                                                |
 | Network  | NUClear provides a networking protocol to send messages to other devices on the network. `on<Network<T>>()` will create a task when T is emitted using the emission type `Scope::NETWORK`.                                                                                                                                                                                                                                                                 |
 
-More information on DSL words for on statements can be found at the [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/dsl.html#on-statements).
+More information on DSL words for on statements can be found in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#on-statements).
 
 ### Runtime arguments
 
 Some DSL words will provide the ability to make changes to the system during runtime. This means that NUClear avoids the need for a system restart should a configuration, port number, or file need to be changed while the system is running.
 
-From the provided DSL words, those which take runtime arguments are: IO, TCP, and UDP.
+The DSL words that take runtime arguments are: `IO`, `TCP`, and `UDP`.
 
 ### Callback
 
-The developer can define the callback which will execute when the reaction is triggered during runtime. The callback can be defined using a C++ lambda function.
+The callback which will execute when the reaction is triggered during runtime can be defined using a C++ lambda function.
 
-During system runtime, the argument selection for the callback works on the principle of fission, in that the arguments provided with the callback can be deduced as needed. For example:
+At runtime, the argument selection for the callback works on the principle of fission, in that the arguments provided to the callback can be deduced and selectively applied as needed. For example:
 
 ```cpp
 on<<Trigger<A>, Optional<Trigger<B>>().then([](const A& a, const B& b) {
@@ -83,13 +85,13 @@ on<<Trigger<A>, Optional<Trigger<B>>().then([](const A& a, const B& b) {
 });
 ```
 
-In the above request, the Trigger on dataType B has been listed as optional, while the Trigger for dataType A is listed as mandatory. Yet the callback function lists arguments for both dataType A and dataType B.
+In the above request, the trigger on data type B has been listed as optional, while the trigger for data type A is listed as mandatory. Yet the callback function lists arguments for both A and B.
 
-Lets say that dataType A is emitted to the PowerPlant, but at this time, dataType B does not have any data associated with it.
+Let's say that type A is emitted to the PowerPlant, but at this time, type B does not have any data associated with it.
 
-Since dataType B was listed as optional, the task associated with this reaction can be scheduled. However, when executing the callback for this reaction, NUClear will identify that dataType B is not present, and will remove reference to this data type from the callback, so that the task is only run for dataType A.
+Even though type B is missing data, since it's listed as optional, the task associated with this reaction can be scheduled. When executing the callback for the reaction, NUClear will identify that type B is not present, and will remove reference to this type from the callback, so that the task is only run with type A.
 
-Effectively, through the application of fission, the callback is restructured as per the following example.
+Effectively, through the application of fission, the callback is restructured to look like the following example.
 
 ```cpp
 .then([](const A& a){
@@ -103,11 +105,11 @@ Emit statements are used by Reactors wanting to emit data to the PowerPlant. Whe
 
 Any data emitted to the PowerPlant will be sent with a unique pointer. The PowerPlant will take ownership of this pointer and run any necessary callbacks to trigger reactions.
 
-Data can be emitted under varying scopes. These can be local or network emissions. More can be found on emit statements on the [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/dsl.html#emit-statements).
+Data can be emitted under varying scopes. These can be local or network emissions. More can be found on emit statements in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#emit-statements).
 
 ### Local Emitting
 
-These emissions send data to the local instance of the NUClear PowerPlant. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
+Local emissions send data to the local instance of the NUClear PowerPlant. Essentially this is the current running process. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
 
 | Scope      | Description                                                                                                                                  |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -129,18 +131,18 @@ Network emissions can be used to send data through the network on which the curr
 
 The NUClear roles system is a build and messaging system for the NUClear framework. It uses [CMake](https://cmake.org/) and [Python](https://www.python.org/) to manage the construction of various executables made up of a selection of modules. These executables are called roles.
 
-CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun cmake so that it locates the new files.
+CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun CMake to locate the new files.
 
 # Managing Reactions
 
-During system runtime, executing reactions can be managed via the reaction handle. A reaction handle is provided for any binding On Statements. Once an on statement has been bound, the reaction handle will be enabled. If necessary, reactions can toggle between enabled and disabled during runtime.
+During system runtime, executing reactions can be managed via their associated reaction handles. A reaction handle is provided for binding on statements. Once an on statement has been bound, the reaction handle will be enabled. If necessary, reactions can toggle between enabled and disabled during runtime.
 
 | Handle           | Description                                                                                                                                                                                         |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | disable()        | Disables the reaction. Tasks will not be created if triggered.                                                                                                                                      |
 | enable()         | Enables the reaction so that associated tasks will be scheduled and queued when the reaction is triggered.                                                                                          |
-| enable(bool set) | Sets the run status of the reaction handle. True will enable and false will disable the reaction.                                                                                                   |
-| enabled()        | Informs if the reaction is currently enabled. Returns true if enabled, false if disabled.                                                                                                           |
-| unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during the instance of runtime. |
+| enable(bool set) | Sets the run status of the reaction handle. `true` will enable the reaction and `false` will disable it.                                                                                                   |
+| enabled()        | Determines the current status of the reaction. Returns `true` if the reaction is enabled, and `false` otherwise.                                                                                                           |
+| unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during that runtime. |
 
 # Examples
