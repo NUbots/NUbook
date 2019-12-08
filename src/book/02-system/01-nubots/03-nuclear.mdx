@@ -53,7 +53,7 @@ For reactions to occur, at least one Binding DSL word should be present in the D
 | Trigger  | Is used to request data dependent reactions. `on<Trigger<T>>()` will execute the task whenever T is emitted into the system. Read only access to T is given via a callback. `on<Trigger<T1, T2, ... >>()` requires multiple types and will only trigger when all the trigger types have been emitted at least once since the last occurrence of the event.                                                                                                  |
 | With     | Is used to define any extra data which should be provided to a subscribing a reaction. This should be fused with at least one other DSL word as the use of this word alone will not trigger a reaction within the system. `on<Trigger<T1>, With<T2>>()` will trigger when T1 is emitted into the system. It will give read-only access of T1 and T2 to the callback. If T2 is not present when T1 is emitted to the system, the reaction will not run. |
 | Last     | Instructs the PowerPlant to store the last $n$ messages (of the associated type) to the cache and provide read-only access to the subscribing reaction. `on<Last<n, Trigger<T, ...>>>()` will store the next $n$ messages of each of the `Trigger` types in a list with the oldest message first. After $n$ messages are stored, the trigger of a new reaction will cause the oldest message to be dropped and the newest copy appended to the list.                                         |
-| Optional | Is used to signify any optional properties in the DSL request. `on<Trigger<T1>, Optional<With<T2>()` will run when T1 is emitted into the system. If T2 is available, then the reaction will be given read-only access to the most recent emission of T2.                                                                                                                                                                                             |
+| Optional | Is used to signify any optional properties in the DSL request. `on<Trigger<T1>, Optional<With<T2>>>()` will run when T1 is emitted into the system. If T2 is available, then the reaction will be given read-only access to the most recent emission of T2.                                                                                                                                                                                             |
 | Single   | Is used to specify that only one instance of the associated reaction can execute at any given point during runtime. `on<Trigger<T, ...>, Single>()` will only allow one task for this reaction to be executed or in the queue at any given time. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                           |
 | Buffer   | Is used to specify that up to $n$ instances of the associated reaction can execute during runtime. `on<Trigger<T, ...>, Buffer<n>>>()` will create and schedule a new task if there are less than $n$ existing tasks for this reaction. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                                                                   |
 | Priority | Assigns a priority to any tasks created to determine scheduling order in the PowerPlant. `on<Trigger<T, ...>, Priority::HIGH>()` will schedule the task with `HIGH` priority when the reaction is triggered. Available priority settings are `REALTIME`, `HIGH`, `NORMAL`, `LOW`, and `IDLE`. This should be fused with another DSL word, such as `Trigger` in the example.                                                                                      |
@@ -109,14 +109,14 @@ Data can be emitted under varying scopes. These can be local or network emission
 
 ### Local Emissions
 
-Local emissions send data to the local instance of the NUClear PowerPlant. Essentially this is the current running process. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
+Local emissions send data to the local instance of the NUClear PowerPlant. Essentially this is the current running process. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, args...);`, where `SCOPE` is replaced with a scope as defined below.
 
 | Scope      | Description                                                                                                                                  |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | LOCAL      | When emitting data under this scope, tasks are distributed via the thread pool for execution. This is the default behaviour when emitting.   |
 | DIRECT     | When emitting data under this scope, the tasks created as a result of this emission will bypass the threadpool, and be executed immediately. |
 | INITIALISE | This scope emits data as the system starts up.                                                                                               |
-| DELAY      | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks), dataType);`.         |
+| DELAY      | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks));`.         |
 
 ### Network Emitting
 
@@ -125,7 +125,7 @@ Network emissions can be used to send data through the network on which the curr
 | Scope   | Description                                                                                                                          |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                             |
-| NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable, dataType);`. |
+| NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable);`. |
 
 # NUClear Roles
 
