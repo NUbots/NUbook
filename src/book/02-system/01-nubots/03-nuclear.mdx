@@ -75,7 +75,7 @@ Data can be emitted under varying scopes. These can be local or network emission
 
 ### Local Emitting
 
-These emissions send data to the local instance of the NUClear powerplant. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
+These emissions send data to the local instance of the NUClear PowerPlant. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, dataType);`, where `SCOPE` is replaced with a scope as defined below.
 
 | Scope      | Description                                                                                                                                  |
 | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -85,6 +85,13 @@ These emissions send data to the local instance of the NUClear powerplant. There
 | DELAY      | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks), dataType);`.         |
 
 ### Network Emitting
+
+Network emissions can be used to send data through the network on which the current system is running.
+
+| Scope   | Description                                                                                                                          |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                             |
+| NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable, dataType);`. |
 
 # NUClear Roles
 
