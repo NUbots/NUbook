@@ -133,4 +133,14 @@ CMake is used as the main system for generating the libraries and executables th
 
 # Managing Reactions
 
-<!-- Definitions section to go in glossary? -->
+During system runtime, executing reactions can be managed via the reaction handle. A reaction handle is provided for any binding On Statements. Once an on statement has been bound, the reaction handle will be enabled. If necessary, reactions can toggle between enabled and disabled during runtime.
+
+| Handle           | Description                                                                                                                                                                                         |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| disable()        | Disables the reaction. Tasks will not be created if triggered.                                                                                                                                      |
+| enable()         | Enables the reaction so that associated tasks will be scheduled and queued when the reaction is triggered.                                                                                          |
+| enable(bool set) | Sets the run status of the reaction handle. True will enable and false will disable the reaction.                                                                                                   |
+| enabled()        | Informs if the reaction is currently enabled. Returns true if enabled, false if disabled.                                                                                                           |
+| unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during the instance of runtime. |
+
+# Examples
