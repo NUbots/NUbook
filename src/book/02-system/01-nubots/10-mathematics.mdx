@@ -168,7 +168,7 @@ valid, but `Hab * rCDb` is invalid. Note that the first vector is rC**B**b and t
 
 </Alert>
 
-If you would like the vector **only rotated**, extract the **rotational component** of the transform and apply it to the vector. This does not hold the same restriction as above, however the **spaces still need to match**.
+If you would like the vector **only rotated**, extract the **rotational component** of the transform and apply it to the vector. The **spaces** that the vector and rotation matrix are in should **match**.
 
 ```cpp
 Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
@@ -200,11 +200,21 @@ Eigen::Vector3d rA_tAb = vAb * t;
 
 ## Examples
 
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and can be instead `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+
+It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
+
+When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto)). Then this is written as
+
+```cpp
+Eigen::Affine3d Htw(sensors.Htw);
+```
+
 If you have a transformation matrix `Htw` (**world** to **torso** transform) and you want the matrix `Hwt` (**torso** to **world** transform), this is can be achieved by calling `Htw.inverse()`. The inverse function **swaps** the letter order. The returned inverse matrix is not **mutable**.
 
 If you have a vector `rTWf` (**world** to **torso** in **foot** space) and you want the opposite letter order (**torso** to **world** in **foot** space), this is done by negating the vector, `rWTf = -rTWf`.
 
-<Alert type='warning'>
+<Alert>
   
   Negating does not change the space the vector is measured in.
 
