@@ -65,6 +65,38 @@ For reactions to occur, at least one Binding DSL word should be present in the D
 
 More information on DSL words for on statements can be found at the [NUClear readthedocs page](https://nuclear.readthedocs.io/en/latest/dsl.html#on-statements).
 
+### Runtime arguments
+
+Some DSL words will provide the ability to make changes to the system during runtime. This means that NUClear avoids the need for a system restart should a configuration, port number, or file need to be changed while the system is running.
+
+From the provided DSL words, those which take runtime arguments are: IO, TCP, and UDP.
+
+### Callback
+
+The developer can define the callback which will execute when the reaction is triggered during runtime. The callback can be defined using a C++ lambda function.
+
+During system runtime, the argument selection for the callback works on the principle of fission, in that the arguments provided with the callback can be deduced as needed. For example:
+
+```cpp
+on<<Trigger<A>, Optional<Trigger<B>>().then([](const A& a, const B& b) {
+
+});
+```
+
+In the above request, the Trigger on dataType B has been listed as optional, while the Trigger for dataType A is listed as mandatory. Yet the callback function lists arguments for both dataType A and dataType B.
+
+Lets say that dataType A is emitted to the PowerPlant, but at this time, dataType B does not have any data associated with it.
+
+Since dataType B was listed as optional, the task associated with this reaction can be scheduled. However, when executing the callback for this reaction, NUClear will identify that dataType B is not present, and will remove reference to this data type from the callback, so that the task is only run for dataType A.
+
+Effectively, through the application of fission, the callback is restructured as per the following example.
+
+```cpp
+.then([](const A& a){
+
+});
+```
+
 ## Emit Statements
 
 Emit statements are used by Reactors wanting to emit data to the PowerPlant. When using NUClear, data will most likely be emitted during a reaction. However, where necessary, emissions can also occur during reactor construction, or in some cases from within the PowerPlant itself.
