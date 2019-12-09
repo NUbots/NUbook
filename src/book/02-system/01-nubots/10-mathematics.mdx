@@ -137,7 +137,7 @@ This is illustrated in the following diagram.
 
 ![Two three dimensional coordinate spaces, one labelled as space 'a' and the other as space 'b'. There is a vector from space 'a' to some point 'c', and is labelled 'rCAb'. There is another vector from 'b' to 'a' and is labelled 'rABb'. There is a final vector from 'b' to 'c' which is labelled 'rCBb = rABb + rCAb'](./images/maths-translation.svg)
 
-This assumes the original vector, `rCAa` **has already been rotated** into space $b$, ie we have `rCAb`.
+This assumes the original vector, `rCAa` **has already been rotated** into space $b$, i.e. we have `rCAb`.
 
 Transformation matrices **left multiply** with vectors to get a vector in the new space. This vector is **rotated and then translated**.
 
@@ -204,7 +204,7 @@ Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matr
 
 It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
 
-When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto)). Then this is written as
+When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
 
 ```cpp
 Eigen::Affine3d Htw(sensors.Htw);
@@ -215,12 +215,12 @@ If you have a transformation matrix `Htw` (**world** to **torso** transform) and
 If you have a vector `rTWf` (**world** to **torso** in **foot** space) and you want the opposite letter order (**torso** to **world** in **foot** space), this is done by negating the vector, `rWTf = -rTWf`.
 
 <Alert>
-  
-  Negating does not change the space the vector is measured in.
+
+Negating does not change the space the vector is measured in.
 
 </Alert>
 
-If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the **inner two letters** should be **identical**, ie the same space.
+If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the **inner two letters** should be **identical**, i.e. the same space.
 
 ```cpp
 Eigen::Affine3d Htf = Htw * Hwf;
