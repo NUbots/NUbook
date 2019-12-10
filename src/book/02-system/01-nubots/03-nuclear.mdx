@@ -226,7 +226,7 @@ All values within this format are little endian.
 
 ## SensorFilter
 
-Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
+Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
 
 The first on statement is located at [line 94](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L94) of `SensorFilter.cpp`.
 
@@ -241,7 +241,7 @@ The first on statement is located at [line 94](https://github.com/NUbots/NUbots/
 
 This spans 94 line to line 192, but has been shortened here.
 
-The DSL request is `on<Configuration>`. This means .... The runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
+The DSL request is `on<Configuration>`. This means .... The runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
 
 ```cpp
 then([this](const Configuration& config) {
@@ -256,7 +256,7 @@ The `const Configuration& config` is a parameter of type `Configuration`. We can
 
 This value is then stored in the [member variable](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.h#L52) `debug` in the struct `config`.
 
-This reaction is used at startup to set many variables from a configuration file. The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L194) does this as well, but with the [`FootDownNetwork.yaml`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/data/config/FootDownNetwork.yaml) configuration file.
+This reaction is used at startup to set many variables from a configuration file. The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L194) does this as well, but with the [`FootDownNetwork.yaml`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/FootDownNetwork.yaml) configuration file.
 
 The [third on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L199) uses the DSL words `Last`, `Trigger` and `Single`.
 
@@ -267,7 +267,7 @@ on<Last<20, Trigger<DarwinSensors>>, Single>().then(
 });
 ```
 
-The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a list. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
+The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a list. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
 
 None of the words used require runtime arguments, so we do not have any here. The callback is
 
@@ -292,6 +292,6 @@ on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Singl
 });
 ```
 
-The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
+The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
 
-As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` message. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
+As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` message. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
