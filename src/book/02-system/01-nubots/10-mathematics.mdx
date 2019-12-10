@@ -139,6 +139,15 @@ This is illustrated in the following diagram.
 
 This assumes the original vector, `rCAa` **has already been rotated** into space $b$, i.e. we have `rCAb`.
 
+Finding the inverse of $H^b_a$ is made simpler by the properties of the matrix.
+
+$$
+(H^b_a)^{-1} = H^a_b = \begin{bmatrix}
+(\mathbf{R}_a^b)^T & (\mathbf{R}_a^b)^T \cdot -\mathbf{r}_{AB}^b \\
+\mathbf{0} & 1
+\end{bmatrix}
+$$
+
 Transformation matrices **left multiply** with vectors to get a vector in the new space. This vector is **rotated and then translated**.
 
 $$
