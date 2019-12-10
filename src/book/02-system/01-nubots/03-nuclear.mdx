@@ -137,12 +137,6 @@ Network emissions can be used to send data through the network on which the curr
 | UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                   |
 | NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable);`. |
 
-# NUClear Roles
-
-The NUClear roles system is a build and messaging system for the NUClear framework. It uses [CMake](https://cmake.org/) and [Python](https://www.python.org/) to manage the construction of various executables made up of a selection of modules. These executables are called roles.
-
-CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun CMake to locate the new files.
-
 # Managing Reactions
 
 During system runtime, executing reactions can be managed via their associated reaction handles. A reaction handle is provided for binding on statements. Once an on statement has been bound, the reaction handle will be enabled. If necessary, reactions can toggle between enabled and disabled during runtime.
@@ -154,6 +148,79 @@ During system runtime, executing reactions can be managed via their associated r
 | enable(bool set) | Sets the run status of the reaction handle. `true` will enable the reaction and `false` will disable it.                                                                                 |
 | enabled()        | Determines the current status of the reaction. Returns `true` if the reaction is enabled, and `false` otherwise.                                                                         |
 | unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during that runtime. |
+
+# NUClear Roles
+
+The NUClear Roles system is a build and messaging system for the NUClear framework. It uses [CMake](https://cmake.org/) and [Python](https://www.python.org/) to manage the construction of various executables made up of a selection of modules. These executables are called roles.
+
+CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun CMake to locate the new files.
+
+## Directories
+
+There are six main directories in the NUClear Roles system and can be seen in the main NUbots codebase.
+
+| Directory   | Description                                                                                                                                                                                         |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `module`    | contains the NUClear reactors. Is broken into the various subsystems. These are `behaviour`, `extension`, `input`, `localisation`, `motion`, `output`, `platform`, `support`, `tools` and `vision`. |
+| `message`   | contains the message types for the system. The `message` folder is located in the `shared` directory. This is broken into the various subsystems much like the `module` directory.                  |
+| `extension` | contains any NUClear DSL extensions, such as `Configuration`. This is located in the `shared` directory.                                                                                            |
+| `utility`   | contains utility code that is shared amongst NUClear Reactors, such as Kinematics and Mathematics utilities. This is located in the `shared` directory.                                             |
+| `roles`     | contains all the NUClear roles files.                                                                                                                                                               |
+| `tools`     | contains any command line extensions for the `b` script, such as `build` and `configure`.                                                                                                           |
+
+## Roles
+
+Roles are executables containing all the modules to be used. They are called `<executablename>.role`, where `<executablename>` is the name of the final binary that will be created.
+
+The name of each module is described as a fully qualified c++ class without the initial module namespace. These modules will then be installed in order when the executable is run. This is important to note as it means modules that have dependencies on other modules may want to be lower in the list. For example installing log handler modules should happen before installing other modules so their output can be seen. It will use this name to locate the module so the directory structure must match the name. An example of a role file would be:
+
+```cpp
+NUCLEAR_ROLE(
+    # Some global modules that are useful
+    extension::FileWatcher
+    support::logging::ConsoleLogHandler
+
+    # The Camera module we described earlier
+    input::Camera
+)
+```
+
+This role file would create an executable with the modules `module::extension::FileWatcher`, `module::support::logging::ConsoleLogHandler` and `module::input::Camera`. This file is a CMake file so you are able to use # to declare comments.
+
+## Tools and the `./b` script
+
+Within `nuclear/b` there is a python tool called `b`. This python tool is used to handle common functionality in the system.
+
+The `./b` script will look for a `tools` directory above the location where the actual `b.py` is located. If it finds one, it will load all `.py` files in that directory and attempt to execute a register and run function on them. This allows the tools to register new functionality to the b script that can be accessed from the command line.
+
+Tools that exist in the NUbots codebase are:
+
+| Tool                                                                           | Description                                                                                              |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| [`build`](https://github.com/NUbots/NUbots/blob/master/tools/build.py)         | Builds the codebase.                                                                                     |
+| [`configure`](https://github.com/NUbots/NUbots/blob/master/tools/configure.py) | Configures targets. Use the argument `-i` to perform an interactive configuration.                       |
+| [`edit`](https://github.com/NUbots/NUbots/blob/master/tools/edit.py)           | What does this do??                                                                                      |
+| [`footdown`](https://github.com/NUbots/NUbots/blob/master/tools/footdown.py)   | Tool for training the footdown network.                                                                  |
+| [`format`](https://github.com/NUbots/NUbots/blob/master/tools/format.py)       | Formats all files using clang-format.                                                                    |
+| [`install`](https://github.com/NUbots/NUbots/blob/master/tools/install.py)     | Installs NUClear roles systems onto remote systems using rsync. This is used to install onto the robots. |
+| [`nbs`](https://github.com/NUbots/NUbots/blob/master/tools/nbs.py)             | Decodes `.nbs` files.                                                                                    |
+| [`run`](https://github.com/NUbots/NUbots/blob/master/tools/run.py)             | Runs a binary file within the Docker container.                                                          |
+| [`shell`](https://github.com/NUbots/NUbots/blob/master/tools/shell.py)         | Opens an interactive shell in the Docker container.                                                      |
+| [`target`](https://github.com/NUbots/NUbots/blob/master/tools/target.py)       | Used to select the default platform to use for docker commands.                                          |
+
+## NBS Files
+
+NBS files are NUClear Binary Stream files. To make it easier to serialise streams of messages for storage sharing and playback, NUClear Roles defines a format for serialising messages to files. This format is based on the Neutron messaging system and NUClear's networking protocol. An `nbs` file has the following frames repeated continuously:
+
+| Name      | Type    | Description                                                                       |
+| --------- | ------- | --------------------------------------------------------------------------------- |
+| header    | char[3] | the header sequence 0xE2, 0x98, 0xA2 (the radioactive symbol ☢ in utf-8)          |
+| size      | uint32  | the size of the frame after this byte in bytes                                    |
+| timestamp | uint64  | the timestamp of this frame in microseconds. Does not have to be a utc timestamp. |
+| hash      | uint64  | a 64 bit hash that identifies the type of the message                             |
+| payload   | char\*  | the serialised payload bytes                                                      |
+
+All values within this format are little endian.
 
 # Examples
 
