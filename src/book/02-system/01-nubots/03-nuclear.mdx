@@ -139,3 +139,73 @@ During system runtime, executing reactions can be managed via their associated r
 | unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during that runtime. |
 
 # Examples
+
+## SensorFilter
+
+Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
+
+The first on statement is located at [line 94](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L94) of `SensorFilter.cpp`.
+
+```cpp
+ on<Configuration>("SensorFilter.yaml").then([this](const Configuration& config) {
+    this->config.debug = config["debug"].as<bool>();
+    // Button config
+    this->config.buttons.debounceThreshold = config["buttons"]["debounce_threshold"].as<int>();
+    ...
+});
+```
+
+This spans 94 line to line 192, but has been shortened here.
+
+The DSL request is `on<Configuration>`. This means .... The runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
+
+```cpp
+then([this](const Configuration& config) {
+    this->config.debug = config["debug"].as<bool>();
+    // Button config
+    this->config.buttons.debounceThreshold = config["buttons"]["debounce_threshold"].as<int>();
+    ...
+});
+```
+
+The `const Configuration& config` is a parameter of type `Configuration`. We can see examples of how this type works in the line after it. `config["debug"].as<bool>()` finds the value labelled as ["debug" in the configuration file](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml#L1) and retrieves it as a `bool`.
+
+This value is then stored in the [member variable](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.h#L52) `debug` in the struct `config`.
+
+This reaction is used at startup to set many variables from a configuration file. The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L194) does this as well, but with the [`FootDownNetwork.yaml`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/data/config/FootDownNetwork.yaml) configuration file.
+
+The [third on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L199) uses the DSL words `Last`, `Trigger` and `Single`.
+
+```cpp
+on<Last<20, Trigger<DarwinSensors>>, Single>().then(
+                [this](const std::list<std::shared_ptr<const DarwinSensors>>& sensors) {
+    ...
+});
+```
+
+The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a list. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
+
+None of the words used require runtime arguments, so we do not have any here. The callback is
+
+```
+then(
+                [this](const std::list<std::shared_ptr<const DarwinSensors>>& sensors) {
+    ...
+});
+```
+
+The parameter for this lambda statement is a list. This is because we used the word `Last`. The list will contain those last 20 received messages as specified in the DSL request.
+
+The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L245) in `SensorFilter.cpp` uses `Trigger`, `Optional`, `With`, `Single`, and `Priority`.
+
+```
+on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>().then(
+                "Main Sensors Loop",
+                [this](const DarwinSensors& input,
+                       std::shared_ptr<const Sensors> previousSensors,
+                       const KinematicsModel& kinematicsModel) {
+    ...
+});
+```
+
+The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and `KinematicsModel` messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
