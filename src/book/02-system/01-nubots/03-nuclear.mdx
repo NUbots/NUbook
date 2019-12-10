@@ -87,9 +87,9 @@ The callback which will execute when the reaction is triggered during runtime ca
 The `args` will generally be based off the conditions for the reaction, such as access to data. For example:
 
 ```
-on<Trigger<dataType>>().then[](const dataType&) {
+on<Trigger<dataType>>().then([](const dataType&) {
     // Do things
-}
+});
 ```
 
 ## Emit Statements
