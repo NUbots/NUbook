@@ -72,32 +72,24 @@ More information on DSL words for on statements can be found in the [NUClear doc
 
 Some DSL words will provide the ability to make changes to the system during runtime. This means that NUClear avoids the need for a system restart should a configuration, port number, or file need to be changed while the system is running.
 
-The DSL words that take runtime arguments are: `IO`, `TCP`, and `UDP`.
+The DSL words that take runtime arguments are: `IO`, `TCP`, `UDP` and `Configuration`.
 
 ### Callback
 
-The callback which will execute when the reaction is triggered during runtime can be defined using a C++ lambda function.
-
-At runtime, the argument selection for the callback works on the principle of fission, in that the arguments provided to the callback can be deduced and selectively applied as needed. For example:
+The callback which will execute when the reaction is triggered during runtime can be defined using a C++ lambda function. These are of the form
 
 ```cpp
-on<<Trigger<A>, Optional<Trigger<B>>().then([](const A& a, const B& b) {
-
-});
+[](args...){
+    statements...
+}
 ```
 
-In the above request, the trigger on data type B has been listed as optional, while the trigger for data type A is listed as mandatory. Yet the callback function lists arguments for both A and B.
+The `args` will generally be based off the conditions for the reaction, such as access to data. For example:
 
-Let's say that type A is emitted to the PowerPlant, but at this time, type B does not have any data associated with it.
-
-Even though type B is missing data, since it's listed as optional, the task associated with this reaction can be scheduled. When executing the callback for the reaction, NUClear will identify that type B is not present, and will remove reference to this type from the callback, so that the task is only run with type A.
-
-Effectively, through the application of fission, the callback is restructured to look like the following example.
-
-```cpp
-.then([](const A& a){
-
-});
+```
+on<Trigger<dataType>>().then[](const dataType&) {
+    // Do things
+}
 ```
 
 ## Emit Statements
