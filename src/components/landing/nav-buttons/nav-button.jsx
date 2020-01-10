@@ -6,7 +6,7 @@ import style from './nav-button.module.css'
 
 const NavButton = ({ Icon, children, active }) => {
   return (
-    <button className={style.button}>
+    <button className={`${style.button} ${active ? style.buttonActive : ''}`}>
       <div className='mr-3'>
         <Icon className='w-10 h-10 fill-current' />
       </div>
