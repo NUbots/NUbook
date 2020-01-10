@@ -8,7 +8,7 @@ import style from './promo-cards.module.css'
 
 const PromoCards = () => {
   return (
-    <div className={`${style.cards} max-w-screen-xl mx-auto px-6 mb-24`}>
+    <div className={`${style.cards} max-w-screen-xl mx-auto px-6 mb-16`}>
       <PromoCard Icon={IconBrain} title='Robotics Research'>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi ut
         placeat quos doloribus iure blanditiis voluptas perspiciatis earum

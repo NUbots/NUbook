@@ -9,7 +9,7 @@ const PromoCard = ({ Icon, title, children }) => {
       <div className={style.cardIcon}>
         <Icon />
       </div>
-      <div className='text-2xl mb-6'>{title}</div>
+      <div className='text-2xl font-semibold mb-6'>{title}</div>
       <div>{children}</div>
     </div>
   )
