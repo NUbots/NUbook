@@ -1,0 +1,62 @@
+---
+section: Guides
+chapter: NUbots
+title: Camera Calibration
+description: Learn how to calibrate cameras.
+slug: /guides/nubots/camera-calibration
+---
+
+Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. \*\*brief description of how camera calibration works.
+
+The calibration is done in two steps. The first is creating the nbs recording and the second is using that nbs recording to find the camera parameters.
+
+1. Change `cameratest.role` to include `support::logging::DataLogging`
+
+```bash
+nuclear_role(
+  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+  # and without it many roles do not run
+  extension::FileWatcher
+  support::SignalCatcher
+  support::logging::ConsoleLogHandler
+  support::logging::DataLogger
+  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+  motion::KinematicsConfiguration
+  support::configuration::NetworkConfiguration
+  support::configuration::GlobalConfig
+  platform::darwin::HardwareIO
+  platform::darwin::SensorFilter
+  input::Camera
+  support::NUsight
+  output::ImageCompressor
+  support::configuration::SoccerConfig
+)
+```
+
+2. Build using `./b build` and then install onto a robot using `./b install n<number>`
+
+3. On the robot, enable image recording in `/config/DataLogging.yaml`.
+
+4. Run `./cameratest` on the robot and hold up a checkerboard (image here), moving it around the area to cover most of the view over time.
+
+5. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
+
+The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory on your computer. Check that it is before continuing to the next steps.
+
+6. Run the following commands
+
+```bash
+sudo apt install protobuf-compiler libprotobuf-dev
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
+```
+
+7. Calibrate the cameras by running
+
+```bash
+./b nbs calibrate_cameras <nbs file name> -c <camera config folder>
+```
+
+`<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
+
+Once the calibration is done, the values in the camera configuration files should be changed. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once all the configuration that is wanted to be done is complete, make sure it is all commited and pushed on a branch and then make a pull request to get the changes into the master branch.
