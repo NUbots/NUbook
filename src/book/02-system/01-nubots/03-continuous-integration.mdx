@@ -1,12 +1,12 @@
 ---
 section: System
 chapter: NUbots
-title: Continuous Integration System
+title: Continuous Integration
 description: The NUbots continuous integration system.
 slug: /system/nubots/ci-system
 ---
 
-## Continuous Integration
+## Overview
 
 NUbots uses [Buildkite](buildkite.com) for its continuous integration pipeline. The Buildkite server will issue build jobs to one of our build clients (the Macs in the lab) as new jobs become available.
 
@@ -20,3 +20,71 @@ The build flow that the NUbots uses a pull request system.
 
 1. Once development on the branch is complete, the developer makes a pull request and a job is issued to a Buildkite client.
 1. Each pull request must be reviewed by another member of the team and all build checks on the Buildkite client must pass before the pull request can be approved and merged into `master`.
+
+## Buildkite Setup (Ubuntu)
+
+The following steps have been collected into a single [script](assets/ci_setup.sh). Before running the script, ensure you have set the buildagent token correctly within the script.
+
+### Install Docker
+
+Steps from (https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+
+```bash
+# Remove old Docker
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+# Install packages to allow apt to use a repository over HTTPS
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# Add Docker’s official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add Docker's stable repository
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+​
+# Install latest Docker CE
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+### Docker Postinstall
+
+Steps from (https://docs.docker.com/install/linux/linux-postinstall/)
+
+```bash
+# Create a 'docker' user group and add local users
+sudo groupadd docker                    # Create user group
+sudo usermod -aG docker nubots          # Add nubots user to group
+sudo usermod -aG docker buildkite-agent # Add buildkite-agent to group
+newgrp docker                           # Activate group changes
+
+# Configure Docker to start on boot
+sudo systemctl enable docker
+```
+
+### Install buildkite
+
+Steps from (https://buildkite.com/docs/agent/v3/ubuntu)
+
+```bash
+# Add the signed buildkite apt repository
+echo "deb https://apt.buildkite.com/buildkite-agent stable main" | sudo tee /etc/apt/sources.list.d/buildkite-agent.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
+
+# Install the agent
+sudo apt-get update
+sudo apt-get install -y buildkite-agent
+
+# Configure the agent token
+sudo sed -i "s/xxx/INSERT-YOUR-AGENT-TOKEN-HERE/g" /etc/buildkite-agent/buildkite-agent.cfg
+
+# Start the agent
+sudo systemctl enable buildkite-agent && sudo systemctl start buildkite-agent
+```
+
+### Add Dockerhub credentials to buildkite
+
+See https://buildkite.com/docs/agent/v3/hooks and https://buildkite.com/docs/agent/v3/configuration
+
+One way to set up credentials is to make use of the Buildkite hook system. The default directory for buildkite hooks is `/etc/buildkite-agent/hooks`. The default path for the agent's configuration file is `/etc/buildkite-agent/buildkite-agent.cfg`.
