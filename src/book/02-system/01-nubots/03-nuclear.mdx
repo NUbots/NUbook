@@ -295,3 +295,21 @@ on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Singl
 The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
 
 As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` message. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
+
+## Emit Statements
+
+An example of local emission can be seen on line 590 of [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L590) where we call
+
+```cpp
+emit(std::move(sensors));
+```
+
+This emits a [`Sensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto) message. This can then be received by reactors waiting for a `Sensors` message to trigger the reaction.
+
+Looking at line 236 of [`GameController.cpp`](https://github.com/NUbots/NUbots/blob/master/module/support/NUsight/src/GameController.cpp#L236), we can see an example of NUClear network emission.
+
+```cpp
+powerplant.emit_shared<Scope::NETWORK>(std::move(gameState), "nusight", true);
+```
+
+This tells the powerplant to emit something across the network. In this case, we are emitting gameState, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
