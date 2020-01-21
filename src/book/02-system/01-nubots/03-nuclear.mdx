@@ -28,23 +28,6 @@ Reactions run tasks when the required data is available and/or when certain cond
 
 Reactions are created by subscribing to the PowerPlant through [DSL On Statements](/system/nubots/nuclear/#on-statements).
 
-## Neutrons
-
-Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `/shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
-
-```cpp
-syntax = "proto3";
-
-package message.motion;
-
-import "Vector.proto";
-
-message WalkCommand {
-    uint64 subsumptionId = 1;  // reservation identifier for servo control
-    vec3   command       = 2;  // x and y are velocity in m/s and angle is in rads/s
-}
-```
-
 # NUClear DSL
 
 ## On Statements
@@ -222,7 +205,26 @@ NBS files are NUClear Binary Stream files. To make it easier to serialise stream
 
 All values within this format are little endian.
 
+## Neutrons
+
+Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `/shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
+
+```cpp
+syntax = "proto3";
+
+package message.motion;
+
+import "Vector.proto";
+
+message WalkCommand {
+    uint64 subsumptionId = 1;  // reservation identifier for servo control
+    vec3   command       = 2;  // x and y are velocity in m/s and angle is in rads/s
+}
+```
+
 # Examples
+
+## On Statements
 
 Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
 
