@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
@@ -11,8 +11,22 @@ const getLinkProps = ({ isCurrent }) => {
 }
 
 const Sidebar = ({ menu, currentSection }) => {
+  const sidebarEl = useRef(null)
+
+  // Scroll to reveal the active link on mount
+  useEffect(() => {
+    const activeLink = sidebarEl.current.querySelector(`.${style.linkActive}`)
+
+    if (activeLink) {
+      activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
+
+      // Sometimes `scrollIntoView` scrolls the main content, so we reset it here
+      document.documentElement.scrollTop = 0
+    }
+  }, [])
+
   return (
-    <nav>
+    <nav ref={sidebarEl}>
       <div className='mb-8'>
         {menu.map(section => {
           const className = `${style.sectionLink} ${
