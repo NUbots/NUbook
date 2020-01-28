@@ -29,6 +29,17 @@ Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to 
 
 It is intended that all configuration values exist in the default configuration file and that only a subset of configuration values appear in the robot-specific and role-specific override files.
 
+<Alert type='info'>
+
+There are exceptions to this, the `Camera` module being the best example.
+
+The `Camera` module introduces the `serial_number` field in the robot-specific
+override files as every robot will have different cameras installed in it.
+However, it makes no sense for the default configuration file to contain the
+`serial_number` field as there is no viable default value for this field.
+
+</Alert>
+
 The robot-specific override is intended to allow configuration values to be tweaked to account a slight variation in the robots hardware. For instance, the cameras on each robot have different serial numbers.
 
 The role-specific override is intended to change a modules behaviour based on which role is running. For instance, disabling the transmission of certain NUsight2 traffic while playing a competition game.
