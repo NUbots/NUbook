@@ -51,6 +51,24 @@ To reiterate how the configuration system loads and merges configuration files
 1. A check is made to see if `config/RoleName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
 1. If any of these 3 configuration files are modified then 1-3 are run again
 
+<Alert type='info'>
+
+It it also supported for a module to have multiple configuration files
+arranged into a folder hierarchy. In this case the configuration system is
+directed to monitor for any changes in an entire folder. Once again, the
+`Camera` module provides a good example of this. The same rules still apply,
+however, rather than the "default file" needing to exist, the "default folder"
+must exist. The merging rules will apply on a per-file basis whenever a change
+to a file is detected in the folder that is being monitored.
+
+</Alert>
+
+<Alert type='info'>
+
+A module can create multiple `Configuration` reactions, each one monitoring a different file or folder. The above detailed rules apply to each reaction individually.
+
+</Alert>
+
 ## The Script System
 
 The script system follows a similar structure as the configuration system. However, default scripts are moved to a platform type folder and the overriding system is not used as it doesn't make much sense to try and merge two scripts.
