@@ -23,7 +23,7 @@ config/
 └── ExampleModule.yaml
 ```
 
-The file `config/ExampleModule.yaml` must exist for every module. This file defines all of the configuration for the module.
+The file `config/ExampleModule.yaml` must exist for every module that uses configuration. This file defines all of the configuration for the module.
 `config/nugus1/ExampleModule.yaml` is an optional file and allows you to provide robot-specific overrides for specific configuration values, in this case it would provide overrides for the `nugus1` robot.
 Similarly, `config/robocup/ExampleModule.yaml` allows for the `robocup` role to further override configuration values.
 
@@ -39,11 +39,6 @@ To reiterate how the configuration system loads and merges configuration files
 1. A check is made to see if `config/RobotName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
 1. A check is made to see if `config/RoleName/ModuleName.yaml` exists. If it does, it is loaded and all values found therein override the equivalent values in the base configuration
 1. If any of these 3 configuration files are modified then 1-3 are run again
-
-<Alert type='info'>
-  It is permitted for a module to not have a configuration file. However, if the
-  module does have configuration, the above rules need to be adhered to.
-</Alert>
 
 ## The Script System
 
