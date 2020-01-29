@@ -58,21 +58,6 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
-### Configure Docker
-
-Steps from <https://docs.docker.com/install/linux/linux-postinstall/>.
-
-```bash
-# Create a 'docker' user group and add local users to allow for use without sudo
-sudo groupadd docker                     # Create user group
-sudo usermod -aG docker nubots           # Add nubots to the group
-sudo usermod -aG docker buildkite-agent  # Add buildkite-agent to the group
-newgrp docker                            # Activate group changes
-
-# Configure Docker to run on boot
-sudo systemctl enable docker
-```
-
 ### Install and Configure Buildkite
 
 Steps from <https://buildkite.com/docs/agent/v3/ubuntu>.
@@ -92,6 +77,21 @@ sudo sed -i "s/xxx/INSERT-YOUR-AGENT-TOKEN-HERE/g" /etc/buildkite-agent/buildkit
 
 # Start the agent and schedule it to run on system startup
 sudo systemctl enable buildkite-agent && sudo systemctl start buildkite-agent
+```
+
+### Configure Docker
+
+Steps from <https://docs.docker.com/install/linux/linux-postinstall/>.
+
+```bash
+# Create a 'docker' user group and add local users to allow for use without sudo
+sudo groupadd docker                     # Create user group
+sudo usermod -aG docker nubots           # Add nubots to the group
+sudo usermod -aG docker buildkite-agent  # Add buildkite-agent to the group
+newgrp docker                            # Activate group changes
+
+# Configure Docker to run on boot
+sudo systemctl enable docker
 ```
 
 ### Add DockerHub Credentials to Buildkite
