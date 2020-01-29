@@ -25,6 +25,14 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 6. When the build passes, the pull request is reviewed by another member of the team and merged into `master` only when approved.
 7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub.
 
+<TabbedImages>
+
+!['Diagram of CI Overview for pull requests'](./images/ci-overview-pr.svg 'CI Overview PR')
+
+!['Diagram of CI Overview for master'](./images/ci-overview-master.svg 'CI Overview Master')
+
+</TabbedImages>
+
 ## Buildkite Agent Setup (Ubuntu)
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
