@@ -144,18 +144,18 @@ Configuration (.yaml) files are linked to the config files in the NUbots code. I
 To build to a real robot you will need to find out the ip of the robot. This corresponds to the number of the robot (1, 2, or 3). Make sure the robot is powered on. Enter:
 
 ```bash
-./b install n**
+./b install [options] <robot>
 ```
 
-Where the first \* corresponds to 1, 2, or 3. The second \* relates to writing config to the robot. Leaving this blank only writes new config to the robot. Using `u` overrides any matching config files on the robot if yours are newer. Using `o` will override any matching config files on the robot. Using `t` will install the toolchain files on to the robot.
+Where `[options]` corresponds to various options as detailed in the [Build System](/system/nubots/build-system#install), and may be none, one or multiple options. `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`.
 
 Next open a new terminal. Type
 
 ```bash
-ssh nubots@10.1.1.*
+ssh nubots@<address>
 ```
 
-Where \* corresponds to 1, 2, or 3 depending on the robot. Now you can run whatever you have built to the robot! For example, if you want to stand the robot up, run
+Where `<address>` corresponds to `10.1.1.` followed by the robot number such as `1`, `2`, or `3`. Now you can run whatever you have built to the robot! For example, if you want to stand the robot up, run
 
 ```bash
 ./scriptrunner Stand.yaml
@@ -169,4 +169,4 @@ And then press the green middle button on the back of the robot. This runs a scr
 
 Roles that are run this way generally contain `platform::darwin::HardwareIO`, the module that deals with hardware input and output from the robot.
 
-Configuration (.yaml) files can be found in the config folder on the robot, and can be robot specific. These are in folders specific to the robot (i.e. nugus1, nugus2, nugus3).
+Configuration (.yaml) files can be found in the config folder on the robot, and can be robot specific. These are in folders specific to the robot (i.e. nugus1, nugus2, nugus3). More on the configuration system can be found on the [Configuration and Script System](/system/nubots/config-script) page.
