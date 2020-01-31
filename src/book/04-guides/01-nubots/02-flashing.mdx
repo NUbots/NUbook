@@ -8,9 +8,9 @@ slug: /guides/nubots/flashing
 
 ## Flashing a Robot
 
-To install Arch Linux (our OS of choice) on to a robot perform the following instructions
+To install Arch Linux (our OS of choice) on to a robot perform the following instructions. Make sure you know the robot number for this NUC before beginning.
 
-1. Download the latest [Arch Linux LiveUSB](https://www.archlinux.org/download/) image and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux)
+1. Download the latest [Arch Linux LiveUSB](https://www.archlinux.org/download/) image and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
 
    - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
@@ -41,14 +41,10 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
    - ![LiveUSB Environment](./images/flashing/liveusb.jpg 'LiveUSB Environment')
    - Run `ip addr` and look for a `inet` line that has a valid IP address on it. If you can't see one you don't have a network connection. Alternatively, run `ping -c 3 google.com` and look for a response time.
 
-     <Grid columns='1fr 1fr' caption='Internet connection status'>
-
      ![Internet connection](./images/flashing/internet.jpg 'Internet connection')
      ![No internet connection](./images/flashing/no_internet.jpg 'No internet connection')
 
-     </Grid>
-
-   - If you have no connection and need to set up the WiFi interface, see below.
+   - If you have no connection and need to set up the WiFi interface, [see below](#manually-setting-up-a-wifi-connection-on-the-robot).
 
 5. Download the installation script [https://git.io/JeWaF](https://git.io/JeWaF) and make sure the script is executable
 
@@ -110,7 +106,7 @@ It is possible that `ip addr` will show a valid IP address for `bond0`, but `pin
 
 </Alert>
 
-The following files now need to be modified (using either `sudo nano` or `sudo vim`)
+If there is no connection, then the following files need to be modified (using either `sudo nano` or `sudo vim`)
 
 - `/etc/systemd/network/20-eth0.network`
 - `/etc/systemd/network/30-wlan0.network`
@@ -120,7 +116,7 @@ The following files now need to be modified (using either `sudo nano` or `sudo v
 
 These 5 files need to be both renamed (replacing `eth0` or `wlan0` with the new interface name) and the contents of the files need to be edited, specifically the line that says `Name=eth0` or `Name=wlan0`.
 
-Finally, correct the `wpa_supplicant` service by running
+Next, correct the `wpa_supplicant` service by running
 
 ```sh
 sudo systemctl disable wpa_supplicant@wlan0
