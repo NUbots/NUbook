@@ -1,12 +1,14 @@
 ---
-section: System
+section: Guides
 chapter: NUbots
 title: Script Engine
-description: Introduction to scripting and how it works in the NUbots codebase.
-slug: /system/nubots/script-engine
+description: How to use the Script Engine to tune and run scripts.
+slug: /guides/nubots/script-engine
 ---
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+
+The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
 
 ## Script Runner
 
@@ -75,10 +77,6 @@ The bottom of the interface shows what commands are available. It does not show 
 `CTRL + C` - Quits script tuner
 
 `:help` - Lists all commands that can be used in script tuner
-
-## Script Engine
-
-The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
 
 ## List of Scripts
 
