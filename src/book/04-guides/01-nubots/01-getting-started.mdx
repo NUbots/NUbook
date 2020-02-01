@@ -42,28 +42,28 @@ Docker is a container system that allows you to install development tools and ru
 
 1. Add Docker's stable repository and update the apt package index.
 
-```bash
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-  bionic \
-  stable"
-sudo add-apt-repository universe
-sudo apt update
-```
+   ```bash
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+   sudo add-apt-repository \
+     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+     bionic \
+     stable"
+   sudo add-apt-repository universe
+   sudo apt update
+   ```
 
 2. Install the latest version of Docker.
 
-```bash
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-sudo apt-get install python3 python3-pip
-```
+   ```bash
+   sudo apt-get install docker-ce docker-ce-cli containerd.io
+   sudo apt-get install python3 python3-pip
+   ```
 
 3. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
 
-```bash
-sudo usermod -aG docker "${USER}"
-```
+   ```bash
+   sudo usermod -aG docker "${USER}"
+   ```
 
 4. Reboot to make the group change take effect.
 
@@ -73,14 +73,14 @@ sudo usermod -aG docker "${USER}"
 
 2. Install Python 3 and Docker using Homebrew.
 
-```bash
-brew install python3
-brew cask install docker
-```
+   ```bash
+   brew install python3
+   brew cask install docker
+   ```
 
 3. Run the Docker Desktop app that was installed and ensure that Docker is running by checking that it shows a green dot in the app menu bar.
 
-![Top right screenshot of a macOS system shows the Docker icon with a dropdown menu. The first line in the menu is highlighted and reads 'Docker desktop is running'.](./images/docker-running-mac.png)
+   ![Top right screenshot of a macOS system shows the Docker icon with a dropdown menu. The first line in the menu is highlighted and reads 'Docker desktop is running'.](./images/docker-running-mac.png)
 
 4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
 
@@ -98,18 +98,18 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
 1. Clone the repo by running the following command in a terminal:
 
-```bash
-git clone https://github.com/NUbots/NUbots.git
-```
+   ```bash
+   git clone https://github.com/NUbots/NUbots.git
+   ```
 
-The repo will be cloned into a `NUbots` directory in the current working directory.
+   The repo will be cloned into a `NUbots` directory in the current working directory.
 
 2. Change into the cloned directory and install the required Python dependencies.
 
-```bash
-cd NUbots
-sudo -H pip3 install -r requirements.txt
-```
+   ```bash
+   cd NUbots
+   sudo -H pip3 install -r requirements.txt
+   ```
 
 ## Building the Code
 
@@ -117,30 +117,30 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
 1. Select the platform (e.g. type of computer) that the built binaries will run on. You do this by running a command in the form:
 
-```bash
-./b target <PLATFORM>
-```
+   ```bash
+   ./b target <PLATFORM>
+   ```
 
-Replace `<PLATFORM>` with your desired platform. The available platforms are:
+   Replace `<PLATFORM>` with your desired platform. The available platforms are:
 
-    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
-    - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are specificially optimised to run well on the NUgus robots.
+   - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
+   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are specificially optimised to run well on the NUgus robots.
 
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
-```bash
-./b configure -i
-```
+   ```bash
+   ./b configure -i
+   ```
 
-This will show a menu to choose roles to build. Enable the roles you want to build and press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+   This will show a menu to choose roles to build. Enable the roles you want to build and press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
 
-4. Now build the code by running:
+3. Now build the code by running:
 
-```bash
-./b build
-```
+   ```bash
+   ./b build
+   ```
 
-5. Some built roles use data from `.yaml` [configuration files](/system/nubots/config-script). If you change a configuration file, you will need to run `./b build` again.
+4. Some built roles use data from `.yaml` [configuration files](/system/nubots/config-script). If you change a configuration file, you will need to run `./b build` again.
 
 ## Running the Code
 
@@ -162,32 +162,35 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 1. Install the built roles onto a robot by running:
 
-```bash
-./b install [options] <robot>
-```
+   ```bash
+   ./b install [options] <robot>
+   ```
 
-Where: - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/nubots/build-system#install) - `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`
+   Where:
+
+   - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/nubots/build-system#install)
+   - `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`
 
 2. Next, open a new terminal and `ssh` into the robot by running:
 
-```bash
-ssh nubots@<address>
-```
+   ```bash
+   ssh nubots@<address>
+   ```
 
-Where `<address>` is the IP address of the robot, in the form `10.1.1.x`, where `x` is the specific robot's number, i.e. `1`, `2`, or `3`.
+   Where `<address>` is the IP address of the robot, in the form `10.1.1.x`, with `x` being the specific robot's number, i.e. `1`, `2`, or `3`.
 
-3. Now you can run any role you built and installed onto the robot. For example, if you built the `scriptrunner` role and want to make the robot stand up, you would run:
+3. Now you can run any role you have built and installed onto the robot. For example, if you built the `scriptrunner` role and want to make the robot stand up, you would run:
 
-```bash
-./scriptrunner Stand.yaml
-```
+   ```bash
+   ./scriptrunner Stand.yaml
+   ```
 
-This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
+   This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
 
 4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/nubots/config-script) for details.
 
 5. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role:
 
-```bash
-./robocup
-```
+   ```bash
+   ./robocup
+   ```
