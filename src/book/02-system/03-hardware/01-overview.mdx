@@ -23,6 +23,19 @@ The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanua
 
 There are custom made mounting brackets milled from aluminium for the [flywheels](https://github.com/NUbots/NUware/blob/master/Igus/Current%20Design/stl_file/Flywheel_Bracket.stl), and servo-to-servo mounting brackets in the [neck](https://github.com/NUbots/NUware/blob/master/Igus/Current%20Design/stl_file/Head_Bracket.stl), hip, and ankle. There are also 3D printed cable clamps on the back of the [knees](https://github.com/NUbots/NUware/blob/master/Igus/Current%20Design/stl_file/Servo_cable_holder.stl), [ankle and hip blocks](https://github.com/NUbots/NUware/blob/master/Igus/Current%20Design/stl_file/Cable_Holder.stl).
 
+The servos have been modified to include a [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf) connected in parallel to the servo motor.
+This is done to prevent induced EMF from overloading the electronics in the servo.
+EMF can be induced when the servos are manually moved without power being applied (i.e. grabbing the robot's leg and forcing the knee to bend).
+
+<Grid columns='1fr 2fr'>
+
+![Top view of the mounted TranZorb. The two arms of the TranZorb are soldered to the motor terminals. Hot glue is added to stabilise the TranZorb against shocks and vibrations.](./images/servo-tranzorb-1.png 'Top view of the mounted TranZorb. The two arms of the TranZorb are soldered to the motor terminals. Hot glue is added to stabilise the TranZorb against shocks and vibrations.')
+![Side view of the mounted TranZorb. TranZorb arm is soldered on to the motor terminal along with the already existing motor connection, which is a black cable](./images/servo-tranzorb-2.png 'Side view of the mounted TranZorb. TranZorb arm is soldered on to the motor terminal along with the already existing motor connection (black cable)')
+
+</Grid>
+
+The TranZorb is soldered directly on to the terminals of the servo motor. Hot glue is applied to stabilise the TranZorb against shocks and vibrations.
+
 ## Cameras
 
 The NUgus robot uses two [FLIR Blackfly S](https://www.flir.com/products/blackfly-s-usb3?model=BFS-U3-13Y3C-C) USB3 cameras with a C-Mount lens positioned in their head, producing images at up to 170FPS. Two custom-built S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180° fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/parts/rr-aums-xxgr.html#RR-AUMS-20GR) are used to connect the cameras to the robot's computer.
