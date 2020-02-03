@@ -33,7 +33,17 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 </TabbedImages>
 
-## Buildkite Agent Setup (Ubuntu)
+## Monitoring and troubleshooting builds
+
+Buildkite has live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
+
+If for example your PR build fails due to formatting errors, you can check the logs to see which files are incorrectly formatted. To fix the build, you would reformat the offending files and push a new commit, which will trigger a rebuild.
+
+To view the logs for a build, scroll to the build checks at the bottom of the PR page and click the **Details** link on the `buildkite/nubots/pr` check.
+
+![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
+
+## Setting up a new agent (Ubuntu)
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
 
