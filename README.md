@@ -120,7 +120,7 @@ See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for mo
 
 ### Showing images in tabs
 
-You can show multiple images in the same place by putting them in tabs. The caption of each image is used for the tab button label.
+You can show multiple images in the same place by putting them in tabs. The caption of each image is used for its tab button label.
 
 The following example shows four images in tabs:
 
