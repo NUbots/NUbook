@@ -118,6 +118,19 @@
   }
 
   /* ============================
+   * Keyboard commands
+   * ============================ */
+  kbd {
+    @apply inline-block text-sm align-middle font-mono font-semibold rounded-sm;
+    padding: 3px 5px;
+    line-height: 12px;
+    color: #444d56;
+    background-color: #fafbfc;
+    border: 1px solid #d1d5da;
+    box-shadow: inset 0 -1px 0 #d1d5da;
+  }
+
+  /* ============================
    * Blockquotes
    * ============================ */
   blockquote {
@@ -362,5 +375,9 @@
     margin-top: -16px;
     margin-left: -16px;
     margin-right: -16px;
+  }
+
+  > details summary + p {
+    @apply mt-3;
   }
 }
