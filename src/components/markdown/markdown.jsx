@@ -5,6 +5,7 @@ import { MDXProvider } from '@mdx-js/react'
 import Code from './code'
 import Image from './image'
 import Link from './link'
+import TabbedImages from './tabbed-images'
 
 import Alert from './alert/alert'
 import Grid from './grid/grid'
@@ -46,6 +47,7 @@ const MDXComponents = {
   h6: createHeading('h6'),
   Alert,
   Grid,
+  TabbedImages,
 }
 
 const Markdown = ({ children }) => (
