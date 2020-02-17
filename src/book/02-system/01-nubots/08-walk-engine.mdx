@@ -1,0 +1,25 @@
+---
+section: System
+chapter: NUbots
+title: Walk Engine
+description: Describes the walk engines present in the NUbots codebase.
+slug: /system/nubots/walk-engine
+---
+
+Currently NUbots have two walk engines. One is an open loop hybrid walk controller and the other is an open loop walk based on quintic splines.
+
+A walk engine will trigger when a [walkcommand](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear). The walk command gives a vector where the first entry is the x velocity in metres per second, the second is the y velocity in metres per second, and the third is an angle given in radians per second.
+
+## Direct Walk Controller
+
+The Direct Walk Controller sends messages to the walk engine. It can send a message to enable or disable the walk engine, stop the walk engine, or send a walkcommand message to the walk engine. 
+
+## Open Loop Hybrid Walk
+
+This walk is an open loop hybrid walk controller, dynamically switching between an analytically solved trajectory for the centre of mass based on the linear inverted pendulum model, and a Zero Moment Point preview controller, based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances. 
+
+## Quintic Spline Walk
+
+The Quintic Walk is an open loop controller based on quintic splines (piecewise fifth degree polynomials). The engine has support for kicking, however this is not used at this time. 
+
+The code used for this walk comes from [BitBots](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
