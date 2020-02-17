@@ -1,0 +1,11 @@
+---
+section: System
+chapter: NUbots
+title: Script Engine
+description: Describes how the script engine works.
+slug: /system/nubots/script-engine
+---
+
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+
+The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
