@@ -12,26 +12,26 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
 1. Change `cameratest.role` to include `support::logging::DataLogging`
 
-```bash
-nuclear_role(
-  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
-  # and without it many roles do not run
-  extension::FileWatcher
-  support::SignalCatcher
-  support::logging::ConsoleLogHandler
-  support::logging::DataLogger
-  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-  motion::KinematicsConfiguration
-  support::configuration::NetworkConfiguration
-  support::configuration::GlobalConfig
-  platform::darwin::HardwareIO
-  platform::darwin::SensorFilter
-  input::Camera
-  support::NUsight
-  output::ImageCompressor
-  support::configuration::SoccerConfig
-)
-```
+   ```bash
+   nuclear_role(
+     # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+     # and without it many roles do not run
+     extension::FileWatcher
+     support::SignalCatcher
+     support::logging::ConsoleLogHandler
+     support::logging::DataLogger
+     # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+     motion::KinematicsConfiguration
+     support::configuration::NetworkConfiguration
+     support::configuration::GlobalConfig
+     platform::darwin::HardwareIO
+     platform::darwin::SensorFilter
+     input::Camera
+     support::NUsight
+     output::ImageCompressor
+     support::configuration::SoccerConfig
+   )
+   ```
 
 2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/nubots/getting-started) or the [Build System page](/system/nubots/build-system).
 
@@ -39,9 +39,9 @@ nuclear_role(
 
 4. Ensure the Left and Right camera serial numbers are correct in their respective configuration files (`Left.yaml` and `Right.yaml`).
 
-The serial numbers can be retrieved by running the `sudo lsusb -s <bus number>:<device number> -v` command on the robot.
+   The serial numbers can be retrieved by running the `sudo lsusb -s <bus number>:<device number> -v` command on the robot.
 
-Next you will need to figure out which is left and which is right. Change the serial number of one camera (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+   Next you will need to figure out which is left and which is right. Change the serial number of one camera (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
 5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera.
 
@@ -49,26 +49,26 @@ Next you will need to figure out which is left and which is right. Change the se
 
 7. Run `./cameratest` on the robot and hold up a checkerboard, moving it around the area to cover most of the view over time. Make sure you cover all of the available image, and make sure that you tilt the board at different angles from the lens.
 
-![A white board with black circles in rows.](./images/checkerboard-calibration.jpg 'Asymmetric circles grid used for calibration.')
+   ![A white board with black circles in rows.](./images/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
 
-6. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
+8. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
 
-The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory on your computer. Check that it is before continuing to the next steps.
+   The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory on your computer. Check that it is before continuing to the next steps.
 
-7. Run the following commands if you have not done this before
+9. Run the following commands if you have not done this before
 
-```bash
-sudo apt install protobuf-compiler libprotobuf-dev
-sudo -H pip3 install --upgrade pip
-sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
-```
+   ```bash
+   sudo apt install protobuf-compiler libprotobuf-dev
+   sudo -H pip3 install --upgrade pip
+   sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
+   ```
 
-8. Calibrate the cameras by running
+10. Calibrate the cameras by running
 
-```bash
-./b nbs calibrate_cameras <nbs file name> -c <camera config folder>
-```
+    ```bash
+    ./b nbs calibrate_cameras <nbs file name> -c <camera config folder>
+    ```
 
-`<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
+    `<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
 
 Once the calibration is done, the values in the camera configuration files should be changed. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once all the configuration that is wanted to be done is complete, make sure it is all commited and pushed on a branch and then make a pull request to get the changes into the master branch.
