@@ -6,7 +6,7 @@ description: Learn how to calibrate cameras.
 slug: /guides/nubots/camera-calibration
 ---
 
-Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. \*\*brief description of how camera calibration works.
+Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. More on camera calibration can be found on [the vision page](/system/nubots/vision).
 
 The calibration is done in two steps. The first is creating the nbs recording and the second is using that nbs recording to find the camera parameters.
 
@@ -33,17 +33,29 @@ nuclear_role(
 )
 ```
 
-2. Build using `./b build` and then install onto a robot using `./b install n<number>`
+2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/nubots/getting-started) or the [Build System page](/system/nubots/build-system).
 
-3. On the robot, enable image recording in `/config/DataLogging.yaml`.
+3. On the robot, enable compressed image recording in `/config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
 
-4. Run `./cameratest` on the robot and hold up a checkerboard (image here), moving it around the area to cover most of the view over time.
+4. Ensure the Left and Right camera serial numbers are correct in their respective configuration files (`Left.yaml` and `Right.yaml`).
 
-5. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
+The serial numbers can be retrieved by running the `sudo lsusb -s <bus number>:<device number> -v` command on the robot.
+
+Next you will need to figure out which is left and which is right. Change the serial number of one camera (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+
+5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera.
+
+6. Check the transform matrix from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file.
+
+7. Run `./cameratest` on the robot and hold up a checkerboard, moving it around the area to cover most of the view over time. Make sure you cover all of the available image, and make sure that you tilt the board at different angles from the lens.
+
+![A white board with black circles in rows.](./images/checkerboard-calibration.jpg 'Asymmetric circles grid used for calibration.')
+
+6. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
 
 The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory on your computer. Check that it is before continuing to the next steps.
 
-6. Run the following commands
+7. Run the following commands if you have not done this before
 
 ```bash
 sudo apt install protobuf-compiler libprotobuf-dev
@@ -51,7 +63,7 @@ sudo -H pip3 install --upgrade pip
 sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
 ```
 
-7. Calibrate the cameras by running
+8. Calibrate the cameras by running
 
 ```bash
 ./b nbs calibrate_cameras <nbs file name> -c <camera config folder>
