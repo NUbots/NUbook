@@ -2,20 +2,195 @@
 section: Guides
 chapter: NUbots
 title: Getting Started
-description: Setting up your environment for NUbots development.
+description: Setting up your environment and getting started with NUbots development.
 slug: /guides/nubots/getting-started
 ---
 
 ## Prerequisites
 
+### Linux or macOS
+
+We recommend a Unix-based operating system like Linux or macOS for developing and running NUbots code. You can find free downloads for [Ubuntu](https://ubuntu.com/), a user-friendly Linux distribution, at their website.
+
+Currently Windows is not officially supported.
+
+<details>
+  <summary>Why no Windows support?</summary>
+
+Windows is not supported at the moment due to lack of support for the `termios` Python module that is used in the Docker build script. We hope to find a fix for this soon. If you know an alternative, free to suggest solutions, or better yet, create a PR to add Windows support.
+
+</details>
+
 ### Git
 
-### Vagrant and VirtualBox
+[Git](https://git-scm.com/) is a [version control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) tool. We use it to track changes to the codebase and work together on the same codebase without getting in each other's way.
 
-### A text editor
+To work on the NUbots code, you'll need to know the basics of using Git, specifically:
 
-## Getting the code
+- how to clone remote repositories onto your computer
+- how to create branches
+- how to add and commit changes
+- how to fetch, pull, and push changes
 
-## Setting up VM
+You can do all the above using [Git in the terminal](https://git-scm.com/docs/git), or you can use a Git GUI tool like [GitKraken](https://www.gitkraken.com/).
 
-## Building the code
+### Docker
+
+Docker is a container system that allows you to install development tools and run builds in an isolated environment that won't affect the rest of your system. We use it to set up the NUbots build system and run builds and binaries.
+
+#### Ubuntu
+
+1. Add Docker's stable repository and update the apt package index.
+
+   ```bash
+   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+   sudo add-apt-repository \
+     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+     bionic \
+     stable"
+   sudo add-apt-repository universe
+   sudo apt update
+   ```
+
+2. Install the latest version of Docker.
+
+   ```bash
+   sudo apt-get install docker-ce docker-ce-cli containerd.io
+   sudo apt-get install python3 python3-pip
+   ```
+
+3. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
+
+   ```bash
+   sudo usermod -aG docker "${USER}"
+   ```
+
+4. Reboot to make the group change take effect.
+
+#### macOS
+
+1. Install Homebrew by following the instructions at [brew.sh](https://brew.sh/).
+
+2. Install Python 3 and Docker using Homebrew.
+
+   ```bash
+   brew install python3
+   brew cask install docker
+   ```
+
+3. Run the Docker Desktop app that was installed and ensure that Docker is running by checking that it shows a green dot in the app menu bar.
+
+   ![Top right screenshot of a macOS system shows the Docker icon with a dropdown menu. The first line in the menu is highlighted and reads 'Docker desktop is running'.](./images/docker-running-mac.png)
+
+4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
+
+### A Text Editor
+
+You'll need a text editor to make changes to the code. We recommend [Visual Studio Code](https://code.visualstudio.com/Download), but feel free to use your favourite editor.
+
+To ensure a consistent [code style](https://en.wikipedia.org/wiki/Programming_style), NUbots uses `clang-format`, a tool that reformats all code files in the repository to have the same style, even if they're written by different people. For convenience, you can install the `clang-format` [extension](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) in Visual Studio Code to automatically format the files when you make changes.
+
+Another useful tool for editing NUbots code in Visual Studio Code is the Remote Development [extension pack](https://code.visualstudio.com/docs/remote/containers). This pack allows Visual Studio Code to work from within the Docker container, using the tools and libraries installed there.
+
+## Getting the Code
+
+With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and try things out.
+
+1. Clone the repo by running the following command in a terminal:
+
+   ```bash
+   git clone https://github.com/NUbots/NUbots.git
+   ```
+
+   The repo will be cloned into a `NUbots` directory in the current working directory.
+
+2. Change into the cloned directory and install the required Python dependencies.
+
+   ```bash
+   cd NUbots
+   sudo -H pip3 install -r requirements.txt
+   ```
+
+## Building the Code
+
+To build the code, open a terminal and change into the NUbots code directory. Then do the following:
+
+1. Select the platform (e.g. type of computer) that the built binaries will run on. You do this by running a command in the form:
+
+   ```bash
+   ./b target <PLATFORM>
+   ```
+
+   Replace `<PLATFORM>` with your desired platform. The available platforms are:
+
+   - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
+   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are specificially optimised to run well on the NUgus robots.
+
+2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
+
+   ```bash
+   ./b configure -i
+   ```
+
+   This will show a menu to choose roles to build. Enable the roles you want to build and press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+
+3. Now build the code by running:
+
+   ```bash
+   ./b build
+   ```
+
+4. Some built roles use data from `.yaml` [configuration files](/system/nubots/config-script). If you change a configuration file, you will need to run `./b build` again.
+
+## Running the Code
+
+With the code built, you have two options for running: on an actual robot, or on your computer using a simulated robot.
+
+### Running with a Simulated Robot
+
+If you are not running the code on a robot, you will need to use a simulated robot. If, for example, you want to run a role called "test", you would run
+
+```bash
+./b run test
+```
+
+Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
+
+### Running on a Real Robot
+
+To run the code on a robot, you need to make sure the robot is powered on, install the built roles onto the robot, and then `ssh` into the robot to run the installed roles.
+
+1. Install the built roles onto a robot by running:
+
+   ```bash
+   ./b install [options] <robot>
+   ```
+
+   Where:
+
+   - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/nubots/build-system#install)
+   - `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`
+
+2. Next, open a new terminal and `ssh` into the robot by running:
+
+   ```bash
+   ssh nubots@<address>
+   ```
+
+   Where `<address>` is the IP address of the robot, in the form `10.1.1.x`, with `x` being the specific robot's number, i.e. `1`, `2`, or `3`.
+
+3. Now you can run any role you have built and installed onto the robot. For example, if you built the `scriptrunner` role and want to make the robot stand up, you would run:
+
+   ```bash
+   ./scriptrunner Stand.yaml
+   ```
+
+   This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
+
+4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/nubots/config-script) for details.
+
+5. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role:
+
+   ```bash
+   ./robocup
+   ```

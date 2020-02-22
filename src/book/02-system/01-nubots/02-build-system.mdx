@@ -2,6 +2,472 @@
 section: System
 chapter: NUbots
 title: Build System
-description: The NUbots build and continuous integration system.
+description: The NUbots build system.
 slug: /system/nubots/build-system
 ---
+
+## The NUbots Build System
+
+### Overview
+
+The NUbots codebase uses a [CMake](https://cmake.org/) build system based on the [NUClear Roles framework](https://github.com/Fastcode/NUClearRoles) and the [Ninja](https://ninja-build.org/) build system.
+
+[Docker](https://www.docker.com/) is used to containerise our build processes so that we may mimic the build environment of the robot and impose version control over our required 3rd party dependencies while also managing operating system level configuration to ensure that all users of our codebase can achieve repeatable results.
+
+#### Requirements
+
+To build the NUbots code a couple of programs are needed on the host machine
+
+- Git: You need this clone and work on the NUbots repository
+- Docker: On Linux and Mac you can just install Docker (and set up user permissions) and you are good to go. On Windows you will also need WSL
+- Python3: A `requirements.txt` file exists in the root of the NUbots repository and in the `nuclear` folder. Install the required python modules using `sudo -H pip3 install -r requirements.txt` and `sudo -H pip3 install -r nuclear/requirements.txt`
+- Visual Studio Code: recommended, but not required. Visual Studio code also has a plugin to allow you to develop inside the Docker container (only using the `generic` image).
+
+<Alert type='warning'>
+  Windows support is still in its experimental stages. Currently, Windows 10
+  Pro, Enterprise, or Education is needed to use Docker.
+</Alert>
+
+### NUClear Roles
+
+The most complete documentation for NUClear Roles can be found in its github [README](https://github.com/Fastcode/NUClearRoles/blob/master/README.md).
+
+Six main directories are used in a NUClear Roles system:
+
+| Directory        | Usage                  |
+| ---------------- | ---------------------- |
+| module           | NUClear reactors       |
+| roles            | Declaration of roles   |
+| shared/extension | NUClear DSL extensions |
+| shared/message   | Protobuf messages      |
+| shared/utility   | Utility code           |
+| tools            | Extensions for `b`     |
+
+#### Modules
+
+The modules folder contains [NUClear reactors](https://nuclear.readthedocs.io/en/latest/components.html#reactors). Reactors are grouped into meta-modules. For instance, the `vision` meta-module groups together reactors that perform vision processing tasks (e.g. ball and goal detection), while the `input` meta-module groups together reactors that gather system inputs (e.g. camera and network inputs).
+
+#### Roles
+
+Role files define which modules should be grouped together in order to form a single role (a binary that performs a specific role).
+
+Role files live in the `roles` folder and have a `.role` extension.
+
+Every role file must call the `nuclear_role()` function. Each argument to the `nuclear_role()` function is a C++ namespaced path to a module that should be included in the role. For example, if the `KinematicsConfiguration` module in `module/motion/KinematicsConfiguration` should be included in the role then `motion::KinematicsConfiguration` should appear as an argument to `nuclear_role()`.
+
+<Alert type="info">
+
+`module` is removed from the start of all module arguments as all modules must reside in the `module` folder.
+
+</Alert>
+
+Ideally, all modules should be independent of each other and, as such, it should not matter which order modules are specified to `nuclear_role()`. In reality, there are a couple of modules which, if they are included in a role, should be passed to `nuclear_role()` first. These modules are:
+
+- `extension::FileWatcher`: Needed before all other modules so that the configuration and script systems can work properly
+- `support::SignalCatcher`: Catches exceptions to print out useful stack traces. Needs to come before all other modules to allow debugging during module installation
+- `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`: Install before other modules so that log messages will get printed during module installation
+- `motion::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
+
+Below is an example of a role file. Any line preceded by a `#` is a comment and will be ignored.
+
+```bash
+nuclear_role(
+  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+  # and without it many roles do not run
+  extension::FileWatcher
+  support::SignalCatcher
+  support::logging::ConsoleLogHandler
+  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+  motion::KinematicsConfiguration
+  support::configuration::GlobalConfig
+  support::configuration::NetworkConfiguration
+  platform::darwin::HardwareIO
+  platform::darwin::SensorFilter
+  support::NUsight
+)
+
+```
+
+#### Extensions
+
+[Extensions](https://nuclear.readthedocs.io/en/latest/extension.html) add new keywords to NUClear's dictionary, allowing you to be more expressive in writing [reactions](https://nuclear.readthedocs.io/en/latest/components.html#reactions).
+
+Two common extensions are `Configuration` and `Script`. `Configuration` allows modules to monitor their configuration file(s) and apply updates in real-time. `Script` provides similar functionality, but for script files.
+
+#### Messages
+
+Every message in the NUbots codebase is a [protobuf](https://developers.google.com/protocol-buffers) message and all protobuf messages live in the `shared/message` folder.
+
+The general convention is to groups message files into folders based on the meta-module which introduces the message to the system. For instance, `module/input/Camera` introduces `Image` messages to the system, so `Image.proto` lives in `shared/message/input`.
+
+NUClear Roles provides special wrappers for certain types. Vector and matrix types are mapped to [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) types. To use these mappings simply use `import Vector.proto;` and `import Matrix.proto;`. Some examples of types that you can use are:
+
+- `fvec3`: A vector with 3 components, maps to an `Eigen::Vector3f`
+- `vec3`: A vector with 3 components, maps to an `Eigen::Vector3d`
+- `mat3`: A 3x3 matrix, maps to an `Eigen::Matrix3d`
+
+All messages are packaged in a similar fashion to the C++ namespaces used for modules. For instance, `Image.proto` is in the `message.input` package.
+
+NUClear Roles creates a C++ wrapper class for each message to create a simpler interface for accessing and mutating message fields. The C++ namespace for a message follows its package. For instance, the `message.input.Image` message will have a C++ namespace of `message::input::Image`.
+
+#### Utilities
+
+Utilities are collections of functions that perform useful tasks. Typically, these functions are stateless and are (or feasibly could be) used by multiple different modules (or even other utilities).
+
+As is the case with modules and messages, utilities are grouped together into meta-utilities. For instance, utilities dealing with angles, coordinate system transforms, and geometrical constructs live in the `shared/utility/math` meta-utility.
+
+#### Tools and the `b` command
+
+NUClear Roles introduces the `b` command that wraps up all of the functionality needed to create modules and build the NUbots code.
+
+| Command   | Description                                                    |
+| --------- | -------------------------------------------------------------- |
+| build     | Build the currently configured code                            |
+| configure | Configure the CMake system for the current target              |
+| edit      | Edit configuration files                                       |
+| footdown  | Trains a neural network to detect foot down based on leg loads |
+| format    | Applies code formatting rules to the codebase                  |
+| install   | Install built code to the specified robot                      |
+| module    | Generate new modules                                           |
+| nbs       | For working with NBS recordings                                |
+| run       | Run a role locally                                             |
+| shell     | Exposes a shell in the docker image                            |
+| target    | Select a target to work on                                     |
+
+##### Build
+
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`.
+If you only wish to build a single role (e.g. `sensortest`) then use the command
+
+```bash
+./b build sensortest
+```
+
+If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests.
+
+##### Configure
+
+`./b configure` will ensure that a build folder is created in the current Docker image and will then run `cmake` on the source code ensuring that CMake creates all of the necessary build files inside of the build folder.
+
+It is possible to specify extra arguments to `cmake` to control the configuration process. For example, to enable the building of unit tests one would run
+
+```bash
+./b configure -- -DBUILD_TESTS=ON
+```
+
+Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Debug`, while this is good while you are in active development of a module, you will get very poor (slow) runtime performance.
+To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and then rebuild your code using the following commands
+
+```bash
+./b configure -- -DCMAKE_BUILD_TYPE=Release
+./b build
+```
+
+<Alert type="info">
+
+`--` is needed to prevent python from trying to process the argument itself. This is only needed if you are specifying arguments that start with a `-`.
+
+</Alert>
+
+Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
+
+##### Edit
+
+If you are running roles on your local machine and you need to edit the configuration or data files for the modules in the role then the preferred method is to edit the file in the source tree and then rebuild the code using `./b build` to copy the edited file into the build folder.
+
+However, some modules generate their configuration file at build-time, making it impossible to edit the file in the source tree. In this situation, you can use `./b edit` to open an interactive window with a text editor allowing you to edit the configuration file in the build tree.
+
+One module that generates it configuration file at build time is `support::logging::DataLogging`, to edit the configuration file for `DataLogging` run
+
+```bash
+./b edit config/DataLogging.yaml
+```
+
+The `edit` command uses the editor that is defined in your host shell (using the `EDITOR` environment variable). If `EDITOR` is not set then it will default to `nano`. Currently, the only supported editors are `vim` and `nano`, with `nano` used as the fallback in all cases.
+
+##### Foot down
+
+This tool uses NBS files recorded from the robot(s) to gather training and testing data to train a neural network to determine if either of the robot's feet are on the ground using leg servo and sensor data.
+
+##### Format
+
+NUbots uses several different code formatters.
+
+- `clang-format` is used to format C++ and protobuf files,
+- `black` and `isort` are used to format python files, and
+- `cmake-format` is used to format CMake files.
+
+If you want to ensure that all files in the codebase are formatted according to our defined style run
+
+```bash
+./b format
+```
+
+If you are using [Visual Studio Code](https://code.visualstudio.com/) with the workspace recommended extensions installed then formatting can be set up to happen when you save or when you type.
+
+##### Install
+
+Once code is built and you are ready to install it on a robot, you can run
+
+```bash
+./b install [options] <robot>
+```
+
+`<robot>` can either be a known robot designation (`n1` or `nugus1`, for instance) or an IP address of a robot.
+
+`[options]` may be one, or more, of the following
+
+| Option | Description                                                                                                                                       |
+| :----: | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+|   -u   | The user to install to on the target. Defaults to the user in the Docker image (this default user should almost always be correct for our robots) |
+|   -t   | Install toolchain to the target                                                                                                                   |
+|  -cn   | Only install new config files. This is the default                                                                                                |
+|  -cu   | Update config files on the target that are older than the local files                                                                             |
+|  -co   | Overwrite all config files on the target                                                                                                          |
+|  -ci   | Ignore all changes to config files (installs no config files)                                                                                     |
+
+The toolchain is a collection of 3rd party libraries that have been built into the Docker images. On a new robot, all roles will fail to run unless the toolchain is installed and, more often than not, if you are receiving errors on the robot saying something to the effect of "cannot open shared object file: No such file or directory" this will usually be solved by installing the toolchain.
+
+<Alert type='info'>
+
+If you have installed the toolchain and you are still getting errors like the
+one mentioned above, try running `sudo ldconfig` on the robot.
+
+</Alert>
+
+##### Module
+
+The `module` command allows you to generate a new module. To generate a new line detection module one would run
+
+```bash
+./b module generate vision/LineDetector
+```
+
+This will generate all necessary module files in the `module/vision/LineDetector` folder. This includes an empty configuration file, a basic C++ source and header file implementing the `LineDetector` reactor, and an empty unit test file.
+
+##### NBS
+
+NBS (NUClear Binary Stream) files are, effectively, concatenations of protobuf messages with a small header packet per message. They provide a simple and effective means for recording real data from the robots in real time.
+
+The `nbs` command provides a couple of subcommands to help you work with NBS data.
+
+| Subcommand     | Description                                                                              |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| extract_images | Extracts images from the NBS file and save them to disk                                  |
+| json           | Extracts selected messages from the NBS file and dumps them to `stdout` in a json format |
+| stats          | Calculates message statistics on the provided NBS file                                   |
+| video          | Extract images from the NBS file and save them in a video file using FFmpeg              |
+
+##### Run
+
+To run roles locally on your system use the `run` command of `b` as follows
+
+```bash
+./b run <name of role>
+```
+
+<Alert type="warning">
+
+Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
+
+</Alert>
+
+##### Shell
+
+This is an undocumented and unsupported option.
+
+<details>
+  <summary>I know what I am doing</summary>
+
+You probably don't know what you are doing. But why would you listen to me?
+
+For some reason, if you really, really, _REALLY_ need to access a terminal inside of Docker you can run
+
+```bash
+./b shell
+```
+
+<Alert type="warning">
+
+Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build` directories will not persist after exiting the Docker shell.
+
+</Alert>
+
+</details>
+
+##### Target
+
+The `target` command of `b` allows you to build code for a different target. Currently, only two targets are supported: `generic` and `nuc7i7bnh`.
+
+The `generic` target is useful if you would like to build and run code on your local machine.
+
+The `nuc7i7bnh` target should be used for building and running code on the robots.
+
+The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
+
+## Docker Images
+
+The NUbots codebase uses Docker images to containerise the build process.
+Two images are created, one intended for running code on your local machine, named `generic`, and another intended for running code on the robots named `nuc7i7bnh`.
+Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
+
+<Alert type="info">
+
+`nuc7i7bnh` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
+
+</Alert>
+
+The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the master branch is updated.
+
+The Docker images use [Arch Linux](https://www.archlinux.org/) as their operating system as it is lightweight, flexible, and up-to-date.
+
+The [docker folder](https://github.com/NUbots/NUbots/tree/master/docker) contains the Dockerfile as well as some utility scripts to ease the burden of compiling multiple different libraries. Other files in this folder end up inside of the image and control either the behaviour of the compiler or build system, or the runtime behaviour of the libraries that are built.
+
+If you need to add a new library or program to the Docker image you should add it to the end of the Dockerfile to minimise the amount of rebuilding that needs to happen. Look for the following marker
+
+```bash
+#######################################
+### ADD NEW PROGRAMS/LIBRARIES HERE ###
+#######################################
+```
+
+### Adding a new library to the robot toolchain
+
+If the intention is to have the new library running on the robot then you need to build the library from source. If the library you are building is well-behaved then it should be a simple matter of adding a line like the following to the Dockerfile
+
+```docker
+RUN install-from-source http://url.to.the.source.tarball.com
+```
+
+This process generally requires some studying of either the library's documentation or build system files to determine appropriate configure and build flags.
+If there are extra flags that need to be specified then modify the above command to
+
+```docker
+RUN install-from-source http://url.to.the.source.tarball.com \
+    -DCONFIGURE_FLAG=XXX
+```
+
+<Alert type="info">
+
+`\` is a line continuation operator, it allows a long line to be split over multiple lines to improve readability
+
+</Alert>
+
+If your library is not well-behaved you may need to do to a lot of googling and trawling through stackoverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
+Another good source of information is the `PKGBUILD` scripts from the Arch Linux repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, then look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
+The `PKGBUILD` script will show you how Arch Linux builds the library including
+
+- necessary dependencies,
+- locations of source files and patches,
+- commands needed to prepare the source files for compilation,
+- commands needed to build the library, and
+- commands needed to install the library
+
+Borrowing commands from these scripts could help relieve your frustrations with the world.
+
+### Adding a new build utility
+
+If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile at the marker near the end of the file
+
+```bash
+#######################################
+### ADD NEW PROGRAMS/LIBRARIES HERE ###
+#######################################
+RUN install-package <name of package>
+```
+
+If a package does not exist in the Arch Linux repositories then you will need to build it from source. However, this time, you need to add it where the marker says
+
+```bash
+##############################################
+### ADD NEW SYSTEM PROGRAMS/LIBRARIES HERE ###
+##############################################
+```
+
+See above for details on how to build a program/library from source.
+
+## The toolchain
+
+The toolchain is a collection of libraries that are used by the NUbots codebase. These libraries are essential for our code (if we don't have them then we are unable to compile anything).
+
+In order to ensure that everyone is using the same versions of every library and that everyone has compiled the libraries in the same way (enabling the correct features, etc), we use Docker to automate the build process.
+Docker also ensures that all of the dependencies for the built libraries are either installed or are also built and that they are also built in the correct order.
+To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile).
+
+In order to improve runtime performance on the robots, all libraries that are built as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
+A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/master/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
+
+If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
+
+```bash
+target=$(gcc -march=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
+diff -y --suppress-common-lines <(gcc -march=native -Q --help=target) <(gcc -march=${target} -Q --help=target)
+```
+
+The first command will determine the codename of the CPU family (i.e. for an Intel CPU it might be `broadwell`, `haswell`, `skylake`, etc).
+
+For the rest of this example we will assume that `target=skylake`.
+
+The second command compares the compiler flags that compiling with `-march=native` would enable compared to using `-march=skylake`.
+The output of this function could look like this
+
+```bash
+-mabm        [enabled]        |    -mabm        [disabled]
+-mrtm        [enabled]        |    -mrtm        [disabled]
+```
+
+The left column are instructions that are enabled/disabled when compiling using `-march=native` and the right column are the instructions that are enabled/disabled when compiling using `-march=skylake`.
+Combining both columns tells us that to get from a generic `skylake` CPU to the CPU that we are using we need to enable both the `abm` and the `rtm` instructions using `-mabm` and `-mrtm`.
+
+<Alert type='info'>
+
+If the output was actually
+
+```bash
+-mabm        [disabled]       |    -mabm        [enabled]
+-mrtm        [enabled]        |    -mrtm        [disabled]
+```
+
+Then we would need to disable `abm` using `-mno-abm` and enable `rtm` using `-mrtm`.
+
+</Alert>
+
+The final piece of information we need is about the CPU cache sizes
+
+```ssh
+gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"
+```
+
+The output of this command will look like this
+
+```bash
+--param l1-cache-size=32
+--param l1-cache-line-size=64
+--param l2-cache-size=12288
+```
+
+<Alert type='warning'>
+
+If you get an error saying "zsh: bad pattern: -###", wrap double-quotes around the `-###` in the above command.
+
+</Alert>
+
+Putting all of this together, the `targets` dict for our example target would be
+
+```
+target = {
+    "flags": [
+        "-march=skylake",
+        "-mtune=skylake",
+        "-mabm",
+        "-mrtm",
+        "--param l1-cache-size=32",
+        "--param l1-cache-line-size=64",
+        "--param l2-cache-size=12288",
+        "-fPIC",
+    ],
+    "release_flags": ["-O3", "-DNDEBUG"],
+    "asm_flags": ["-DELF", "-D__x86_64__", "-DPIC"],
+    "asm_object": "elf64",
+}
+```
