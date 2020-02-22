@@ -48,56 +48,36 @@ The next section is a table. These show the angle and gain for each servo for th
 
 The bottom of the interface shows what commands are available. It does not show all the commands. All commands can be viewed by typing `:help`. Note that the letters are UPPERCASE.
 
-`,` - Moves to the frame that is left of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.
-
-`.` - Moves to the frame that is right of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.
-
-`N` - Creates a new frame after the frame you have currently selected. This frame will be a duplicate of the frame you have selected. It will be added in after the currently selected frame, and the selected frame will not change.
-
-`I` - Deletes the current frame you have selected. The new selected frame will be the frame after the deleted frame, or before if it was the last frame.
-
-`space` - This toggles locking and unlocking of servos. When the servo is locked, you will not be able to move that joint on the real robot and the angle it is at will be stored in the table on the script tuner interface. When it is unlocked, you are able to freely move that joint on the real robot to adjust the angle of the joint for that frame. Space is used to edit any field that is editable.
-
-`T` - Edits the duration that this frame plays for, in milliseconds. Press `Enter` to submit.
-
-`J` - Jumps to a specified frame. After pressing this key, type in the frame number you want to jump to and then hit `Enter`.
-
-`G` - Opens interface for editing gain of entire script or frame. Allows changing of all servo gains, only the upper body gains (arms and head) or lower body gains (legs). Can specify for the entire script or for a particular frame. Use `X` to exit the edit gain interface.
-
-`P` - Plays the script from the first frame to the last frame.
-
-`S` - Saves the new script or saves the edited script.
-
-`A` - Saves the script with a particular name. After pressing this key, write the name of the script and press `Enter`.
-
-`R` - Manual refresh view
-
-`M` - Mirrors the whole script
-
-`X` - Exits the help or exits gain editing
-
-`CTRL + C` - Quits script tuner
-
-`:help` - Lists all commands that can be used in script tuner
+| Command                        | Description                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <kbd>,</kbd>                   | Moves to the frame that is left of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                            |
+| <kbd>.</kbd>                   | Moves to the frame that is right of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                           |
+| <kbd>N</kbd>                   | Creates a new frame after the frame you have currently selected. This frame will be a duplicate of the frame you have selected. It will be added in after the currently selected frame, and the selected frame will not change.                                                                                                                                                                      |
+| <kbd>I</kbd>                   | Deletes the current frame you have selected. The new selected frame will be the frame after the deleted frame, or before if it was the last frame.                                                                                                                                                                                                                                                   |
+| <kbd>space</kbd>               | This toggles locking and unlocking of servos. When the servo is locked, you will not be able to move that joint on the real robot and the angle it is at will be stored in the table on the script tuner interface. When it is unlocked, you are able to freely move that joint on the real robot to adjust the angle of the joint for that frame. Space is used to edit any field that is editable. |
+| <kbd>T</kbd>                   | Edits the duration that this frame plays for, in milliseconds. Press <kbd>Enter</kbd> to submit.                                                                                                                                                                                                                                                                                                     |
+| <kbd>J</kbd>                   | Jumps to a specified frame. After pressing this key, type in the frame number you want to jump to and then hit <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                     |
+| <kbd>G</kbd>                   | Opens interface for editing gain of entire script or frame. Allows changing of all servo gains, only the upper body gains (arms and head) or lower body gains (legs). Can specify for the entire script or for a particular frame. Use <kbd>X</kbd> to exit the edit gain interface.                                                                                                                 |
+| <kbd>P</kbd>                   | Plays the script from the first frame to the last frame.                                                                                                                                                                                                                                                                                                                                             |
+| <kbd>S</kbd>                   | Saves the new script or saves the edited script.                                                                                                                                                                                                                                                                                                                                                     |
+| <kbd>A</kbd>                   | Saves the script with a particular name. After pressing this key, write the name of the script and press <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                           |
+| <kbd>R</kbd>                   | Manual refresh view.                                                                                                                                                                                                                                                                                                                                                                                 |
+| <kbd>M</kbd>                   | Mirrors the whole script.                                                                                                                                                                                                                                                                                                                                                                            |
+| <kbd>X</kbd>                   | Exits the help or exits gain editing.                                                                                                                                                                                                                                                                                                                                                                |
+| <kbd>CTRL</kbd> + <kbd>C</kbd> | Quits script tuner.                                                                                                                                                                                                                                                                                                                                                                                  |
+| <kbd>:help</kbd>               | Lists all commands that can be used in script tuner.                                                                                                                                                                                                                                                                                                                                                 |
 
 ## List of Scripts
 
-`KickLeft.yaml` - robot kicks with its left foot
-
-`KickRight.yaml` - robot kicks with its right foot
-
-`NodYes.yaml` - the robot nods its head
-
-`Relax.yaml` - the robot relaxes all of its joints
-
-`RelaxHead.yaml` - the robot relaxes its head joints
-
-`RollOverFront.yaml` - the robot rolls from its back onto its front
-
-`Stand.yaml` - the robot moves into a standing position
-
-`StandUpBack.yaml` - the robot gets up from its back and moves into a standing position
-
-`StandUpFront.yaml` - the robot gets up from its front and moves into a standing position
-
-`Zombie.yaml` - the robot moves into a standing zombie position, with arms straight out
+| Script Name          | Description                                                              |
+| -------------------- | ------------------------------------------------------------------------ |
+| `KickLeft.yaml`      | Robot kicks with its left foot.                                          |
+| `KickRight.yaml`     | Robot kicks with its right foot.                                         |
+| `NodYes.yaml`        | The robot nods its head.                                                 |
+| `Relax.yaml`         | The robot relaxes all of its joints.                                     |
+| `RelaxHead.yaml`     | The robot relaxes its head joints.                                       |
+| `RollOverFront.yaml` | The robot rolls from its back onto its front.                            |
+| `Stand.yaml`         | The robot moves into a standing position.                                |
+| `StandUpBack.yaml`   | The robot gets up from its back and moves into a standing position.      |
+| `StandUpFront.yaml`  | The robot gets up from its front and moves into a standing position.     |
+| `Zombie.yaml`        | The robot moves into a standing zombie position, with arms straight out. |
