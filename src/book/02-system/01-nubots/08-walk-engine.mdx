@@ -10,9 +10,7 @@ Currently NUbots have two walk engines. One is an open loop hybrid walk controll
 
 A walk engine will trigger when a [walkcommand](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear). The walk command gives a vector where the first entry is the x velocity in metres per second, the second is the y velocity in metres per second, and the third is an angle given in radians per second.
 
-## Direct Walk Controller
-
-The Direct Walk Controller sends messages to the walk engine. It can send a message to enable or disable the walk engine, stop the walk engine, or send a walkcommand message to the walk engine.
+The [Direct Walk Controller](https://github.com/NUbots/NUbots/tree/master/module/behaviour/skills/DirectWalkController) sends messages to the walk engine. It can send a message to enable or disable the walk engine, stop the walk engine, or send a walkcommand message to the walk engine.
 
 ## Open Loop Hybrid Walk
 
