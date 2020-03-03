@@ -33,6 +33,12 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 </TabbedImages>
 
+## The build pipeline
+
+The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/master/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting". We edit this file to add, remove, or change build jobs.
+
+The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
+
 ## Monitoring and troubleshooting builds
 
 Buildkite has live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
