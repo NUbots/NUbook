@@ -122,7 +122,7 @@ sudo systemctl enable docker
 
 For agents to push built `master` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
 
-One way to provide credentials to the agent via env variables is to use the agent hooks system. The default directory for agent hooks is `/etc/buildkite-agent/hooks`. The default path for the agent's configuration file is `/etc/buildkite-agent/buildkite-agent.cfg`.
+Credentials are provided to the agent via env variables from agent hooks system. Specifically via the environment hook. The default location for this hook is `/etc/buildkite-agent/hooks/environment`. The default path for the agent's configuration file is `/etc/buildkite-agent/buildkite-agent.cfg`.
 
 See the following pages in the Buildkite documentation for reference:
 
