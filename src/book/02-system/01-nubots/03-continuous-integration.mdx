@@ -18,11 +18,11 @@ This CI process works in combination with the [Git Feature Branch workflow](http
    git checkout -b biddulph/ball-detector
    ```
 
-2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request on GitHub. This triggers a webhook to Buildkite to build and test the PR.
+2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. This triggers a webhook to Buildkite to build and test the PR.
 3. Buildkite receives the webhook and creates separate build jobs for different parts of the PR (build, check code format, test, etc) and sends different jobs to different agents based on their availability.
 4. Agents receive a job, clone the code, pull the existing `master` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
 5. Buildkite receives the results and updates the build status in the Buildkite UI as well as on the PR page on GitHub.
-6. When the build passes, the pull request is reviewed by another member of the team, and if approved, is merged into `master`.
+6. When the build passes, the PR is reviewed by another member of the team. If approved, the PR can be merged into `master`.
 7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
 
 <TabbedImages>
