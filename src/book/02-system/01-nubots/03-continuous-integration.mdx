@@ -22,8 +22,8 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 3. Buildkite receives the webhook and creates separate build jobs for different parts of the PR (build, check code format, test, etc) and sends different jobs to different agents based on their availability.
 4. Agents receive a job, clone the code, pull the existing `master` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
 5. Buildkite receives the results and updates the build status in the Buildkite UI as well as on the PR page on GitHub.
-6. When the build passes, the pull request is reviewed by another member of the team and merged into `master` only when approved.
-7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub.
+6. When the build passes, the pull request is reviewed by another member of the team, and if approved, is merged into `master`.
+7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
 
 <TabbedImages>
 
@@ -33,13 +33,13 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 </TabbedImages>
 
-## The build pipeline
+## The Build Pipeline
 
-The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/master/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting". We edit this file to add, remove, or change build jobs.
+The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/master/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting".
 
-The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
+To add, remove, or change build jobs, we edit the pipeline file. The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
 
-## Monitoring and troubleshooting builds
+## Monitoring and Troubleshooting Builds
 
 Buildkite has live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
 
@@ -49,7 +49,7 @@ To view the logs for a build, scroll to the build checks at the bottom of the PR
 
 ![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
 
-## Setting up a new agent (Ubuntu)
+## Setting Up a New Agent (Ubuntu)
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
 
@@ -122,9 +122,11 @@ sudo systemctl enable docker
 
 For agents to push built `master` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
 
-Credentials are provided to the agent via env variables from agent hooks system. Specifically via the environment hook. The default location for this hook is `/etc/buildkite-agent/hooks/environment`. The default path for the agent's configuration file is `/etc/buildkite-agent/buildkite-agent.cfg`.
+Credentials are provided to the agent via env variables using [agent hooks](https://buildkite.com/docs/agent/v3/hooks#agent-hooks). Specifically using the environment hook. The default path for this hook is `/etc/buildkite-agent/hooks/environment`.
 
-See the following pages in the Buildkite documentation for reference:
+After the credentials are added, the agent needs to be marked as having the credentials by setting the `dockerhub=true` tag in the agent configuration file. The default path for this file is `/etc/buildkite-agent/buildkite-agent.cfg`.
+
+For more information about agent configuration and hooks, see the following pages in the Buildkite documentation:
 
 - <https://buildkite.com/docs/agent/v3/hooks>
 - <https://buildkite.com/docs/agent/v3/configuration>
