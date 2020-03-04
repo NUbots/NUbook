@@ -53,12 +53,6 @@ To view the logs for a build, scroll to the build checks at the bottom of the PR
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
 
-<Alert type="warning">
-
-**Note:** the final step below, [Install Docker Compose](#install-docker-compose), is not in the script, and must be done manually in order to install the latest version.
-
-</Alert>
-
 ### Install Docker
 
 Steps from <https://docs.docker.com/install/linux/docker-ce/ubuntu/>.
@@ -80,6 +74,17 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 # Install latest Docker CE
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+### Install Docker Compose
+
+```bash
+# Install Python 3 and pip
+sudo apt-get update
+sudo apt-get install python3.6 python3-pip
+
+# Install Docker Compose
+sudo pip3 install docker-compose
 ```
 
 ### Install and Configure Buildkite
@@ -130,7 +135,3 @@ For more information about agent configuration and hooks, see the following page
 
 - <https://buildkite.com/docs/agent/v3/hooks>
 - <https://buildkite.com/docs/agent/v3/configuration>
-
-### Install Docker Compose
-
-Follow the instructions here to install the latest version of Docker Compose: <https://docs.docker.com/compose/install/>

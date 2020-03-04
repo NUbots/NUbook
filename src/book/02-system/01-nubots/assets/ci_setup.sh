@@ -35,6 +35,12 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bi
 apt-get update
 apt-get install -y docker-ce docker-ce-cli containerd.io
 
+# Install Docker Compose
+echo "** Install Docker Compose **"
+apt-get update
+apt-get install -y python3.6 python3-pip
+pip3 install docker-compose
+
 # Install the Buildkite agent
 echo "** Install Buildkite **"
 echo "deb https://apt.buildkite.com/buildkite-agent stable main" | tee /etc/apt/sources.list.d/buildkite-agent.list
