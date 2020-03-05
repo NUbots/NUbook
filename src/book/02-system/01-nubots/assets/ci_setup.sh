@@ -39,7 +39,8 @@ apt-get install -y docker-ce docker-ce-cli containerd.io
 echo "** Install Docker Compose **"
 apt-get update
 apt-get install -y python3.6 python3-pip
-pip3 install docker-compose
+# Set HOME to the current user's home dir and run pip (what "sudo -H" does)
+HOME=$(eval echo ~$USER) pip3 install docker-compose
 
 # Install the Buildkite agent
 echo "** Install Buildkite **"
