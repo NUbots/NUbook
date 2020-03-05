@@ -2,16 +2,19 @@
 BUILDKITE_AGENT_TOKEN="<INSERT AGENT TOKEN HERE>"
 DOCKER_LOGIN_PASSWORD="<INSERT DOCKERHUB ACCOUNT PASSWORD HERE>"
 
-# Check for root
+# Check for root and bail if not
 echo "** Checking if running with root privileges **"
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 
+# Check that the agent token is set, and bail if not
 if [ "$BUILDKITE_AGENT_TOKEN" = "<INSERT AGENT TOKEN HERE>" ]; then
     echo "Buildkite agent token not set"
     exit 1
 else
     echo BUILDKITE_AGENT_TOKEN=${BUILDKITE_AGENT_TOKEN}
 fi
+
+# Check that the DockerHub password is set, and bail if not
 if [ "$DOCKER_LOGIN_PASSWORD" = "<INSERT DOCKERHUB ACCOUNT PASSWORD HERE>" ]; then
     echo "Dockerhub password not set"
     exit 1
@@ -62,13 +65,14 @@ systemctl enable docker
 echo "** Set up buildkite **"
 sed -i "s/xxx/${BUILDKITE_AGENT_TOKEN}/g" /etc/buildkite-agent/buildkite-agent.cfg
 
+# Start the agent and configure it to run on system startup
 systemctl enable buildkite-agent && systemctl start buildkite-agent
 
 # Make the DockerHub login password available to agents via an environment variable
 echo -e "set -e\nexport DOCKER_LOGIN_PASSWORD=\"${DOCKER_LOGIN_PASSWORD}\"" > /etc/buildkite-agent/hooks/environment
 chmod +x /etc/buildkite-agent/hooks/environment
 
-# Set `dockerhub` tag on the agent to indicate that it has the login credentials
+# Set the `dockerhub` tag on the agent to indicate that it has the login credentials
 grep -qxF 'tags="dockerhub=true"' /etc/buildkite-agent/buildkite-agent.cfg || echo 'tags="dockerhub=true"' >> /etc/buildkite-agent/buildkite-agent.cfg
 
 echo "** Done **"

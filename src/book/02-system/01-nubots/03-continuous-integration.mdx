@@ -65,7 +65,7 @@ sudo apt-get remove docker docker-engine docker.io containerd runc
 sudo apt-get update
 sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
-# Add Docker’s official GPG key
+# Add Docker's official GPG key
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
 # Add Docker's stable repository
@@ -96,7 +96,7 @@ Steps from <https://buildkite.com/docs/agent/v3/ubuntu>.
 echo "deb https://apt.buildkite.com/buildkite-agent stable main" | sudo tee /etc/apt/sources.list.d/buildkite-agent.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
 
-# Install Buildkite the agent
+# Install the Buildkite agent
 sudo apt-get update
 sudo apt-get install -y buildkite-agent
 
@@ -104,7 +104,7 @@ sudo apt-get install -y buildkite-agent
 # Replace INSERT-YOUR-AGENT-TOKEN-HERE with the token from Buildkite.
 sudo sed -i "s/xxx/INSERT-YOUR-AGENT-TOKEN-HERE/g" /etc/buildkite-agent/buildkite-agent.cfg
 
-# Start the agent and schedule it to run on system startup
+# Start the agent and configure it to run on system startup
 sudo systemctl enable buildkite-agent && sudo systemctl start buildkite-agent
 ```
 
@@ -119,7 +119,7 @@ sudo usermod -aG docker nubots           # Add nubots to the group
 sudo usermod -aG docker buildkite-agent  # Add buildkite-agent to the group
 newgrp docker                            # Activate group changes
 
-# Configure Docker to run on boot
+# Configure Docker to run on system startup
 sudo systemctl enable docker
 ```
 
