@@ -14,7 +14,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
    ```bash
    nuclear_role(
-     # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+     # FileWatcher, ConsoleLogHandler and SignalCatcher must go first. KinematicsConfiguration usually goes after these
      # and without it many roles do not run
      extension::FileWatcher
      support::SignalCatcher
@@ -35,7 +35,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
 2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/nubots/getting-started) or the [Build System page](/system/nubots/build-system).
 
-3. On the robot, enable compressed image recording in `/config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
+3. On the robot, enable compressed image recording in `config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
 
 4. Ensure the Left and Right camera serial numbers are correct in their respective configuration files (`Left.yaml` and `Right.yaml`).
 
@@ -51,11 +51,11 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
    ![A white board with black circles in rows.](./images/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
 
-8. Stop the binary and copy the nbs file created into the NUbots directory on your computer by using the command `scp <robot address>:<file path> .` on your computer in your NUbots directory. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
+8. Stop the binary and copy the nbs file created into the NUbots directory on your computer. Do this by running the command `scp <robot address>:<file path> .` from the NUbots directory on your computer. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
 
-   The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory on your computer. Check that it is before continuing to the next steps.
+   The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory. Check that it is before continuing to the next steps.
 
-9. Run the following commands if you have not done this before
+9. Run the following commands to install the dependencies of the camera calibration tool if you have not done this before
 
    ```bash
    sudo apt install protobuf-compiler libprotobuf-dev
@@ -71,4 +71,4 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
     `<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
 
-Once the calibration is done, the values in the camera configuration files should be changed. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once all the configuration that is wanted to be done is complete, make sure it is all commited and pushed on a branch and then make a pull request to get the changes into the master branch.
+Once the calibration is done, the values in the camera configuration files should be changed. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once all the configuration that is wanted to be done is complete, make sure it is all committed and pushed on a branch and then make a pull request to get the changes into the master branch.
