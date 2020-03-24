@@ -45,9 +45,17 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
 5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera.
 
-6. Check the transform matrix from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file.
+6. Check the [transform matrix](/system/nubots/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
 
-7. Run `./cameratest` on the robot and hold up a checkerboard, moving it around the area to cover most of the view over time. Make sure you cover all of the available image, and make sure that you tilt the board at different angles from the lens.
+$$
+\text{Hpc} = \begin{bmatrix}
+\cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
+0 & 1 & 0 & 0.033795 \\
+-\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
+0 & 0 & 0 & 1 \end{bmatrix}
+$$
+
+7. Run `./cameratest` on the robot and hold up a board as shown in the below image. Move the board around so as to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
    ![A white board with black circles in rows.](./images/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
 
