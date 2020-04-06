@@ -45,7 +45,7 @@
 
   a {
     @apply text-nubots-700;
-    @apply underline;
+    @apply underline break-words;
 
     strong {
       @apply font-bold;
@@ -75,7 +75,7 @@
     @apply text-sm;
     @apply px-1;
     @apply leading-none;
-    @apply whitespace-no-wrap;
+    @apply whitespace-pre-line;
     @apply text-red-600;
     @apply font-mono;
     @apply align-baseline;
