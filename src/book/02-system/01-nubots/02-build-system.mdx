@@ -268,28 +268,23 @@ To run roles locally on your system use the `run` command of `b` as follows
 
 <Alert type="warning">
 
-Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
+Important things to note when using the `run` command
+ - Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
+ - When using the debugging utilities you should recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` (`./b configure -i`) otherwise you will not get file or line number information in your stack traces.
 
 </Alert>
 
 The `run` command provides some options to help you debug your roles.
 
-<Alert type="warning">
-
-Be sure that you are using the `generic` target for this (`./b target generic`). You will likely want to recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` otherwise you will likely get useless information.
-
-</Alert>
-
-
-| Subcommand     | Description                                                                              |
-| -------------- | ---------------------------------------------------------------------------------------- |
-| --asan         | Enables address sanitisation, a fast memory error detector.                              |
-| --gdb          | Runs selected role inside of GDB to enable debugging.                                    |
-| --valgrind     | Runs selected role inside of valgrind to enable detection of memory errors.              |
+| Subcommand | Description                                                                 |
+| ---------- | --------------------------------------------------------------------------- |
+| --asan     | Enables address sanitisation, a fast memory error detector.                 |
+| --gdb      | Runs selected role inside of GDB to enable debugging.                       |
+| --valgrind | Runs selected role inside of valgrind to enable detection of memory errors. |
 
 In order to use ASan you must recompile your role after setting `USE_ASAN` to `ON` in the cmake options (`./b configure -i`).
 
-Currently, using the `--asan` option adds an environment variable that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to revocer the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
+Currently, using the `--asan` option adds an environment variable that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
 ```sh
 ASAN_OPTIONS=option1=value1:option2=value ./b run --asan keyboardwalk
@@ -297,7 +292,7 @@ ASAN_OPTIONS=option1=value1:option2=value ./b run --asan keyboardwalk
 
 <Alert type="info">
 
-If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of docker that have persistent write access.
+If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of the Docker container that have persistent write access.
 
 </Alert>
 
@@ -309,22 +304,13 @@ While it is possible to run GDB and valgrind simultaneously, two separate proces
 
 <Alert type="info">
 
-If you need to run GDB and valgrind simulataneously, have a look at [this page](https://www.valgrind.org/docs/manual/manual-core-adv.html#manual-core-adv.gdbserver).
+For further information on using ASan, GDB, and valgrind check out these pages
 
-</Alert>
-
-<Alert type="info">
-
-If you need help deciding between ASan and valgrind have a look at [this page](https://github.com/google/sanitizers/wiki/AddressSanitizerComparisonOfMemoryTools).
-
-</Alert>
-
-<Alert type="info">
-
-More information about these tools can be found here
-[Address Sanitiser](https://github.com/google/sanitizers/wiki)
-[GDB](https://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_toc.html)
-[Valgrind](https://valgrind.org/docs/manual/quick-start.html)
+- [Address Sanitiser](https://github.com/google/sanitizers/wiki)
+- [GDB](https://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_toc.html)
+- [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
+- [Running GDB and valgrind simulataneously](https://www.valgrind.org/docs/manual/manual-core-adv.html#manual-core-adv.gdbserver).
+- [Choosing between ASan and valgrind](https://github.com/google/sanitizers/wiki/AddressSanitizerComparisonOfMemoryTools).
 
 </Alert>
 
