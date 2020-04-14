@@ -269,8 +269,9 @@ To run roles locally on your system use the `run` command of `b` as follows
 <Alert type="warning">
 
 Important things to note when using the `run` command
- - Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
- - When using the debugging utilities you should recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` (`./b configure -i`) otherwise you will not get file or line number information in your stack traces.
+
+- Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
+- When using the debugging utilities you should recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` (`./b configure -i`) otherwise you will not get file or line number information in your stack traces.
 
 </Alert>
 
