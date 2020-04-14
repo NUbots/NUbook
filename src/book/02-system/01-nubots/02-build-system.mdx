@@ -284,6 +284,12 @@ The `run` command provides some options to help you debug your roles.
 
 In order to use ASan you must recompile your role after setting `USE_ASAN` to `ON` in the cmake options (`./b configure -i`).
 
+<Alert type="info">
+
+Be sure to set `USE_ASAN` to `OFF` and `CMAKE_BUILD_TYPE` to `MinSizeRel` once you are finished debugging. Both ASan and Debug builds will slow your roles runtime down a lot.
+
+</Alert>
+
 Currently, using the `--asan` option adds an environment variable that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
 ```sh
