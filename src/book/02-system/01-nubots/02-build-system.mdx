@@ -298,7 +298,7 @@ ASAN_OPTIONS=option1=value1:option2=value ./b run --asan keyboardwalk
 
 <Alert type="info">
 
-If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of the Docker container that have persistent write access.
+If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of the Docker container that have persistent write access. The default log file location is `/home/nubots/NUbots/asan.log.PID` which corresponds to the NUbots source code directory. `PID` is the process ID of your role in the Docker container, ASan will always add this.
 
 </Alert>
 
