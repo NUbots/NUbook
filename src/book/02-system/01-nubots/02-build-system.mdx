@@ -279,7 +279,6 @@ The `run` command provides some options to help you debug your roles.
 
 | Subcommand | Description                                                                 |
 | ---------- | --------------------------------------------------------------------------- |
-| --asan     | Enables address sanitisation, a fast memory error detector.                 |
 | --gdb      | Runs selected role inside of GDB to enable debugging.                       |
 | --valgrind | Runs selected role inside of valgrind to enable detection of memory errors. |
 
@@ -291,10 +290,10 @@ Be sure to set `USE_ASAN` to `OFF` and `CMAKE_BUILD_TYPE` to `MinSizeRel` once y
 
 </Alert>
 
-Currently, using the `--asan` option adds an environment variable that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
+When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
 ```sh
-ASAN_OPTIONS=option1=value1:option2=value ./b run --asan keyboardwalk
+ASAN_OPTIONS=option1=value1:option2=value ./b run keyboardwalk
 ```
 
 <Alert type="info">
