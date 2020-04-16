@@ -8,13 +8,13 @@ slug: /guides/nubook/troubleshooting
 
 ## My newly added page is not showing up
 
-When you add a new page, you should remove the gatsby build `cache` and `public` folder:
+When you add a new page, you should remove the gatsby build `.cache` and `public` folder:
 
 ```sh
 rm -rf .cache public
 ```
 
-## I'm getting wierd errors when running `yarn dev`
+## I'm getting weird errors when running `yarn dev`
 
 Usually this happens when there's a problem with one or more packages in `node_modules`. Try deleting `node_modules` and running `yarn` again
 
