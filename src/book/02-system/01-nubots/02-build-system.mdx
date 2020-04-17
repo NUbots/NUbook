@@ -308,6 +308,8 @@ Since ASan and valgrind perform the same task they cannot be used in conjunction
 
 While it is possible to run GDB and valgrind simultaneously, two separate processes need to be started and then linked together. While this is technically possible, it has currently been assigned to the `too hard` basket and, as such, this option has been disabled and an exception will be thrown if you try to do this.
 
+When using GDB to debug curses-enabled roles (e.g. `keyboardwalk`) and a breakpoint is triggered or an error occurs the role will be halted and control is returned to GDB. However, the role will likely be halted in a way that prevents curses from being disabled, leaving the screen in a reasonably unreadable state. To fix this, use the `reset` command and the screen should return to normal. You can then use `bt` or `bt full` to get a stack trace and continue debugging as normal.
+
 <Alert type="info">
 
 For further information on using ASan, GDB, and valgrind check out these pages
