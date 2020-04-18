@@ -10,7 +10,11 @@ Read on if you want to add or update content.
 
 ### Ubuntu
 
-NOTE If you are using anything other than Ubuntu we assume that you know what you are doing and know how to modify the following commands appropriately
+---
+
+**NOTE** If you are using anything other than Ubuntu we assume that you know what you are doing and know how to modify the following commands appropriately
+
+---
 
 0. Navigate to the directory where you want to install NUbook
 
