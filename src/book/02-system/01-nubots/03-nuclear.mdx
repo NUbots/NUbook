@@ -277,6 +277,34 @@ The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<Kin
 
 As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` and the `KinematicsModel` messages. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
 
+Looking at line 133 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/master/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L133) we can see an example of an `on<IO>` reaction.
+
+```cpp
+on<IO>(STDIN_FILENO, IO::READ).then([this] {
+    // Get the character the user has typed
+    switch (getch()) {
+        ...
+    }
+
+    // Update whatever visual changes we made
+    refreshView();
+});
+```
+
+In this case the DSL request is `on<IO>` and the runtime arguments are `(STDIN_FILENO, IO::READ)` which directs the PowerPlant to monitor for new data to read on the standard input file (i.e. the keybaord). Finally, the callback is
+
+```cpp
+then([this] {
+    // Get the character the user has typed
+    switch (getch()) {
+        ...
+    }
+
+    // Update whatever visual changes we made
+    refreshView();
+});
+```
+
 ## Emit Statements
 
 An example of local emission can be seen on line 590 of [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L590) where we call
@@ -294,3 +322,20 @@ powerplant.emit_shared<Scope::NETWORK>(std::move(gameState), "nusight", true);
 ```
 
 This tells the PowerPlant to emit something across the network. In this case, we are emitting `gameState`, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
+
+Looking at line 112 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/master/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L112), we can see an example of an `INITIALIZE` scoped emit statement.
+
+You will notice that this lambda accepts no parameters, instead it uses the `getch()` function to read a character from keyboard.
+
+```cpp
+emit<Scope::INITIALIZE>(std::make_unique<RegisterAction>(RegisterAction{
+    id,
+    "Script Tuner",
+    {std::pair<float, std::set<LimbID>>(
+        1, {LimbID::LEFT_LEG, LimbID::RIGHT_LEG, LimbID::LEFT_ARM, LimbID::RIGHT_ARM, LimbID::HEAD})},
+    [this](const std::set<LimbID>&) {},
+    [this](const std::set<LimbID>&) {},
+    [this](const std::set<ServoID>&) {}}));
+```
+
+This tells the PowerPlant to emit something at system initialization. In this case, we are emitting a [`RegisterAction`](https://github.com/NUbots/NUbots/blob/master/shared/utility/behaviour/Action.h#L34) which registers the `ScriptTuner` module with the subsumption system.
