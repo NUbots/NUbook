@@ -81,3 +81,19 @@ The bottom of the interface shows what commands are available. It does not show 
 | `StandUpBack.yaml`   | The robot gets up from its back and moves into a standing position.      |
 | `StandUpFront.yaml`  | The robot gets up from its front and moves into a standing position.     |
 | `Zombie.yaml`        | The robot moves into a standing zombie position, with arms straight out. |
+
+## Modifying and Adding Scripts
+
+When installing NUbots code onto a robot when tuning scripts, ensure you are using [the correct flag for configuration files when installing](/system/nubots/build-system#install), depending on whether you want to overwrite scripts or not overwrite scripts. Ensure you have installed the `scripttuner` and `scriptrunner` binaries by turning `scripttuner.role` and `scriptrunner.role` ON in `./b configure -i`.
+
+Use script tuner as detailed above to make or edit your script. It is a good idea to have one person using script tuner and another person holding the robot and moving the joints to new positions. Ensure you wait a few seconds before closing a script after saving to allow it time to save.
+
+When you have finished making or editing your script, copy it across to your computer using
+
+```bash
+scp nubots@<address>:<path/to/script> <path/on/your/computer>
+```
+
+where `<address>` is the address of the robot, `<path/to/script>` is the path to the script, and `<path/on/your/computer>` is the path you want to copy the script to. Run this command on your computer.
+
+To get the changes into the master branch on GitHub, you will need to make a new branch and create a pull request.
