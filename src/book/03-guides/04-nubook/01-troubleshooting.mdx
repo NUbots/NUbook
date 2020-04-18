@@ -2,13 +2,13 @@
 section: Guides
 chapter: NUbook
 title: Troubleshooting
-description: Learn how to troubleshoot common errors when working with NUbook.
+description: Solutions to common problems you might encounter when working with NUbook.
 slug: /guides/nubook/troubleshooting
 ---
 
 ## Why is my newly added page is not showing up?
 
-When you add a new page, you should remove the gatsby build `.cache` and `public` folder:
+When you add a new page, you should remove the Gatsby cache and public folders:
 
 ```sh
 rm -rf .cache public
@@ -16,7 +16,7 @@ rm -rf .cache public
 
 ## Why am I getting weird errors when I run `yarn dev`?
 
-Usually this happens when there's a problem with one or more packages in `node_modules`. Try deleting `node_modules` and running `yarn` again
+Usually this happens when there's a problem with one or more packages in `node_modules`. Try deleting `node_modules` and running `yarn` to reinstall dependencies:
 
 ```sh
 rm -rf node_modules && yarn
@@ -24,20 +24,20 @@ rm -rf node_modules && yarn
 
 Then try running `yarn dev` again.
 
-## I am getting errors from 'Prettier' when running `yarn dev`! / I can't push to GitHub!
+## Why am I getting errors from Prettier when running `yarn dev`? / Why can't I push to GitHub?
 
-If NUbook is not formatted correctly, you may not see any changes appear NUbook, and you will not be able to push to GitHub. To fix this, run:
+If a page is not formatted correctly, changes to that page may not show up in the NUbook preview, and you will not be able to push to GitHub. To fix this, run:
 
-```bash
+```sh
 yarn format --fix
 ```
 
-## My change is not showing up in NUbook!
+## Why are my changes not showing up in NUbook?
 
 Make sure you have saved the file.
 
-If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folder. run
+If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folders. To do so, run:
 
-```bash
+```sh
 rm -rf .cache public && yarn dev
 ```
