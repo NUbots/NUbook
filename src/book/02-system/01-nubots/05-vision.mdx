@@ -25,6 +25,8 @@ Because the vectors are generated in the space around the camera, the sample is 
 
 The height and orientation of the camera is tracked using the kinematics and inertial measurement unit of the robot. The radius of the soccer ball is given. The unit vectors only need to be calculated once for each height and radius pair. As the robot walks its height varies. A series of Visual Meshes for different heights are calculated on startup. For each image this information is recorded and the appropriate Visual Mesh is chosen. A binary search pattern is used to select the vectors that will become points on the image based on the camera's orientation. The partitions of the binary search pattern are built on startup and the search is run in real-time. Every training and run-time image is converted into the mesh before the network is run. The network labels each point of the mesh with the probability it belongs to an object class. A post-processing algorithm based on the probabilities of the mesh can cluster the sample points to determine an object's position.
 
+![The classifications from the Visual Mesh neural network.](./images/vision-green-horizon-balls-detections.png 'The classifications from the Visual Mesh neural network.')
+
 # Post Processing
 
 From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. Firstly, all points that the Visual Mesh has identified as either field points or field line points are clustered into connected regions and, each cluster is then either merged or discarded using some heuristics until a single cluster remains. Finally, an upper convex hull algorithm is applied to the final cluster determine the edge of the field.
@@ -36,3 +38,5 @@ The goal post detector follows a similar structure to the ball detector. Cluster
 At present, a field line detector is not implemented, but will likely be implemented before the next competition.
 
 All calculations in all detectors are done in 3D world coordinates.
+
+![The full output of the vision system showing the green horizon, ball and goal detections.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
