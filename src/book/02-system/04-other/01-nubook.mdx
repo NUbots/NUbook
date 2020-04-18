@@ -15,48 +15,49 @@ Read on if you want to add or update content.
 ### Ubuntu
 
 <Alert>
-If you are using anything other than Ubuntu we assume that you know what you are doing and know how to modify the following commands appropriately
+  If you are using anything other than Ubuntu we assume that you know what you
+  are doing and know how to modify the following commands appropriately
 </Alert>
 
 0. Navigate to the directory where you want to install NUbook
 
-    ```sh
-    cd <path>
-    ```
+   ```sh
+   cd <path>
+   ```
 
 1. Install git, nodejs and the node package manager, npm
 
-    ```sh
-    sudo apt update
-    sudo apt-get install git nodejs npm
-    ```
+   ```sh
+   sudo apt update
+   sudo apt-get install git nodejs npm
+   ```
 
-2. Use npm to install yarn
+1. Use npm to install yarn
 
-    ```sh
-    sudo npm install -g yarn
-    ```
+   ```sh
+   sudo npm install -g yarn
+   ```
 
-3. Clone this repo and `cd` into the cloned directory
+1. Clone this repo and `cd` into the cloned directory
 
-    ```sh
-    git clone https://github.com/NUbots/NUbook.git
-    cd NUbook
-    ```
+   ```sh
+   git clone https://github.com/NUbots/NUbook.git
+   cd NUbook
+   ```
 
-4. Install dependencies
+1. Install dependencies
 
-    ```sh
-    yarn
-    ```
+   ```sh
+   yarn
+   ```
 
-5. Run the [Gatsby](https://www.gatsbyjs.org/) development server
+1. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
-    ```sh
-    yarn dev
-    ```
+   ```sh
+   yarn dev
+   ```
 
-6. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
+1. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
 ### Mac OS
 
@@ -64,35 +65,35 @@ If you are using anything other than Ubuntu we assume that you know what you are
 
 2. Install git, node and yarn
 
-    ```sh
-    brew upgrade
-    brew install git node && brew install yarn
-    ```
+   ```sh
+   brew upgrade
+   brew install git node && brew install yarn
+   ```
 
 3. Navigate to the directory where you want to install NUbook
 
-    ```sh
-    cd <path>
-    ```
+   ```sh
+   cd <path>
+   ```
 
 4. Clone this repo and `cd` into the cloned directory
 
-    ```sh
-    git clone https://github.com/NUbots/NUbook.git
-    cd NUbook
-    ```
+   ```sh
+   git clone https://github.com/NUbots/NUbook.git
+   cd NUbook
+   ```
 
 5. Install dependencies
 
-    ```sh
-    yarn
-    ```
+   ```sh
+   yarn
+   ```
 
 6. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
-    ```sh
-    yarn dev
-    ```
+   ```sh
+   yarn dev
+   ```
 
 7. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
@@ -103,9 +104,9 @@ All additions and edits are done through GitHub pull requests. To add or edit co
 1. Clone the repo, install dependencies, and run the development server as shown in [Getting started](#getting-started) above.
 2. Create a new branch for your changes, in the format `your_last_name/short_description_of_change`:
 
-    ```sh
-    git checkout -b paye/add_2019_debrief
-    ```
+   ```sh
+   git checkout -b paye/add_2019_debrief
+   ```
 
 3. Make your changes by adding or editing MDX files in [`src/book/`](src/book/). See below for how to write and organise pages.
 4. Preview your changes by visiting [localhost:8000](http://localhost:8000) in a browser.
