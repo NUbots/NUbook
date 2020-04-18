@@ -2,37 +2,60 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d89a0d60-217a-4563-ad03-65ccc90b9222/deploy-status)](https://app.netlify.com/sites/nubook/deploys)
 
-NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at https://nubook.netlify.com/.
+NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
 
 Read on if you want to add or update content.
 
 ## Getting started
 
-### Ubuntu
+### Install prerequisites
 
----
+You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [Yarn](https://classic.yarnpkg.com/en/) installed.
 
-**NOTE** If you are using anything other than Ubuntu we assume that you know what you are doing and know how to modify the following commands appropriately
+<details>
+<summary>Ubuntu installation instructions</summary>
 
----
+1. Install Git by running the following commands:
 
-0. Navigate to the directory where you want to install NUbook
+```
+sudo apt update
+sudo apt install git
+```
+
+2. Install the latest version of Node.js by following the instructions [here](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions) to (pick the latest version).
+3. Install the latest version of Yarn by following the instructions [here](https://classic.yarnpkg.com/en/docs/install#debian-stable).
+
+</details>
+
+<details>
+<summary>Windows installation instructions</summary>
+
+1. Download and install Git from <https://git-scm.com/download/win>
+2. Download and install Node.js from <https://nodejs.org/en/> (pick the LTS version)
+3. Download and install Yarn from <https://classic.yarnpkg.com/latest.msi>
+
+</details>
+
+<details>
+<summary>macOS installation installation</summary>
+
+1. Install Homebrew by following the instructions at https://brew.sh/
+
+2. Install Git, Node.js and Yarn
+
+```sh
+brew upgrade
+brew install git node && brew install yarn
+```
+
+</details>
+
+### Install NUbook
+
+1. Navigate to the directory where you want to install NUbook
 
 ```sh
 cd <path>
-```
-
-1. Install git, nodejs and the node package manager, npm
-
-```sh
-sudo apt update
-sudo apt-get install git nodejs npm
-```
-
-2. Use npm to install yarn
-
-```sh
-sudo npm install -g yarn
 ```
 
 3. Clone this repo and `cd` into the cloned directory
@@ -55,44 +78,6 @@ yarn dev
 ```
 
 6. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
-
-### Mac OS
-
-1. Install homebrew by following the directions at https://brew.sh/
-
-2. Install git, node and yarn
-
-```sh
-brew upgrade
-brew install git node && brew install yarn
-```
-
-3. Navigate to the directory where you want to install NUbook
-
-```sh
-cd <path>
-```
-
-4. Clone this repo and `cd` into the cloned directory
-
-```sh
-git clone https://github.com/NUbots/NUbook.git
-cd NUbook
-```
-
-5. Install dependencies
-
-```sh
-yarn
-```
-
-6. Run the [Gatsby](https://www.gatsbyjs.org/) development server
-
-```sh
-yarn dev
-```
-
-7. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
 ## Contributing content
 
@@ -285,4 +270,3 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 ![Screenshot of deploy previews link](./deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
-
