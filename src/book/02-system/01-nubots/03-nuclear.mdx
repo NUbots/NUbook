@@ -51,7 +51,7 @@ For reactions to occur, at least one Binding DSL word should be present in the D
 | DSL Word      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Trigger       | Is used to request data dependent reactions. `on<Trigger<T>>()` will execute the task whenever T is emitted into the system. Read only access to T is given via a callback. `on<Trigger<T1, T2, ... >>()` requires multiple types and will only trigger when all the trigger types have been emitted at least once since the last occurrence of the event.                                                                                                    |
-| With          | Is used to define any extra data which should be provided to a subscribing a reaction. This should be fused with at least one other DSL word as the use of this word alone will not trigger a reaction within the system. `on<Trigger<T1>, With<T2>>()` will trigger when T1 is emitted into the system. It will give read-only access of T1 and T2 to the callback. If T2 is not present when T1 is emitted to the system, the reaction will not run.        |
+| With          | Is used to define any extra data which should be provided to a subscribing reaction. This should be fused with at least one other DSL word as the use of this word alone will not trigger a reaction within the system. `on<Trigger<T1>, With<T2>>()` will trigger when T1 is emitted into the system. It will give read-only access of T1 and T2 to the callback. If T2 is not present when T1 is emitted to the system, the reaction will not run.          |
 | Last          | Instructs the PowerPlant to store the last $n$ messages received (of the associated type) to the cache and provide read-only access to the subscribing reaction. `on<Last<n, Trigger<T, ...>>>()` will store the next $n$ messages of each of the `Trigger` types in a list with the oldest message first. After $n$ messages are stored, the trigger of a new reaction will cause the oldest message to be dropped and the newest copy appended to the list. |
 | Optional      | Is used to signify any optional properties in the DSL request. `on<Trigger<T1>, Optional<With<T2>>>()` will run when T1 is emitted into the system. If T2 is available, then the reaction will be given read-only access to the most recent emission of T2. If it is not available, it will give the callback a `nullptr`.                                                                                                                                    |
 | Single        | Is used to specify that only one instance of the associated reaction can execute at any given point during runtime. `on<Trigger<T, ...>, Single>()` will only allow one task for this reaction to be executed or in the queue at any given time. This should be fused with another DSL word, such as `Trigger` in the example. This word is equivalent to `Buffer<1>`.                                                                                        |
@@ -98,7 +98,7 @@ Emit statements are used by Reactors wanting to emit data to the PowerPlant. Whe
 
 Any data emitted to the PowerPlant will be sent with a unique pointer. The PowerPlant will take ownership of this pointer and run any necessary callbacks to trigger reactions.
 
-Data can be emitted under varying scopes. These can be local or network emissions. More can be found on emit statements in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#emit-statements).
+Data can be emitted under varying scopes. These can be local or network emissions. More information can be found on emit statements in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#emit-statements).
 
 ### Local Emissions
 
@@ -122,7 +122,7 @@ Network emissions can be used to send data through the network on which the curr
 
 # Managing Reactions
 
-During system runtime, executing reactions can be managed via their associated reaction handles. A reaction handle is provided for binding on statements. Once an on statement has been bound, the reaction handle will be enabled. If necessary, reactions can toggle between enabled and disabled during runtime.
+During system runtime, executing reactions can be managed via their associated reaction handles. A reaction handle is provided for binding `on` statements. Once an `on` statement has been bound, the reaction handle will be `enabled`. If necessary, reactions can toggle between `enabled` and `disabled` during runtime.
 
 | Handle           | Description                                                                                                                                                                              |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -148,14 +148,14 @@ There are six main directories in the NUClear Roles system and can be seen in th
 | `message`   | contains the message types for the system. The `message` folder is located in the `shared` directory. This is broken into the various subsystems much like the `module` directory.                  |
 | `extension` | contains any NUClear DSL extensions, such as `Configuration`. This is located in the `shared` directory.                                                                                            |
 | `utility`   | contains utility code that is shared amongst NUClear Reactors, such as Kinematics and Mathematics utilities. This is located in the `shared` directory.                                             |
-| `roles`     | contains all the NUClear roles files.                                                                                                                                                               |
+| `roles`     | contains all the NUClear role files.                                                                                                                                                                |
 | `tools`     | contains any command line extensions for the `b` script, such as `build` and `configure`.                                                                                                           |
 
 ## Roles
 
-Roles are executables containing all the modules to be used. They are called `<executablename>.role`, where `<executablename>` is the name of the final binary that will be created.
+Roles are executables containing a specified list of modules. They are called `<executablename>.role`, where `<executablename>` is the name of the final binary that will be created.
 
-The name of each module is described as a fully qualified c++ class without the initial module namespace. These modules will then be installed in order when the executable is run. This is important to note as it means modules that have dependencies on other modules may want to be lower in the list. For example installing log handler modules should happen before installing other modules so their output can be seen. It will use this name to locate the module so the directory structure must match the name. An example of a role file would be:
+The name of each module is described as a fully qualified C++ class without the initial `module` namespace. These modules will then be installed in order when the executable is run. This is important to note as it means modules that have dependencies on other modules may want to be lower in the list. For example installing log handler modules should happen before installing other modules so their output can be seen. It will use this name to locate the module so the directory structure must match the name. An example of a role file would be:
 
 ```cpp
 NUCLEAR_ROLE(
@@ -197,9 +197,9 @@ NBS files are NUClear Binary Stream files. To make it easier to serialise stream
 
 | Name      | Type    | Description                                                                       |
 | --------- | ------- | --------------------------------------------------------------------------------- |
-| header    | char[3] | the header sequence 0xE2, 0x98, 0xA2 (the radioactive symbol ☢ in utf-8)          |
+| header    | char[3] | the header sequence 0xE2, 0x98, 0xA2 (the radioactive symbol ☢ in UTF-8)          |
 | size      | uint32  | the size of the frame after this byte in bytes                                    |
-| timestamp | uint64  | the timestamp of this frame in microseconds. Does not have to be a utc timestamp. |
+| timestamp | uint64  | the timestamp of this frame in microseconds. Does not have to be a UTC timestamp. |
 | hash      | uint64  | a 64 bit hash that identifies the type of the message                             |
 | payload   | char\*  | the serialised payload bytes                                                      |
 
@@ -207,7 +207,7 @@ All values within this format are little endian.
 
 ## Neutrons
 
-Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `/shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
+Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
 
 ```cpp
 syntax = "proto3";
@@ -239,9 +239,9 @@ The first on statement is located at [line 94](https://github.com/NUbots/NUbots/
 });
 ```
 
-This spans 94 line to line 192, but has been shortened here.
+This spans lines 94 to 192, but has been shortened here.
 
-The DSL request is `on<Configuration>`. This means .... The runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
+The DSL request is `on<Configuration>`. This means the runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
 
 ```cpp
 then([this](const Configuration& config) {
@@ -267,7 +267,7 @@ on<Last<20, Trigger<DarwinSensors>>, Single>().then(
 });
 ```
 
-The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a list. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
+The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a `std::list`. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
 
 None of the words used require runtime arguments, so we do not have any here. The callback is
 
@@ -278,7 +278,7 @@ then(
 });
 ```
 
-The parameter for this lambda statement is a list. This is because we used the word `Last`. The list will contain those last 20 received messages as specified in the DSL request.
+The parameter for this lambda statement is a `std::list`. This is because we used the word `Last`. The list will contain those last 20 received messages as specified in the DSL request. It is also valid to use a `std::vector` for this parameter.
 
 The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L245) in `SensorFilter.cpp` uses `Trigger`, `Optional`, `With`, `Single`, and `Priority`.
 
@@ -294,7 +294,7 @@ on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Singl
 
 The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
 
-As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` message. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
+As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` and the `KinematicsModel` messages. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
 
 ## Emit Statements
 
@@ -312,4 +312,4 @@ Looking at line 236 of [`GameController.cpp`](https://github.com/NUbots/NUbots/b
 powerplant.emit_shared<Scope::NETWORK>(std::move(gameState), "nusight", true);
 ```
 
-This tells the powerplant to emit something across the network. In this case, we are emitting gameState, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
+This tells the PowerPlant to emit something across the network. In this case, we are emitting `gameState`, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
