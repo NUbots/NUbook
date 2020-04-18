@@ -1,31 +1,34 @@
 ---
 section: Guides
 chapter: Hardware
-title: Servo Calibration
+title: Servo Setup and Calibration
 description: Discover how to calibrate servos.
 slug: /guides/hardware/servo-calibration
 ---
 
-Testing
+The servos come with a default id and baudrate. When a servo is firt used, these parameters must be updated. Servo calibration is performed when a servo has the gearset relplaced. A link to the required software can be found at:
 
-To calibrate the servos please follow the following instructions:
+https://www.robotis.com/service/download.php?no=1670
 
-1. Connect the device to your computer and its power supply
+To setup or calibrate the servos please follow the following instructions:
 
-2. Connect the servo to the device
+1. Connect the servo to the power supply and dynamixel programming tool to your PC via the USB connection as shown TODO Insert Picture
 
-3. Open Dynamixel Wizard
+2. Open Dynamixel Wizard
 
-4. Tools > Calibrate
+3. In the options menu, set the baudrate to the baudrate of the servo
 
-5. Read the instructions and click next
+   - 1000000 bps (Calibration)
+   - 57600 bps (Setup)
+   - TODO Insert Picture
 
-6. Choose the correct servo model from the list. **(MX-64 or MX-106 NOT the 2.0 versions)**
+4. Select the COM Port that the dynamixel tool is connected to, if unknown Select All.
 
-7. Select the communications port _(which ones normally?)_
+5. Start the scan
 
-8. teasdd
-   The current servo position is shown on the servo by the dot on the driveshaft.
+6. TODO Need a servo to see what happens
+
+7. The current servo position is shown on the servo by the dot on the driveshaft.
    Move the servo to the first position (straight up)
    Click confirm
    Follow the instructions on the screen for all 4 positions
