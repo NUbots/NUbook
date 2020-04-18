@@ -6,96 +6,81 @@ description: The NUbots team handbook and documentation.`
 slug: /system/nubook
 ---
 
-NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at https://nubook.netlify.com/.
+NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
 
 Read on if you want to add or update content.
 
 ## Getting started
 
-### Ubuntu
+### Install prerequisites
 
-<Alert>
-  If you are using anything other than Ubuntu we assume that you know what you
-  are doing and know how to modify the following commands appropriately
-</Alert>
+You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [Yarn](https://classic.yarnpkg.com/en/) installed.
 
-0. Navigate to the directory where you want to install NUbook
+<details>
+<summary>Ubuntu installation instructions</summary>
 
-   ```sh
-   cd <path>
+1. Install Git by running the following commands:
+
    ```
-
-1. Install git, nodejs and the node package manager, npm
-
-   ```sh
    sudo apt update
-   sudo apt-get install git nodejs npm
+   sudo apt install git
    ```
 
-1. Use npm to install yarn
+2. Install the latest version of Node.js by following the instructions [here](https://github.com/nodesource/distributions/blob/master/README.md#installation-instructions) to (pick the latest version).
+3. Install the latest version of Yarn by following the instructions [here](https://classic.yarnpkg.com/en/docs/install#debian-stable).
 
-   ```sh
-   sudo npm install -g yarn
-   ```
+</details>
 
-1. Clone this repo and `cd` into the cloned directory
+<details>
+<summary>Windows installation instructions</summary>
 
-   ```sh
-   git clone https://github.com/NUbots/NUbook.git
-   cd NUbook
-   ```
+1. Download and install Git from <https://git-scm.com/download/win>
+2. Download and install Node.js from <https://nodejs.org/en/> (pick the LTS version)
+3. Download and install Yarn from <https://classic.yarnpkg.com/latest.msi>
 
-1. Install dependencies
+</details>
 
-   ```sh
-   yarn
-   ```
+<details>
+<summary>macOS installation installation</summary>
 
-1. Run the [Gatsby](https://www.gatsbyjs.org/) development server
-
-   ```sh
-   yarn dev
-   ```
-
-1. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
-
-### Mac OS
-
-1. Install homebrew by following the directions at https://brew.sh/
-
-2. Install git, node and yarn
+1. Install Homebrew by following the instructions at <https://brew.sh/>
+2. Install Git, Node.js and Yarn
 
    ```sh
    brew upgrade
    brew install git node && brew install yarn
    ```
 
-3. Navigate to the directory where you want to install NUbook
+</details>
+
+### Install NUbook
+
+1. Navigate to the directory where you want to install NUbook
 
    ```sh
    cd <path>
    ```
 
-4. Clone this repo and `cd` into the cloned directory
+2. Clone this repo and `cd` into the cloned directory
 
    ```sh
    git clone https://github.com/NUbots/NUbook.git
    cd NUbook
    ```
 
-5. Install dependencies
+3. Install dependencies
 
    ```sh
    yarn
    ```
 
-6. Run the [Gatsby](https://www.gatsbyjs.org/) development server
+4. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
    ```sh
    yarn dev
    ```
 
-7. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
+5. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
 ## Contributing content
 
@@ -124,9 +109,9 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 - Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
-```md
-![Image description for search engines and screen readers](./images/image.png 'Image caption')
-```
+  ```md
+  ![Image description for search engines and screen readers](./images/image.png 'Image caption')
+  ```
 
 ### Adding syntax-highlighted code blocks
 
@@ -149,17 +134,17 @@ int main() {
 
 - For inline math, wrap TeX-formatted content with a `$`:
 
-```md
-The equation is $c^2 = a^2 + b^2$.
-```
+  ```md
+  The equation is $c^2 = a^2 + b^2$.
+  ```
 
 - For math blocks, wrap with `$$` on separate lines:
 
-```md
-$$
-e^{i\phi} = \cos(\phi) + i\sin(\phi)
-$$
-```
+  ```md
+  $$
+  e^{i\phi} = \cos(\phi) + i\sin(\phi)
+  $$
+  ```
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/docs/support_table.html for supported symbols and functions.
 
@@ -238,27 +223,27 @@ Pages are written in MDX files and stored in section and chapter folders in the 
 - Each page's filename is numbered to create the order that will be used for menus and the previous/next page navigation links.
 - Each page has "frontmatter" at the top of the file specifying details such as title and description:
 
-```md
----
-section: The NUbots Team
-chapter: Introduction
-title: Introduction to NUbots
-description: Learn about what we do, key people, and where to find the lab.
-slug: /
----
-```
+  ```md
+  ---
+  section: The NUbots Team
+  chapter: Introduction
+  title: Introduction to NUbots
+  description: Learn about what we do, key people, and where to find the lab.
+  slug: /
+  ---
+  ```
 
 - The frontmatter is written in [YAML](https://gettaurus.org/docs/YAMLTutorial/), with the following supported fields:
 
-| Field         | Type    | Presence | Description                                                                 |
-| ------------- | ------- | -------- | --------------------------------------------------------------------------- |
-| `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
-| `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
-| `title`       | String  | Required | The page title                                                              |
-| `description` | String  | Required | A short, one-sentence description of the page content                       |
-| `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
-| `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
-| `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
+  | Field         | Type    | Presence | Description                                                                 |
+  | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
+  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
+  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
+  | `title`       | String  | Required | The page title                                                              |
+  | `description` | String  | Required | A short, one-sentence description of the page content                       |
+  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
+  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
+  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
 
 ## Formatting code
 
