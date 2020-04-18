@@ -8,28 +8,49 @@ Read on if you want to add or update content.
 
 ## Getting started
 
-You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/en/) installed. Get those first, then:
+###Ubuntu
 
-1. Clone this repo and `cd` into the cloned directory
+NOTE If you are using anything other than Ubuntu we assume that you know what you are doing and know how to modify the following commands appropriately
+
+0. Navigate to the directory where you want to install NUbook
+
+```sh
+cd \<path>
+```
+
+1. Install git, nodejs and the node package manager, npm
+
+```sh
+sudo apt update
+sudo apt-get install git nodejs npm
+```
+
+2. Use npm to install yarn
+
+```sh
+sudo npm install -g yarn
+```
+
+3. Clone this repo and `cd` into the cloned directory
 
 ```sh
 git clone https://github.com/NUbots/NUbook.git
 cd NUbook
 ```
 
-2. Install dependencies
+4. Install dependencies
 
 ```sh
 yarn
 ```
 
-3. Run the [Gatsby](https://www.gatsbyjs.org/) development server
+5. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
 ```sh
 yarn dev
 ```
 
-4. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
+6. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
 ## Contributing content
 
