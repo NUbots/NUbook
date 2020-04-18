@@ -19,6 +19,9 @@ const Sidebar = ({ menu, currentSection }) => {
 
     if (activeLink) {
       activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
+
+      // Sometimes `scrollIntoView` scrolls the main content, so we reset it here
+      document.documentElement.scrollTop = 0
     }
   }, [])
 
