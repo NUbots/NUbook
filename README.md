@@ -58,26 +58,26 @@ brew install git node && brew install yarn
 cd <path>
 ```
 
-3. Clone this repo and `cd` into the cloned directory
+2. Clone this repo and `cd` into the cloned directory
 
 ```sh
 git clone https://github.com/NUbots/NUbook.git
 cd NUbook
 ```
 
-4. Install dependencies
+3. Install dependencies
 
 ```sh
 yarn
 ```
 
-5. Run the [Gatsby](https://www.gatsbyjs.org/) development server
+4. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
 ```sh
 yarn dev
 ```
 
-6. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
+5. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
 ## Contributing content
 
