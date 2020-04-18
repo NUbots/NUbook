@@ -5,3 +5,29 @@ title: Localisation
 description: Introduction to localisation and how it works in the NUbots codebase.
 slug: /system/nubots/localisation
 ---
+
+## Overview
+
+The role of the localisation/RobotParticleLocalisation (aka Localisation) module in NUbots is to track the transform from world to field space (world space having it's origin at the location the robot powered up, and field space having it's origin at field center). A Particle Filter [1] is used to track the SE(2) transform which is emitted for use in other modules and NUSight as the three state variables X and Y position and angle. These variables are primarily intended to be combined with the platform/darwin/SensorFilter module which among other things returns the transform from torso to world. These two transforms combined can then be used to obtain the transform from field to torso (the location of the robot on the field).
+
+## Location of Key Files
+- **Main files:** NUbots/module/localisation/RobotParticleLocalisation/src/RobotParticleLocalisation.[cpp/h]
+- **Initialisation yaml:** NUbots/module/localisation/RobotParticleLocalisation/data/config/RobotParticleLocalisation.yaml
+- **Particle Filter:** NUbots/shared/utility/math/filter/ParticleFilter.h
+- **Robot Specific Functions:** NUbots/module/localisation/RobotParticleLocalisation/src/RobotModel.[cpp/h]
+- **Odometry:** NUbots/module/platform/darwin/SensorFilter/src/SensorFilter.cpp
+
+## Basic Function of the Filter
+Upon initialisation of the Particle Filter module, the Calibration reaction is triggered, which loads in the initialisation values for the filter from the RobotParticleLocalisation.yaml file, and then emits a ResetRobotHypotheses to start the Particle Filter. The main step during the initialisation of the Particle Filter is to create and normally distribute a number of particles (the number specified in the yaml file) over the possible starting region of the field, each particle being a guess of the SE(2) world to field transform. 
+
+From then on, the Time Update function runs at the frequency specified in RobotParticalLocalisation.h, and the Measurement Update runs every time a new Goal Measurement has been emitted by the Goal Detector module. The Time Update function does not make any changes since the world to field transform does not change over time, however the Measurement Update uses the difference between the observed and expected goal post measurements for each particle. A number of random "rogue" particles are added to avoid local maxima, then based on the difference just calculated, each particle is awarded a weight and ranked, with the worst particles discarded.
+
+
+
+
+
+
+
+## References
+
+[1] S. Thrun, W. Burgard and D. Fox, Probabilistic robotics. Cambridge, Mass.: MIT Press, 2005, pp. 96-116.
