@@ -118,6 +118,25 @@ The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-col
 
 See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
 
+### Showing images in tabs
+
+You can show multiple images in the same place by putting them in tabs. The caption of each image is used for its tab button label.
+
+The following example shows four images in tabs:
+
+```mdx
+<TabbedImages>
+
+![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
+![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
+![Dog](https://source.unsplash.com/featured/1600x900/?dog,1 'Dog')
+![Turtle](https://source.unsplash.com/featured/1600x900/?turtle,1 'Turtle')
+
+</TabbedImages>
+```
+
+See what the tabs look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#tabbed-images).
+
 ### Showing alerts and warnings
 
 You can show an informational alert using:

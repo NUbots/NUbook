@@ -1,0 +1,137 @@
+---
+section: System
+chapter: NUbots
+title: Continuous Integration
+description: The NUbots continuous integration system.
+slug: /system/nubots/ci-system
+---
+
+## Overview
+
+NUbots uses [Buildkite](https://buildkite.com) for its continuous integration pipeline. The Buildkite server listens for code changes on GitHub and issues build jobs to our build agents (the iMacs in the lab), as they become available.
+
+This CI process works in combination with the [Git Feature Branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) we use for development:
+
+1. Developers branch off `master`, creating a new branch with a name of the form `<lastname>/<purpose-of-branch>`. For example:
+
+   ```sh
+   git checkout -b biddulph/ball-detector
+   ```
+
+2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. This triggers a webhook to Buildkite to build and test the PR.
+3. Buildkite receives the webhook and creates separate build jobs for different parts of the PR (build, check code format, test, etc) and sends different jobs to different agents based on their availability.
+4. Agents receive a job, clone the code, pull the existing `master` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
+5. Buildkite receives the results and updates the build status in the Buildkite UI as well as on the PR page on GitHub.
+6. When the build passes, the PR is reviewed by another member of the team. If approved, the PR can be merged into `master`.
+7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
+
+<TabbedImages>
+
+!['Diagram of CI Overview for pull requests'](./images/ci-overview-pr.svg 'CI Overview PR')
+
+!['Diagram of CI Overview for master'](./images/ci-overview-master.svg 'CI Overview Master')
+
+</TabbedImages>
+
+## The Build Pipeline
+
+The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/master/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting".
+
+To add, remove, or change build jobs, we edit the pipeline file. The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
+
+## Monitoring and Troubleshooting Builds
+
+Buildkite has live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
+
+If for example your PR build fails due to formatting errors, you can check the logs to see which files are incorrectly formatted. To fix the build, you would reformat the offending files and push a new commit, which will trigger a rebuild.
+
+To view the logs for a build, scroll to the build checks at the bottom of the PR page and click the **Details** link on the `buildkite/nubots/pr` check.
+
+![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
+
+## Setting Up a New Agent (Ubuntu)
+
+The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
+
+### Install Docker
+
+Steps from <https://docs.docker.com/install/linux/docker-ce/ubuntu/>.
+
+```bash
+# Remove old Docker
+sudo apt-get remove docker docker-engine docker.io containerd runc
+
+# Install packages to allow apt to use a repository over HTTPS
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# Add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add Docker's stable repository
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
+​
+# Install latest Docker CE
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+### Install Docker Compose
+
+```bash
+# Install Python 3 and pip
+sudo apt-get update
+sudo apt-get install python3.6 python3-pip
+
+# Install Docker Compose
+sudo -H pip3 install docker-compose
+```
+
+### Install and Configure Buildkite
+
+Steps from <https://buildkite.com/docs/agent/v3/ubuntu>.
+
+```bash
+# Add the signed Buildkite apt repository
+echo "deb https://apt.buildkite.com/buildkite-agent stable main" | sudo tee /etc/apt/sources.list.d/buildkite-agent.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
+
+# Install the Buildkite agent
+sudo apt-get update
+sudo apt-get install -y buildkite-agent
+
+# Add the agent token to the configuration file.
+# Replace INSERT-YOUR-AGENT-TOKEN-HERE with the token from Buildkite.
+sudo sed -i "s/xxx/INSERT-YOUR-AGENT-TOKEN-HERE/g" /etc/buildkite-agent/buildkite-agent.cfg
+
+# Start the agent and configure it to run on system startup
+sudo systemctl enable buildkite-agent && sudo systemctl start buildkite-agent
+```
+
+### Configure Docker
+
+Steps from <https://docs.docker.com/install/linux/linux-postinstall/>.
+
+```bash
+# Create a 'docker' user group and add local users to allow for use without sudo
+sudo groupadd docker                     # Create user group
+sudo usermod -aG docker nubots           # Add nubots to the group
+sudo usermod -aG docker buildkite-agent  # Add buildkite-agent to the group
+newgrp docker                            # Activate group changes
+
+# Configure Docker to run on system startup
+sudo systemctl enable docker
+```
+
+### Add DockerHub Credentials to Buildkite
+
+For agents to push built `master` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
+
+Credentials are provided to the agent via env variables using [agent hooks](https://buildkite.com/docs/agent/v3/hooks#agent-hooks). Specifically using the environment hook. The default path for this hook is `/etc/buildkite-agent/hooks/environment`.
+
+After the credentials are added, the agent needs to be marked as having the credentials by setting the `dockerhub=true` tag in the agent configuration file. The default path for this file is `/etc/buildkite-agent/buildkite-agent.cfg`.
+
+For more information about agent configuration and hooks, see the following pages in the Buildkite documentation:
+
+- <https://buildkite.com/docs/agent/v3/hooks>
+- <https://buildkite.com/docs/agent/v3/configuration>

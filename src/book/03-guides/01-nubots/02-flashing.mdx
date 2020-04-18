@@ -1,0 +1,165 @@
+---
+section: Guides
+chapter: NUbots
+title: Flashing a Robot
+description: How to install a new operating system on a robot
+slug: /guides/nubots/flashing
+---
+
+## Flashing a Robot
+
+To install Arch Linux (our OS of choice) on to a robot perform the following instructions. Make sure you know the robot number for this NUC before beginning.
+
+1. Download the latest [Arch Linux LiveUSB](https://www.archlinux.org/download/) image and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
+
+   - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
+     - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
+   - Burn the Arch Linux ISO you just downloaded to the USB drive (in this example we are using `/dev/sdb`)
+   - ```sh
+     sudo dd bs=4M if=~/Downloads/archlinux-2019.11.01-x86_64.iso of=/dev/sdb status=progress oflag=sync
+     ```
+
+2. If you are using a brand new NUC, Boot into the BIOS on the NUC
+
+   - Turn the NUC on and hold down the F2 button
+   - Intel Visual BIOS should appear
+   - Navigate to "Advanced" menu
+   - Navigate to "Power" then set "After Power Failure" to "Power On"
+     ![BIOS Power Menu](./images/flashing/bios_power.jpg 'BIOS Power Menu')
+   - Navigate to "Boot" and then "Boot Configuration"
+     - Ensure "Boot USB Devices First" is enabled in "UEFI Boot"
+     - Ensure "USB" is enabled in "Boot Devices"
+       ![BIOS Boot Configuration Menu](./images/flashing/bios_boot_configuration.jpg 'BIOS Boot Configuration Menu')
+   - Navigate to "Secure Boot" and disable "Secure Boot"
+     ![BIOS Secure Boot Menu](./images/flashing/bios_secure_boot.jpg 'BIOS Secure Boot Menu')
+   - Press F10 to save settings and exit and ensure you USB drive is plugged in
+
+3. If you are not using a brand new NUC, ensure your USB drive is plugged in and turn the NUC on
+
+4. Once the system has booted into the LiveUSB environment on the robot, ensure the robot has an active network connection
+
+   - ![LiveUSB Environment](./images/flashing/liveusb.jpg 'LiveUSB Environment')
+   - Run `ip addr` and look for a `inet` line that has a valid IP address on it. If you can't see one you don't have a network connection. Alternatively, run `ping -c 3 google.com` and look for a response time.
+
+     ![Internet connection](./images/flashing/internet.jpg 'Internet connection')
+     ![No internet connection](./images/flashing/no_internet.jpg 'No internet connection')
+
+   - If you have no connection and need to set up the WiFi interface, [see below](#manually-setting-up-a-wifi-connection-on-the-robot).
+
+5. Download the installation script [https://git.io/JeWaF](https://git.io/JeWaF) and make sure the script is executable
+
+   - ```sh
+     wget https://git.io/JeWaF -O ./arch_install.sh
+     chmod +x ./arch_install.sh
+     ```
+   - The installation script is located in the NUbots repository at [doc/ArchInstall/arch_install.sh](https://github.com/NUbots/NUbots/blob/master/doc/ArchInstall/arch_install.sh)
+
+6. Execute the script and follow the instructions
+   - ```sh
+     ./arch_install.sh
+     ```
+
+The installation script will end by downloading a secondary script and providing you with a command that you must run
+
+```sh
+ROBOT_NUMBER=<N> arch-chroot /mnt ./arch-chroot_install.sh
+```
+
+Substitute `<N>` with the number of the robot that you are building. This will influence the IP address of the robot as well as the robots' hostname.
+
+<Alert type="warning">
+
+The secondary script assumes that the network interfaces are named `eth0` for ethernet and `wlan0` for WiFi. If you _know_ this is not the case then execute the script as follows
+
+```sh
+ROBOT_NUMBER=<N> \
+ETHERNET_INTERFACE=IF_NAME \
+WIFI_INTERFACE=IF_NAME \
+arch-chroot /mnt ./arch-chroot_install.sh
+```
+
+</Alert>
+
+Finally, once that script has finished, you must run one more command.
+
+```sh
+/mnt/arch-post_install.sh
+```
+
+This command will end by rebooting the robot. When this happens be sure to remove the USB installation drive from robot so that you may boot into the new system.
+
+The final two scripts can be found at [doc/ArchInstall/arch-chroot_install.sh](https://github.com/NUbots/NUbots/blob/master/doc/ArchInstall/arch-chroot_install.sh) and [doc/ArchInstall/arch-post_install.sh](https://github.com/NUbots/NUbots/blob/master/doc/ArchInstall/arch-post_install.sh)
+
+## Testing the new robot
+
+Once installation is complete and you have booted into your shiny new OS, you should perform a couple of simple tests to ensure everything is operational.
+
+First, login to system
+
+![Login](./images/flashing/login.jpg 'Login')
+
+Now check for a network connection, the same as we did before. If `ip addr` indicates that there is no connection then it is likely that the secondary installation script made the wrong guess about the name of the network interfaces. Inspect the output from `ip link` and make note of the ethernet and wifi interface names.
+
+<Alert type="warning">
+
+It is possible that `ip addr` will show a valid IP address for `bond0`, but `ping -c 3 google.com` and `ping -c 3 8.8.8.8` will indicate that there is no network connection.
+
+</Alert>
+
+If there is no connection, then the following files need to be modified (using either `sudo nano` or `sudo vim`)
+
+- `/etc/systemd/network/20-eth0.network`
+- `/etc/systemd/network/30-wlan0.network`
+- `/etc/systemd/network/99-eth0.network`
+- `/etc/systemd/network/99-wlan0.network`
+- `/etc/wpa_supplicant/wpa_supplicant-wlan0.conf`
+
+These 5 files need to be both renamed (replacing `eth0` or `wlan0` with the new interface name) and the contents of the files need to be edited, specifically the line that says `Name=eth0` or `Name=wlan0`.
+
+Next, correct the `wpa_supplicant` service by running
+
+```sh
+sudo systemctl disable wpa_supplicant@wlan0
+sudo systemctl enable wpa_supplicant@new_interface
+```
+
+Be sure to replace `new_interface` with the name of the WiFi interface.
+
+Once these files have been fixed, reboot by typing `sudo systemctl reboot` and then login again. Hopefully, `ip addr` indicates that there is an active network connection (on `bond0`) and `ping -c 3 google.com` also indicates an active connection.
+
+## Manually setting up a WiFi connection on the robot
+
+To set up the WiFi interface you first need to know the name of the interface. To find this, run
+
+```sh
+ip link
+```
+
+![Known network interfaces](./images/flashing/known_interfaces.jpg 'Known network interfaces')
+
+and look for an interface starting with `wl`. On our robots it is usually `wlan0`.
+
+The rest of these instructions assume a network using WPA2 (like the network used in the NUbots lab).
+
+1. Make sure the `wpa_supplicant` configuration directory exists
+
+   - ```sh
+     mkdir -p /etc/wpa_supplicant
+     ```
+
+2. Setup the network configuration
+
+   - ```sh
+     wpa_passphrase <Network SSID> <Network Passphrase> > /etc/wpa_supplicant/wpa_supplicant-<WiFi Interface>.conf
+     ```
+   - Be sure to replace `<Network SSID>` with the SSID of the wireless network to connect to (either `epsilon-x` or `epsilon-z` in the lab), `<Network Passphrase>` with the password for the network (ask someone for the lab password if you don't know it), and `<WiFi Interface>` with the name of the interface found earlier.
+
+3. Now start all of the necessary services
+
+   - ```sh
+     systemctl start dhcpcd.service
+     systemctl start wpa_supplicant.service
+     systemctl start wpa_supplicant@<Wifi Interface>.service
+     ```
+   - Be sure to replace `<WiFi Interface>` with the name of the interface found earlier.
+   - Wait a handful of seconds and run `ip addr` to check that the WiFi interface has an IP address

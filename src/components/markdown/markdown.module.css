@@ -45,7 +45,7 @@
 
   a {
     @apply text-nubots-700;
-    @apply underline;
+    @apply underline break-words;
 
     strong {
       @apply font-bold;
@@ -75,7 +75,7 @@
     @apply text-sm;
     @apply px-1;
     @apply leading-none;
-    @apply whitespace-no-wrap;
+    @apply whitespace-pre-line;
     @apply text-red-600;
     @apply font-mono;
     @apply align-baseline;
@@ -115,6 +115,19 @@
         @apply bg-gray-500;
       }
     }
+  }
+
+  /* ============================
+   * Keyboard commands
+   * ============================ */
+  kbd {
+    @apply inline-block text-sm align-middle font-mono font-semibold rounded-sm;
+    padding: 3px 5px;
+    line-height: 12px;
+    color: #444d56;
+    background-color: #fafbfc;
+    border: 1px solid #d1d5da;
+    box-shadow: inset 0 -1px 0 #d1d5da;
   }
 
   /* ============================
@@ -362,5 +375,9 @@
     margin-top: -16px;
     margin-left: -16px;
     margin-right: -16px;
+  }
+
+  > details summary + p {
+    @apply mt-3;
   }
 }
