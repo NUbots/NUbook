@@ -60,6 +60,14 @@ const Image = props => (
             alt={props.alt}
           />
         )
+      } else if (/\.svg$/i.test(src)) {
+        Img = (
+          <img
+            src={src}
+            className='max-w-full h-auto mx-auto'
+            alt={props.alt}
+          />
+        )
       } else {
         const image = data.allImageSharp.edges.find(edge => {
           const path = src.split('/').pop()
@@ -77,7 +85,7 @@ const Image = props => (
         <figure className='p-2 bg-gray-100 leading-none'>
           {Img}
           {props.children && (
-            <figcaption className='pt-3 pb-1 italic text-base'>
+            <figcaption className='pt-3 italic text-base'>
               {props.children}
             </figcaption>
           )}

@@ -55,11 +55,11 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 ### Adding images
 
-- Add image files in the [`src/images/`](src/images/) directory
+- Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
 
 ```md
-![Image caption](../../../images/image.png)
+![Image description for search engines and screen readers](./images/image.png 'Image caption')
 ```
 
 ### Adding syntax-highlighted code blocks
@@ -96,6 +96,74 @@ $$
 ```
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/docs/support_table.html for supported symbols and functions.
+
+### Showing content in grids
+
+You can show content such as images, code, and math equations side-by-side in a grid.
+
+The following example shows four images in a 2x2 grid with a caption:
+
+```mdx
+<Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
+
+![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
+![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
+![Dog](https://source.unsplash.com/featured/1600x900/?dog,1 'Dog')
+![Turtle](https://source.unsplash.com/featured/1600x900/?turtle,1 'Turtle')
+
+</Grid>
+```
+
+The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+
+See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
+
+### Showing images in tabs
+
+You can show multiple images in the same place by putting them in tabs. The caption of each image is used for its tab button label.
+
+The following example shows four images in tabs:
+
+```mdx
+<TabbedImages>
+
+![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
+![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
+![Dog](https://source.unsplash.com/featured/1600x900/?dog,1 'Dog')
+![Turtle](https://source.unsplash.com/featured/1600x900/?turtle,1 'Turtle')
+
+</TabbedImages>
+```
+
+See what the tabs look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#tabbed-images).
+
+### Showing alerts and warnings
+
+You can show an informational alert using:
+
+```mdx
+<Alert>
+
+Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui?
+
+</Alert>
+```
+
+You can also show a warning using:
+
+```mdx
+<Alert type='warning'>
+
+Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Autem quo deserunt amet suscipit, fuga ullam cumque accusamus doloremque rem
+qui.
+
+</Alert>
+```
+
+See what the alerts look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#alerts).
 
 ## Organising pages
 
@@ -142,3 +210,16 @@ If you need to, you can:
 Pull requests are automatically deployed as previews using [Netlify](https://netlify.com/), which will run code quality checks and report failures before a deploy.
 
 When a pull request is merged into master, it is automatically deployed to the main site.
+
+## Deploy previews
+
+As mentioned above, pull requests are automatically deployed as previews using Netlify.
+
+The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netlify.com/` where `[PR number]` is the pull request number. For example, `https://deploy-preview-21--nubook.netlify.com/` is the preview URL for pull request number 21.
+
+You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
+
+![Screenshot of deploy previews link](./deploy-previews.png)
+
+**We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
