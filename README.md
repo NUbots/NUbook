@@ -63,6 +63,7 @@ yarn dev
 2. Install git, node and yarn
 
 ```sh
+brew upgrade
 brew install git node && brew install yarn
 ```
 
