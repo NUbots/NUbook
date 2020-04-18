@@ -10,9 +10,9 @@ slug: /system/nusight/overview
 
 ### Overview
 
-The NUsight visualization system is a web-based visualizer created in-house for the NUbots team. It provides real time display of information of messages passed inside the NUclear robotics framework. The data that can be visualized in NUsight may come from the real hardware or simulated hardware.
+The NUsight visualization system is a web-based visualizer created in-house for the NUbots team. It provides real time display of information of messages passed inside the NUClear robotics framework. The data that can be visualized in NUsight may come from the real hardware or simulated hardware.
 
-Dasboard displays a bird's eye view of the playing field with the robots loacalized in the field. This section also displays the overall state of all robots.
+Dashboard displays a bird's eye view of the playing field with the robots localised in the field. This section also displays the overall state of all robots.
 
 Localization previews the robot's pose. The visualization data can come from a real robot or a simulated hardware.
 
@@ -34,11 +34,14 @@ Flip Orientation flips the playing field to display the mirror image of the prev
 
 ![Dashboard](./images/nusight-dashboard.png)
 
-The playing field displays all the robots that are currently connected to NUsight. It. The yellow rectangle indicates our own goal. The blue one is the opponent's goal.
+The playing field displays all the robots that are currently connected to NUsight. The yellow rectangle indicates our own goal. The blue one is the opponent's goal.
 
-Each robot displays the number assigned to it by NUsight. The wedge on the representation of the robot indicates the direction of the robot's orientation. The black arcs coming out of each robot indicates the robot's walk path
-
-The orange dot in the playing field indicates where the robot thinks the ball is located. The green arrow coming out of the orange ball indicates how the robot will kick the ball. Usually it should point towards the opponent's goal.
+|         Item         |  &nbsp Image &nbsp &nbsp &nbsp &nbsp &nbsp  | Description                                                                                                                 |
+| :------------------: | :-----------------------------------------: | --------------------------------------------------------------------------------------------------------------------------- |
+| Robot Representation |    ![](./images/dashboard-robot-rep.png)    | Displays the robot's number assigned by NUsight. The wedge on the robot indicates the direction of the robot's orientation. |
+|      Black Arcs      | ![](./images/dashboard-robot-walk-path.png) | Indicates the robot's walk path.                                                                                            |
+|         Ball         | ![](./images/dashboard-ball-direction.png)  | Indicates where the robot things the ball is located.                                                                       |
+|     Green Arrow      |    ![](./images/dashboard-ball-kick.png)    | Indicates how the robot will kick the ball. Usually it should point towards the opponent's goal.                            |
 
 #### Robot Status Display
 
@@ -62,17 +65,14 @@ This area displays the internal status of a robot, for each robot connected to N
 
 #### Keymapping
 
-| Keyboard | Action                                                         |
-| :------: | -------------------------------------------------------------- |
-|    w     | Move forward                                                   |
-|    s     | Move backward                                                  |
-|    a     | Strafe left                                                    |
-|    d     | Strafe right                                                   |
-|  Space   | Switch between Free Camera, First Person or Thrid Persion view |
-
-|       Mouse       | Action                                          |
-| :---------------: | ----------------------------------------------- |
-| Right mouse click | In first or third person, switch between robots |
+|  Keyboard/Mouse   | Action                                                         |
+| :---------------: | -------------------------------------------------------------- |
+|         w         | Move forward                                                   |
+|         s         | Move backward                                                  |
+|         a         | Strafe left                                                    |
+|         d         | Strafe right                                                   |
+|       Space       | Switch between Free Camera, First Person or Thrid Persion view |
+| Right mouse click | In first or third person, switch between robots                |
 
 ### Chart
 
@@ -101,5 +101,7 @@ This tab can toggle different overlays on the image that is being seen by the ro
 - Goals
 
 ### Visual Mesh
+
+![Visual Mesh](./images/visual-mesh-main.png)
 
 This section displays the data from the robot's camera and provides a mesh overlay on the image using the Visual Mesh object detection algorithm
