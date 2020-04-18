@@ -1,7 +1,7 @@
 ---
 section: Guides
 chapter: NUbots
-title:	Git
+title: Git
 description: Contributing to a NUbots project with git.
 slug: /guides/general/git
 ---
@@ -14,11 +14,12 @@ This guide assumes you know the basics of git and basic shell commands.
 
 Suppose you have a file you have made which you would like to add to a NUbots repository, called `my_file.cpp`, as part of your project to make the robot stand up.
 
-In terminal, change directory to where you have the repo cloned. 
+In terminal, change directory to where you have the repo cloned.
 
 ```sh
  cd ~/NUbots/NUbots
 ```
+
 ### Select Branch
 
 If you are working within an existing project, then you need to find out which branch the work is on. To list the branches, use `git branch`. Once you can see which branch you want swap to it:
@@ -61,4 +62,3 @@ Before making a pull request, it is important that your code adheres to the form
 If your code is in a different and it uses C++ or protobuf files, use the `.clang-format` file in the NUbots repo to format them.
 
 If you get a message that your build failed, try running the relevant format commands and then committing the changes which they made. You won't be able to merge the PR until the build checks pass.
-
