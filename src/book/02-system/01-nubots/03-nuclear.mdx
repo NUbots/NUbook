@@ -64,7 +64,7 @@ For reactions to occur, at least one Binding DSL word should be present in the D
 | Shutdown      | Used to specify any reactions/tasks which should occur during shutdown. `on<Shutdown>()` will create a task after the shutdown command has been emitted and all existing tasks have completed.                                                                                                                                                                                                                                                                |
 | IO            | Used to trigger reactions based on standard I/O operations using file descriptors. `on<IO>(pipe/stream/comms, io_status)` will create a task when the communication line matches the given status. For example, `on<IO>(my_file_descriptor, IO::READ)` will create the task when the given file descriptor has data available to read.                                                                                                                        |
 | Network       | NUClear provides a networking protocol to send messages to other devices on the network. `on<Network<T>>()` will create a task when T is emitted using the emission type `Scope::NETWORK`.                                                                                                                                                                                                                                                                    |
-| Configuration | Used to set configuration values. File name is a runtime argument. Is of the form `on<Configuration>("Config.yaml").then(...)`.                                                                                                                                                                                                                                                                                                                               |
+| Configuration | Used to set configuration values. File name is a runtime argument. Is of the form `on<Configuration>("Config.yaml").then(...)`. The runtime argument can also be a folder to enable monitoring for all changes in that folder.                                                                                                                                                                                                                                |
 
 More information on DSL words for on statements can be found in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#on-statements).
 
@@ -79,7 +79,7 @@ The DSL words that take runtime arguments are: `IO`, `TCP`, `UDP` and `Configura
 The callback which will execute when the reaction is triggered during runtime can be defined using a C++ lambda function. These are of the form
 
 ```cpp
-[](args...){
+[this](args...){
     statements...
 }
 ```
@@ -87,10 +87,12 @@ The callback which will execute when the reaction is triggered during runtime ca
 The `args` will generally be based off the conditions for the reaction, such as access to data. For example:
 
 ```
-on<Trigger<dataType>>().then([](const dataType&) {
+on<Trigger<dataType>>().then([this](const dataType& value) {
     // Do things
 });
 ```
+
+Capturing the `this` pointer will allow your reaction to access other members of your `Reactor` (e.g. configuration data).
 
 ## Emit Statements
 
@@ -115,10 +117,10 @@ Local emissions send data to the local instance of the NUClear PowerPlant. Essen
 
 Network emissions can be used to send data through the network on which the current system is running.
 
-| Scope   | Description                                                                                                                |
-| ------- | -------------------------------------------------------------------------------------------------------------------------- |
-| UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                   |
-| NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable);`. |
+| Scope   | Description                                                                                                                                                                                                                                                            |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                                                                                                                                                               |
+| NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable);`. The `reliable` flag, if `true`, will cause NUClear to continue sending the `data` until it receives an `ACK`nowledgement from the `target`. |
 
 # Managing Reactions
 
@@ -163,7 +165,7 @@ NUCLEAR_ROLE(
     extension::FileWatcher
     support::logging::ConsoleLogHandler
 
-    # The Camera module we described earlier
+    # Input from USB3 Cameras
     input::Camera
 )
 ```
