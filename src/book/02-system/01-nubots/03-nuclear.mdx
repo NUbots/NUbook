@@ -172,27 +172,6 @@ NUCLEAR_ROLE(
 
 This role file would create an executable with the modules `module::extension::FileWatcher`, `module::support::logging::ConsoleLogHandler` and `module::input::Camera`. This file is a CMake file so you are able to use # to declare comments.
 
-## Tools and the `./b` script
-
-Within `nuclear/b` there is a python tool called `b`. This python tool is used to handle common functionality in the system.
-
-The `./b` script will look for a `tools` directory above the location where the actual `b.py` is located. If it finds one, it will load all `.py` files in that directory and attempt to execute a register and run function on them. This allows the tools to register new functionality to the b script that can be accessed from the command line.
-
-Tools that exist in the NUbots codebase are:
-
-| Tool                                                                           | Description                                                                                              |
-| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| [`build`](https://github.com/NUbots/NUbots/blob/master/tools/build.py)         | Builds the codebase.                                                                                     |
-| [`configure`](https://github.com/NUbots/NUbots/blob/master/tools/configure.py) | Configures targets. Use the argument `-i` to perform an interactive configuration.                       |
-| [`edit`](https://github.com/NUbots/NUbots/blob/master/tools/edit.py)           | What does this do??                                                                                      |
-| [`footdown`](https://github.com/NUbots/NUbots/blob/master/tools/footdown.py)   | Tool for training the footdown network.                                                                  |
-| [`format`](https://github.com/NUbots/NUbots/blob/master/tools/format.py)       | Formats all files using clang-format.                                                                    |
-| [`install`](https://github.com/NUbots/NUbots/blob/master/tools/install.py)     | Installs NUClear roles systems onto remote systems using rsync. This is used to install onto the robots. |
-| [`nbs`](https://github.com/NUbots/NUbots/blob/master/tools/nbs.py)             | Decodes `.nbs` files.                                                                                    |
-| [`run`](https://github.com/NUbots/NUbots/blob/master/tools/run.py)             | Runs a binary file within the Docker container.                                                          |
-| [`shell`](https://github.com/NUbots/NUbots/blob/master/tools/shell.py)         | Opens an interactive shell in the Docker container.                                                      |
-| [`target`](https://github.com/NUbots/NUbots/blob/master/tools/target.py)       | Used to select the default platform to use for docker commands.                                          |
-
 ## NBS Files
 
 NBS files are NUClear Binary Stream files. To make it easier to serialise streams of messages for storage sharing and playback, NUClear Roles defines a format for serialising messages to files. This format is based on the Neutron messaging system and NUClear's networking protocol. An `nbs` file has the following frames repeated continuously:
