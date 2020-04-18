@@ -23,3 +23,21 @@ rm -rf node_modules && yarn
 ```
 
 Then try running `yarn dev` again.
+
+## I am getting errors from 'Prettier' when running `yarn dev`! / I can't push to GitHub!
+
+If NUbook is not formatted correctly, you may not see any changes appear NUbook, and you will not be able to push to GitHub. To fix this, run:
+
+```bash
+yarn format --fix
+```
+
+## My change is not showing up in NUbook!
+
+Make sure you have saved the file.
+
+If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folder. run
+
+```bash
+rm -rf .cache public && yarn dev
+```
