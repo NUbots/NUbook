@@ -39,8 +39,7 @@ sudo apt install git
 <details>
 <summary>macOS installation installation</summary>
 
-1. Install Homebrew by following the instructions at https://brew.sh/
-
+1. Install Homebrew by following the instructions at <https://brew.sh/>
 2. Install Git, Node.js and Yarn
 
 ```sh
