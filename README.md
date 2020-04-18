@@ -56,6 +56,43 @@ yarn dev
 
 6. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
+### Mac OS
+
+1. Install homebrew by following the directions at https://brew.sh/
+
+2. Install git, node and yarn
+
+```sh
+brew install git node && brew install yarn
+```
+
+3. Navigate to the directory where you want to install NUbook
+
+```sh
+cd <path>
+```
+
+4. Clone this repo and `cd` into the cloned directory
+
+```sh
+git clone https://github.com/NUbots/NUbook.git
+cd NUbook
+```
+
+5. Install dependencies
+
+```sh
+yarn
+```
+
+6. Run the [Gatsby](https://www.gatsbyjs.org/) development server
+
+```sh
+yarn dev
+```
+
+7. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
+
 ## Contributing content
 
 All additions and edits are done through GitHub pull requests. To add or edit content:
