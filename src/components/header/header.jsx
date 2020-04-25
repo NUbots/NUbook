@@ -18,7 +18,7 @@ const Header = ({ menu, currentSection, background }) => {
         }`}
       >
         <div className='max-w-screen-xl mx-auto px-6'>
-          <div className='-mx-6 h-16 flex items-center'>
+          <div className='-mx-6 h-20 flex items-center'>
             <div className='px-6 lg:pr-8 lg:w-1/4 xl:w-1/5'>
               <Logo />
             </div>

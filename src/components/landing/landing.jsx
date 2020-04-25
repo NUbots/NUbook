@@ -17,9 +17,24 @@ const LandingPage = props => {
 
       <Header menu={menu} currentSection={menu[0]} background='transparent' />
 
-      <div className={style.cover}></div>
+      <div className={style.cover}>
+        <div className='max-w-screen-xl mx-auto px-4 relative z-10 pt-16 h-full flex items-end'>
+          <div className='absolute bottom-0 pb-20 pl-2'>
+            <div className='text-white text-5xl leading-none mb-4'>
+              NUbots Robotics Research Group
+            </div>
+            <div className='w-1/2 text-white opacity-75 font-semibold text-lg'>
+              NUbots is a team in the University of Newcastle’s robotics
+              research group focused on developing humanoid soccer-playing
+              robots for the international RoboCup competition.
+            </div>
+          </div>
+          <div className='w-1/2'></div>
+          <div className={`h-full w-1/2 ${style.coverImage}`}></div>
+        </div>
+      </div>
 
-      <PromoCards />
+      {/* <PromoCards />
 
       <div className='max-w-screen-xl mx-auto px-8 mb-32'>
         <h1 className='text-4xl mb-16 text-center'>Welcome to NUbook</h1>
@@ -33,7 +48,7 @@ const LandingPage = props => {
         </div>
       </div>
 
-      <NavButtons />
+      <NavButtons /> */}
 
       <Footer />
     </>
