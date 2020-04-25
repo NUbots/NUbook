@@ -68,7 +68,15 @@
     "quoteProps": "consistent",
     "trailingComma": "es5",
     "jsxBracketSameLine": false,
-    "endOfLine": "lf"
+    "endOfLine": "lf",
+    "overrides": [
+      {
+        "files": "*.mdx",
+        "options": {
+          "parser": "markdown"
+        }
+      }
+    ]
   },
   "husky": {
     "hooks": {
