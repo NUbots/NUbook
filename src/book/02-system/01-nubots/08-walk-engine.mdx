@@ -6,9 +6,9 @@ description: Describes the walk engines present in the NUbots codebase.
 slug: /system/nubots/walk-engine
 ---
 
-Currently NUbots has two walk engines. One is an open loop hybrid walk controller and the other is an open loop walk based on quintic splines.
+Currently NUbots has two walk engines. One is an **open loop hybrid walk controller** and the other is an **open loop walk** based on **quintic splines**.
 
-A walk engine will trigger when a [walkcommand](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
+A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
 
 | Variable | Description                   |
 | -------- | ----------------------------- |
@@ -20,21 +20,21 @@ The [Direct Walk Controller](https://github.com/NUbots/NUbots/tree/master/module
 
 ## Open Loop Hybrid Walk
 
-This walk is an open loop hybrid walk controller, dynamically switching between an analytically solved trajectory for the centre of mass based on the linear inverted pendulum model, and a Zero Moment Point preview controller, based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
+This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**, based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
 
 ## Quintic Spline Walk
 
-The Quintic Walk is an open loop controller based on quintic splines (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
+The Quintic Walk is an **open loop controller** based on **quintic splines** (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
 
 The engine has support for kicking, however this is not used at this time.
 
-The code used for this walk comes from [BitBots](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
+The code used for this walk comes from [**BitBots**](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
 
 ## Keyboard Walk
 
-The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/master/module/behaviour/strategy/KeyboardWalk) is used for testing and demonstration purposes. Keyboard walk can use any of the walk engines in the codebase.
+The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/master/module/behaviour/strategy/KeyboardWalk) is used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase.
 
-Keyboard walk acts as an interface for using one of these walks. Keyboard walk uses keyboard inputs to control the robot. The inputs available are detailed in the following table.
+Keyboard walk acts as an interface for using one of these walks. Keyboard walk uses **keyboard inputs** to control the robot. The inputs available are detailed in the following table.
 
 | Command            | Description                                                               |
 | ------------------ | ------------------------------------------------------------------------- |
@@ -55,11 +55,13 @@ Keyboard walk acts as an interface for using one of these walks. Keyboard walk u
 | <kbd>r</kbd>       | Resets keyboardwalk. Head rotation is set to 0. Walk command is set to 0. |
 | <kbd>q</kbd>       | Quits keyboardwalk.                                                       |
 
-The **keyboardwalkfake** role uses HardwareSimulator, for when you don't want to run keyboard walk on the robot.
+To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/master/roles/keyboardwalk.role) and run the binary.
+
+The [**keyboardwalkfake** role](https://github.com/NUbots/NUbots/blob/master/roles/keyboardwalkfake.role) uses HardwareSimulator, for when you don't want to run keyboard walk on the robot.
 
 ## PS3 Walk
 
-The PS3 walk module is an interface for testing and demonstrating the walk and other functionalities using a PS3 controller.
+The [PS3 walk module](https://github.com/NUbots/NUbots/tree/master/module/behaviour/strategy/PS3Walk) is an interface for **testing** and **demonstrating** the walk and other functionalities using a **PS3 controller**.
 
 The module connects to the PS3 controller using bluetooth and reacts based on the joystick or button input.
 
@@ -72,3 +74,5 @@ The module connects to the PS3 controller using bluetooth and reacts based on th
 | TRIANGLE                  | Toggles walking on/off.                    |
 | SQUARE                    | Toggles locking of the head.               |
 | R2                        | Right kick.                                |
+
+To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/master/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. When the controller is connected to the robot, you can remove the cable.
