@@ -2,12 +2,18 @@
 
 module.exports = {
   theme: {
+    screens: {
+      'xxs': '425px',
+      'xs': '512px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1440px',
+      '3xl': '1600px',
+      '4xl': '1920px',
+    },
     extend: {
-      screens: {
-        '2xl': '1440px',
-        '3xl': '1600px',
-        '4xl': '1920px',
-      },
       colors: {
         'gray': {
           '100': '#f5f5f5',
@@ -37,6 +43,9 @@ module.exports = {
         'icon-inverted': 'rgba(255, 255, 255, 0.7)',
         'hint': 'rgba(0, 0, 0, 0.38)',
         'hint-inverted': 'rgba(255, 255, 255, 0.38)',
+      },
+      backgroundColor: {
+        well: 'rgba(255, 255, 255, 0.1)',
       },
       padding: {
         '14': '3.5rem',
