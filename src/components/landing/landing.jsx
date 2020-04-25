@@ -5,9 +5,14 @@ import Footer from '../../components/footer/footer'
 import Header from '../../components/header/header'
 import SEO from '../../components/seo'
 
-import PromoCards from './promo-cards/promo-cards'
-import NavButtons from './nav-buttons/nav-buttons'
-import style from './landing.module.css'
+import Cover from './cover/cover'
+
+import IconBall from './promo-card/icon-ball.svg'
+import IconBrain from './promo-card/icon-brain.svg'
+import IconHandshake from './promo-card/icon-handshake.svg'
+import PromoCard from './promo-card/promo-card'
+
+import Book from './book/book'
 
 const LandingPage = props => {
   const { menu } = props.pageContext
@@ -17,38 +22,46 @@ const LandingPage = props => {
 
       <Header menu={menu} currentSection={menu[0]} background='transparent' />
 
-      <div className={style.cover}>
-        <div className='max-w-screen-xl mx-auto px-4 relative z-10 pt-16 h-full flex items-end'>
-          <div className='absolute bottom-0 pb-20 pl-2'>
-            <div className='text-white text-5xl leading-none mb-4'>
-              NUbots Robotics Research Group
-            </div>
-            <div className='w-1/2 text-white opacity-75 font-semibold text-lg'>
-              NUbots is a team in the University of Newcastle’s robotics
-              research group focused on developing humanoid soccer-playing
-              robots for the international RoboCup competition.
-            </div>
+      <Cover title='NUbots Robotics Research Group'>
+        NUbots is a team in the University of Newcastle’s robotics research
+        group focused on developing humanoid soccer-playing robots for the
+        international RoboCup competition.
+      </Cover>
+
+      <div style={{ backgroundColor: '#1A202C' }}>
+        <div className='max-w-screen-xl mx-auto px-6 py-12'>
+          <div className='grid  lg:grid-cols-3 lg:grid-rows-1 gap-6'>
+            <PromoCard Icon={IconBrain} title='AI &amp; Robotics Research'>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
+              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
+              earum voluptates soluta.
+            </PromoCard>
+
+            <PromoCard Icon={IconBall} title='RoboCup'>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
+              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
+              earum voluptates soluta.
+            </PromoCard>
+
+            <PromoCard Icon={IconHandshake} title='Community Engagement'>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
+              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
+              earum voluptates soluta.
+            </PromoCard>
           </div>
-          <div className='w-1/2'></div>
-          <div className={`h-full w-1/2 ${style.coverImage}`}></div>
         </div>
       </div>
 
-      {/* <PromoCards />
-
-      <div className='max-w-screen-xl mx-auto px-8 mb-32'>
-        <h1 className='text-4xl mb-16 text-center'>Welcome to NUbook</h1>
-        <div className='text-center text-xl mx-auto max-w-xl lg:max-w-4xl xl:max-w-5xl leading-relaxed'>
-          NUbook is the documentation and team handbook for the NUbots team.
-          NUbots is an interdis ... some thing Lorem ipsum dolor sit amet,
-          consectetur adipisicing elit. Commodi ut placeat quos doloribus iure
-          blanditiis voluptas perspiciatis earum voluptates soluta. Commodi ut
-          placeat quos doloribus iure blanditiis voluptas perspiciatis earum
-          voluptates soluta.
+      <div className='max-w-screen-xl mx-auto px-6 py-20 relative'>
+        <div className='relative text-center mb-12'>
+          <h2 className='text-4xl mb-2'>NUbook</h2>
+          <div className=' text-secondary text-lg'>
+            The NUbots team documentation
+          </div>
         </div>
-      </div>
 
-      <NavButtons /> */}
+        <Book />
+      </div>
 
       <Footer />
     </>
