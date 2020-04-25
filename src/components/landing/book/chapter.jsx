@@ -13,8 +13,8 @@ const Chapter = ({ title, pages }) => {
       <div>
         {pages.map(page => (
           <a
-            href={page.url}
-            key={page.url}
+            href={page.slug}
+            key={page.slug}
             className='flex py-2 text-lg text-nubots-700 hover:underline items-start'
           >
             <IconArrowRight className='mt-px mr-4 text-secondary' />{' '}

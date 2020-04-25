@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 
 import style from './section.module.css'
 
-const Section = ({ Icon, children, active }) => {
+const Section = ({ Icon, children, active, onClick }) => {
   return (
     <button
       className={`${style.sectionButton} ${
         active ? style.sectionButtonActive : ''
       }`}
+      onClick={onClick}
     >
       <div className='mr-3'>
         <Icon className='w-8 h-8 fill-current' />
@@ -24,6 +25,7 @@ Section.propTypes = {
   Icon: PropTypes.elementType,
   children: PropTypes.node,
   active: PropTypes.bool,
+  onClick: PropTypes.func,
 }
 
 Section.defaultProps = {

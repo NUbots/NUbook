@@ -1,5 +1,6 @@
 .sectionButton {
   @apply inline-flex text-nubots-500 bg-white px-4 py-2 items-center justify-center flex-shrink-0;
+  min-width: 180px;
 
   &:hover,
   &:focus {

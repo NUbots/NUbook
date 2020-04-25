@@ -60,7 +60,7 @@ const LandingPage = props => {
           </div>
         </div>
 
-        <Book />
+        <Book contents={menu} />
       </div>
 
       <Footer />
