@@ -28,25 +28,44 @@ const LandingPage = props => {
         international RoboCup competition.
       </Cover>
 
-      <div style={{ backgroundColor: '#1A202C' }}>
+      <div style={{ backgroundColor: `rgba(26, 32, 44, 0.95)` }}>
         <div className='max-w-screen-xl mx-auto px-6 py-12'>
-          <div className='grid  lg:grid-cols-3 lg:grid-rows-1 gap-6'>
+          <div className='grid lg:grid-cols-3 lg:grid-rows-1 gap-6'>
             <PromoCard Icon={IconBrain} title='AI &amp; Robotics Research'>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
-              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
-              earum voluptates soluta.
+              Our research focuses on applying intelligent techniques in the{' '}
+              <a
+                className='text-white hover:underline focus:underline'
+                href='https://humanoid.robocup.org/'
+              >
+                Humanoid Soccer
+              </a>{' '}
+              domain, and using that domain as a test bed to develop solutions
+              for wider application in other research areas.
             </PromoCard>
 
             <PromoCard Icon={IconBall} title='RoboCup'>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
-              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
-              earum voluptates soluta.
+              NUbots competes yearly in the{' '}
+              <a
+                className='text-white hover:underline focus:underline'
+                href='https://www.robocup.org/objective'
+              >
+                RoboCup competition
+              </a>
+              , whose ultimate goal is to develop a team of fully autonomous
+              humanoid robots that can win against the human world champions by
+              2050.
             </PromoCard>
 
             <PromoCard Icon={IconHandshake} title='Community Engagement'>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
-              ut placeat quos doloribus iure blanditiis voluptas perspiciatis
-              earum voluptates soluta.
+              NUbots engages with the community through events including{' '}
+              <a
+                className='text-white hover:underline focus:underline'
+                href='https://www.robocupjunior.org.au/'
+              >
+                RoboCup Junior
+              </a>
+              , school visits, public exhibitions, STEM and robotics advocacy,
+              as well as research collaborations with industry.
             </PromoCard>
           </div>
         </div>
