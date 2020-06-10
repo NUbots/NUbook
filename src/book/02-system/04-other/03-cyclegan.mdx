@@ -3,7 +3,7 @@ section: System
 chapter: Other Projects
 title: CycleGAN
 description: A CycleGAN implementation for dataset generation.
-slug: /system/nupbr
+slug: /system/cyclegan
 ---
 
 The NUbots robots must be able to detect object in their environments so they are able to play soccer. We use machine learning to detect where objects are in the world. To find out more about our vision system, head over to [the vision page](/system/vision).
@@ -18,22 +18,16 @@ A [Cycle-Consistent Adversarial Network (CycleGAN)](https://arxiv.org/abs/1703.1
 
 ## The Model
 
-This implementation of CycleGAN uses real images and NUpbr paired raw and segmentation images. The NUpbr raw images represent the A domain of the CycleGAN. The real images represent the B domain of the CycleGAN. We can then pair up our fake images with NUpbr segmentation images to obtain a dataset of pseudo-real images. 
+This implementation of CycleGAN uses real images and NUpbr paired raw and segmentation images. The NUpbr raw images represent the A domain of the CycleGAN. The real images represent the B domain of the CycleGAN. We train the model on the fake images and NUpbr segmentation images to obtain a dataset of pseudo-real images.
 
-For a given real NUpbr raw image, we will also load in the corresponding real NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white, and ensure the black is true black. This gives us a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1'. This is called our attention mask. 
+For a given real NUpbr raw image, we will also load in the corresponding real NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white, and ensure the black is true black. This gives us a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1'. This is called our attention mask.
 
-After we get a fake real image, we use the attention mask to add back in the original background. 
+After we get a fake real image, we use the attention mask to add back in the original background.
 
 ```py
 masked_fake_B = fake_B*attention + real_A*(1-attention)
 ```
 
-`fake_B*attention` will give us the non-background pixels of the fake real image. `real_A*(1-attention)` will give us the background pixels of the original real NUbpr image. Adding these both together, we get the fake non-background elements and the real background elements in one image. This result is then used for training. This removes the consideration of the background from the training, and instead lets the generator focus its attention on the non-background elements. 
+`fake_B*attention` will give us the non-background pixels of the fake real image. `real_A*(1-attention)` will give us the background pixels of the original real NUbpr image. Adding these both together, we get the fake non-background elements and the real background elements in one image. This result is then used for training. This removes the consideration of the background from the training, and instead lets the generator focus its attention on the non-background elements.
 
-Since we do not hve an attention mask for images in the B domain, we focus more on cycling on the original real A image. From a real B image, we generate a fake A image. We do not cycle from here. From a real A image, we cycle on the resulting fake B image, and then again on the resulting cycled fake A image. The cycles from the real A image all have an attention mask from the corresponding segmentation mask for A. 
-
-## Training
-
-## Testing
-
-## Generating
+Since we do not have an attention mask for images in the B domain, we focus more on cycling on the original real A image. From a real B image, we generate a fake A image. We do not cycle from here. From a real A image, we cycle on the resulting fake B image, and then again on the resulting cycled fake A image. All the cycles from the real A image can use the attention mask from the corresponding segmentation mask for A.
