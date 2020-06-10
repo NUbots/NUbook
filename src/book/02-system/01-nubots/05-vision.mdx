@@ -8,35 +8,91 @@ slug: /system/nubots/vision
 
 The vision system aims to convert images from a camera in the robot into useful information, such as ball position, goal position, field lines and obstacles. This information is used to determine behaviour and localisation. The vision system encompasses the [hardware](/system/hardware/overview/#cameras), object detection, and post processing.
 
+# Cameras
+
+The cameras have the following parameters that are used by the object detection algorithm.
+
+| Parameter           | Type                 | Description                                                                                                                                       |
+| ------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serial_number`     | string               | The serial number of the camera.                                                                                                                  |
+| `lens.projection`   | string               | The fisheye lens projection type. Can be rectilinear, equidistant or equisold.                                                                    |
+| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. Focal length is the angle of view and magnification. |
+| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width            |
+| `k`                 | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                             |
+| `fov`               | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                |
+| `Hpc`               | 4x4 matrix           | Homogeneous transform from the rigid platform this camera is attached to (pitch servo) to the camera's virtual focal point.                       |
+
+These parameters are set for each camera as configuration values in the [Camera module](https://github.com/NUbots/NUbots/tree/master/module/input/Camera/data/config), in each robot's respective folder. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`.
+
+The parameters are used in the Camera module to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/master/shared/message/input/Image.proto).
+
+The [projection tool](https://github.com/NUbots/NUbots/tree/master/shared/utility/vision/projection.h), based on [panotools' fisheye projection calculations](https://wiki.panotools.org/Fisheye_Projection), maps a portion of the surface of a sphere to a flat image. The type of projection is specified by the above parameter `len.projection`.
+
 # Visual Mesh
+
+## Algorithm
 
 The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vision system, and is used for sparse detection of balls, points on the field, field lines, goal posts and other robots.
 
-The Visual Mesh is a convolutional neural network for object detection based on a mesh which samples pixels from an image. The mesh is depth independent and the number of mesh points is small enough to allow a CNN to run in real-time on a humanoid robot. Tests on the CPU from the Intel NUC7i7BNH show that a nine layer Visual Mesh has an execution time of 2.44ms. Furthermore, the Visual Mesh does not degrade in accuracy when objects occur at different distances. This is due to the depth independence introduced by using the mesh. The Visual Mesh has been used to detect a soccer ball on a field up to 10m away from the camera. The Visual Mesh can detect soccer balls, field lines and goal posts, however it is built assuming the object to be detected is spherical.
+The Visual Mesh is an input transformation that uses knowledge of a cameras orientation and position relative to an observation plane to greatly increase the performance and accuracy of a convolutional neural network. It utilises the geometry of objects to create a mesh structure that ensures that a similar number of samples points are selected regardless of distance. The result is that networks can be much smaller and simpler while still achieving high levels of accuracy. The Visual Mesh is very capable when it comes to detecting distant objects. Distant objects often become too small for a network to detect accurately, but as the Visual Mesh normalises, its size detections are still accurate. The Visual Mesh can detect soccer balls, field lines and goal posts.
 
 The Visual Mesh is created using the following geometric assumptions for each image:
 
 - The camera lens type, height and orientation with respect to the ground are known.
 - The object is spherical with known radius and remains on the ground.
 
-The height, orientation and radius are used to create a set of unit vectors based at the camera position. Any vector with its origin at the camera can be thought of as a ray of light travelling towards the camera. If the vector is within the field of view of the camera it will be collected by the lens. The vector is mapped to a point on the image using the lens projection equation, provided the point is within the bounds of the image sensor of the camera. The Visual Mesh is formed by taking an array of vectors and associating each of them with a point and pixel in the image. The array of vectors is specially constructed using two equations to efficiently sample the space around the camera for the object. This means the points (sample points) on the image will efficiently sample the image for the object.
+The height, orientation and radius are used to create a set of unit vectors based at the camera position. Any vector with its origin at the camera can be thought of as a ray of light travelling towards the camera. If the vector is within the field of view of the camera it will be collected by the lens. The vector is mapped to a point on the image using the lens projection equation, provided the point is within the bounds of the image sensor of the camera. The Visual Mesh is formed by taking an array of vectors and associating each of them with a point and pixel in the image. The array of vectors is specially constructed using two equations to efficiently sample the space around the camera for the object. This means the sample points on the image will efficiently sample the image for the object.
+
+![A soccer field with a hexagonal grid. Each hexagon is made up of a center point and six neighbours.](./images/visual-mesh-grid.jpg 'The Visual Mesh grid')
 
 Because the vectors are generated in the space around the camera, the sample is consistent despite changes in lens type, image resolution, and the apparent size of an object due to distance. Each sample point is connected to its six closest neighbours and these connections become the edges of the mesh. A fully [convolutional neural network](https://doi.org/10.1109/TPAMI.2016.2572683) is used on the mesh where each sample point and it's neighbours become the input to a convolution. All layers in the network use seven point convolutions since there are six neighbours for each sample point. A parameter controls the number of sample points on the object which determines the level of detail available to the network.
 
-The height and orientation of the camera is tracked using the kinematics and inertial measurement unit of the robot. The radius of the soccer ball is given. The unit vectors only need to be calculated once for each height and radius pair. As the robot walks its height varies. A series of Visual Meshes for different heights are calculated on startup. For each image this information is recorded and the appropriate Visual Mesh is chosen. A binary search pattern is used to select the vectors that will become points on the image based on the camera's orientation. The partitions of the binary search pattern are built on startup and the search is run in real-time. Every training and run-time image is converted into the mesh before the network is run. The network labels each point of the mesh with the probability it belongs to an object class. A post-processing algorithm based on the probabilities of the mesh can cluster the sample points to determine an object's position.
+The height and orientation of the camera is tracked using the kinematics and inertial measurement unit of the robot. The radius of the soccer ball is given. The unit vectors only need to be calculated once for each height and radius pair. As the robot walks its height varies. A series of Visual Meshes for different heights are calculated on startup. For each image this information is recorded and the appropriate Visual Mesh is chosen. A binary search pattern is used to select the vectors that will become points on the image based on the camera's orientation. The partitions of the binary search pattern are built on startup and the search is run in real-time. Every training and run-time image is converted into the mesh before the network is run. The network labels each point of the mesh with the probability it belongs to an object class. This labelling is then used in the post processing section, as detailed below.
 
-![The classifications from the Visual Mesh neural network.](./images/vision-green-horizon-balls-detections.png 'The classifications from the Visual Mesh neural network.')
+![A soccer field with a segmentation overlay of different colours based on features and objects in the scene.](./images/vision-green-horizon-balls-detections.png 'The classifications from the Visual Mesh neural network.')
+
+## Implementation
+
+The Visual Mesh implementation can be [found on GitHub](https://github.com/Fastcode/VisualMesh). It has implementations for using circle, spherical or cylinder geometry for the mesh. The Visual Mesh implementation uses TensorFlow for training. The Visual Mesh can be used with the CPU engine with C++ code or it can be used with the OpenCL engine on CPUs and many GPUs.
+
+In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh). Network biases and weights are found in the configuration file in the module, along with other Visual Mesh parameters such as geometry type. The module receives an Image message from the Camera module, detailed above, and inputs it into the Visual Mesh. The resulting mesh and classifications are output as a [VisualMesh message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/VisualMesh.proto). This message can then be used in post processing.
 
 # Post Processing
 
-From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. Firstly, all points that the Visual Mesh has identified as either field points or field line points are clustered into connected regions and, each cluster is then either merged or discarded using some heuristics until a single cluster remains. Finally, an upper convex hull algorithm is applied to the final cluster determine the edge of the field.
+From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The green horizon detector uses information from the Visual Mesh message as detailed above. The goal and ball detectors use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/GreenHorizon.proto).
 
-The ball detector forms clusters out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point, but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points. Any clusters which are not below the field edge are discarded. A circular cone is then fitted to each cluster. The cone axis is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points. Different heuristics, such as degree of circle fit and different distance metrics, are then used to discard to cones.
+All calculations in the detectors are done in 3D world coordinates. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/mathematics).
 
-The goal post detector follows a similar structure to the ball detector. Clusters are formed from goal post edge points and any clusters that do not intersect the field edge are discarded. The bottom centre point of the goal post is then found by averaging the edge points. The distance to the goal posts are determined and if there are multiple goal posts detected an attempt is made to assign **leftness** and **rightness** to each post.
+![A soccer field with an overlay of lines representing detections. A soccer ball has a circle around it. Goal posts and a fan have vertical lines. The field has a green line around it.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
 
-At present, a field line detector is not implemented, but will likely be implemented before the next competition.
+## Green Horizon Detector
 
-All calculations in all detectors are done in 3D world coordinates.
+When the [green horizon detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large cluster of points that is determined to be the field.
 
-![The full output of the vision system showing the green horizon, ball and goal detections.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
+The points are first filtered to give only potential field points. The first field point is added to a cluster with all its field point neighbours. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
+
+Clustering is repeated until all field points are part of a cluster. Clusters that are smaller than a given threshold are discarded. Clusters are merged unless they overlap. If the clusters overlap, we keep the larger cluster and discard the smaller cluster.
+
+After clustering has finished, one cluster will remain which should represent the field. An upper convex hull algorithm is applied to the final cluster to determine the edge of the field. The detector will emit a GreenHorizon message that specifies the location of the edge of the field.
+
+## Ball Detector
+
+The [ball detector receives](https://github.com/NUbots/NUbots/blob/master/module/vision/BallDetector/) a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/master/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/master/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field.
+
+The ball detector forms clusters out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point, but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points.
+
+Any clusters which are above the field edge (i.e. the green horizon) or are smaller than a given threshold are discarded. A circular cone is then fitted to each cluster. The cone axis is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
+
+Degree of circle fit is used to determine if the cluster fits the shape of a circle well enough to be a ball. If it does not, then we discard it. Any ball clusters that are too close, as defined by some configuration variable, are also discarded. Clusters with a large difference between their angular and projection based distances are discarded. Any balls further away than the length of the field, as specified by the FieldDescription, are discarded.
+
+Any clusters that are still remaining are determined to be balls and so are emitted as a [Balls message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Ball.proto).
+
+## Goal Detector
+
+The [goal detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
+
+Any points that are not goal points or are completely surrounded by goal points are discarded. Any points above the green horizon are also discarded. The points we have left are goal post edge points. These points are clustered. Any clusters that do not intersect the green horizon are discarded, since we assume goals are higher than the field. Any clusters that are smaller than a given threshold are also discarded.
+
+The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure distance from. If there is more than one cluster, i.e. more than one goal post, an attempt is made to pair up the goal posts. This is done by calculating the distances between the posts and pairing up goal posts which are close together. **Leftness** and **rightness** is assigned to each post in a pair based on the their positions.
+
+The goal detector then emits any goals as a [Goals message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Goal.proto).
