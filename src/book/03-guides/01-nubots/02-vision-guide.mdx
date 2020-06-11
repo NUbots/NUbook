@@ -1,0 +1,138 @@
+---
+section: Guides
+chapter: NUbots
+title: Maintaining Vision
+description: How to maintain the vision system.
+slug: /guides/nubots/vision
+---
+
+# Dataset Generation
+
+Datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS). If you don't have access to the NAS, ask a team leader for an account. The NAS contains millions of NUpbr training images and large TensorFlow records containing the correct data to train the Visual Mesh on.
+
+## NUpbr
+
+NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding segmentation images for training.
+
+NUpbr requires Blender **2.79**. Download the appropriate file from the [Blender 2.79 Stable Release](https://download.blender.org/release/Blender2.79/).
+
+Clone the [NUpbr repository](https://github.com/NUbots/NUpbr) using
+
+```sh
+git clone https://github.com/NUbots/NUpbr.git
+```
+
+Navigate to the NUpbr directory and run
+
+```sh
+blender --python pbr.py
+```
+
+Find out more about NUpbr and how to edit the parameters on the [NUpbr NUbook page](/system/NUpbr/).
+
+## NUgan
+
+The NUbots CycleGAN performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
+
+Clone the [NUgan repository](https://github.com/NUbots/NUgan) using
+
+```sh
+git clone https://github.com/NUbots/NUgan.git
+```
+
+The [NUgan repository](https://github.com/NUbots/NUgan) details how to train, test and generate images.
+
+NUpbr images can be found on the NAS for the A datasets. The B dataset can be obtained by taking pictures, or collecting images from [BitBots ImageTagger](https://imagetagger.bit-bots.de/).
+
+## Setting Up The Data
+
+The [Visual Mesh repository](https://github.com/Fastcode/VisualMesh) contains information on how to set up the datasets. It contains [a script](https://github.com/Fastcode/VisualMesh/blob/master/training/build_dataset.py) that takes data and converts it into the tfrecord format that the Visual Mesh expects. The script requires a folder of raw images, segmentation masks, and metadata. NUpbr will provide all these as output, and such data can be found on the NAS. If using output from NUgan, use the corresponding NUpbr segmentation masks and metadata, and add in the generated NUgan images in the image folder.
+
+# The Visual Mesh
+
+## Training
+
+Ensure you have followed the above steps to get a dataset to train on.
+
+As specified in the [Visual Mesh repository README](https://github.com/Fastcode/VisualMesh), install the dependencies from `requirements.txt`.
+
+```sh
+pip3 install -r requirements
+```
+
+Using [`cmake`](https://cmake.org/) and a C++ compiler with C++11 or later, build the custom TensorFlow op.
+
+```sh
+mkdir build
+cd build
+cmake ..
+make
+```
+
+A yaml file must be created with options for training. An example of this is in [the example_net.yaml file](https://github.com/Fastcode/VisualMesh/blob/master/example_net.yaml).
+
+Execute the training by running
+
+```sh
+./mesh.py train [config.yaml] [output_dir]
+```
+
+Where `[config.yaml]` is the options yaml file as specified above, and the output directory is the name of the directory you want the progress and results to be saved to. Progress can be monitored with TensorBoard.
+
+## Testing
+
+Testing the network is executed similarly to training. Run
+
+```sh
+./mesh.py test [config.yaml] [output_dir]
+```
+
+Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision (mAP).
+
+## Exporting Configuration
+
+The weights and biases will be output into a yaml file like the one found at [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) or [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
+
+Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. A git guide will be available on NUbook soon.
+
+# Testing
+
+Now that the Visual Mesh has been updated in the NUbots repository, you will want to test it before merging.
+
+Build the code, ensuring `VisualMesh.role` is on in `./b configure -i`. Go to the [Getting Started page](/guides/nubots/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/nubots/build-system) to find out more about options when installing onto the robot.
+
+When your new Visual Mesh is installed onto the robot, connect to the robot and ensure NUsight is on.
+
+```sh
+nano config/NUsight.yaml
+```
+
+Turn vision object and visual mesh on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser.
+
+Run the visualmesh role
+
+```sh
+./visualmesh
+```
+
+Wait for the cameras to load and then watch the Vision or Visual Mesh tabs in NUsight. To determine if the output is correct, consult the [vision page](/system/nubots/vision) for images of the expected output.
+
+If the output has improved make sure you create a PR and get the changes merged in to the GitHub repository.
+
+# Other Considerations
+
+## Odometry
+
+Vision relies on good odometry. Ensure the robot knows what its orientation is by enabling sensor data in `NUsight.yaml` on the robot, navigating to the NUsight localisation tab or chart view, and running sensortest
+
+```
+./sensortest
+```
+
+Move the robot around in each axis to determine the general accuracy of the odometry. If it is not accurate, vision is unlikely to work due to the green horizon.
+
+## Camera Calibration
+
+If the cameras are not calibrated correctly, the vision system will not work well. Information on calibration is available on [the vision page](/system/nubots/vision).
+
+An automatic camera calibration tool is available to use in the NUbots repository that can be used to calibrate the cameras. A guide on how to calibrate the cameras will be available on NUbook soon.
