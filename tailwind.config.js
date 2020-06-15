@@ -49,6 +49,7 @@ module.exports = {
       },
       padding: {
         '14': '3.5rem',
+        '26': '6.5rem',
       },
       maxWidth: {
         'screen-xl': '1280px',
