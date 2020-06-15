@@ -8,7 +8,7 @@ import MenuToggle from './menu-toggle/menu-toggle'
 import Search from './search/search'
 import style from './header.module.css'
 
-const Header = ({ menu, currentSection, background }) => {
+const Header = ({ menu, currentSection, background, height }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   return (
     <>
@@ -18,7 +18,7 @@ const Header = ({ menu, currentSection, background }) => {
         }`}
       >
         <div className='max-w-screen-xl mx-auto px-6'>
-          <div className='-mx-6 h-20 flex items-center'>
+          <div className={`-mx-6 flex items-center ${height}`}>
             <div className='px-6 lg:pr-8 lg:w-1/4 xl:w-1/5'>
               <Logo />
             </div>
@@ -45,10 +45,12 @@ Header.propTypes = {
   menu: PropTypes.array.isRequired,
   currentSection: PropTypes.object.isRequired,
   background: PropTypes.string,
+  height: PropTypes.string,
 }
 
 Header.defaultProps = {
   background: 'solid',
+  height: 'h-16',
 }
 
 export default Header

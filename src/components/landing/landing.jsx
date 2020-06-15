@@ -20,7 +20,12 @@ const LandingPage = props => {
     <>
       <SEO title='NUbots: Robotics Research at the University of Newcastle' />
 
-      <Header menu={menu} currentSection={menu[0]} background='transparent' />
+      <Header
+        menu={menu}
+        currentSection={menu[0]}
+        background='transparent'
+        height='h-20'
+      />
 
       <Cover title='NUbots Robotics Research Group'>
         NUbots is a team in the University of Newcastle’s robotics research
