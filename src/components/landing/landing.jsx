@@ -18,7 +18,10 @@ const LandingPage = props => {
   const { menu } = props.pageContext
   return (
     <>
-      <SEO title='NUbots: Robotics Research at the University of Newcastle' />
+      <SEO
+        title='NUbots: Robotics Research at the University of Newcastle'
+        description='NUbook is the NUbots team documentation and handbook. It contains information about the team, our areas of research, publications, and team history; a description of our hardware, software systems, and related tools; as well as guides on contributing to NUbots.'
+      />
 
       <Header
         menu={menu}
