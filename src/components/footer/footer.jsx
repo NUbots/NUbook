@@ -13,7 +13,7 @@ const Footer = () => (
         Copyright © {new Date().getFullYear()} NUbots -{' '}
         <a
           className='hover:text-gray-800'
-          href='https://github.com/NUbots/NUbook/blob/master/LICENSE'
+          href='https://creativecommons.org/licenses/by/4.0/'
           target='_blank'
           rel='noopener noreferrer'
           title='View NUbook license'
