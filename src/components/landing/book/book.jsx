@@ -20,7 +20,7 @@ const Book = ({ contents }) => {
   }
   return (
     <div>
-      <div className='flex overflow-x-auto items-end border-2 border-b-0 border-nubots-500 rounded-t lg:inline-flex'>
+      <div className='flex mb-6 overflow-x-auto md:justify-center'>
         {contents.map((section, i) => {
           return (
             <Section
@@ -36,8 +36,8 @@ const Book = ({ contents }) => {
           )
         })}
       </div>
-      <div className='bg-gray-100 border-2 border-nubots-500 rounded-b lg:rounded-t lg:rounded-tl-none'>
-        <div className='p-4 grid gap-4 xxs:p-5 xxs:gap-5 md:p-6 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:p-8 xl:gap-8'>
+      <div className='bg-gray-100 border-2 border-nubots-500 rounded'>
+        <div className='p-4 grid gap-4 xxs:p-5 xxs:gap-5 md:p-6 md:gap-6 md:grid-cols-2 lg:grid-cols-3 lg:p-8 xl:p-12 xl:gap-8'>
           {contents[currentSectionIndex].chapters.map(chapter => {
             return (
               <Chapter

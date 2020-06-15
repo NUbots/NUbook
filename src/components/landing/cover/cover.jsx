@@ -11,7 +11,7 @@ const Cover = ({ title, children }) => {
           <div className='text-center md:text-left text-white text-3xl leading-tight xs:text-4xl lg:text-5xl'>
             {title}
           </div>
-          <div className='hidden text-white opacity-75 font-semibold text-xl md:block md:mt-4 md:pr-32 lg:pr-24 lg:text-xl xl:max-w-4xl'>
+          <div className='hidden text-white text-xl md:block md:mt-4 md:pr-32 lg:pr-24 lg:text-xl xl:max-w-4xl'>
             {children}
           </div>
         </div>

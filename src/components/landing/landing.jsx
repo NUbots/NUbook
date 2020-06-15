@@ -28,13 +28,13 @@ const LandingPage = props => {
         international RoboCup competition.
       </Cover>
 
-      <div style={{ backgroundColor: `rgba(26, 32, 44, 0.95)` }}>
+      <div className='bg-gray-100'>
         <div className='max-w-screen-xl mx-auto px-6 py-12'>
           <div className='grid lg:grid-cols-3 lg:grid-rows-1 gap-6'>
             <PromoCard Icon={IconBrain} title='AI &amp; Robotics Research'>
               Our research focuses on applying intelligent techniques in the{' '}
               <a
-                className='text-white hover:underline focus:underline'
+                className='text-nubots-700 hover:underline focus:underline'
                 href='https://humanoid.robocup.org/'
               >
                 Humanoid Soccer
@@ -46,7 +46,7 @@ const LandingPage = props => {
             <PromoCard Icon={IconBall} title='RoboCup'>
               NUbots competes yearly in the{' '}
               <a
-                className='text-white hover:underline focus:underline'
+                className='text-nubots-700 hover:underline focus:underline'
                 href='https://www.robocup.org/objective'
               >
                 RoboCup competition
@@ -59,7 +59,7 @@ const LandingPage = props => {
             <PromoCard Icon={IconHandshake} title='Community Engagement'>
               NUbots engages with the community through events including{' '}
               <a
-                className='text-white hover:underline focus:underline'
+                className='text-nubots-700 hover:underline focus:underline'
                 href='https://www.robocupjunior.org.au/'
               >
                 RoboCup Junior
@@ -71,11 +71,13 @@ const LandingPage = props => {
         </div>
       </div>
 
-      <div className='max-w-screen-xl mx-auto px-6 py-20 relative'>
-        <div className='relative text-center mb-12'>
-          <h2 className='text-4xl mb-2'>NUbook</h2>
-          <div className=' text-secondary text-lg'>
-            The NUbots team documentation
+      <div className='max-w-screen-xl mx-auto px-6 py-24 relative'>
+        <div className='relative text-center mb-20'>
+          <h2 className='text-4xl mb-8'>Welcome to NUbook</h2>
+          <div className='text-secondary text-lg max-w-3xl mx-auto'>
+            The NUbots team documentation. Lorem ipsum dolor sit amet
+            consectetur adipisicing elit. Molestiae minima ipsa dolor dolorum
+            perferendis labore eum tempora quia commodi eveniet.
           </div>
         </div>
 

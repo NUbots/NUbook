@@ -1,15 +1,11 @@
 .sectionButton {
-  @apply inline-flex text-nubots-500 bg-white px-4 py-2 items-center justify-center flex-shrink-0;
+  @apply inline-flex text-nubots-500 bg-white px-4 py-2 items-center justify-center flex-shrink-0 rounded-full border-2 border-nubots-500 mx-1 my-1;
   min-width: 180px;
 
   &:hover,
   &:focus {
     background-color: rgba(249, 165, 13, 0.12);
   }
-}
-
-.sectionButton + .sectionButton {
-  @apply border-l-2 border-nubots-500;
 }
 
 .sectionButtonActive {

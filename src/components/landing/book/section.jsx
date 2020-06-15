@@ -14,9 +14,7 @@ const Section = ({ Icon, children, active, onClick }) => {
       <div className='mr-3'>
         <Icon className='w-8 h-8 fill-current' />
       </div>
-      <div className='text-xl font-semibold flex-grow mr-2 text-left leading-tight'>
-        {children}
-      </div>
+      <div className='text-xl font-semibold mr-2 leading-tight'>{children}</div>
     </button>
   )
 }
