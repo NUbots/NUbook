@@ -52,6 +52,15 @@ Docker is a container system that allows you to install development tools and ru
    sudo apt update
    ```
 
+   If you are on Linux Mint, this will give a malformed input error. Remove `[arch=amd64]` and rerun.
+
+   ```bash
+   sudo add-apt-repository \
+    "deb https://download.docker.com/linux/ubuntu \
+    bionic \
+    stable"
+   ```
+
 2. Install the latest version of Docker.
 
    ```bash
@@ -99,7 +108,7 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 1. Clone the repo by running the following command in a terminal:
 
    ```bash
-   git clone https://github.com/NUbots/NUbots.git
+   git clone --recursive https://github.com/NUbots/NUbots.git
    ```
 
    The repo will be cloned into a `NUbots` directory in the current working directory.
