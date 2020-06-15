@@ -80,7 +80,10 @@ const LandingPage = props => {
         <div className='relative text-center mb-20'>
           <h2 className='text-4xl mb-8'>Welcome to NUbook</h2>
           <div className='text-secondary text-lg max-w-3xl mx-auto'>
-            NUbook is the NUbots team documentation and handbook. It contains information about the team, our areas of research, publications, and team history; a description of our hardware, software systems, and related tools; as well as guides on contributing to NUbots.
+            NUbook is the NUbots team documentation and handbook. It contains
+            information about the team, our areas of research, publications, and
+            team history; a description of our hardware, software systems, and
+            related tools; as well as guides on contributing to NUbots.
           </div>
         </div>
 
