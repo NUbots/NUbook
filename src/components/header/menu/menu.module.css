@@ -1,5 +1,5 @@
 .wrapper {
-  @apply h-screen w-full overflow-hidden fixed z-10;
+  @apply h-screen w-full overflow-hidden fixed z-20;
   transition: max-height 0.3s ease;
 
   @screen lg {
