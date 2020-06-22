@@ -19,7 +19,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
      extension::FileWatcher
      support::SignalCatcher
      support::logging::ConsoleLogHandler
-     support::logging::DataLogger
+     support::logging::DataLogging
      # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
      motion::KinematicsConfiguration
      support::configuration::NetworkConfiguration
@@ -41,7 +41,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
    The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
 
-   Next you will need to figure out which is left and which is right. Change the serial number of one camera (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+   Next you will need to figure out which is left and which is right. Change the serial number for one camera to an incorrect number (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
 5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and losening the three grub screws. Twist until the camera is focused.
 
@@ -55,7 +55,7 @@ $$
 0 & 0 & 0 & 1 \end{bmatrix}
 $$
 
-7. Run `./cameratest` on the robot and hold up a board as shown in the below image. Move the board around so as to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
+7. Run `./cameratest` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around so as to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
    ![A white board with black circles in rows.](./images/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
 
