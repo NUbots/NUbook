@@ -1,12 +1,16 @@
 ---
 section: System
 chapter: NUbots
-title: Script Engine
-description: Describes how the script engine works.
-slug: /system/nubots/script-engine
+title: Script System
+description: Describes how the script system works.
+slug: /system/nubots/script-system
 ---
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+
+To learn how to tune scripts, visit the [ScriptTuner guide](/guides/nubots/script-tuner) page.
+
+# Script Engine
 
 To execute scripts, we emit and receive messages describing the script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/master/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
 
@@ -73,3 +77,40 @@ The script files are YAML files of the following format.
 ```
 
 These script files are in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/nubots/config-script) page.
+
+# Script Runner
+
+[ScriptRunner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptRunner) is a module in the behaviour sub-system. It takes command line arguments and attempts to run them as scripts. It does not require paths, only the name of the script/s to execute. Any role with the ScriptRunner module must also contain the ScriptEngine module.
+
+The command line arguments are stored as a vector of strings. When the middle button on the robot is pushed, the next script in the vector will be executed. If there are no more scripts, nothing will be executed.
+
+An example of using ScriptRunner is
+
+```bash
+./scriptrunner Stand.yaml
+```
+
+# Script Tuner
+
+[ScriptTuner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptTuner) is a module in the behaviour sub-system. It either creates a new script or opens an existing script if specified in the command line. It uses curses to create a GUI in the terminal. Through this GUI, YAML files are created or edited that specify a script that can then be used by other modules. A ServoCommand will be emitted based on the current frame selected in ScriptTuner. By locking and unlocking servos on the robot, the ServoCommand and YAML files can be changed. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
+
+To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/nubots/script-tuner).
+
+# Loading YAML Script Files
+
+The script system follows a similar structure as the [configuration system](/system/nubots/config-system). However, default scripts are moved to a platform type folder and the overriding system is not used as it doesn't make sense to try and merge two scripts.
+
+In the script system, we first check for a robot-specific script. If a robot-specific script does not exist, then we check for a platform-specific script.
+
+```text
+scripts/
+├── nugus/
+│   └── Stand.yaml
+└── nugus2/
+    └── Stand.yaml
+```
+
+To reiterate how the script system loads script files
+
+1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded
+2. If it doesn't exist, then a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded
