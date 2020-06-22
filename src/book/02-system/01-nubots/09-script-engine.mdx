@@ -51,7 +51,7 @@ An example of an emission is in [ScriptTuner.cpp](https://github.com/NUbots/NUbo
 emit(std::make_unique<ExecuteScript>(id, script, NUClear::clock::now()));
 ```
 
-The [ScriptEngine](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It sends the servo positions and time in a [ServoCommand](https://github.com/NUbots/NUbots/blob/master/shared/message/behaviour/ServoCommand.proto) message.
+The [ScriptEngine](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It collects the servo positions and time for each frame and modifies them if needed based on the given duration and start time in the message. The information is then emitted as a [ServoCommand](https://github.com/NUbots/NUbots/blob/master/shared/message/behaviour/ServoCommand.proto) message.
 
 The script files are YAML files of the following format.
 
@@ -59,15 +59,15 @@ The script files are YAML files of the following format.
 - duration: 1000
   targets:
     - id: HEAD_YAW
-      position: -0.001534355
+      position: 0
       gain: 30
       torque: 100
     - id: HEAD_PITCH
-      position: 0.5308869
+      position: 0.5
       gain: 30
       torque: 100
     - id: R_HIP_YAW
-      position: -0.02915275
+      position: -0.03
       gain: 30
       torque: 100
 ```
