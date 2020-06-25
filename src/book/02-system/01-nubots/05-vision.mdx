@@ -81,17 +81,45 @@ The [ball detector receives](https://github.com/NUbots/NUbots/blob/master/module
 
 The ball detector forms clusters out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point, but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points.
 
-Any clusters which are above the field edge (i.e. the green horizon) or are smaller than a given threshold are discarded. A circular cone is then fitted to each cluster. The cone axis is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
+Clusters are discarded if they fail to meet any of the following criteria
 
-Degree of circle fit is used to determine if the cluster fits the shape of a circle well enough to be a ball. If it does not, then we discard it. Any ball clusters that are too close, as defined by some configuration variable, are also discarded. Clusters with a large difference between their angular and projection based distances are discarded. Any balls further away than the length of the field, as specified by the FieldDescription, are discarded.
+- The cluster is below the field edge (i.e. the green horizon).
 
-Any clusters that are still remaining are determined to be balls and so are emitted as a [Balls message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Ball.proto).
+- The cluster is smaller than a given threshold.
+
+Each remaining cluster is fitted with a circular cone. The cone axis is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
+
+Clusters are discarded if they fail to meet any of the following criteria
+
+- The cluster fits the shape of a circle well enough to be a ball. We use degree of circle fit to determine this. This involves calculating the standard deviation of the angle between all the rays in the cluster. The standard deviation must not exceed a given threshold.
+
+- The distance to the cluster is larger than a given minimum distance.
+
+- The difference between the [angular](https://en.wikipedia.org/wiki/Angular_diameter) and projection based sizes of the cluster is within a given threshold.
+
+- The cluster must have distance less than the length of the field, as given by the FieldDescription message.
+
+Any remaining clusters are assumed to be balls and so are emitted together as a [Balls message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Ball.proto).
 
 ## Goal Detector
 
 The [goal detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
-Any points that are not goal points or are completely surrounded by goal points are discarded. Any points above the green horizon are also discarded. The points we have left are goal post edge points. These points are clustered. Any clusters that do not intersect the green horizon are discarded, since we assume goals are higher than the field. Any clusters that are smaller than a given threshold are also discarded.
+Points are discarded if they fail to meet any of the following criteria
+
+- The point is labelled as a goal point by the Visual Mesh
+
+- The point is **not** surrounded by other goal points
+
+- The point is below the green horizon
+
+The points we have left are goal post edge points. These points are clustered.
+
+Clusters are discarded if they fail to meet any of the following criteria
+
+- The cluster intersects the green horizon (we assume goals are higher than the field)
+
+- The cluster is larger than a given threshold
 
 The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure distance from. If there is more than one cluster, i.e. more than one goal post, an attempt is made to pair up the goal posts. This is done by calculating the distances between the posts and pairing up goal posts which are close together. **Leftness** and **rightness** is assigned to each post in a pair based on the their positions.
 
