@@ -1,14 +1,19 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import SearchIcon from './search-icon.svg'
 import style from './search.module.css'
 
-const Search = () => (
+const Search = ({ background }) => (
   <div className={`${style.search} relative`}>
     <input
       disabled
-      placeholder='Search handbook...'
-      className='h-10 w-full pl-14 pr-4 rounded appearance-none text-lg bg-gray-800 placeholder-gray-500 text-white outline-none focus:bg-white focus:text-primary cursor-not-allowed'
+      placeholder='Search NUbook...'
+      className={`h-10 w-full pl-14 pr-4 rounded appearance-none text-lg outline-none cursor-not-allowed ${
+        background === 'solid'
+          ? style.backgroundSolid
+          : style.backgroundTransparent
+      }`}
       title='Search coming soon'
     />
     <SearchIcon
@@ -16,5 +21,13 @@ const Search = () => (
     />
   </div>
 )
+
+Search.propTypes = {
+  background: PropTypes.string,
+}
+
+Search.defaultProps = {
+  background: 'solid',
+}
 
 export default Search
