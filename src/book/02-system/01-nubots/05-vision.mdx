@@ -6,7 +6,7 @@ description: Introduction to vision and how it works in the NUbots codebase.
 slug: /system/nubots/vision
 ---
 
-The vision system aims to convert images from a camera in the robot into useful information, such as ball position, goal position, field lines and obstacles. This information is used to determine behaviour and localisation. The vision system encompasses the [hardware](/system/hardware/overview/#cameras), object detection, and post processing.
+The vision system aims to convert images from a camera in the robot into useful information, such as ball position, goal position, field lines and obstacles. This information is used to determine behaviour and localisation. The vision system encompasses [hardware](/system/hardware/overview/#cameras), object detection, and post processing.
 
 # Cameras
 
@@ -22,9 +22,9 @@ The cameras have the following parameters that are used by the object detection 
 | `fov`               | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                |
 | `Hpc`               | 4x4 matrix           | Homogeneous transform from the rigid platform this camera is attached to (pitch servo) to the camera's virtual focal point.                       |
 
-These parameters are set for each camera as configuration values in the [Camera module](https://github.com/NUbots/NUbots/tree/master/module/input/Camera/data/config), in each robot's respective folder. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`.
+These parameters are set for each camera as **configuration values** in the [Camera module](https://github.com/NUbots/NUbots/tree/master/module/input/Camera/data/config), in each robot's respective folder. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`.
 
-The parameters are used in the Camera module to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/master/shared/message/input/Image.proto).
+The parameters are used in the **Camera module** to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/master/shared/message/input/Image.proto).
 
 The [projection tool](https://github.com/NUbots/NUbots/tree/master/shared/utility/vision/projection.h), based on [panotools' fisheye projection calculations](https://wiki.panotools.org/Fisheye_Projection), maps a portion of the surface of a sphere to a flat image. The type of projection is specified by the above parameter `len.projection`.
 
@@ -32,7 +32,7 @@ The [projection tool](https://github.com/NUbots/NUbots/tree/master/shared/utilit
 
 ## Algorithm
 
-The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vision system and is used for sparse detection of balls, points on the field, field lines, goal posts and other robots. It is an input transformation that uses knowledge of a cameras orientation and position relative to an observation plane to increase the performance and accuracy of a convolutional neural network. It utilises the geometry of objects to create a mesh structure that gives a high accuracy of detection regardless of the distance to the object.
+The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vision system and is used for sparse **detection** of balls, points on the field, field lines, goal posts and other robots. It is an **input transformation** that uses knowledge of a cameras orientation and position relative to an observation plane to increase the performance and accuracy of a **convolutional neural network**. It utilises the **geometry of objects** to create a **mesh structure** that gives a high accuracy of detection regardless of the distance to the object.
 
 The **height** and **orientation** of the camera is tracked using the kinematics and inertial measurement unit of the robot. The **lens type** and the expected **radius** of any soccer ball are given as a configuration value. These values are used to create a set of **unit vectors** with the origin at the camera position. These unit vectors represent rays of light travelling towards the camera. Each vector is **mapped** to a **point on the image** using an appropriate lens projection equation. Two equations are to efficiently sample the space around the camera to obtain the **array of vectors** and associated **sample points**.
 
@@ -46,45 +46,45 @@ The mesh constructed is **one possible mesh**. Various meshes can be created fro
 
 ## Implementation
 
-The Visual Mesh implementation can be [found on GitHub](https://github.com/Fastcode/VisualMesh). It has implementations for using circle, spherical or cylinder geometry for the mesh. The Visual Mesh implementation uses TensorFlow for training. The Visual Mesh can be used with the CPU engine with C++ code or it can be used with the OpenCL engine on CPUs and many GPUs.
+The Visual Mesh implementation can be [found on GitHub](https://github.com/Fastcode/VisualMesh). It has implementations for using **circle, spherical or cylinder geometry** for the mesh. The Visual Mesh implementation uses **TensorFlow** for training. The Visual Mesh can be used with the **CPU engine** with C++ code or it can be used with the **OpenCL engine** on CPUs and many GPUs.
 
-In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh). Network biases and weights are found in the configuration file in the module, along with other Visual Mesh parameters such as geometry type. The module receives an Image message from the Camera module, detailed above, and inputs it into the Visual Mesh. The resulting mesh and classifications are output as a [VisualMesh message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/VisualMesh.proto). This message can then be used in post processing.
+In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh). **Network biases and weights** are found in the **configuration file** in the module, along with other Visual Mesh parameters such as geometry type. The module receives an **Image message** from the Camera module, detailed above, and inputs it into the Visual Mesh. The resulting **mesh and classifications** are output as a [VisualMesh message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/VisualMesh.proto). This message can then be used in [post processing](#post-processing).
 
 # Post Processing
 
-From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The green horizon detector uses information from the Visual Mesh message as detailed above. The goal and ball detectors use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/GreenHorizon.proto).
+From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The **green horizon** detector uses information from the Visual Mesh message as detailed above. The **goal** and **ball detectors** use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/GreenHorizon.proto).
 
-All calculations in the detectors are done in 3D world coordinates. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/mathematics).
+All calculations in the detectors are done in **3D world coordinates**. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/mathematics).
 
 ![A soccer field with an overlay of lines representing detections. A soccer ball has a circle around it. Goal posts and a fan have vertical lines. The field has a green line around it.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
 
 ## Green Horizon Detector
 
-When the [green horizon detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large cluster of points that is determined to be the field.
+When the [green horizon detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large **cluster** of points that is determined to be the field.
 
-The points are first filtered to give only potential field points. The first field point is added to a cluster with all its field point neighbours. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
+The points are first filtered to give only potential field points. The first field point is added to a cluster with all its **field point neighbours**. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
 
-Clustering is repeated until all field points are part of a cluster. Clusters that are smaller than a given threshold are discarded. Clusters are merged unless they overlap. If the clusters overlap, we keep the larger cluster and discard the smaller cluster.
+Clustering is repeated until all field points are part of a cluster. Clusters that are smaller than a given threshold are **discarded**. Clusters are **merged** unless they overlap. If the clusters overlap, we keep the larger cluster and discard the smaller cluster.
 
-After clustering has finished, one cluster will remain which should represent the field. An upper convex hull algorithm is applied to the final cluster to determine the edge of the field. The detector will emit a GreenHorizon message that specifies the location of the edge of the field.
+After clustering has finished, one cluster will remain which should represent **the field**. An **upper convex hull algorithm** is applied to the final cluster to determine the edge of the field. The detector will emit a **GreenHorizon message** that specifies the location of the edge of the field.
 
 ## Ball Detector
 
 The [ball detector receives](https://github.com/NUbots/NUbots/blob/master/module/vision/BallDetector/) a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/master/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/master/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field.
 
-The ball detector forms clusters out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point, but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points.
+The ball detector forms **clusters** out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point, but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points.
 
-Clusters are discarded if they fail to meet any of the following criteria
+Clusters are **discarded** if they fail to meet any of the following criteria
 
 - The cluster is below the field edge (i.e. the green horizon).
 
 - The cluster is smaller than a given threshold.
 
-Each remaining cluster is fitted with a circular cone. The cone axis is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
+Each remaining cluster is fitted with a **circular cone**. The cone axis is determined from the **line segment** between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
 
-Clusters are discarded if they fail to meet any of the following criteria
+Clusters are **discarded** if they fail to meet any of the following criteria
 
-- The cluster fits the shape of a circle well enough to be a ball. We use degree of circle fit to determine this. This involves calculating the standard deviation of the angle between all the rays in the cluster. The standard deviation must not exceed a given threshold.
+- The cluster fits the **shape of a circle** well enough to be a ball. We use degree of circle fit to determine this. This involves calculating the standard deviation of the angle between all the rays in the cluster. The standard deviation must not exceed a given threshold.
 
 - The distance to the cluster is larger than a given minimum distance.
 
@@ -98,7 +98,7 @@ Any remaining clusters are assumed to be balls and so are emitted together as a 
 
 The [goal detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
-Points are discarded if they fail to meet any of the following criteria
+Points are **discarded** if they fail to meet any of the following criteria
 
 - The point is labelled as a goal point by the Visual Mesh
 
@@ -106,9 +106,9 @@ Points are discarded if they fail to meet any of the following criteria
 
 - The point is below the green horizon
 
-The points we have left are goal post edge points. These points are clustered.
+The points we have left are goal post edge points. These points are **clustered**.
 
-Clusters are discarded if they fail to meet any of the following criteria
+Clusters are **discarded** if they fail to meet any of the following criteria
 
 - The cluster intersects the green horizon (we assume goals are higher than the field)
 
