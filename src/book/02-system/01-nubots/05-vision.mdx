@@ -80,15 +80,46 @@ Clusters are **discarded** if they fail to meet any of the following criteria
 
 - The cluster is smaller than a given threshold.
 
-Each remaining cluster is fitted with a **circular cone**. The cone axis is determined from the **line segment** between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
+Each remaining cluster is fitted with a **circular cone**. The **cone axis** is determined from the line segment between the centre on the camera and the average of all ball edge points. The radius of the cone is determined by the maximum distance between the ball edge points and the average of all of the ball edge points.
 
 Clusters are **discarded** if they fail to meet any of the following criteria
 
 - The cluster fits the **shape of a circle** well enough to be a ball. We use degree of circle fit to determine this. This involves calculating the standard deviation of the angle between all the rays in the cluster. The standard deviation must not exceed a given threshold.
 
+  $$
+  \text{angle}_i = \frac{\text{axis}_i \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+  $$
+
+  $$
+  \text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+  $$
+
+  $$
+  \text{standard deviation} = \sum_{i=0}^n (\text{mean} - \text{angle}_i)^2
+  $$
+
+  - $\text{axis}_i$ is the cone axis as specified above of the $i$th cluster
+  - $\text{ray}_i$ is the ray vector of the $i$th cluster
+  - $\text{radius}_{\text{max}}$ is the maximum radius allowed
+
 - The distance to the cluster is larger than a given minimum distance.
 
 - The difference between the [angular](https://en.wikipedia.org/wiki/Angular_diameter) and projection based sizes of the cluster is within a given threshold.
+
+  $$
+  r_a = \frac{r_b}{\sqrt{1 - r^2}}
+  $$
+
+  $$
+  r_p = \lVert \text{axis} \cdot \frac{r_b - \text{rWCc.z}}{\text{axis.z}} + \text{rWCc} \rVert
+  $$
+
+  - $r_a$ is the angular based size
+  - $r_p$ is the projection based size
+  - $r_b$ is the actual ball radius we are expecting
+  - $r$ is the calculated cluster radius
+  - axis is the cone axis as specified above
+  - rWCc is the vector from camera to world in camera space. For more information on this convention, see the [Mathematics](/system/nubots/mathematics#homogeneous-transformations) page.
 
 - The cluster must have distance less than the length of the field, as given by the FieldDescription message.
 
