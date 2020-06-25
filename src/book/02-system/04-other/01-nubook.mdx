@@ -6,9 +6,7 @@ description: The NUbots team handbook and documentation.
 slug: /system/nubook
 ---
 
-NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
-
-Read on if you want to add or update content.
+NUbook is the handbook and high-level documentation for the NUbots team. What you are looking at right now is NUbook! This page has information on how NUbook works.
 
 ## Getting started
 
@@ -87,7 +85,7 @@ You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [
 All additions and edits are done through GitHub pull requests. To add or edit content:
 
 1. Clone the repo, install dependencies, and run the development server as shown in [Getting started](#getting-started) above.
-2. Create a new branch for your changes, in the format `your_last_name/short_description_of_change`:
+2. Create a new branch for your changes, in the format `surname/short_description_of_change`:
 
    ```sh
    git checkout -b paye/add_2019_debrief
@@ -98,13 +96,17 @@ All additions and edits are done through GitHub pull requests. To add or edit co
 5. Commit and push your changes to GitHub.
 6. Go to the repo on GitHub and create a pull request for your branch. Your pull request will be reviewed, merged, and deployed to the live site.
 
+More information on using Git can be found on the [Git Guide](/guides/general/git).
+
 ## Writing Markdown
 
 NUbook content is written using [MDX](https://mdxjs.com/), an extension of [Markdown](https://daringfireball.net/projects/markdown/) with support for dynamic content via [JSX](https://reactjs.org/docs/introducing-jsx.html) and [React](https://reactjs.org/) components. Markdown provides a minimal syntax for writing and styling text content.
 
-GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/) for getting started with Markdown. There's also [this short video series](https://www.youtube.com/playlist?list=PLu8EoSxDXHP7v7K5nZSMo9XWidbJ_Bns3) if you prefer watching.
+GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/) for getting started with Markdown. There's also [a short video series](https://www.youtube.com/playlist?list=PLu8EoSxDXHP7v7K5nZSMo9XWidbJ_Bns3) on using Markdown.
 
-### Adding images
+NUbook has a [kitchen sink](/kitchen-sink) demonstrating the various functionalities avaliable to use when writing NUbook pages.
+
+#### Adding images
 
 - Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
@@ -113,7 +115,7 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
   ![Image description for search engines and screen readers](./images/image.png 'Image caption')
   ```
 
-### Adding syntax-highlighted code blocks
+#### Adding syntax-highlighted code blocks
 
 Use triple backticks ` ``` ` on separate lines to open and close code blocks. Specify the language with a file extension after the opening backticks for syntax highlighting.
 
@@ -130,7 +132,7 @@ int main() {
 ```
 ````
 
-### Adding math symbols and equations
+#### Adding math symbols and equations
 
 - For inline math, wrap TeX-formatted content with a `$`:
 
@@ -148,7 +150,7 @@ int main() {
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/docs/support_table.html for supported symbols and functions.
 
-### Showing content in grids
+#### Showing content in grids
 
 You can show content such as images, code, and math equations side-by-side in a grid.
 
@@ -167,9 +169,7 @@ The following example shows four images in a 2x2 grid with a caption:
 
 The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
 
-See the [original pull request](https://github.com/NUbots/NUbook/pull/20) for more examples.
-
-### Showing images in tabs
+#### Showing images in tabs
 
 You can show multiple images in the same place by putting them in tabs. The caption of each image is used for its tab button label.
 
@@ -186,9 +186,7 @@ The following example shows four images in tabs:
 </TabbedImages>
 ```
 
-See what the tabs look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#tabbed-images).
-
-### Showing alerts and warnings
+#### Showing alerts and warnings
 
 You can show an informational alert using:
 
@@ -213,8 +211,6 @@ qui.
 
 </Alert>
 ```
-
-See what the alerts look like in the [kitchen sink](https://nubook.netlify.com/kitchen-sink#alerts).
 
 ## Organising pages
 
