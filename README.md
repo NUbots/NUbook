@@ -1,5 +1,7 @@
 # NUbook
 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](code_of_conduct.md)
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d89a0d60-217a-4563-ad03-65ccc90b9222/deploy-status)](https://app.netlify.com/sites/nubook/deploys)
 
 NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
