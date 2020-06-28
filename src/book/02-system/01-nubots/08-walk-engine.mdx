@@ -22,7 +22,11 @@ The [behaviour](system/nubots/behaviour) of the robot determines where it will w
 
 ## Open Loop Hybrid Walk
 
-This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**, based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
+This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**. To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
+
+This walk is based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). The code is a refactored version of the [UPennalizers](https://fling.seas.upenn.edu/~robocup/wiki/) / Team DARwIn [2013 code release](https://github.com/UPenn-RoboCup/UPennalizers/tree/master). NUbots have made several improvements and simplifications.
+
+The module for this walk is located in the [OldWalkEngine module folder](https://github.com/NUbots/NUbots/tree/master/module/motion/OldWalkEngine).
 
 ## Quintic Spline Walk
 
