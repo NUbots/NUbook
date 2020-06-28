@@ -269,3 +269,7 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 ![Screenshot of deploy previews link](./deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
+## Licence
+
+[CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) for content, [MIT](./LICENSE) for code.
