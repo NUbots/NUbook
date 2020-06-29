@@ -8,9 +8,9 @@ slug: /system/nubook
 
 NUbook is the handbook and high-level documentation for the NUbots team. What you are looking at right now is NUbook! This page has information on how NUbook works.
 
-## Getting started
+## Getting Started
 
-### Install prerequisites
+### Install Prerequisites
 
 You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [Yarn](https://classic.yarnpkg.com/en/) installed.
 
@@ -80,7 +80,7 @@ You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [
 
 5. Preview the site by visiting [localhost:8000](http://localhost:8000) in a browser
 
-## Contributing content
+## Contributing Content
 
 All additions and edits are done through GitHub pull requests. To add or edit content:
 
@@ -106,7 +106,7 @@ GitHub has [a good guide](https://guides.github.com/features/mastering-markdown/
 
 NUbook has a [kitchen sink](/kitchen-sink) demonstrating the various functionalities avaliable to use when writing NUbook pages.
 
-#### Adding images
+### Images
 
 - Add image files in an `images` folder in the same directory as the file being edited
 - Reference images in Markdown:
@@ -115,7 +115,7 @@ NUbook has a [kitchen sink](/kitchen-sink) demonstrating the various functionali
   ![Image description for search engines and screen readers](./images/image.png 'Image caption')
   ```
 
-#### Adding syntax-highlighted code blocks
+### Syntax-Highlighted Code Blocks
 
 Use triple backticks ` ``` ` on separate lines to open and close code blocks. Specify the language with a file extension after the opening backticks for syntax highlighting.
 
@@ -132,7 +132,7 @@ int main() {
 ```
 ````
 
-#### Adding math symbols and equations
+### Maths Symbols and Equations
 
 - For inline math, wrap TeX-formatted content with a `$`:
 
@@ -150,7 +150,7 @@ int main() {
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See https://katex.org/docs/support_table.html for supported symbols and functions.
 
-#### Showing content in grids
+### Content in Grids
 
 You can show content such as images, code, and math equations side-by-side in a grid.
 
@@ -169,7 +169,7 @@ The following example shows four images in a 2x2 grid with a caption:
 
 The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
 
-#### Showing images in tabs
+### Images in Tabs
 
 You can show multiple images in the same place by putting them in tabs. The caption of each image is used for its tab button label.
 
@@ -186,7 +186,7 @@ The following example shows four images in tabs:
 </TabbedImages>
 ```
 
-#### Showing alerts and warnings
+### Alerts and Warnings
 
 You can show an informational alert using:
 
@@ -212,7 +212,7 @@ qui.
 </Alert>
 ```
 
-## Organising pages
+## Organising Pages
 
 Pages are written in MDX files and stored in section and chapter folders in the [`src/book/`](src/book/) directory, and organised as follows:
 
@@ -241,7 +241,7 @@ Pages are written in MDX files and stored in section and chapter folders in the 
   | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
   | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
 
-## Formatting code
+## Formatting Code
 
 All code in NUbook (including Markdown) is formatted using [Prettier](https://prettier.io/) for a consistent style.
 
@@ -258,7 +258,7 @@ Pull requests are automatically deployed as previews using [Netlify](https://net
 
 When a pull request is merged into master, it is automatically deployed to the main site.
 
-## Deploy previews
+## Deploy Previews
 
 As mentioned above, pull requests are automatically deployed as previews using Netlify.
 
