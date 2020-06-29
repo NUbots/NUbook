@@ -55,8 +55,8 @@
     "build": "gatsby build",
     "dev": "gatsby develop",
     "clean": "rimraf .cache/ public/",
-    "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint src/**/*.css",
-    "format": "prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\" && stylelint src/**/*.css --fix",
+    "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
+    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
     "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\""
   },
   "repository": {

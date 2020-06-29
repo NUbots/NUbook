@@ -24,5 +24,6 @@ module.exports = {
         ignorePseudoClasses: ['global'],
       },
     ],
+    'declaration-colon-newline-after': null,
   },
 }
