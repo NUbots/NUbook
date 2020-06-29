@@ -60,7 +60,7 @@ Before making a pull request, it is important that your code adheres to the code
 
 If your code is in a different repository and it uses C++ or protobuf files, use the `.clang-format` file in the NUbots repo to format them.
 
-If you get a message that your build failed, try running the relevant format commands and then committing any format changes. You won't be able to merge the PR until the build checks pass.
+If you push your changes to GitHub and get a message that the build failed due to formatting issues, try running the relevant format commands, commit any changes, and push to GitHub again. This will trigger a new build, which will check the formatting again. You won't be able to merge the PR until the build checks pass.
 
 ## Work in Progress PRs
 
