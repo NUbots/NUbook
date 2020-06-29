@@ -1,11 +1,13 @@
 @import '~katex/dist/katex.min.css';
 
+/* purgecss start ignore */
+
 /**
  * This injects Tailwind's base styles, which is a combination of
  * normalize.css and some additional base styles.
  */
-/* purgecss start ignore */
 @tailwind base;
+
 /* purgecss end ignore */
 
 /**

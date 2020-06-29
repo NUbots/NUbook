@@ -8,10 +8,10 @@
 
 .alertContent p {
   @apply text-base mt-3;
-}
 
-.alertContent p:first-child {
-  margin-top: 0;
+  &:first-child {
+    @apply mt-0;
+  }
 }
 
 .alertContent code {
