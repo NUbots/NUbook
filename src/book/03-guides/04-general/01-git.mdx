@@ -52,7 +52,11 @@ Commits should make minor changes, and the changes in each commit should have a 
 
 ## Formatting and Buildkite Checks
 
-Before making a pull request, it is important that your code adheres to the formatting rules. For branches in the NUbots repo, running `./b format` before your last commit should fix formatting issues. Code in the NUbook repo must be formatted with `yarn format` before it can be committed. For NUsight code, use `yarn eslint` to find problems, and `yarn eslint:fix` to fix them.
+Before making a pull request, it is important that your code adheres to the code style and formatting rules for the project you are contributing to.
+
+- For code in the [NUbots](https://github.com/NUbots/NUbots) repository, run `./b format` to fix formatting issues before making a commit.
+- For code in [NUsight](https://github.com/NUbots/NUsight2), run `yarn eslint:fix` to fix formatting issues before making a commit.
+- For code in [NUbook](https://github.com/NUbots/NUbook), run `yarn format` to fix formatting issues before making a commit.
 
 If your code is in a different repository and it uses C++ or protobuf files, use the `.clang-format` file in the NUbots repo to format them.
 
