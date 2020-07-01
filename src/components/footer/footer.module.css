@@ -4,8 +4,8 @@
   filter: grayscale(0.6);
 
   &:hover {
-    filter: none;
-    transform: rotate(40deg);
     @apply opacity-100;
+    transform: rotate(40deg);
+    filter: none;
   }
 }
