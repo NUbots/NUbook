@@ -28,6 +28,16 @@ const Footer = () => (
         >
           CC-BY-4.0
         </a>
+        <br></br>
+        <a
+          className='hover:text-gray-800'
+          href='https://policies.newcastle.edu.au/document/view-current.php?id=204'
+          target='_blank'
+          rel='noopener noreferrer'
+          title='View Code of Conduct'
+        >
+          University of Newcastle Code of Conduct
+        </a>
       </div>
       <div className='flex justify-center mb-6 order-first lg:mb-0 lg:order-none lg:w-1/3'>
         <Link to='/'>
