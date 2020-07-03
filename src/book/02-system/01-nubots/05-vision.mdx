@@ -34,7 +34,7 @@ The [projection tool](https://github.com/NUbots/NUbots/tree/master/shared/utilit
 
 The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vision system and is used for sparse **detection** of balls, points on the field, field lines, goal posts and other robots. It is an **input transformation** that uses knowledge of a cameras orientation and position relative to an observation plane to increase the performance and accuracy of a **convolutional neural network**. It utilises the **geometry of objects** to create a **mesh structure** that gives high accuracy of detection regardless of the distance to the object.
 
-The **height** and **orientation** of the camera is tracked using the kinematics and inertial measurement unit of the robot. The **lens type** and the expected **radius** of any soccer ball are given as a configuration value. These values are used to create a set of **unit vectors** with the origin at the camera position. These unit vectors represent rays of light travelling towards the camera. Each vector is **mapped** to a **point on the image** using an appropriate lens projection equation. Two equations are to efficiently sample the space around the camera to obtain the **array of vectors** and associated **sample points**.
+The **height** and **orientation** of the camera is tracked using the kinematics and inertial measurement unit of the robot. The **lens type** and the expected **radius** of any soccer ball are given as a configuration value. These values are used to create a set of **unit vectors** with the origin at the camera position. These unit vectors represent rays of light travelling towards the camera. Each vector is **mapped** to a **point on the image** using an appropriate lens projection equation. Two equations are used to efficiently sample the space around the camera to obtain the **array of vectors** and associated **sample points**.
 
 ![A soccer field with a hexagonal grid. Each hexagon is made up of a centre point and six neighbours.](./images/visual-mesh-grid.jpg 'The Visual Mesh grid')
 
@@ -125,7 +125,7 @@ Any remaining clusters are assumed to be balls and so are emitted together as a 
 
 The [goal detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
-All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal post) are found and partitioned into clusters. Clusters are **discarded** if they fail to meet any of the following criteria
+All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if they fail to meet any of the following criteria
 
 - The cluster intersects the green horizon (we assume goals are higher than the field)
 
