@@ -36,7 +36,7 @@ The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vis
 
 The **height** and **orientation** of the camera is tracked using the kinematics and inertial measurement unit of the robot. The **lens type** and the expected **radius** of any soccer ball are given as a configuration value. These values are used to create a set of **unit vectors** with the origin at the camera position. These unit vectors represent rays of light travelling towards the camera. Each vector is **mapped** to a **point on the image** using an appropriate lens projection equation. Two equations are used to efficiently sample the space around the camera to obtain the **array of vectors** and associated **sample points**.
 
-![A soccer field with a hexagonal grid. Each hexagon is made up of a centre point and six neighbours.](./images/visual-mesh-grid.jpg 'The Visual Mesh grid')
+![A soccer field with a triangular grid overlay.](./images/visual-mesh-grid.jpg 'The Visual Mesh grid')
 
 Each **sample point** is connected to its **six closest neighbours**. These connections become the **edges** of the mesh. A fully [convolutional neural network](https://doi.org/10.1109/TPAMI.2016.2572683) is used on the mesh where each sample point and its neighbours become the **input to a convolution**. All layers in the network use **seven point convolutions**, representing a point and its six neighbours. The number of sample points determines the level of detail available to the network. The **output of the network** is a **label** to each point specifying what class it belongs to. This could be a ball, goal-post, field, field line, robot, or none.
 
@@ -56,7 +56,7 @@ From the Visual Mesh a series of specialised detectors are employed to detect fi
 
 All calculations in the detectors are done in **3D world coordinates**. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/mathematics).
 
-![A soccer field with an overlay of lines representing detections. A soccer ball has a circle around it. Goal posts and a fan have vertical lines. The field has a green line around it.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
+![A soccer field with an overlay of lines representing object detections.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
 
 ## Green Horizon Detector
 
