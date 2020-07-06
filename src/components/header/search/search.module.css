@@ -3,3 +3,25 @@
     @apply text-icon;
   }
 }
+
+.backgroundSolid {
+  @apply bg-gray-800 text-white;
+
+  &:focus {
+    @apply bg-white text-primary;
+  }
+}
+
+.backgroundTransparent {
+  @apply text-white;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.54);
+  }
+
+  &:focus {
+    @apply bg-white text-primary;
+  }
+}

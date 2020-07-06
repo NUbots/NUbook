@@ -12,7 +12,7 @@ const getLinkProps = ({ isCurrent }) => {
   }
 }
 
-const Menu = ({ menu, currentSection, open }) => {
+const Menu = ({ menu, currentSection, open, isHome }) => {
   return (
     <>
       <Helmet>
@@ -35,7 +35,7 @@ const Menu = ({ menu, currentSection, open }) => {
             <div className='mb-8'>
               {menu.map(section => {
                 const className = `${style.sectionLink} ${
-                  section.title === currentSection.title
+                  !isHome && section.title === currentSection.title
                     ? `${style.sectionLinkActive}`
                     : ''
                 }`
@@ -98,6 +98,11 @@ Menu.propTypes = {
     ).isRequired,
   }),
   open: PropTypes.bool.isRequired,
+  isHome: PropTypes.bool,
+}
+
+Menu.defaultProps = {
+  isHome: false,
 }
 
 export default Menu

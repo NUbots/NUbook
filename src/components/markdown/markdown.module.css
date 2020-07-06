@@ -2,8 +2,7 @@
   /* ============================
    * Base text color and line height
    * ============================ */
-  @apply text-primary;
-  @apply leading-relaxed;
+  @apply text-primary leading-relaxed;
 
   /* ============================
    * Vertical rythm
@@ -39,8 +38,7 @@
    * Separator
    * ============================ */
   hr {
-    @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200;
-    @apply my-16;
+    @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200 my-16;
   }
 
   a {
@@ -69,7 +67,6 @@
    * Inline code
    * ============================ */
   :not(pre) > code {
-    background-color: rgba(0, 0, 0, 0.04);
     @apply inline-block;
     @apply rounded-sm;
     @apply text-sm;
@@ -80,6 +77,7 @@
     @apply font-mono;
     @apply align-baseline;
     @apply font-normal;
+    background-color: rgba(0, 0, 0, 0.04);
   }
 
   strong code {
@@ -90,9 +88,7 @@
    * Code blocks
    * ============================ */
   pre {
-    @apply font-mono;
-    @apply rounded;
-    @apply font-normal;
+    @apply flex p-0 text-sm leading-normal font-mono rounded font-normal;
     scrollbar-width: none;
 
     &::-webkit-scrollbar {
@@ -100,6 +96,7 @@
     }
 
     code {
+      @apply p-4;
       overflow-x: auto;
 
       &::-webkit-scrollbar {
@@ -108,11 +105,15 @@
       }
 
       &::-webkit-scrollbar-track {
-        @apply bg-gray-300;
+        @apply bg-transparent;
       }
 
       &::-webkit-scrollbar-thumb {
-        @apply bg-gray-500;
+        @apply bg-gray-500 rounded-full;
+
+        &:hover {
+          @apply bg-gray-600;
+        }
       }
     }
   }
@@ -136,7 +137,7 @@
   blockquote {
     @apply bg-gray-100;
     @apply p-4;
-    @apply border-l border-l-4 border-gray-200;
+    @apply border-l-4 border-gray-200;
     @apply text-primary;
     @apply text-base;
   }
@@ -197,9 +198,8 @@
   h3 > code,
   h4 > code,
   h5 > code {
+    @apply text-red-600 font-mono;
     font-size: inherit;
-    @apply text-red-600;
-    @apply font-mono;
   }
 
   h3 > code {
@@ -255,16 +255,14 @@
       @apply relative pl-10;
 
       &::before {
-        @apply absolute left-0 top-0 ml-4;
-        @apply inline-block mr-3;
-        @apply text-icon;
+        @apply absolute left-0 top-0 ml-4 inline-block mr-3 text-icon;
         content: '\25CF'; /* Bullet symbol */
       }
     }
   }
 
   ol {
-    @apply list-none;
+    list-style-type: none;
     counter-reset: item;
 
     > li {
@@ -294,11 +292,12 @@
     blockquote,
     details,
     figure,
+    [data-table-responsive],
     [data-alert] {
       @apply mt-3;
 
       &:first-child {
-        margin-top: 0;
+        @apply mt-0;
       }
     }
   }
@@ -306,35 +305,31 @@
   :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
   ul code,
   ol code {
-    @apply text-sm;
-    @apply leading-normal;
-  }
-
-  pre {
-    @apply flex p-0;
     @apply text-sm leading-normal;
-  }
-
-  pre code {
-    @apply p-4;
   }
 
   /* ============================
    * Tables
    * ============================ */
+  [data-table-responsive] {
+    @apply block w-full overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
   table {
-    @apply w-full text-left;
+    @apply w-full text-left border border-gray-200;
     border-collapse: collapse !important;
 
     th {
-      @apply text-sm font-semibold text-primary p-2 bg-gray-100;
+      @apply font-semibold text-primary py-2 px-4 bg-gray-100;
     }
 
     td {
-      @apply p-2 border-t border-gray-200 text-sm;
+      @apply py-2 px-4 border-t border-gray-200;
 
       code {
-        @apply bg-gray-100 px-1 font-mono text-xs text-red-700 align-baseline;
+        @apply bg-gray-100 px-1 font-mono text-sm text-red-600 align-baseline;
       }
 
       &:first-child {
@@ -347,34 +342,30 @@
    * Math
    * ============================ */
   :global(.katex-display) {
-    margin-bottom: 0;
+    @apply mb-0;
   }
 
   /* ============================
    * Collapsible sections
    * ============================ */
   details summary {
-    user-select: none;
-    cursor: pointer;
+    @apply select-none cursor-pointer;
   }
 
   > details {
-    border: 1px solid #eee;
+    @apply border border-b-0 border-gray-200;
   }
 
   > details[open] {
-    padding: 16px;
+    @apply p-4 border-b;
   }
 
   > details summary {
-    background-color: #eee;
-    padding: 8px 16px;
+    @apply bg-gray-200 py-2 px-4;
   }
 
   > details[open] > summary {
-    margin-top: -16px;
-    margin-left: -16px;
-    margin-right: -16px;
+    @apply -mt-4 -mx-4;
   }
 
   > details summary + p {
