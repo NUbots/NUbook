@@ -35,10 +35,21 @@ A.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
+const Table = ({ children }) => (
+  <div data-table-responsive='true'>
+    <table>{children}</table>
+  </div>
+)
+
+Table.propTypes = {
+  children: PropTypes.node.isRequired,
+}
+
 const MDXComponents = {
   img: Img,
   a: A,
   code: Code,
+  table: Table,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
   h3: createHeading('h3'),
