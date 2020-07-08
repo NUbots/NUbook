@@ -2,32 +2,26 @@
 section: System
 chapter: NUbots
 title: Localisation
-description: Introduction to localisation and how it works in the NUbots codebase.
+description: Localisation and how it works in the NUbots codebase.
 slug: /system/nubots/localisation
 ---
 
-## Overview
+Localisation determines where the robot is in its environment. For the purpose of soccer playing, the environment is the field. The knowledge of where the robot is on the field is useful for deciding the robot's behaviour.
 
-The role of the localisation/RobotParticleLocalisation (aka Localisation) module in NUbots is to track the transform from world to field space (world space having it's origin at the location the robot powered up, and field space having it's origin at field center). A Particle Filter [1] is used to track the SE(2) transform which is emitted for use in other modules and NUSight as the three state variables X and Y position and angle. These variables are primarily intended to be combined with the platform/darwin/SensorFilter module which among other things returns the transform from torso to world. These two transforms combined can then be used to obtain the transform from field to torso (the location of the robot on the field).
+# Algorithm
 
-## Location of Key Files
-- **Main files:** NUbots/module/localisation/RobotParticleLocalisation/src/RobotParticleLocalisation.[cpp/h]
-- **Initialisation yaml:** NUbots/module/localisation/RobotParticleLocalisation/data/config/RobotParticleLocalisation.yaml
-- **Particle Filter:** NUbots/shared/utility/math/filter/ParticleFilter.h
-- **Robot Specific Functions:** NUbots/module/localisation/RobotParticleLocalisation/src/RobotModel.[cpp/h]
-- **Odometry:** NUbots/module/platform/darwin/SensorFilter/src/SensorFilter.cpp
+[Odometry](/system/nubots/odometry) gives us the robot's position relative to the world. The origin of world space is the position, on startup, of the center of the robot's torso projected to the ground. For information on transforms, see the [mathematics](/system/nubots/mathematics) page. Localisation gives the x-y position and yaw angle of field space relative to world space. Field space has origin at the center of the field. Since we know world to field space and world to robot space, we can get robot to field space. This allows us to determine where the robot is on the field.
 
-## Basic Function of the Filter
-Upon initialisation of the Particle Filter module, the Calibration reaction is triggered, which loads in the initialisation values for the filter from the RobotParticleLocalisation.yaml file, and then emits a ResetRobotHypotheses to start the Particle Filter. The main step during the initialisation of the Particle Filter is to create and normally distribute a number of particles (the number specified in the yaml file) over the possible starting region of the field, each particle being a guess of the SE(2) world to field transform. 
+The localisation method used to estimate world to field space uses a Particle Filter. The Particle Filter estimates the transform using particles. Initially, the Particle Filter creates and normally distributes a number of particles, each representing a guess of the world to field transform. Each particle is equally likely to be correct. The particles are then updated when we see goal posts. The difference between the observed and expected goal post measurements for each particle is calculated. A number of random "rogue" particles are added to avoid local maxima. Based on the difference calculated each particle is awarded a weight and ranked with the worst particles discarded.
 
-From then on, the Time Update function runs at the frequency specified in RobotParticalLocalisation.h, and the Measurement Update runs every time a new Goal Measurement has been emitted by the Goal Detector module. The Time Update function does not make any changes since the world to field transform does not change over time, however the Measurement Update uses the difference between the observed and expected goal post measurements for each particle. A number of random "rogue" particles are added to avoid local maxima, then based on the difference just calculated, each particle is awarded a weight and ranked, with the worst particles discarded.
+# Implementation
 
+The [Robot Particle Localisation](https://github.com/NUbots/NUbots/tree/master/module/localisation/RobotParticleLocalisation) module uses the [Particle Filter](https://github.com/NUbots/NUbots/blob/master/shared/utility/math/filter/eigen/ParticleFilter.h) utility with template type [RobotModel](https://github.com/NUbots/NUbots/blob/master/module/localisation/RobotParticleLocalisation/src/RobotModel.h). The module emits a [Field](https://github.com/NUbots/NUbots/blob/master/shared/message/localisation/Field.proto) message that can then be used in the rest of the system. This should be used in conjunction with [SensorFilter](https://github.com/NUbots/NUbots/tree/master/module/platform/darwin/SensorFilter), which handles robot odometry and gives the world to robot matrix.
 
+The module will set parameters using the given [YAML](https://github.com/NUbots/NUbots/blob/master/module/localisation/RobotParticleLocalisation/data/config/RobotParticleLocalisation.yaml) file. At this time, the filter is initialised with particles based on the parameters of the YAML file.
 
+RobotParticleLocalisation runs a time update at a specified frequency and a measurement update. Since the world to field transform does not change over time, i.e. the world and the field are stationary, the time update does nothing. The measurement update runs every time a [Goals](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Goal.proto) message is received from [vision](/system/nubots/vision), alongside a [FieldDescription](https://github.com/NUbots/NUbots/blob/master/shared/message/support/FieldDescription.proto) message that describes what the field the robot is playing on looks like. In this update, the weights of the particles are adjusted based on the goals message.
 
+# References
 
-
-
-## References
-
-[1] S. Thrun, W. Burgard and D. Fox, Probabilistic robotics. Cambridge, Mass.: MIT Press, 2005, pp. 96-116.
+1. S. Thrun, W. Burgard and D. Fox, Probabilistic robotics. Cambridge, Mass.: MIT Press, 2005, pp. 96-116.
