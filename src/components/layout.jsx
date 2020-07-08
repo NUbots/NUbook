@@ -78,7 +78,7 @@ const Layout = ({ children, data, pageContext }) => {
         </div>
       </div>
 
-      <div className='pt-8'>
+      <div className='pt-12'>
         <Footer />
       </div>
     </>
