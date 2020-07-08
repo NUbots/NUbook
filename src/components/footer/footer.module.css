@@ -10,6 +10,7 @@
     svg {
       filter: none;
       transform: rotate(40deg);
+
       @apply opacity-100;
     }
   }
