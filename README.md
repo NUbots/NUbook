@@ -270,6 +270,10 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
 
+## Code of Conduct
+
+NUbook is a project of the NUbots team at the University of Newcastle, Australia. The team, all external contributors, and all users of its projects must comply with the [University's Code of Conduct](https://policies.newcastle.edu.au/document/view-current.php?id=204).
+
 ## Licence
 
 [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/) for content, [MIT](./LICENSE) for code.
