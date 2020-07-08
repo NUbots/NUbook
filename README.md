@@ -2,8 +2,6 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d89a0d60-217a-4563-ad03-65ccc90b9222/deploy-status)](https://app.netlify.com/sites/nubook/deploys)
 
-[NUbots is a University of Newcastle team. The team must comply with the University's Code of Conduct.](https://policies.newcastle.edu.au/document/view-current.php?id=204).
-
 NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
 
 Read on if you want to add or update content.
@@ -271,6 +269,10 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 ![Screenshot of deploy previews link](./deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
+## Code of Conduct
+
+NUbook is a project of the NUbots team at the University of Newcastle, Australia. The team, all external contributors, and all users of its projects must comply with the [University's Code of Conduct](https://policies.newcastle.edu.au/document/view-current.php?id=204).
 
 ## Licence
 
