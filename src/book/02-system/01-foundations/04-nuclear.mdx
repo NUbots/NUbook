@@ -8,7 +8,7 @@ slug: /system/foundations/nuclear
 
 NUClear is the software framework used in the main NUbots codebase. It is a message passing system designed to be modular and fast.
 
-This page is intended to be a practical summary of the official [NUClear documentation](https://nuclear.readthedocs.io/en/latest/), which contains a detailed description of NUClear. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](/system/nubots/nuclear/#nuclear-roles) in this page is based off.
+This page is intended to be a practical summary of the official [NUClear documentation](https://nuclear.readthedocs.io/en/latest/), which contains a detailed description of NUClear. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](#nuclear-roles) in this page is based off.
 
 # Components
 
@@ -26,7 +26,7 @@ A reactor can be thought of as a module. All modules in the NUClear system are a
 
 Reactions run tasks when the required data is available and/or when certain conditions are true. A task is the current execution of a defined reaction within the system. These functions are bound by NUClear as callbacks, and it is the execution of these callbacks which will assign tasks to a thread.
 
-Reactions are created by subscribing to the PowerPlant through [DSL On Statements](/system/nubots/nuclear/#on-statements).
+Reactions are created by subscribing to the PowerPlant through [DSL On Statements](#on-statements).
 
 # NUClear DSL
 
