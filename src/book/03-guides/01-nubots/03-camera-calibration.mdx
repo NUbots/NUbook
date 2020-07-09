@@ -47,13 +47,13 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
 6. Check the [transform matrix](/system/nubots/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
 
-$$
-\text{Hpc} = \begin{bmatrix}
-\cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
-0 & 1 & 0 & 0.033795 \\
--\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
-0 & 0 & 0 & 1 \end{bmatrix}
-$$
+   $$
+   \text{Hpc} = \begin{bmatrix}
+   \cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
+   0 & 1 & 0 & 0.033795 \\
+   -\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
+   0 & 0 & 0 & 1 \end{bmatrix}
+   $$
 
 7. Run `./cameratest` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
@@ -100,6 +100,6 @@ $$
     3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
     4. Run `visualmesh.role` and switch to the vision tab in NUsight
 
-       NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
+    NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
 
 12. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once the calibration is complete, commit all changes and push to the branch. Make a pull request to get the changes into the master branch.
