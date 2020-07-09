@@ -57,7 +57,19 @@ $$
 
 7. Run `./cameratest` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
-   ![A white board with black circles in rows.](./images/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
+   ![A white board with black circles in rows.](./images/calibration/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
+
+   <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Photos from the robot's cameras of a person moving around a board for camera calibration">
+
+   ![A person holding a board in the middle of the photo](./images/calibration/board-middle.jpg)
+
+   ![A person holding a board at the bottom of the photo](./images/calibration/board-below.jpg)
+
+   ![A person holding a board to the left](./images/calibration/board-left.jpg)
+
+   ![A person holding a board to the right](./images/calibration/board-right.jpg)
+
+   </Grid>
 
 8. Stop the binary and copy the nbs file created into the NUbots directory on your computer. Do this by running the command `scp <robot address>:<file path> .` from the NUbots directory on your computer. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
 
