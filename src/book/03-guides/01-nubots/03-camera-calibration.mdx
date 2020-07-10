@@ -43,9 +43,9 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
    Next you will need to figure out which is left and which is right. Change the serial number for one camera to an incorrect number (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
-5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and losening the three grub screws. Twist until the camera is focused.
+5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
-6. Check the [transform matrix](/system/nubots/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
+6. Check the [transform matrix](/system/nubots/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
 
 $$
 \text{Hpc} = \begin{bmatrix}
