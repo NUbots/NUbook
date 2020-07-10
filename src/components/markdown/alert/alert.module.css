@@ -1,5 +1,5 @@
 .alert {
-  @apply max-w-full p-4 flex items-center;
+  @apply max-w-full p-4 flex items-center border-2 rounded-md;
 }
 
 .alertContent {
@@ -8,10 +8,10 @@
 
 .alertContent p {
   @apply text-base mt-3;
-}
 
-.alertContent p:first-child {
-  margin-top: 0;
+  &:first-child {
+    @apply mt-0;
+  }
 }
 
 .alertContent code {
@@ -33,6 +33,7 @@
 
 .alertInfo {
   background-color: rgba(33, 150, 243, 0.12);
+  border-color: rgba(33, 150, 243, 0.7);
 }
 
 .alertInfo .alertIcon {
@@ -41,6 +42,7 @@
 
 .alertWarning {
   background-color: rgba(255, 152, 0, 0.12);
+  border-color: rgba(255, 152, 0, 0.7);
 }
 
 .alertWarning .alertIcon {
