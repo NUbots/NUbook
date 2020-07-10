@@ -79,4 +79,15 @@ $$
 
     `<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
 
-Once the calibration is done, the values in the camera configuration files should be changed. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once all the configuration that is wanted to be done is complete, make sure it is all committed and pushed on a branch and then make a pull request to get the changes into the master branch.
+    Once the calibration is done, the values in the camera configuration files should be changed.
+
+11. Verify these values by running vision and checking the output in NUsight.
+
+    1. Ensure `NUsight.yaml` has enabled compressed images and vision objects.
+    2. Stand the robot up with `./scriptrunner Stand.yaml`
+    3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
+    4. Run `visualmesh.role` and switch to the vision tab in NUsight
+
+       NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
+
+12. Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once the calibration is complete, commit all changes and push to the branch. Make a pull request to get the changes into the master branch.
