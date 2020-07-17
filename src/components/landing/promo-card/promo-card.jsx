@@ -16,7 +16,7 @@ const PromoCard = ({ Icon, title, children }) => {
 PromoCard.propTypes = {
   Icon: PropTypes.elementType,
   title: PropTypes.string.isRequired,
-  children: PropTypes.elementType.isRequired,
+  children: PropTypes.node.isRequired,
 }
 
 export default PromoCard
