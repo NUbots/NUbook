@@ -87,17 +87,17 @@ Testing the network is executed similarly to training. Run
 ./mesh.py test [config.yaml] [output_dir]
 ```
 
-Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision (mAP).
+Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision.
 
 ## Exporting Configuration
 
 The weights and biases will be output into a yaml file like the one found at [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) or [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
 
-Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. A git guide will be available on NUbook soon.
+Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. For further information about Git, view the [Git Guide](/guides/general/git).
 
 # Testing
 
-Now that the Visual Mesh has been updated in the NUbots repository, you will want to test it before merging.
+Now that the Visual Mesh has been updated in the NUbots repository, you should test it before merging.
 
 Build the code, ensuring `VisualMesh.role` is on in `./b configure -i`. Go to the [Getting Started page](/guides/nubots/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/nubots/build-system) to find out more about options when installing onto the robot.
 
@@ -107,7 +107,7 @@ When your new Visual Mesh is installed onto the robot, connect to the robot and 
 nano config/NUsight.yaml
 ```
 
-Turn vision object and visual mesh on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser.
+Turn `vision object` and `visual mesh` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser.
 
 Run the visualmesh role
 
