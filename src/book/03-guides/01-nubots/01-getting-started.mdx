@@ -96,12 +96,14 @@ Docker is a container system that allows you to install development tools and ru
 
 #### Windows
 
-1. Ensure your Windows build is at least 2004. 
+1. Ensure your Windows build is at least 2004.
+
    1. Press <kbd>WIN</kbd> + <kbd>r</kbd>.
    2. Type `winver`.
    3. Hit enter.
 
 2. Enable WSL 2
+
    1. Open Windows Powershell in administrator mode.
    2. Input `dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart`
    3. Input `dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart`
@@ -109,9 +111,10 @@ Docker is a container system that allows you to install development tools and ru
 
 3. Go to the Microsoft Store. Search for Ubuntu and install it. Launch Ubuntu.
 
-4. Ensure Ubuntu is using WSL 2. 
-   1. In Powershell, run `wsl --list --verbose`. 
-   2. If the version is not 2, run  `wsl --set-version ubuntu 2`.
+4. Ensure Ubuntu is using WSL 2.
+
+   1. In Powershell, run `wsl --list --verbose`.
+   2. If the version is not 2, run `wsl --set-version ubuntu 2`.
 
 5. [Download Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
 
