@@ -83,32 +83,42 @@ Docker is a container system that allows you to install development tools and ru
 
 #### Windows
 
+<Alert type='warning'>
+  Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
+</Alert>
+
 1. Ensure your Windows build is at least 2004.
 
-   1. Press <kbd>WIN</kbd> + <kbd>r</kbd>.
-   2. Type `winver`.
-   3. Hit enter.
+   - Press <kbd>WIN</kbd> + <kbd>r</kbd>.
+   - Type `winver` and hit <kbd>Enter</kbd>.
+   - Inspect the version to verify it is at least 2004. Upgrade Windows if not.
 
 2. Enable WSL 2
 
-   1. Open Windows Powershell in administrator mode.
-   2. Input `dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart`
-   3. Input `dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart`
-   4. Restart your computer.
+   - Open Windows Powershell in administrator mode.
+   - Run the following to install WSL:
+     ```
+     dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+     ```
+   - Run the following to enable the Virtual Machine Platform feature needed for WSL:
+     ```
+     dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+     ```
+   - Restart your computer.
 
 3. Go to the Microsoft Store. Search for Ubuntu and install it. Launch Ubuntu.
 
 4. Ensure Ubuntu is using WSL 2.
 
-   1. In Powershell, run `wsl --list --verbose`.
-   2. If the version is not 2, run `wsl --set-version ubuntu 2`.
+   - In Powershell, run `wsl --list --verbose`.
+   - If the version is not 2, run `wsl --set-version ubuntu 2`.
 
-5. [Download Docker for Windows](https://docs.docker.com/docker-for-windows/install/).
+5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version.
 
 6. Configure Docker settings.
-   1. In the system tray, click on the Docker icon and select 'settings'.
-   2. In 'General', enable the 'Use the WSL 2 based engine' option.
-   3. In 'Resources: WSL Integration' enable Ubuntu.
+   - In the system tray, right-click the Docker icon and select **Settings**.
+   - In **General**, enable the **Use the WSL 2 based engine** option.
+   - In **Resources: WSL Integration** enable Ubuntu.
 
 The commands in the rest of this guide should be run in the WSL 2 Ubuntu terminal.
 
@@ -160,7 +170,9 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    ./b configure -i
    ```
 
-   This will show a menu to choose roles to build. Enable the roles you want to build and press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+   This will show a menu to choose roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
+
+   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
 
 3. Now build the code by running:
 
