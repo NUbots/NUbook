@@ -120,7 +120,15 @@ Docker is a container system that allows you to install development tools and ru
    - In **General**, enable the **Use the WSL 2 based engine** option.
    - In **Resources: WSL Integration** enable Ubuntu.
 
-The commands in the rest of this guide should be run in the WSL 2 Ubuntu terminal.
+Notes:
+
+- The commands in the rest of this guide should be run in the WSL 2 Ubuntu terminal, except for the commands that should be run on a real robot.
+
+- When you download the code, it will be in WSL. The path on your system to the code is of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`. `<USERNAME>` corresponds to the username you set up for Ubuntu. There may be differences if you cloned into a different directory. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+
+- GitKraken will not allow you to open the repository outside of WSL. [Use the following steps to set up your system to use GitKraken in WSL](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823).
+
+- To be able to copy into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Click on properties, and enable 'Use Ctrl+Shift+C/V as Copy/Paste' in the 'Options' tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
 
 ### A Text Editor
 
@@ -162,7 +170,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    Replace `<PLATFORM>` with your desired platform. The available platforms are:
 
    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
-   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are specificially optimised to run well on the NUgus robots.
+   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the NUgus robots.
 
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
