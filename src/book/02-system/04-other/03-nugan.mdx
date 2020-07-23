@@ -14,7 +14,22 @@ Machine learning often requires data to train on. Rather than take thousands of 
 
 A [Generative Adversarial Network (GAN)](https://arxiv.org/abs/1406.2661) is a machine learning technique developed in 2014 which aims to create new data based on the given training data. A GAN consists of a generator and a discriminator. The generator creates fake data and the discriminator classifies the data as real or fake.
 
-A [Cycle-Consistent Adversarial Network (CycleGAN)](https://arxiv.org/abs/1703.10593) performs unpaired image-to-image translation. CycleGAN is based on [image-to-image translation GAN (pix2pix)](https://arxiv.org/abs/1611.07004). The main difference between these two GAN models is that CycleGAN uses unpaired data while pix2pix uses paired data. CycleGANs translate some domain A to another domain B, and vice versa. It trains not only by using A and B as input to the A and B generators respectively, but it also uses the output of each generator as the input for the other generator. This is the cycle input. The CycleGAN also uses an identity mapping to stabilise the training. It will input a real A image into the B generator, which should give back the original real A input. This is also done for real B images into the A generator.
+A [Cycle-Consistent Adversarial Network (CycleGAN)](https://arxiv.org/abs/1703.10593) performs unpaired image-to-image translation. CycleGAN is based on [image-to-image translation GAN (pix2pix)](https://arxiv.org/abs/1611.07004). The main difference between these two GAN models is that CycleGAN uses unpaired data while pix2pix uses paired data. CycleGANs translate some domain A to another domain B, and vice versa. It uses four networks.
+
+| Network         | Description                                            |
+| --------------- | ------------------------------------------------------ |
+| Generator A     | Transfers an image from the A domain to the B domain.  |
+| Generator B     | Transforms an image from the B domain to the A domain. |
+| Discriminator A | Determines if a given image is from the A domain.      |
+| Discriminator B | Determines if a given image is from the B domain.      |
+
+During training, the generators will receive images from the dataset pool for their respective domain. The output of these will be fake images. The fake images are fed into the other generator.
+
+![A flow diagram with two lanes. One lane reads 'Real A' to 'Generator A' to 'Fake B' to 'Generator B' to 'Cycled Fake A'. The other reads 'Real B' to 'Generator B' to 'Fake A' to 'Generator A' to 'Cycled Fake B'.](./images/nugan_cycle.svg 'Cycle Mapping')
+
+The CycleGAN also uses an identity mapping to stabilise the training. It will input a real A image into the B generator, which should give back the original real A input. This is also done for real B images into the A generator.
+
+![A flow diagram with two lanes. One lane reads 'Real B' to 'Generator A' to 'Real B'. The other lane reads 'Real A' to 'Generator B' to 'Real A'.]('./images/nugan_identity.svg' 'Identity Mapping')
 
 ## The Model
 
