@@ -126,7 +126,7 @@ The options are as follows
 | BATCH_SIZE | Batch size for training. Many GPUs cannot support a batch size more than 1.                                                                    | 1                                          |
 | NAME       | Name of the training run. This will be the directory name of the checkpoints and results.                                                      | The current date prepended with 'soccer\_' |
 | DATAROOT   | The path to the folder with the trainA, trainA_seg, trainB folders.                                                                            | ./datasets/soccer                          |
-| CONT       | Set if you would like to continue training from an existing trained model. This does not include the base model, which is loaded if CONT is 0. | 0                                          |
+| CONT       | Set to 1 if you would like to continue training from an existing trained model. NAME should correspond to the name of the model you are continuing to train. This does not include the base model, which is loaded if CONT is 0. | 0                                          |
 | EPOCHCOUNT | The epoch count to start from. If you are continuing the training, you can set this as the last epoch saved.                                   | 1                                          |
 
 In most cases you will not need to add any options.
