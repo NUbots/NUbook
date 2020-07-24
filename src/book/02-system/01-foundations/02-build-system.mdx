@@ -14,19 +14,9 @@ The NUbots codebase uses a [CMake](https://cmake.org/) build system based on the
 
 [Docker](https://www.docker.com/) is used to containerise our build processes so that we may mimic the build environment of the robot and impose version control over our required 3rd party dependencies while also managing operating system level configuration to ensure that all users of our codebase can achieve repeatable results.
 
-#### Requirements
+#### Requirements and Setup
 
-To build the NUbots code a couple of programs are needed on the host machine
-
-- Git: You need this clone and work on the NUbots repository
-- Docker: On Linux and Mac you can just install Docker (and set up user permissions) and you are good to go. On Windows you will also need WSL
-- Python3: A `requirements.txt` file exists in the root of the NUbots repository and in the `nuclear` folder. Install the required python modules using `sudo -H pip3 install -r requirements.txt` and `sudo -H pip3 install -r nuclear/requirements.txt`
-- Visual Studio Code: recommended, but not required. Visual Studio code also has a plugin to allow you to develop inside the Docker container (only using the `generic` image).
-
-<Alert type='warning'>
-  Windows support is still in its experimental stages. Currently, Windows 10
-  Pro, Enterprise, or Education is needed to use Docker.
-</Alert>
+See the [Getting Started guide](/guides/nubots/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
 
 ### NUClear Roles
 
@@ -85,7 +75,6 @@ nuclear_role(
   platform::darwin::SensorFilter
   support::NUsight
 )
-
 ```
 
 #### Extensions
@@ -131,13 +120,12 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | module    | Generate new modules                                           |
 | nbs       | For working with NBS recordings                                |
 | run       | Run a role locally                                             |
-| shell     | Exposes a shell in the docker image                            |
+| shell     | Exposes a shell in the Docker image                            |
 | target    | Select a target to work on                                     |
 
 ##### Build
 
-As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`.
-If you only wish to build a single role (e.g. `sensortest`) then use the command
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `sensortest`) then use the command
 
 ```bash
 ./b build sensortest
@@ -292,7 +280,7 @@ Be sure to set `USE_ASAN` to `OFF` and `CMAKE_BUILD_TYPE` to `MinSizeRel` once y
 
 When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
-```sh
+```bash
 ASAN_OPTIONS=option1=value1:option2=value ./b run keyboardwalk
 ```
 
@@ -484,7 +472,7 @@ Then we would need to disable `abm` using `-mno-abm` and enable `rtm` using `-mr
 
 The final piece of information we need is about the CPU cache sizes
 
-```ssh
+```bash
 gcc -### -E - -march=native 2>&1 | sed -r '/cc1/!d;s/(")|(^.* - )//g'| grep -oP -- "--param l[12]-cache(-line|)-size=[0-9]*"
 ```
 

@@ -8,19 +8,6 @@ slug: /guides/nubots/getting-started
 
 ## Prerequisites
 
-### Linux or macOS
-
-We recommend a Unix-based operating system like Linux or macOS for developing and running NUbots code. You can find free downloads for [Ubuntu](https://ubuntu.com/), a user-friendly Linux distribution, at their website.
-
-Currently Windows is not officially supported.
-
-<details>
-  <summary>Why no Windows support?</summary>
-
-Windows is not supported at the moment due to lack of support for the `termios` Python module that is used in the Docker build script. We hope to find a fix for this soon. If you know an alternative, free to suggest solutions, or better yet, create a PR to add Windows support.
-
-</details>
-
 ### Git
 
 [Git](https://git-scm.com/) is a [version control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) tool. We use it to track changes to the codebase and work together on the same codebase without getting in each other's way.
@@ -32,7 +19,8 @@ To work on the NUbots code, you'll need to know the basics of using Git, specifi
 - how to add and commit changes
 - how to fetch, pull, and push changes
 
-You can do all the above using [Git in the terminal](https://git-scm.com/docs/git), or you can use a Git GUI tool like [GitKraken](https://www.gitkraken.com/).
+You can do all the above using [Git in the terminal](https://git-scm.com/docs/git), or you can use a Git GUI tool such as [GitKraken](https://www.gitkraken.com/) or [GitHub Desktop](https://desktop.github.com/).
+There is a guide to using Git in NUbots [here](/guides/general/git).
 
 ### Docker
 
@@ -93,6 +81,55 @@ Docker is a container system that allows you to install development tools and ru
 
 4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
 
+#### Windows
+
+<Alert type='warning'>
+  Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
+</Alert>
+
+1. Ensure your Windows build is at least 2004.
+
+   - Press <kbd>WIN</kbd> + <kbd>R</kbd>.
+   - Type `winver` and hit <kbd>Enter</kbd>.
+   - Inspect the version to verify it is at least 2004. Upgrade Windows if not.
+
+2. Enable WSL 2
+
+   - Open Windows Powershell in administrator mode.
+   - Run the following to install WSL:
+     ```
+     dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+     ```
+   - Run the following to enable the Virtual Machine Platform feature needed for WSL:
+     ```
+     dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+     ```
+   - Restart your computer.
+
+3. Go to the Microsoft Store. Search for Ubuntu and install it. Launch Ubuntu.
+
+4. Ensure Ubuntu is using WSL 2.
+
+   - In Powershell, run `wsl --list --verbose`.
+   - If the version is not 2, run `wsl --set-version ubuntu 2`.
+
+5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version.
+
+6. Configure Docker settings.
+   - In the system tray, right-click the Docker icon and select **Settings**.
+   - In **General**, enable the **Use the WSL 2 based engine** option.
+   - In **Resources: WSL Integration** enable Ubuntu.
+
+Notes on using WSL on Windows:
+
+- The commands in the rest of this guide should be run in the WSL Ubuntu terminal, except for the commands that should be run on a real robot.
+
+- When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+
+- GitKraken will not allow you to open the repository outside of WSL. Use the steps described in this article to [set up your system to use GitKraken in WSL](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823).
+
+- To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
+
 ### A Text Editor
 
 You'll need a text editor to make changes to the code. We recommend [Visual Studio Code](https://code.visualstudio.com/Download), but feel free to use your favourite editor.
@@ -105,7 +142,7 @@ Another useful tool for editing NUbots code in Visual Studio Code is the Remote 
 
 With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and try things out.
 
-1. Clone the repo by running the following command in a terminal:
+1. Clone the repo by running the following command in a terminal. If you're on Windows, do this in the WSL Ubuntu terminal, after running `cd ~` to go to your home folder.
 
    ```bash
    git clone --recursive https://github.com/NUbots/NUbots.git
@@ -133,7 +170,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    Replace `<PLATFORM>` with your desired platform. The available platforms are:
 
    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
-   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are specificially optimised to run well on the NUgus robots.
+   - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the NUgus robots.
 
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
@@ -141,7 +178,9 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    ./b configure -i
    ```
 
-   This will show a menu to choose roles to build. Enable the roles you want to build and press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+   This will show a menu to choose roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
+
+   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
 
 3. Now build the code by running:
 
