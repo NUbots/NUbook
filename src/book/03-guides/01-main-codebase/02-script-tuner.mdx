@@ -1,16 +1,16 @@
 ---
 section: Guides
-chapter: NUbots
+chapter: Main Codebase
 title: Running and Tuning Scripts
 description: How to tune and run scripts.
-slug: /guides/nubots/script-tuner
+slug: /guides/main/script-tuner
 ---
 
-Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
 The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
 
-More on the [script engine can be found here](/system/nubots/script-system).
+Information on Script Engine is on the [Motion](/system/subsystems/motion#script-engine) page and Script Runner and Script Tuner on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 ## Script Runner
 
@@ -36,13 +36,13 @@ Where `Script.yaml` is either the name of an existing script, if you want to edi
 
 You will then be able to tune the script. You will see the following interface for script editing.
 
-![First line states 'Scripts: scripts/nugus2/walk.yaml'. Next line says 'Frames:' with consecutive numbers from 1 to 44 laid out in a row. The number '1' is selected. The next line says 'Duration: 3000'. The next section is a table with the first column specifying servo names such as 'right shoulder pitch'. The second column specifies the angle of the servo. This is of the format 'Angle: +1.45'. Some of the rows have dashes instead of numbers for the angle, denoting an empty field. The third row states the gain of the servo. This is of the form 'Gain: 30.0'. Like the angle, some of these are blanked out with dashes. Empty angle and gain fields are paired. In the next section there are several keyboard commands which allow the user to use the interface.](../../../images/scripttuner.png)
+![First line states 'Scripts: scripts/nugus2/walk.yaml'. Next line says 'Frames:' with consecutive numbers from 1 to 44 laid out in a row. The number '1' is selected. The next line says 'Duration: 3000'. The next section is a table with the first column specifying servo names such as 'right shoulder pitch'. The second column specifies the angle of the servo. This is of the format 'Angle: +1.45'. Some of the rows have dashes instead of numbers for the angle, denoting an empty field. The third row states the gain of the servo. This is of the form 'Gain: 30.0'. Like the angle, some of these are blanked out with dashes. Empty angle and gain fields are paired. In the next section there are several keyboard commands which allow the user to use the interface.](./images/scripttuner.png)
 
 The first line tells you the name and path of the script you are creating or editing.
 
 The second line specifies the number of frames and the current frame, which is highlighted. Each frame specifies different joint positions, and when these frames are combined they result in a motion.
 
-The next line is duration. This determines how long the robot will take to move to the servo positions you have specified. This is measured in milliseconds.
+The next line is the duration. This determines how long the robot will take to move to the servo positions you have specified. This is measured in milliseconds.
 
 The next section is a table. These show the angle and gain for each servo for that frame.
 
@@ -84,7 +84,7 @@ The bottom of the interface shows what commands are available. It does not show 
 
 ## Modifying and Adding Scripts
 
-When installing NUbots code onto a robot when tuning scripts, ensure you are using [the correct flag for configuration files when installing](/system/nubots/build-system#install), depending on whether you want to overwrite scripts or not overwrite scripts. Ensure you have installed the `scripttuner` and `scriptrunner` binaries by turning `scripttuner.role` and `scriptrunner.role` ON in `./b configure -i`.
+When installing NUbots code onto a robot when tuning scripts, ensure you are using [the correct flag for configuration files when installing](/system/foundations/build-system#install), depending on whether you want to overwrite scripts or not overwrite scripts. Ensure you have installed the `scripttuner` and `scriptrunner` binaries by turning `scripttuner.role` and `scriptrunner.role` ON in `./b configure -i`.
 
 Use script tuner as detailed above to make or edit your script. It is a good idea to have one person using script tuner and another person holding the robot and moving the joints to new positions. Ensure you wait a few seconds before closing a script after saving to allow it time to save.
 
