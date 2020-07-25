@@ -1,9 +1,9 @@
 ---
 section: Guides
-chapter: NUbots
+chapter: Main Codebase
 title: Recording and Playback
 description: Recording data and playing it back.
-slug: /guides/nubots/recording-playback
+slug: /guides/main/recording-playback
 ---
 
 NUbots data is stored in [NUClear Binary Stream (NBS) files](/system/nubots/nuclear#nbs-files). Any [messages](https://github.com/NUbots/NUbots/tree/master/shared/message) that are passed around the NUbots system can be recorded.
@@ -49,11 +49,53 @@ Tools are executed by running
 ./b nbs <tool_name> <nbs_file_name>
 ```
 
-| Tool Name         | Description                                                                                                                               | Arguments                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| stats             | Decodes an NBS file into a series of file statistics.                                                                                     | --message-timestamp uses the message's `.timestamp` field as the time of the message.                                                                                                                                                                                                                                                                                                                          |
-| json              | Outputs the data in the NBS file to a JSON file. It is useful to redirect the output to a file by appending `> file.json` to the command. | -                                                                                                                                                                                                                                                                                                                                                                                                              |
-| extract_images    | Decodes an NBS file and extracts any compressed jpeg files into jpeg files.                                                               | --output specifies the folder to save the images to.                                                                                                                                                                                                                                                                                                                                                           |
-| video             | This will take images in an NBS file and create a video.                                                                                  | --output specifies the folder to save the video to. --quality specifies the quality to save the video in. --encoder specifies the encoder to use when encoding the video.                                                                                                                                                                                                                                      |
-| calibrate_cameras | Calculate camera intrinsics using an NBS recording of asymmetric circles grid patterns.                                                   | --config the path to the directory containing the camera configuration files. --rows the number of rows in the asymmetric circles grid. --cols the number of columns in the asymmetric circles grid. --grid_size the distance between rows/cols in the grid in meters. -- no-intrisics does not change the intrinsic configuration values. --no-extrinsics does not change the extrinsic configuration values. |
-| footdown          | Trains a foot down network using sensor data from the legs.                                                                               | -                                                                                                                                                                                                                                                                                                                                                                                                              |
+## Stats
+
+Decodes an NBS file into a series of file statistics.
+
+| Argument            | Definition                                                        |
+| ------------------- | ----------------------------------------------------------------- |
+| --message-timestamp | Uses the message's `.timestamp` field as the time of the message. |
+
+## JSON
+
+Outputs the data in the NBS file to a JSON file. It is useful to redirect the output to a file by appending `> file.json` to the command.
+
+## Extract Images
+
+Decodes an NBS file and extracts any compressed jpeg files into jpeg files.
+
+| Argument | Definition                                  | Default                       |
+| -------- | ------------------------------------------- | ----------------------------- |
+| --output | Specifies the folder to save the images to. | The current working directory |
+
+## Video
+
+This will take images in an NBS file and create a video.
+
+| Argument  | Definition                                            | Default                       |
+| --------- | ----------------------------------------------------- | ----------------------------- |
+| --output  | Specifies the folder to save the video to.            | The current working directory |
+| --quality | Specifies the quality to save the video in.           | 30M                           |
+| --encoder | specifies the encoder to use when encoding the video. | h264_nvenc                    |
+
+## Calibrate Cameras
+
+Calculate camera intrinsics using an NBS recording of asymmetric circles grid patterns.
+
+| Argument        | Definition                                                           | Default  |
+| --------------- | -------------------------------------------------------------------- | -------- |
+| --config        | The path to the directory containing the camera configuration files. | Required |
+| --rows          | The number of rows in the asymmetric circles grid.                   | 4        |
+| --cols          | The number of columns in the asymmetric circles grid.                | 11       |
+| --grid_size     | The distance between rows/cols in the grid in meters.                | 0.04     |
+| -- no-intrisics | Does not change the intrinsic configuration values.                  | -        |
+| --no-extrinsics | Does not change the extrinsic configuration values.                  | -        |
+
+## Foot Down
+
+Trains a foot down network using sensor data from the legs.
+
+# Playing Back Data
+
+Messages can be emitted from an NBS file. When using prerecorded data, ensure you remove the modules in the role which emit those message types that you would like to emit from the NBS file, otherwise you will get potentially conflicting data. The role file must include `support::logging::DataPlayback`.
