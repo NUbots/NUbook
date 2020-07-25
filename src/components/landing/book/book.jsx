@@ -8,9 +8,9 @@ import Section from './section'
 import Chapter from './chapter'
 
 const iconMap = {
-  'The NUbots Team': IconTeam,
-  'System': IconSystem,
-  'Guides': IconGuides,
+  Team: IconTeam,
+  System: IconSystem,
+  Guides: IconGuides,
 }
 
 const Book = ({ contents }) => {
