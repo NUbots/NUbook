@@ -221,7 +221,7 @@ Pages are written in MDX files and stored in section and chapter folders in the 
 
 ```md
 ---
-section: The NUbots Team
+section: Team
 chapter: Introduction
 title: Introduction to NUbots
 description: Learn about what we do, key people, and where to find the lab.
