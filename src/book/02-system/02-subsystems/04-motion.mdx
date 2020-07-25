@@ -5,3 +5,66 @@ title: Motion
 description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
+
+# Walk Engine
+
+Currently NUbots has two walk engines. One is an **open loop hybrid walk controller** and the other is an **open loop walk** based on **quintic splines**. These engines take care of the mathematics and control involved in taking steps without falling over. The walk engines do not plan where to walk to, only how to walk.
+
+A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
+
+| Variable | Description                   |
+| -------- | ----------------------------- |
+| x        | velocity in metres per second |
+| y        | velocity in metres per second |
+| z        | angle in radians per second   |
+
+The [behaviour](system/nubots/behaviour) of the robot determines what the walk command will be.
+
+## Open Loop Hybrid Walk
+
+This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**. To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
+
+This walk is based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). The code is a refactored version of the [UPennalizers](https://fling.seas.upenn.edu/~robocup/wiki/) / Team DARwIn [2013 code release](https://github.com/UPenn-RoboCup/UPennalizers/tree/master). NUbots have made several improvements and simplifications.
+
+The module for this walk is located in the [OldWalkEngine module folder](https://github.com/NUbots/NUbots/tree/master/module/motion/OldWalkEngine).
+
+## Quintic Spline Walk
+
+The Quintic Walk is an **open loop controller** based on **quintic splines** (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
+
+The engine has support for kicking, however this is not used at this time.
+
+The code used for this walk comes from [**BitBots**](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
+
+The implementation of this walk is currently a work in progress. See the implementation on the [QuinticWalk branch](https://github.com/NUbots/NUbots/tree/biddulph/quintic_walk/module/motion/QuinticWalk).
+
+### Implementation
+
+The walk uses the Footstep class to generate the targets for the foot. It handles the special cases of side stepping and turning to prevent collisions with the other foot.
+
+The SplineContainer class holds Points and multiple Spline objects. As the SplineContainer gets points, it creates Splines based on these points. These Spline objects are matched to some name in a mapping.
+
+The Spline that the SplineContainer holds is a generic Spline class that holds all the information for a mathematical spline. Each piecewise polynomial in the spline is represented by a Polynom object that contains the coefficients for a polynomial.
+
+The specific Spline type we use is a SmoothSpline, extended from the Spline class. The SmoothSpline uses the added contraints of given initial and final velocities and accelerations.
+
+The TrajectoryUtils file specifies the usage of the SplineContainer for the purpose of walking. It creates a SplineContainer with the following Splines
+
+| Name                 | Description                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------------- |
+| IS_DOUBLE_SUPPORT    | Splines for when the robot is in double support phase, i.e. both feet are on the ground. |
+| IS_LEFT_SUPPORT_FOOT | Splines for the support foot.                                                            |
+| TRUNK_POS_X          | The Cartesian position of the robot's torso in the x-axis.                               |
+| TRUNK_POS_Y          | The Cartesian position of the robot's torso in the y-axis.                               |
+| TRUNK_POS_Z          | The Cartesian position of the robot's torso in the z-axis.                               |
+| TRUNK_AXIS_X         | The orientation - x-axis of the robot's torso.                                           |
+| TRUNK_AXIS_Y         | The orientation - y-axis of the robot's torso.                                           |
+| TRUNK_AXIS_Z         | The orientation - z-axis of the robot's torso.                                           |
+| FOOT_POS_X           | The Cartesian position of the robot's flying foot in the x-axis.                         |
+| FOOT_POS_Y           | The Cartesian position of the robot's flying foot in the y-axis.                         |
+| FOOT_POS_Z           | The Cartesian position of the robot's flying foot in the z-axis.                         |
+| FOOT_AXIS_X          | The orientation - x-axis of the robot's flying foot.                                     |
+| FOOT_AXIS_Y          | The orientation - y-axis of the robot's flying foot.                                     |
+| FOOT_AXIS_Z          | The orientation - z-axis of the robot's flying foot.                                     |
+
+The points that make up all these splines can be found in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/ff2cf1f7f38bf558494e305a99544e15affaf719/module/motion/QuinticWalk/src/engine/WalkEngine.cpp#L331). The [configuration parameters](https://github.com/NUbots/NUbots/blob/biddulph/quintic_walk/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points.
