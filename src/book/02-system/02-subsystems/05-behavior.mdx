@@ -5,3 +5,27 @@ title: Behaviour
 description: Behaviour and how it works in the NUbots codebase.
 slug: /system/subsystems/behaviour
 ---
+
+The behaviour subsystem includes walk planning, soccer strategies, get up detection, head behaviour, script running and tuning, and kick behaviour.
+
+# Script Runner
+
+[ScriptRunner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptRunner) is a module in the behaviour subsystem. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute. Any role with the ScriptRunner module must also contain the [ScriptEngine](system/subsystems/motion#ScriptEngine) module.
+
+When ScriptRunner is run, it stores the script file names passed to it as a vector of strings. When the middle button on the robot is pushed, the scripts are executed in order of appearance, one after the other. ScriptRunner also provides an option to set a delay before the execution of the first script, as well as a delay between the execution of each script.
+
+An example of using ScriptRunner to run a script called `Stand.yaml` is:
+
+```bash
+./scriptrunner Stand.yaml
+```
+
+# Script Tuner
+
+[ScriptTuner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptTuner) is a module in the behaviour subsystem. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](https://en.wikipedia.org/wiki/Curses_(programming_library) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
+
+When frames are selected in the ScriptTuner interface, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
+
+ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When a servo is "locked", its position can only be changed in ScriptTuner. When it is "unlocked", the servo can be moved physically on the robot, which will update the position value in the script. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
+
+To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/nubots/script-tuner).
