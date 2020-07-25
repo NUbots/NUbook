@@ -221,7 +221,7 @@ Pages are written in MDX files and stored in section and chapter folders in the 
 
 ```md
 ---
-section: The NUbots Team
+section: Team
 chapter: Introduction
 title: Introduction to NUbots
 description: Learn about what we do, key people, and where to find the lab.
@@ -269,6 +269,10 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 ![Screenshot of deploy previews link](./deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
+
+## Code of Conduct
+
+NUbook is a project of the NUbots team at the University of Newcastle, Australia. The team, all external contributors, and all users of its projects must comply with the [University's Code of Conduct](https://policies.newcastle.edu.au/document/view-current.php?id=204).
 
 ## Licence
 
