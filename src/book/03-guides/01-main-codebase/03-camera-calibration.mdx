@@ -6,7 +6,7 @@ description: Learn how to calibrate cameras.
 slug: /guides/main/camera-calibration
 ---
 
-Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. More on camera calibration can be found on [the vision page](/system/nubots/vision).
+Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. More on camera calibration can be found on [the vision page](/system/subsystems/vision).
 
 The calibration is done in two steps. The first is creating the nbs recording and the second is using that nbs recording to find the camera parameters.
 
@@ -33,7 +33,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
    )
    ```
 
-2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/nubots/getting-started) or the [Build System page](/system/nubots/build-system).
+2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/main/getting-started) or the [Build System page](/system/foundations/build-system).
 
 3. On the robot, enable compressed image recording in `config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
 
@@ -45,7 +45,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
 5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
-6. Check the [transform matrix](/system/nubots/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
+6. Check the [transform matrix](/system/foundations/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
 
    $$
    \text{Hpc} = \begin{bmatrix}
