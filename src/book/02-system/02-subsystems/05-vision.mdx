@@ -34,7 +34,7 @@ In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](http
 
 From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The **green horizon** detector uses information from the Visual Mesh message as detailed above. The **goal** and **ball detectors** use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/GreenHorizon.proto).
 
-All calculations in the detectors are done in **3D world coordinates**. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/nubots/mathematics).
+All calculations in the detectors are done in **3D world coordinates**. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/foundations/mathematics).
 
 ![A soccer field with an overlay of lines representing object detections.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
 
