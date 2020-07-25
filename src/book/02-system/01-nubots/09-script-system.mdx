@@ -2,17 +2,19 @@
 section: System
 chapter: NUbots
 title: Script System
-description: Describes how the script system works.
+description: How the NUbots script system works.
 slug: /system/nubots/script-system
 ---
 
-Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint positions. For example, standing up is a basic script telling the robot to move its joints to the stand position over a one second time period. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
-To learn how to tune scripts, visit the [ScriptTuner guide](/guides/nubots/script-tuner) page.
+To learn how to tune scripts, see the [ScriptTuner guide](/guides/nubots/script-tuner).
 
 # Script Engine
 
-To execute scripts, we emit and receive messages describing the script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/master/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
+## Messages
+
+To execute a script, we emit an "execute script" message describing the script to execute. This message is received in the ScriptEngine, which executes the appropriate script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/master/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
 
 `ExecuteScriptByName` takes
 
@@ -21,13 +23,13 @@ To execute scripts, we emit and receive messages describing the script. These ar
 - the duration of the scripts
 - the time that these scripts should start executing
 
-An example of receiving is in [ScriptEngine.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine/src/ScriptEngine.cpp#L51).
+An example of receiving this message is in [ScriptEngine.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine/src/ScriptEngine.cpp#L51).
 
 ```cpp
 on<Trigger<ExecuteScriptByName>>().then([this](const ExecuteScriptByName& command) {...}
 ```
 
-An example of an emission is in [KickScript.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/skills/KickScript/src/KickScript.cpp#L102)
+An example of emitting this message is in [KickScript.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/skills/KickScript/src/KickScript.cpp#L102)
 
 ```cpp
 emit(std::make_unique<ExecuteScriptByName>(
@@ -36,20 +38,20 @@ emit(std::make_unique<ExecuteScriptByName>(
 
 Note these are only the names of the scripts, not the full paths. The names correspond to the names of YAML files in the [scripts folder](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine/data/scripts).
 
-Rather than using the name of a script, we can also use a [Script type](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L43) directly. `Script` contains all the information for the script. We use the message `ExecuteScript` to send these Scripts. `ExecuteScript` takes
+In addition to using the name of a script, we can also use [a instance of Script](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L43) directly. `Script` can be instantiated with all the information for the script to execute, and can be emitted using the `ExecuteScript` message. `ExecuteScript` takes:
 
 - a subsumption ID
 - a Script or vector of Scripts
 - the duration of the scripts
 - the time that these scripts should start executing
 
-It can be received by using an on statement as seen in [ScriptEngine.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine/src/ScriptEngine.cpp#L71)
+An example of receiving this messages is in [ScriptEngine.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine/src/ScriptEngine.cpp#L71)
 
 ```cpp
 on<Trigger<ExecuteScript>>().then([this](const ExecuteScript& command) {...}
 ```
 
-An example of an emission is in [ScriptTuner.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L590)
+An example of emitting this message is in [ScriptTuner.cpp](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L590)
 
 ```cpp
 emit(std::make_unique<ExecuteScript>(id, script, NUClear::clock::now()));
@@ -57,7 +59,9 @@ emit(std::make_unique<ExecuteScript>(id, script, NUClear::clock::now()));
 
 The [ScriptEngine](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It collects the servo positions and time for each frame and modifies them if needed based on the given duration and start time in the message. The information is then emitted as a [ServoCommand](https://github.com/NUbots/NUbots/blob/master/shared/message/behaviour/ServoCommand.proto) message.
 
-The script files are YAML files of the following format.
+## Script files
+
+The script files are YAML files specifying a duration and list of servo targets, in a format like the following:
 
 ```yaml
 - duration: 1000
@@ -80,11 +84,11 @@ These script files are in the ScriptEngine module. Scripts can be specific to a 
 
 # Script Runner
 
-[ScriptRunner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptRunner) is a module in the behaviour sub-system. It takes command line arguments and attempts to run them as scripts. It does not require paths, only the name of the script/s to execute. Any role with the ScriptRunner module must also contain the ScriptEngine module.
+[ScriptRunner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptRunner) is a module in the behaviour subsystem. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute. Any role with the ScriptRunner module must also contain the ScriptEngine module.
 
-The command line arguments are stored as a vector of strings. When the middle button on the robot is pushed, the next script in the vector will be executed. If there are no more scripts, nothing will be executed.
+When ScriptRunner is ran, it stores the script file names passed to it as a vector of strings. When the middle button on the robot is pushed, the scripts are executed in order of appearance, one after the other. ScriptRunner also provides an option to set a delay before execution of the first script, as well as a delay between the execution of each script.
 
-An example of using ScriptRunner is
+An example of using ScriptRunner to run a script called `Stand.yaml` is:
 
 ```bash
 ./scriptrunner Stand.yaml
@@ -92,13 +96,17 @@ An example of using ScriptRunner is
 
 # Script Tuner
 
-[ScriptTuner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptTuner) is a module in the behaviour sub-system. It either creates a new script or opens an existing script if specified in the command line. It uses curses to create a GUI in the terminal. Through this GUI, YAML files are created or edited that specify a script that can then be used by other modules. A ServoCommand will be emitted based on the current frame selected in ScriptTuner. By locking and unlocking servos on the robot, the ServoCommand and YAML files can be changed. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
+[ScriptTuner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptTuner) is a module in the behaviour subsystem. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](https://en.wikipedia.org/wiki/Curses_(programming_library) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
+
+When frames are selected in the ScriptTuner interface, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
+
+ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When a servo is "locked", its position can only be changed in ScriptTuner. When it is "unlocked", the servo can be moved physically on the robot, which will update the position value in the script. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
 
 To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/nubots/script-tuner).
 
 # Loading YAML Script Files
 
-The script system follows a similar structure as the [configuration system](/system/nubots/config-system). However, default scripts are moved to a platform type folder and the overriding system is not used as it doesn't make sense to try and merge two scripts.
+The script system follows a similar structure as the [configuration system](/system/nubots/config-system). However, default scripts are moved to a platform type folder and the merging of values is skipped as it doesn't make sense to try and merge two scripts.
 
 In the script system, we first check for a robot-specific script. If a robot-specific script does not exist, then we check for a platform-specific script.
 
@@ -112,5 +120,5 @@ scripts/
 
 To reiterate how the script system loads script files
 
-1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded
-2. If it doesn't exist, then a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded
+1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded.
+2. If it doesn't exist, then a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded.
