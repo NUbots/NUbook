@@ -10,7 +10,7 @@ slug: /system/subsystems/motion
 
 Currently NUbots has two walk engines. One is an **open loop hybrid walk controller** and the other is an **open loop walk** based on **quintic splines**. These engines take care of the mathematics and control involved in taking steps without falling over. The walk engines do not plan where to walk to, only how to walk.
 
-A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/nubots/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
+A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [emitted](/system/foundations/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
 
 | Variable | Description                   |
 | -------- | ----------------------------- |
@@ -18,7 +18,7 @@ A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NU
 | y        | velocity in metres per second |
 | z        | angle in radians per second   |
 
-The [behaviour](system/nubots/behaviour) of the robot determines what the walk command will be.
+The [behaviour](system/subsystems/behaviour) of the robot determines what the walk command will be.
 
 ## Open Loop Hybrid Walk
 
