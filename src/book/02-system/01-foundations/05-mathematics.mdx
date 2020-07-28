@@ -8,6 +8,8 @@ slug: /system/foundations/mathematics
 
 The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. Specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
 
+# Linear Algebra
+
 We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
 
 ## Bases
@@ -275,3 +277,34 @@ For measurements on the field we use field space. For field coordinates the **x-
 - [Wolfram MathWorld](http://mathworld.wolfram.com/)
 
 - [Eigen Documentation](http://eigen.tuxfamily.org/dox/)
+
+# Interpolation
+
+Lets say we have a collection of data points. We want to find a function that contains all these points. We call this function an interpolant. Often we use a polynomial to describe this function.
+
+## Splines
+
+Splines are used in the [Quintic Walk Engine](/system/subsystems/motion#walk-engine).
+
+Rather than have one global polynomial, it can be useful to use piecewise polynomials. These are all defined locally around the interpolation points.
+
+![2D graph plot of a piecewise polynomial function that passes through specific highlighted points.](./images/maths-spline.svg 'Spline. Interpolation points are in blue.')
+
+Every two consecutive points on the graph have an associated polynomial that is plotted in the range between these two points.
+
+The Quintic Walk specifically uses quintic splines. This means that each polynomial is of the form
+
+$$
+S_i = a_{5i} x^5 + a_{4i} x^4 + a_{3i} x^3 + a_{2i} x^2 + a_{1i} x + a_{0i}
+$$
+
+For $i = 0, ..., n-1$, where $n$ is the number of interpolation points.
+
+These particular quintic splines have interpolation points $(x_0, y_0, y'_0, y''_0) \cdots (x_n, y_n, y'_n, y''_n)$. They must satify the conditions
+
+- $S_j(x)$ is a polynomial in $[x_j, x_{j+1}]$ for each $j = 0, \cdots , n-1$
+- $S_j(x_j) = y_j$ and $S_j(x_{j+1}) = y_{j+1}$ for each $j = 0, \cdots , n-1$
+- $S'_{j+1}(x_{j+1}) = S'_j(x_{j+1}) = y'_{j+1}$ for each $j = 0, \cdots , n-2$
+- $S''_{j+1}(x_{j+1}) = S''_j(x_{j+1}) = y''_{j+1}$ for each $j = 0, \cdots , n-2$
+- $S'_0(x_0) = b_{0}$ and $S'_{n-1}(x_n) = y'_{n}$
+- $S''_0(x_0) = b_{0}$ and $S''_{n-1}(x_n) = y''_{n}$
