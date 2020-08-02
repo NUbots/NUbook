@@ -5,3 +5,62 @@ title: Working with Robots
 description: How to safely handle and work with robots.
 slug: /guides/hardware/working-with-robots
 ---
+
+## Aligning an Ankle
+
+An alignment of a ankle may need to be done if the foot and the leg of the robot aren't perpendicular when standing. 
+An ankle alignment may also be necessary when the foot has come loose. 
+
+To align an ankle correctly perform the following instructions:
+
+1. On the inner part of the robots leg, unscrew the screws holding the plastic casing to the the ankle and knee servo. 
+Remove the plastic casing, as seen in the following image:
+![leg cover](./images/ankle_leg/leg_cover.jpg 'leg cover')
+
+2. There should be a silver disk, the following photo is a close up:
+![servo close up](./images/ankle_leg/servo_close.jpg 'servo close up')
+There are three small indents on the silver disk, two on one side and one on the other. The single dot should be pointing towards the ground when the robot is standing and the other two dots towards the head.
+These three dots form an arrow, this arrow should be pointing downwards when the robot is standing.
+
+3. Manually move the disk on the servo so it is in the correct orientation 
+
+4. Place the plastic cover back on and replace all the screws. When replacing the screws, one hole must be left without a screw to allow for the servo to move. The hole left without a screw is the largest hole, which can be seen on the right of the following image:
+![screw hole](./images/angle_leg/screw_holes.jpg 'screw hole')
+
+## Replacing Shoulder servo
+
+1. Detatching the arm
+
+    - On the shoulder of the robot, there is a ring of screws front and back. Remove all the screws and the larger centre screw on both sides
+    - Remove the arm from the shoulder socket, it will still be attatched by a wire
+    - Take off the long part of plastic between the shoudler and neck, it is held by two screws. This piece of plastic can be seen in the following photo:
+    ![shoulder cover](./images/shoulder/shoulder.jpg 'shoulder cover')
+    - Now that the piece is off, there is a port for the chord that is still keeping the arm in place, detach this and the arm will be completely detatched
+2. Detatching the shoulder
+    - Looking in the shoulder socket there is another circle of screws, remove these and the shoulder will detatch
+    Note: Two plastic spacers should also fall out
+3. Removing the servo
+    - Remove and disconnect the boards and fans neccessary to access the shoulder servo from the inside, make sure to note any chords you detatch
+    - On the outside of the robot where the shoulder socket detatched, remove the four screws mounting the servo to the robots body
+    - There is a plastic holder inside the robot holding each shoulder servos in place, slide this towards the robots back to unclip the servos to allow it to fall freely out of its slot
+
+4. Mechanically testing the servo
+    - Remove the circular metal plate from the servo, get the plastic servo testor to test if the servo rotates freely without any clunks. If it doesn't rotate or is clunky, it needs replacing
+5. Installing a new servo
+    - Get the new servo set with the same serial number on the box
+    - Connect the metal circualr disk that came in the box on the new servo, ensuring you line up the indents on the metal disk and servo
+    - Place the servo into the body, put back the plastic holder and reconnect all the chords that were disconnected in the 'removing servo' step
+    - Rescrew the four screws that were taken out 
+    - The arms of the robot should be directly outwards when set to 0 degrees. This means you need to orientate the server before placing the shoulder back on. 
+    On the metal circular disk that was placed on, there are small indents in the metal, two on one side and one on the other.
+    The single indent needs to be towards the front of the robot, and the two dots towards its back, this ensures the robots shoulder will be correctly aligned.
+
+6. Reconstruction 
+    - Now attach the shoulder back on, ensuring you put back the plastic spacers and leave one hole without a screw (the biggest hole in the circle of screws). The shoulder should also be placed on
+    with correct orientation. On the shoulder there is one side of raised up plastic, two sides with the holes for the screws and a shorter side. The side with the shortest bit of plastic should be faced frontwards,
+    the same direction the metal circular disk was orientated.
+    - Connect the chord of the arm again to the slot between the shoulder and head
+    - slide the arm in place and rescrew the arm to the shoulder
+
+7. Testing 
+    - Now the shoulder needs to be calibrated, see servo calibration for this. 
