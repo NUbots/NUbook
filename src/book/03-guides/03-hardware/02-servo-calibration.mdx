@@ -16,13 +16,17 @@ Before a servo is first used, it\'s default parameters need to be updated to ens
 To update the servo parameters, perform the following instructions:
 
 1. Connect the USB to the computer with the Dynamixel Wizard.
+![Photo of the USB attachment for the Dynamixel Wizard connected to a computer](./images/servo_calibration/usb.jpg)
 
-2. Connect the power supply and the servo to the attached component of the USB
+2. Connect the power supply and the servo to the attached component of the USB.
+![Photo of the servo cable connected to the power attachment of the USB](./images/servo_calibration/power_supply.jpg)
 
 3. Open Dynamixel Wizard
 
 4. Select Scan and wait for the attached servo to be discovered
-(OPTIONAL) Brand new servos should be preset to an ID of 1. Lower the ID range in Options > Scan to speed up discovery.
+(OPTIONAL) Brand new servos should be preset to an ID of 1. Lower the ID range in 'Options > Scan' to speed up discovery.
+![Screenshot of Dynamixel Wizard performing a scan with no servos discovered](./images/servo_calibration/scan.png)
+![Screenshot of Dynamixel Wizard performing a scan with 3 servos discovered](./images/servo_calibration/discover.png)
 
 5. If there a multiple servos discovered, the new servo should be the option with ID = 1 and Baud Rate = 57600 bps
 
@@ -30,6 +34,8 @@ To update the servo parameters, perform the following instructions:
 
   - ID: Varies depending on where the servo will be placed. See below for guidance (TODO)
   - Baud Rate (Bus): 1M bps = 2M/(1 + 1)
+
+  ![Screenshot of Dynamixel Wizard Baud Rate selection with 1M bps selected](./images/servo_calibration/update_parameters.png)
 
 7. Test the calibration by setting the Goal Position to 0, +90 and -90 and observing the position of the arrow on the horn.
 
