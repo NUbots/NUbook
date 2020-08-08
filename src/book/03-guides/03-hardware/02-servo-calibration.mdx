@@ -6,37 +6,34 @@ description: Discover how to calibrate servos.
 slug: /guides/hardware/servo-calibration
 ---
 
+## Servo Calibration
+
 Servos are electrical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it is required to be removed and replaced with a new servo. 
 
-Before a servo is first used, it\'s default parameters need to be updated to ensure correct operation of the limbs. This is done using the Dynamixel Wizard found at:
-
-https://www.robotis.com/service/download.php?no=1670
+Before a servo is first used, it\'s default parameters need to be updated to ensure correct operation of the limbs. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670)
 
 
+To update the servo parameters, perform the following instructions:
 
-To setup or calibrate the servos please follow the following instructions:
+1. Connect the USB to the computer with the Dynamixel Wizard.
 
-1. Connect the servo to the power supply and dynamixel programming tool to your PC via the USB connection as shown TODO Insert Picture
+2. Connect the power supply and the servo to the attached component of the USB
 
-2. Open Dynamixel Wizard
+3. Open Dynamixel Wizard
 
-3. In the options menu, set the baudrate to the baudrate of the servo
+4. Select Scan and wait for the attached servo to be discovered
+(OPTIONAL) Brand new servos should be preset to an ID of 1. Lower the ID range in Options > Scan to speed up discovery.
 
-   - 1000000 bps (Calibration)
-   - 57600 bps (Setup)
-   - TODO Insert Picture
+5. If there a multiple servos discovered, the new servo should be the option with ID = 1 and Baud Rate = 57600 bps
 
-4. Select the COM Port that the dynamixel tool is connected to, if unknown Select All.
+6. Update the following parameters (don\'t forget to press save after each update):
 
-5. Start the scan
+  - ID: Varies depending on where the servo will be placed. See below for guidance (TODO)
+  - Baud Rate (Bus): 1M bps = 2M/(1 + 1)
 
-6. TODO Need a servo to see what happens
+7. Test the calibration by setting the Goal Position to 0, +90 and -90 and observing the position of the arrow on the horn.
 
-7. The current servo position is shown on the servo by the dot on the driveshaft.
-   Move the servo to the first position (straight up)
-   Click confirm
-   Follow the instructions on the screen for all 4 positions
-   Test the calibration by setting the goal position to either side of the zero position (does the servo rotate all the way around)
-   Check that the servo positions is approximately the target postion at a few different points.
-   Check that the baud rate is still at (what the rate is)
-   Check that the servo ID is set correctly (link to list of servo IDs and positions)
+8. Select Disconnect, disconnect both the power and servo from the attached component.
+
+9. Place the servo into the robot.
+
