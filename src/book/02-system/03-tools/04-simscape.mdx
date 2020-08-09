@@ -1,0 +1,46 @@
+---
+section: System
+chapter: Tools
+title: Simscape
+description: A physics simulation for testing the robot.
+slug: /system/tools/simscape
+keywords:
+  [
+    physics,
+    simulation,
+  ]
+---
+
+## Overview
+
+A physics simulation implemented in [Matlab](https://au.mathworks.com/products/matlab.html)/[Simulink](https://au.mathworks.com/products/simulink.html)/[SimscapeMultibody](https://au.mathworks.com/products/simmechanics.html). It's designed to have a higher accuracy than our previous simulations, which is more useful for AI training. Be careful as this project shares it's name with one of the major libraries it uses, Simscape.
+
+## Simulations
+
+### Static Simulation
+
+This simulation will display physically-constrained, static poses of the robot, based on predefined joint positions.
+
+### Contact Simulation
+
+This simulation models contact forces and friction to a free-body robot.
+
+### Servo Simulation
+
+This simulation replaces the default Simscape Multibody revolute joints with Dynamixel MX64 and MX106 servo motors. This allows for the simulation-time modification of the robot pose for each servo.
+
+## Usage
+
+* For Matlab and Simulink you need an account and a license, The University of Newcastle has a campus license, see the [IT Services link](https://www.newcastle.edu.au/current-students/support/it/software-and-tools#table14022). 
+
+* If you want to use SimscapeUDP, you need to run
+    ```
+    cd src/UDP
+    mkdir build
+    cd build
+    ../src/buildSimscapeUDP.sh
+    ```
+
+## SimscapeUDP
+
+An extension to Simscape that allows the Servo Simulation to communicate with the NUbots NUClear code. SimscapeUDP sends and receives neutrons via UDP. It also adds the requirement for [protobuf](https://developers.google.com/protocol-buffers).
