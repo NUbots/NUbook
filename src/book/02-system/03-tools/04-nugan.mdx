@@ -33,23 +33,23 @@ The CycleGAN also uses an identity mapping to stabilise the training. It will in
 
 ## The Model
 
-This implementation of CycleGAN uses real images and NUpbr paired raw and segmentation images. The NUpbr raw images represent the A domain of the CycleGAN. The real images represent the B domain of the CycleGAN. We train the model on real images and NUpbr images to obtain a dataset of pseudo-real images.
+This implementation of CycleGAN uses photographs and NUpbr paired raw and segmentation images. The NUpbr raw images represent the A domain of the CycleGAN. The photographs represent the B domain of the CycleGAN. We train the model on photographs and NUpbr images to obtain a dataset of fake photographs.
 
-For a given real NUpbr raw image, we will also load in the corresponding real NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white and ensure the black is true black, to produce a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1', which forms our attention mask.
+For a given NUpbr raw image, we will also load in the corresponding NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white and ensure the black is true black, to produce a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1', which forms our attention mask.
 
-![Segmentation mask and a black and white image where the background of the segmentation mask is black and the rest white.](images/cyclegan_attention.png 'Segmentation image and corresponding attention mask.')
+![Segmentation mask and a black and white image where the background of the segmentation mask is black and the rest is white.](images/cyclegan_attention.png 'Segmentation image and corresponding attention mask.')
 
-After we get a fake real image, we use the attention mask to add back in the original background.
+After we get a fake photograph, we use the attention mask to add back in the original background.
 
 ```py
 masked_fake_B = fake_B*attention + real_A*(1-attention)
 ```
 
-`fake_B*attention` will give us the non-background pixels of the fake real image. `real_A*(1-attention)` will give us the background pixels of the original real NUbpr image. Adding these both together, we get the fake non-background elements and the real background elements in one image. This result is then used for training. This removes the consideration of the background from the training, and instead lets the generator focus its attention on the non-background elements.
+`fake_B*attention` will give us the non-background pixels of the fake photograph. `real_A*(1-attention)` will give us the background pixels of the original NUbpr image. Adding these both together, we get the fake non-background elements and the real background elements in one image. This result is then used for training. This removes the consideration of the background from the training, and instead lets the generator focus its attention on the non-background elements.
 
 Since we do not have an attention mask for images in the B domain, we focus more on cycling on the original real A image. From a real B image, we generate a fake A image. We do not cycle from here. From a real A image, we cycle on the resulting fake B image, and then again on the resulting cycled fake A image. All the cycles from the real A image can use the attention mask from the corresponding segmentation mask for A.
 
-The repository contains a pretrained base model that will map semi-synthetic soccer field images to real soccer field images. This model can then be fine-tuned to a specific field by training from the base model with a dataset of real images of a specific field. When training is run, without specifying to continue an existing fine-tuning trained model, the pretrained base will be loaded.
+The repository contains a pre-trained base model that will map semi-synthetic soccer field images to real soccer field images. This model can then be fine-tuned to a specific field by training from the base model with a dataset of real images of a specific field. When training is run, without specifying to continue an existing fine-tuning trained model, the pre-trained base will be loaded.
 
 ## Using NUgan
 
