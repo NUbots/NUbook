@@ -35,7 +35,7 @@ The CycleGAN also uses an identity mapping to stabilise the training. It will in
 
 This implementation of CycleGAN uses real images and NUpbr paired raw and segmentation images. The NUpbr raw images represent the A domain of the CycleGAN. The real images represent the B domain of the CycleGAN. We train the model on real images and NUpbr images to obtain a dataset of pseudo-real images.
 
-For a given real NUpbr raw image, we will also load in the corresponding real NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white and ensure the black is true black, to produce a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1'. This is called our attention mask.
+For a given real NUpbr raw image, we will also load in the corresponding real NUpbr segmentation image into the model. We set the non-black (not background) pixels of the segmentation image to white and ensure the black is true black, to produce a black and white image. The black portions of the image represent '0' and the white portions of the image represent '1', which forms our attention mask.
 
 ![Segmentation mask and a black and white image where the background of the segmentation mask is black and the rest white.](images/cyclegan_attention.png 'Segmentation image and corresponding attention mask.')
 
@@ -73,15 +73,13 @@ You can use either CPU or NVIDIA GPU with latest drivers, [CUDA](https://develop
 
 If you are using Windows, we recommend using [Anaconda](https://docs.anaconda.com/anaconda/install/windows/).
 
-To set up with pip run
+On non-Windows OS you can use the provided shell script to install dependencies in Anaconda.
 
 ```sh
-sudo apt install python-pip
-pip3 install setuptools wheel
-pip3 install -r requirements.txt
+sh scripts/conda_deps.sh
 ```
 
-To set up with Anaconda (MacOS) you can create a new environment with the given environment file
+To set up with Anaconda on MacOS you can create a new environment with the given environment file
 
 ```sh
 conda env create -f environment.yml
@@ -93,10 +91,12 @@ In Windows, use the batch file rather than the environment file.
 "./scripts/conda_deps.bat"
 ```
 
-On non-Windows OS you could also use the provided shell script to install dependencies in Anaconda.
+To set up with pip run
 
 ```sh
-sh scripts/conda_deps.sh
+sudo apt install python-pip
+pip3 install setuptools wheel
+pip3 install -r requirements.txt
 ```
 
 ### Training
