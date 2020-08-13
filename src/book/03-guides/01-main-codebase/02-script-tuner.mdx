@@ -6,15 +6,15 @@ description: How to tune and run scripts.
 slug: /guides/main/script-tuner
 ---
 
-Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a very basic script telling the robot to move their joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a small script telling the robot to move their joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
-The Script Engine specifies how the scripts work. It takes each joint position and time from the `.yaml` file and sends the information to the servos.
+The Script Engine executes script files by performing the robot motions that they describe. It takes each joint position and time from the `.yaml` file and sends the information to the servos, causing the robot to move.
 
-Information on Script Engine is on the [Motion](/system/subsystems/motion#script-engine) page and Script Runner and Script Tuner on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
+Information on Script Engine is on the [Motion](/system/subsystems/motion#script-engine) page. Information on Script Runner and Script Tuner is on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 ## Script Runner
 
-The script runner command will run a script. The command for this is
+The `scriptrunner` command will run a script. It is used as follows:
 
 ```bash
 ./scriptrunner Script.yaml
@@ -22,59 +22,59 @@ The script runner command will run a script. The command for this is
 
 Where you would replace `Script.yaml` with the name of the script. All scripts can be found in the NUbots repository under `/module/motion/ScriptEngine/data/scripts/`.
 
-The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, if you were running `Stand.yaml` on `nugus1`, the ScriptEngine would first look for `Stand.yaml` in the `/scripts/` folder, and then it would check in the `/scripts/nugus1/` folder for a `Stand.yaml` file. If it exists, it will override with that script.
+The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, you could have a stand script specifically for the NUgus 1 robot stored in `/scripts/nugus1/Stand.yaml`. When you run `./scriptrunner Stand.yaml` on NUgus 1, the ScriptEngine will first look for the robot-specific `Stand.yaml` in the `/scripts/nugus1/` folder. If found, it will execute it. If not, it will look for a platform-specific `Stand.yaml` in the `/scripts/nugus/` folder, which it will execute if found. Otherwise, it will look for a more general `Stand.yaml` in the `/scripts/` folder.
 
 ## Script Tuner
 
-Script tuner is an easy way to make scripts. To use script tuner, run
+Script tuner is a tool that can be used to create and modify scripts. To use script tuner, run:
 
 ```bash
 ./scripttuner /path/to/Script.yaml
 ```
 
-Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script. `/path/to/` is the path to the script. This may be `scripts/nugus/Script.yaml`, or `scripts/nugus*/Script.yaml` where `*` is the robot number for a robot specific script.
+Where `Script.yaml` is either the name of an existing script, if you want to edit it, or the name for a new script. `/path/to/Script.yaml` is the path to the script. This may be `scripts/nugus/Script.yaml`, or `scripts/nugus*/Script.yaml` where `*` is the robot number for a robot specific script.
 
-You will then be able to tune the script. You will see the following interface for script editing.
+Running a command like the above will open the following interface, which will enable you to tune the script:
 
 ![First line states 'Scripts: scripts/nugus2/walk.yaml'. Next line says 'Frames:' with consecutive numbers from 1 to 44 laid out in a row. The number '1' is selected. The next line says 'Duration: 3000'. The next section is a table with the first column specifying servo names such as 'right shoulder pitch'. The second column specifies the angle of the servo. This is of the format 'Angle: +1.45'. Some of the rows have dashes instead of numbers for the angle, denoting an empty field. The third row states the gain of the servo. This is of the form 'Gain: 30.0'. Like the angle, some of these are blanked out with dashes. Empty angle and gain fields are paired. In the next section there are several keyboard commands which allow the user to use the interface.](./images/scripttuner.png)
 
 The first line tells you the name and path of the script you are creating or editing.
 
-The second line specifies the number of frames and the current frame, which is highlighted. Each frame specifies different joint positions, and when these frames are combined they result in a motion.
+The second line specifies the number of frames and the current frame, which is highlighted. Each frame specifies different joint (i.e. servo) positions, and when these frames are combined they result in a motion.
 
 The next line is the duration. This determines how long the robot will take to move to the servo positions you have specified. This is measured in milliseconds.
 
-The next section is a table. These show the angle and gain for each servo for that frame.
+The next section is a table that shows the angle and gain for each servo for that frame.
 
-The bottom of the interface shows what commands are available. It does not show all the commands. All commands can be viewed by typing `:help`. Note that the letters are UPPERCASE.
+The bottom of the interface shows what commands are available. It does not show all the commands. All commands can be viewed by typing `:help` and pressing <kbd>Enter</kbd>. Note that the letters should be pressed in UPPERCASE.
 
 | Command                        | Description                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <kbd>,</kbd>                   | Moves to the frame that is left of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                            |
-| <kbd>.</kbd>                   | Moves to the frame that is right of the frame you have currently selected. When you move to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                           |
-| <kbd>N</kbd>                   | Creates a new frame after the frame you have currently selected. This frame will be a duplicate of the frame you have selected. It will be added in after the currently selected frame, and the selected frame will not change.                                                                                                                                                                      |
-| <kbd>I</kbd>                   | Deletes the current frame you have selected. The new selected frame will be the frame after the deleted frame, or before if it was the last frame.                                                                                                                                                                                                                                                   |
-| <kbd>space</kbd>               | This toggles locking and unlocking of servos. When the servo is locked, you will not be able to move that joint on the real robot and the angle it is at will be stored in the table on the script tuner interface. When it is unlocked, you are able to freely move that joint on the real robot to adjust the angle of the joint for that frame. Space is used to edit any field that is editable. |
-| <kbd>T</kbd>                   | Edits the duration that this frame plays for, in milliseconds. Press <kbd>Enter</kbd> to submit.                                                                                                                                                                                                                                                                                                     |
-| <kbd>J</kbd>                   | Jumps to a specified frame. After pressing this key, type in the frame number you want to jump to and then hit <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                     |
-| <kbd>G</kbd>                   | Opens interface for editing gain of entire script or frame. Allows changing of all servo gains, only the upper body gains (arms and head) or lower body gains (legs). Can specify for the entire script or for a particular frame. Use <kbd>X</kbd> to exit the edit gain interface.                                                                                                                 |
+| <kbd>,</kbd>                   | Moves to the frame that is to the left of the currently selected frame. When moving to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                            |
+| <kbd>.</kbd>                   | Moves to the frame that is right of the currently selected frame. When moving to the frame, the robot's joints will move to the joint positions for that frame.                                                                                                                                                                                                                          |
+| <kbd>N</kbd>                   | Creates a new frame after the currently selected frame. This frame will be a duplicate of the selected frame. It will be added in after the currently selected frame, and the selected frame will not change.                                                                                                                                                                      |
+| <kbd>I</kbd>                   | Deletes the currently selected frame. The frame after the deleted frame will be selected, if there's one. Otherwise the one before will be selected.                                                                                                                                                                                                                                                   |
+| <kbd>space</kbd>               | Toggles locking and unlocking of servos. When a servo is locked, you will not be able to manually move its joint on the robot, and the angle it is at will be stored in the table on the script tuner interface. When it is unlocked, you are able to freely move that joint on the robot to adjust the angle of the joint for that frame. Space bar can be pressed to edit any field that is editable. |
+| <kbd>T</kbd>                   | Edits the duration that the current frame plays for, in milliseconds. After pressing this key, type the duration and press <kbd>Enter</kbd> to submit.                                                                                                                                                                                                                                                                                                     |
+| <kbd>J</kbd>                   | Jumps to a specified frame. After pressing this key, type the frame number you want to jump to and then press <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                     |
+| <kbd>G</kbd>                   | Opens the interface for editing the gain of the entire script or frame. Provides a quick way to change all servo gains, only the upper body gains (arms and head), or only lower body gains (legs) at the same time. The change can be applied to the entire script or to a particular frame. Press <kbd>X</kbd> to exit the edit gain interface when done.                                                                                                                 |
 | <kbd>P</kbd>                   | Plays the script from the first frame to the last frame.                                                                                                                                                                                                                                                                                                                                             |
 | <kbd>S</kbd>                   | Saves the new script or saves the edited script.                                                                                                                                                                                                                                                                                                                                                     |
-| <kbd>A</kbd>                   | Saves the script with a particular name. After pressing this key, write the name of the script and press <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                           |
-| <kbd>R</kbd>                   | Manual refresh view.                                                                                                                                                                                                                                                                                                                                                                                 |
+| <kbd>A</kbd>                   | Saves the script with a particular name (equivalent to "save as"). After pressing this key, type the name of the script and press <kbd>Enter</kbd>.                                                                                                                                                                                                                                                                           |
+| <kbd>R</kbd>                   | Manually refreshes view. Useful if for some reason the view gets stuck.                                                                                                                                                                                                                                                                                                                                                           |
 | <kbd>M</kbd>                   | Mirrors the whole script.                                                                                                                                                                                                                                                                                                                                                                            |
-| <kbd>X</kbd>                   | Exits the help or exits gain editing.                                                                                                                                                                                                                                                                                                                                                                |
-| <kbd>CTRL</kbd> + <kbd>C</kbd> | Quits script tuner.                                                                                                                                                                                                                                                                                                                                                                                  |
+| <kbd>X</kbd>                   | Exits the help view or exits the gain editing interface.                                                                                                                                                                                                                                                                                                                                                                |
+| <kbd>CTRL</kbd>+<kbd>C</kbd> | Quits script tuner.                                                                                                                                                                                                                                                                                                                                                                                  |
 | <kbd>:help</kbd>               | Lists all commands that can be used in script tuner.                                                                                                                                                                                                                                                                                                                                                 |
 
 ## List of Scripts
 
 | Script Name          | Description                                                              |
 | -------------------- | ------------------------------------------------------------------------ |
-| `KickLeft.yaml`      | Robot kicks with its left foot.                                          |
-| `KickRight.yaml`     | Robot kicks with its right foot.                                         |
+| `KickLeft.yaml`      | The robot kicks with its left foot.                                          |
+| `KickRight.yaml`     | The robot kicks with its right foot.                                         |
 | `NodYes.yaml`        | The robot nods its head.                                                 |
-| `Relax.yaml`         | The robot relaxes all of its joints.                                     |
+| `Relax.yaml`         | The robot relaxes all of its joints. Be prepared to hold it if it's standing, as it might fall over.                             |
 | `RelaxHead.yaml`     | The robot relaxes its head joints.                                       |
 | `RollOverFront.yaml` | The robot rolls from its back onto its front.                            |
 | `Stand.yaml`         | The robot moves into a standing position.                                |
@@ -84,11 +84,11 @@ The bottom of the interface shows what commands are available. It does not show 
 
 ## Modifying and Adding Scripts
 
-When installing NUbots code onto a robot when tuning scripts, ensure you are using [the correct flag for configuration files when installing](/system/foundations/build-system#install), depending on whether you want to overwrite scripts or not overwrite scripts. Ensure you have installed the `scripttuner` and `scriptrunner` binaries by turning `scripttuner.role` and `scriptrunner.role` ON in `./b configure -i`.
+When installing NUbots code onto a robot for tuning scripts, ensure you are using [the correct flag for installing configuration files](/system/foundations/build-system#install), depending on whether you want to overwrite existing scripts on the robot, or not. Also ensure that enable the `scripttuner` and `scriptrunner` binaries by turning `scripttuner.role` and `scriptrunner.role` ON in `./b configure -i`, before building and installing.
 
-Use script tuner as detailed above to make or edit your script. It is a good idea to have one person using script tuner and another person holding the robot and moving the joints to new positions. Ensure you wait a few seconds before closing a script after saving to allow it time to save.
+Use script tuner as detailed above to make or edit your script. It is a good idea to have one person using script tuner and another person holding the robot and moving the joints to new positions. Wait a few seconds after saving before you close the script, to allow it time to finish saving.
 
-When you have finished making or editing your script, copy it across to your computer using
+When you have finished making or editing your script, copy it from the robot to your computer using
 
 ```bash
 scp nubots@<address>:<path/to/script> <path/on/your/computer>
@@ -96,4 +96,4 @@ scp nubots@<address>:<path/to/script> <path/on/your/computer>
 
 where `<address>` is the address of the robot, `<path/to/script>` is the path to the script, and `<path/on/your/computer>` is the path you want to copy the script to. Run this command on your computer.
 
-To get the changes into the master branch on GitHub, you will need to make a new branch and create a pull request.
+After you copy the script to your computer, you should commit it to a new branch and make a pull request to get it added to the `master` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them.

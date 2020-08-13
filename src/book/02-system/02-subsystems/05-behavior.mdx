@@ -24,7 +24,7 @@ An example of using ScriptRunner to run a script called `Stand.yaml` is:
 
 [ScriptTuner](https://github.com/NUbots/NUbots/tree/master/module/behaviour/tools/ScriptTuner) is a module in the behaviour subsystem. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](<https://en.wikipedia.org/wiki/Curses_(programming_library)>) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
 
-When frames are selected in the ScriptTuner interface, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
+A script consists of frames (also called targets) which specify the position of one or more servos at a given time. The ScriptTuner interface allows for stepping through and modifying those frames. When a frame is selected in ScriptTuner, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
 
 ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When a servo is "locked", its position can only be changed in ScriptTuner. When it is "unlocked", the servo can be moved physically on the robot, which will update the position value in the script. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
 
