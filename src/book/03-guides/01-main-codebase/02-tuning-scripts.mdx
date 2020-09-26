@@ -24,6 +24,8 @@ Where you would replace `Script.yaml` with the name of the script. All scripts c
 
 The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, you could have a stand script specifically for the NUgus 1 robot stored in `/scripts/nugus1/Stand.yaml`. When you run `./scriptrunner Stand.yaml` on NUgus 1, the ScriptEngine will first look for the robot-specific `Stand.yaml` in the `/scripts/nugus1/` folder. If found, it will execute it. If not, it will look for a platform-specific `Stand.yaml` in the `/scripts/nugus/` folder, which it will execute if found. Otherwise, it will look for a more general `Stand.yaml` in the `/scripts/` folder.
 
+More on the script system can be found on the [Configuration and Script System page](/system/foundations/config-script).
+
 ## Script Tuner
 
 Script tuner is a tool that can be used to create and modify scripts. To use script tuner, run:
@@ -36,7 +38,43 @@ Where `Script.yaml` is either the name of an existing script, if you want to edi
 
 Running a command like the above will open the following interface, which will enable you to tune the script:
 
-![First line states 'Scripts: scripts/nugus2/walk.yaml'. Next line says 'Frames:' with consecutive numbers from 1 to 44 laid out in a row. The number '1' is selected. The next line says 'Duration: 3000'. The next section is a table with the first column specifying servo names such as 'right shoulder pitch'. The second column specifies the angle of the servo. This is of the format 'Angle: +1.45'. Some of the rows have dashes instead of numbers for the angle, denoting an empty field. The third row states the gain of the servo. This is of the form 'Gain: 30.0'. Like the angle, some of these are blanked out with dashes. Empty angle and gain fields are paired. In the next section there are several keyboard commands which allow the user to use the interface.](./images/scripttuner.png)
+```
+-----------------------------------Script Tuner-----------------------------------
+
+Script: scripts/nugus2/walk.yaml
+Frames: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
+Duration:  3000
+-
+
+
+U Head Pan              Angle:  -.--- Gain: ---.-
+U Head Tilt             Angle:  -.--- Gain: ---.-
+L Right Shoulder Pitch  Angle: +1.963 Gain:  30.0
+L Left Shoulder Pitch   Angle: +1.963 Gain:  30.0
+L Right Shoulder Roll   Angle: -0.124 Gain:  30.0
+L Left Shoulder Roll    Angle: +0.124 Gain:  30.0
+L Right Elbow           Angle: -2.443 Gain:  30.0
+L Left Elbow            Angle: -2.443 Gain:  30.0
+L Right Hip Yaw         Angle: +0.030 Gain:  30.0
+L Left Hip Yaw          Angle: +0.030 Gain:  30.0
+L Right Hip Roll        Angle: -0.063 Gain:  30.0
+L Left Hip Roll         Angle: +0.063 Gain:  30.0
+L Right Hip Pitch       Angle: -0.204 Gain:  30.0
+L Left Hip Pitch        Angle: -0.204 Gain:  30.0
+L Right Knee            Angle: +0.257 Gain:  30.0
+L Left Knee             Angle: +0.257 Gain:  30.0
+L Right Ankle Pitch     Angle: -0.239 Gain:  30.0
+L Left Ankle Pitch      Angle: -0.239 Gain:  30.0
+L Right Ankle Roll      Angle: +0.060 Gain:  30.0
+L Left Ankle Roll       Angle: -0.067 Gain:  30.0
+
+Commands
+, Left a frame  N New Frame        Lock/Unlock   J Jump to Frame P play
+. Right a frame I Delete a Frame T Edit Duration G Change Gains  S Save
+
+Type :help for a full list of commands
+----------------------------------------------------------------------------------
+```
 
 The first line tells you the name and path of the script you are creating or editing.
 
@@ -96,4 +134,4 @@ scp nubots@<address>:<path/to/script> <path/on/your/computer>
 
 where `<address>` is the address of the robot, `<path/to/script>` is the path to the script, and `<path/on/your/computer>` is the path you want to copy the script to. Run this command on your computer.
 
-After you copy the script to your computer, you should commit it to a new branch and make a pull request to get it added to the `master` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them.
+After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `master` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git visit the [Git guide](/guides/general/git).
