@@ -14,7 +14,7 @@ We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library 
 
 A **basis** is a **maximal** set of **linearly independent** vectors.
 
-In this context, bases usually span $\mathbb{R}^3$. That is, they cover ** three-dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
+In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three-dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
 
 $$
 \mathbf{u} = a_1 \cdot \mathbf{b}_1 + a_2 \cdot \mathbf{b}_2 + a_3 \cdot \mathbf{b}_3
@@ -239,7 +239,7 @@ This gives the **foot** to **torso** transform by **multiplying** the **world** 
 
 These two **inner** letters are **cancelled**, with the outer two remaining. This also works for rotation matrices.
 
-If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be ** cancelled** in a similar way to the transformation matrices.
+If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **cancelled** in a similar way to the transformation matrices.
 
 ```cpp
 Eigen::Vector3d rXZa = rXYa + rYZa;
