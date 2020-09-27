@@ -2,35 +2,55 @@
 section: Guides
 chapter: Hardware
 title: Servo Setup and Calibration
-description: Discover how to calibrate servos.
+description: Learn how to test and calibrate servos.
 slug: /guides/hardware/servo-calibration
 ---
 
-## Servo Calibration
+Servos are electromechanical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it should be removed and replaced with a new servo.
 
-Servos are electrical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it is required to be removed and replaced with a new servo.
+Before a servo is first used, its default parameters need to be updated to ensure correct operation of the limbs. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
 
-Before a servo is first used, it's default parameters need to be updated to ensure correct operation of the limbs. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
+## Set Up
 
-To update the servo parameters, perform the following instructions:
+To start testing, calibrating or updating the parameters of a servo do the following:
 
-1. Connect the USB to the computer with the Dynamixel Wizard.
-   ![Photo of the USB attachment for the Dynamixel Wizard connected to a computer](./images/servo_calibration/usb.jpg)
+1. Connect the USB2Dynamixel to a USB port on the computer with Dynamixel Wizard.
+   ![Photo of the USB2Dynamixel attachment for Dynamixel Wizard connected to a computer](./images/servo_calibration/usb.jpg)
 
-2. Connect the power supply and the servo to the attached component of the USB.
-   ![Photo of the servo cable connected to the power attachment of the USB](./images/servo_calibration/power_supply.jpg)
+2. Connect the power supply and the servo to the attached component of the USB2Dynamixel.
+   ![Photo of the servo cable connected to the power attachment of the USB2Dynamixel](./images/servo_calibration/power_supply.jpg)
 
 3. Open Dynamixel Wizard.
 
-4. Select Scan and wait for the attached servo to be discovered.
+## Calibration
 
-   (OPTIONAL) Brand new servos should be preset to an ID of 1. Lower the ID range in 'Options > Scan' to speed up discovery.
+**TODO**: actually see what the instructions are and get screenshots, this is just from memory.
+
+To calibrate a servo perform the following instructions:
+
+1. Select Tools -> Calibrate. A window will pop up with instructions on how to calibrate the servo.
+
+2. Select the correct servo model. The model will be written on the servo, either MX-64 for head and arm servos or MX-106 for leg servos.
+
+3. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The software will then install the firmware to the servo.
+
+4. Rotate the servo so that the dot is in the 6-o'clock position. Use the tool pictured to move the _what is this called?_ and the marks to line up correctly.
+
+5. Continue to rotate to each of the 3-o'clock, 12-o'clock and 9-o'clock positions when told by the software.
+
+## Parameters and Testing
+
+To update the servo parameters, perform the following instructions:
+
+1. Select Scan and wait for the attached servo to be discovered.
+
+   Optional: brand new servos should be preset to an ID of 1. Lower the ID range in "**Options > Scan**" to speed up discovery.
    ![Screenshot of Dynamixel Wizard performing a scan with no servos discovered](./images/servo_calibration/scan.png)
    ![Screenshot of Dynamixel Wizard performing a scan with 3 servos discovered](./images/servo_calibration/discover.png)
 
-5. If there a multiple servos discovered, the new servo should be the option with ID = 1 and Baud Rate = 57600 bps.
+2. If there are multiple servos discovered, the new servo should be the option with ID = 1 and Baud Rate = 57600 bps.
 
-6. Update the following parameters (don't forget to press save after each update):
+3. Update the following parameters (don't forget to press save after each update):
 
    - ID: Varies depending on where the servo will be placed. See below for guidance.
 
@@ -63,8 +83,8 @@ To update the servo parameters, perform the following instructions:
 
      ![Screenshot of Dynamixel Wizard Baud Rate selection with 1M bps selected](./images/servo_calibration/update_parameters.png)
 
-7. Test the calibration by setting the Goal Position to 0, +90 and -90 and observing the position of the arrow on the horn.
+4. Test the calibration by setting the Goal Position to 0, +90 and -90 and observing the position of the arrow on the horn. Set the goal position to ~+170 and ~+190 (either side of +180) to test if the servo is in joint mode. It should take the long route around to the second position.
 
-8. Select Disconnect, disconnect both the power and servo from the attached component.
+5. Select Disconnect, disconnect both the power and servo from the attached component.
 
-9. Place the servo into the robot.
+6. Place the servo into the robot.
