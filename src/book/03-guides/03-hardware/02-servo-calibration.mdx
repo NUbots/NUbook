@@ -34,11 +34,11 @@ To calibrate a servo perform the following instructions:
 
 3. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The software will then install the firmware to the servo.
 
-4. Rotate the servo so that the dot is in the 6-o'clock position. Use the tool pictured to move the _what is this called?_ and the marks to line up correctly.
+4. Rotate the servo so that the dot is in the 6-o'clock position. Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
 
 5. Continue to rotate to each of the 3-o'clock, 12-o'clock and 9-o'clock positions when told by the software.
 
-## Parameters and Testing
+## Parameters
 
 To update the servo parameters, perform the following instructions:
 
@@ -83,8 +83,18 @@ To update the servo parameters, perform the following instructions:
 
      ![Screenshot of Dynamixel Wizard Baud Rate selection with 1M bps selected](./images/servo_calibration/update_parameters.png)
 
-4. Test the calibration by setting the Goal Position to 0, +90 and -90 and observing the position of the arrow on the horn. Set the goal position to ~+170 and ~+190 (either side of +180) to test if the servo is in joint mode. It should take the long route around to the second position.
+## Testing
 
-5. Select Disconnect, disconnect both the power and servo from the attached component.
+To test the servo, perform the following instructions:
 
-6. Place the servo into the robot.
+1. Set the Goal Position in Dynamixel Wizard to 0, +90 and -90 and observe the position of the arrow on the horn. It should match the picture.
+
+2. Set the Goal Position in Dynamixel Wizard to some position either side of +180 to test if the servo is in joint mode. If it is it should take the long route around to the second position. If it does not, it is not in joint mode. _instructions on how to fix_
+
+If the servo is performing correctly, we can disconnect the servo and use it in a robot.
+
+1. Select 'Disconnect' in Dynamixel Wizard.
+
+2. Disconnect both the power and servo from the attached component.
+
+3. Place the servo into the robot.
