@@ -53,8 +53,8 @@ const Cite = ({ children }) => {
 
   return (
     <sup>
-      {referenceIds.map(id => (
-        <CiteSingle>{id}</CiteSingle>
+      {referenceIds.map((id, index) => (
+        <CiteSingle key={id + index}>{id}</CiteSingle>
       ))}
     </sup>
   )
