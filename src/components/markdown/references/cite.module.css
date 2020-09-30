@@ -1,8 +1,8 @@
 .citeLink {
-  text-decoration: none!important;
+  text-decoration: none !important;
 }
 
 .citeLink:hover,
 .citeLink:focus {
-  text-decoration: underline!important;
+  text-decoration: underline !important;
 }

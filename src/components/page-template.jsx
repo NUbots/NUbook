@@ -8,7 +8,7 @@ import Layout from './layout'
 export const BibReferencesContext = React.createContext('bibReferences')
 
 const PageTemplate = props => {
-  const [ usedReferences, setUsedReferences ] = useState(new Set())
+  const [usedReferences, setUsedReferences] = useState(new Set())
 
   function addUsedReference(referenceId) {
     setUsedReferences(

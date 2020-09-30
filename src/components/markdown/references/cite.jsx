@@ -42,6 +42,10 @@ const CiteSingle = ({ children }) => {
   )
 }
 
+CiteSingle.propTypes = {
+  children: PropTypes.node.isRequired,
+}
+
 const Cite = ({ children }) => {
   const referenceIds = String(children)
     .split(',')

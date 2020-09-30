@@ -135,13 +135,13 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     // Compute the path to this page's bib references file
     // (relative to the `src/book` directory)
     const directory = path.dirname(node.fileAbsolutePath)
-    const bibFilePath = path.posix.join(
+    const bibFilePath = path.posix.resolve(
       directory,
       node.frontmatter.references || 'references.bib'
     )
     const [, bibFileRelative] = bibFilePath.split('src/book/')
 
-    const references = bibReferences[bibFileRelative] || null;
+    const references = bibReferences[bibFileRelative] || null
 
     actions.createPage({
       path: node.frontmatter.slug,
