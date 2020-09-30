@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 const { parseBibFile, normalizeFieldValue } = require('bibtex')
 
 function bibToJson(bib) {
@@ -28,7 +30,7 @@ async function createBibNode({
   createNodeId,
   createContentDigest,
 }) {
-  function transformObject(obj, id, type) {
+  function transformObject(obj, id) {
     const bibNode = {
       ...obj,
       id,
@@ -57,8 +59,7 @@ async function createBibNode({
 
   transformObject(
     parsedContent,
-    parsedContent.id ? parsedContent.id : createNodeId(`${node.id} >>> Bibtex`),
-    'Bibtex'
+    parsedContent.id ? parsedContent.id : createNodeId(`${node.id} >>> Bibtex`)
   )
 }
 
