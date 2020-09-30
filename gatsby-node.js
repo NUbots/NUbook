@@ -141,6 +141,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
     const [, bibFileRelative] = bibFilePath.split('src/book/')
 
+    const references = bibReferences[bibFileRelative] || null;
+
     actions.createPage({
       path: node.frontmatter.slug,
       component: path.resolve('./src/components/page-template.jsx'),
@@ -149,7 +151,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
-        bib: bibReferences[bibFileRelative],
+        references,
       },
     })
   })

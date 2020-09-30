@@ -1,15 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 import Layout from './layout'
 
+export const BibReferencesContext = React.createContext('bibReferences')
+
 const PageTemplate = props => {
+  const [ usedReferences, setUsedReferences ] = useState(new Set())
+
+  function addUsedReference(referenceId) {
+    setUsedReferences(
+      previousReferences => new Set([...previousReferences, referenceId])
+    )
+  }
+
+  const referencesContext = {
+    references: props.pageContext.references,
+    usedReferences,
+    addUsedReference,
+  }
+
   return (
-    <Layout pageContext={props.pageContext} data={props.data}>
-      <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
-    </Layout>
+    <BibReferencesContext.Provider value={referencesContext}>
+      <Layout pageContext={props.pageContext} data={props.data}>
+        <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
+      </Layout>
+    </BibReferencesContext.Provider>
   )
 }
 
