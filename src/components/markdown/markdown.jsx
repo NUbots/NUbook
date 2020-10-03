@@ -10,6 +10,7 @@ import TabbedImages from './tabbed-images'
 import Alert from './alert/alert'
 import Grid from './grid/grid'
 import Cite from './references/cite'
+import References from './references/references'
 import style from './markdown.module.css'
 import { createHeading } from './heading/heading'
 
@@ -52,6 +53,7 @@ const MDXComponents = {
   code: Code,
   table: Table,
   cite: Cite,
+  references: References,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
   h3: createHeading('h3'),
