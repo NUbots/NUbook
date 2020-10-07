@@ -15,9 +15,11 @@ const References = ({ children }) => {
     const fields = references[referenceId].fields
     // fields now has all the data you need, e.g. fields.author, fields.title
 
+    console.log('REFERENCE ID: ' + referenceId);
+
     // returning values
     return(
-      <div>
+      <div id={`#reference-${referenceId}`}>
         <p> {i+1}. {fields.author} ({fields.year}) - <i>{fields.title}</i> - <a target="_blank" href={fields.url} >{fields.url}</a></p>
         
       </div>
