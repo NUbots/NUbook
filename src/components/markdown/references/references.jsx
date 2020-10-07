@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { BibReferencesContext } from '../../page-template'
 
 const References = ({ children }) => {
-  const { references, usedReferences, addUsedReference } = useContext(
+  const { references, usedReferences } = useContext(
     BibReferencesContext
   )
 
