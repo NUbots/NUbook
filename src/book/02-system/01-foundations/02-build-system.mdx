@@ -16,7 +16,7 @@ The NUbots codebase uses a [CMake](https://cmake.org/) build system based on the
 
 #### Requirements and Setup
 
-See the [Getting Started guide](/guides/nubots/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
+See the [Getting Started guide](/guides/main/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
 
 ### NUClear Roles
 
@@ -70,7 +70,7 @@ nuclear_role(
   # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
   motion::KinematicsConfiguration
   support::configuration::GlobalConfig
-  support::configuration::NetworkConfiguration
+  network::NUClearNetwork
   platform::darwin::HardwareIO
   platform::darwin::SensorFilter
   support::NUsight
