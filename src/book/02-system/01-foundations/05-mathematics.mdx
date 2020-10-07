@@ -6,7 +6,7 @@ description: Detailed explanation of how mathematics is written in the NUbots co
 slug: /system/foundations/mathematics
 ---
 
-The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. Specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
+The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
 
 We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
 
@@ -14,7 +14,7 @@ We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library 
 
 A **basis** is a **maximal** set of **linearly independent** vectors.
 
-In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
+In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three-dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
 
 $$
 \mathbf{u} = a_1 \cdot \mathbf{b}_1 + a_2 \cdot \mathbf{b}_2 + a_3 \cdot \mathbf{b}_3
@@ -183,7 +183,7 @@ If you would like the vector **only rotated**, extract the **rotational componen
 Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
 ```
 
-Homogeneous transformation matrices can be **multiplied** together to get a **new homogemeous transformation** matrix.
+Homogeneous transformation matrices can be **multiplied** together to get a **new homogeneous transformation** matrix.
 
 $$
 \mathbf{H}_a^c = \mathbf{H}_b^c \cdot \mathbf{H}^b_a
@@ -197,7 +197,7 @@ Eigen::Affine3d Hca = Hcb * Hba;
 
 ## Velocity
 
-Velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
+The velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
 
 Velocities can only be **rotated**, **not translated**. They should **not** be multiplied by a homogeneous transformation matrix, but they can be multiplied by a **rotation matrix**.
 
@@ -239,7 +239,7 @@ This gives the **foot** to **torso** transform by **multiplying** the **world** 
 
 These two **inner** letters are **cancelled**, with the outer two remaining. This also works for rotation matrices.
 
-If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **canceled** in a similar way to the transformation matrices.
+If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **cancelled** in a similar way to the transformation matrices.
 
 ```cpp
 Eigen::Vector3d rXZa = rXYa + rYZa;
@@ -251,7 +251,7 @@ When measured relative to the robot the **x-axis** is **forward** out of the tor
 
 World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
 
-For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the center of the field.
+For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
 
 ## Summary
 

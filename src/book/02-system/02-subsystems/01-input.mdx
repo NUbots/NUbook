@@ -1,0 +1,29 @@
+---
+section: System
+chapter: Subsystems
+title: Input
+description: How inputs are handled in the NUbots codebase.
+slug: /system/subsystems/input
+---
+
+Input to the system includes cameras, [Game Controller](https://github.com/RoboCup-Humanoid-TC/GameController) and [NatNet](https://optitrack.com/products/natnet-sdk/).
+
+# Cameras
+
+The cameras have the following parameters that are used by the object detection algorithm.
+
+| Parameter           | Type                 | Description                                                                                                                                           |
+| ------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serial_number`     | string               | The serial number of the camera. This is used to identify the camera and distinguish it from other cameras in the robot.                              |
+| `lens.projection`   | string               | The lens projection type. Can be rectilinear, equidistant or equisold.                                                                                |
+| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. The focal length is the angle of view and magnification. |
+| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width                |
+| `k`                 | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                                 |
+| `fov`               | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                    |
+| `Hpc`               | 4x4 matrix           | Homogeneous transform from the rigid platform this camera is attached to (pitch servo) to the camera's virtual focal point.                           |
+
+These parameters are set for each camera as **configuration values** in the [Camera module](https://github.com/NUbots/NUbots/tree/master/module/input/Camera/data/config), in each robot's respective folder. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`.
+
+The parameters are used in the **Camera module** to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/master/shared/message/input/Image.proto).
+
+The [projection tool](https://github.com/NUbots/NUbots/tree/master/shared/utility/vision/projection.h), based on [panotools' fisheye projection calculations](https://wiki.panotools.org/Fisheye_Projection), maps a portion of the surface of a sphere to a flat image. The type of projection is specified by the above parameter `lens.projection`.
