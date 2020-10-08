@@ -10,75 +10,75 @@ Camera calibration is done to determine optimal parameters for the cameras, such
 
 The calibration is done in two steps. The first is creating the nbs recording and the second is using that nbs recording to find the camera parameters.
 
-1. Change `cameratest.role` to include `support::logging::DataLogging`
+1.  Change `cameratest.role` to include `support::logging::DataLogging`
 
-   ```bash
-   nuclear_role(
-     # FileWatcher, ConsoleLogHandler and SignalCatcher must go first. KinematicsConfiguration usually goes after these
-     # and without it many roles do not run
-     extension::FileWatcher
-     support::SignalCatcher
-     support::logging::ConsoleLogHandler
-     support::logging::DataLogging
-     # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-     motion::KinematicsConfiguration
-     support::configuration::NetworkConfiguration
-     support::configuration::GlobalConfig
-     platform::darwin::HardwareIO
-     platform::darwin::SensorFilter
-     input::Camera
-     support::NUsight
-     output::ImageCompressor
-     support::configuration::SoccerConfig
-   )
-   ```
+    ```bash
+    nuclear_role(
+      # FileWatcher, ConsoleLogHandler and SignalCatcher must go first. KinematicsConfiguration usually goes after these
+      # and without it many roles do not run
+      extension::FileWatcher
+      support::SignalCatcher
+      support::logging::ConsoleLogHandler
+      support::logging::DataLogging
+      # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+      motion::KinematicsConfiguration
+      support::configuration::NetworkConfiguration
+      support::configuration::GlobalConfig
+      platform::darwin::HardwareIO
+      platform::darwin::SensorFilter
+      input::Camera
+      support::NUsight
+      output::ImageCompressor
+      support::configuration::SoccerConfig
+    )
+    ```
 
-2. Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/main/getting-started) or the [Build System page](/system/foundations/build-system).
+2.  Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/main/getting-started) or the [Build System page](/system/foundations/build-system).
 
-3. On the robot, enable compressed image recording in `config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
+3.  On the robot, enable compressed image recording in `config/DataLogging.yaml`. Do this by setting `message.output.CompressedImage` to `true`.
 
-4. Ensure the Left and Right camera serial numbers are correct in their respective configuration files (`Left.yaml` and `Right.yaml`).
+4.  Ensure the Left and Right camera serial numbers are correct in their respective configuration files (`Left.yaml` and `Right.yaml`).
 
-   The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
+    The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
 
-   Next you will need to figure out which is left and which is right. Change the serial number for one camera to an incorrect number (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+    Next you will need to figure out which is left and which is right. Change the serial number for one camera to an incorrect number (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, simply by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
-5. Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
+5.  Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
-6. Check the [transform matrix](/system/foundations/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
+6.  Check the [transform matrix](/system/foundations/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation. In SI units the matrix is
 
-   $$
-   \text{Hpc} = \begin{bmatrix}
-   \cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
-   0 & 1 & 0 & 0.033795 \\
-   -\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
-   0 & 0 & 0 & 1 \end{bmatrix}
-   $$
+    $$
+    \text{Hpc} = \begin{bmatrix}
+    \cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
+    0 & 1 & 0 & 0.033795 \\
+    -\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
+    0 & 0 & 0 & 1 \end{bmatrix}
+    $$
 
-7. Run `./cameratest` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
+7.  Run `./cameratest` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
-   ![A white board with black circles in rows.](./images/calibration/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
+    ![A white board with black circles in rows.](./images/calibration/asymmetric-circle-grid.svg 'Asymmetric circles grid used for calibration.')
 
-   <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Photos from the robot's cameras of a person moving around a board for camera calibration">
+    <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Photos from the robot's cameras of a person moving around a board for camera calibration">
 
-   ![A person holding a board in the middle of the photo](./images/calibration/board-middle.jpg)
-   ![A person holding a board at the bottom of the photo](./images/calibration/board-below.jpg)
-   ![A person holding a board to the left](./images/calibration/board-left.jpg)
-   ![A person holding a board to the right](./images/calibration/board-right.jpg)
+    ![A person holding a board in the middle of the photo](./images/calibration/board-middle.jpg)
+    ![A person holding a board at the bottom of the photo](./images/calibration/board-below.jpg)
+    ![A person holding a board to the left](./images/calibration/board-left.jpg)
+    ![A person holding a board to the right](./images/calibration/board-right.jpg)
 
-   </Grid>
+    </Grid>
 
-8. Stop the binary and copy the nbs file created into the NUbots directory on your computer. Do this by running the command `scp <robot address>:<file path> .` from the NUbots directory on your computer. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
+8.  Stop the binary and copy the nbs file created into the NUbots directory on your computer. Do this by running the command `scp <robot address>:<file path> .` from the NUbots directory on your computer. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Check on the robot first using `ls` to determine the name. The name can be changed by the command `mv <old path> <new path>`.
 
-   The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory. Check that it is before continuing to the next steps.
+    The robot can be turned off at this point. The recording you just made should be on your computer in the NUbots directory. Check that it is before continuing to the next steps.
 
-9. Run the following commands to install the dependencies of the camera calibration tool if you have not done this before
+9.  Run the following commands to install the dependencies of the camera calibration tool if you have not done this before
 
-   ```bash
-   sudo apt install protobuf-compiler libprotobuf-dev
-   sudo -H pip3 install --upgrade pip
-   sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
-   ```
+    ```bash
+    sudo apt install protobuf-compiler libprotobuf-dev
+    sudo -H pip3 install --upgrade pip
+    sudo -H pip3 install tensorflow opencv-contrib-python ruamel.yaml
+    ```
 
 10. Calibrate the cameras by running
 
