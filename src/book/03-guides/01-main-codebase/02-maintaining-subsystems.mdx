@@ -1,16 +1,22 @@
 ---
 section: Guides
-chapter: NUbots
-title: Maintaining Vision
-description: How to maintain the vision system.
-slug: /guides/nubots/vision
+chapter: Main Codebase
+title: Maintaining Subsystems
+description: How to maintain subsystems within the main codebase.
+slug: /guides/main/maintaining-subsystems
 ---
 
-# Dataset Generation
+This page details how to maintain various subsystems within the main codebase.
+
+# Vision
+
+Before vision can work on the robot, odometry and kinematics must work on the robot. If these are inaccurate, then the green horizon will be inaccurate.
+
+## Dataset Generation
 
 Datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS). If you don't have access to the NAS, ask a team leader for an account. The NAS contains millions of NUpbr training images and large TensorFlow records containing the correct data to train the Visual Mesh on.
 
-## NUpbr
+### NUpbr
 
 NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding segmentation images for training.
 
@@ -28,9 +34,9 @@ Navigate to the NUpbr directory and run
 blender --python pbr.py
 ```
 
-Find out more about NUpbr and how to edit the parameters on the [NUpbr NUbook page](/system/NUpbr/).
+Find out more about NUpbr and how to edit the parameters on the [NUpbr NUbook page](/system/tools/nupbr).
 
-## NUgan
+### NUgan
 
 The NUbots CycleGAN performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
 
@@ -44,13 +50,13 @@ The [NUgan repository](https://github.com/NUbots/NUgan) details how to train, te
 
 NUpbr images can be found on the NAS for the A datasets. The B dataset can be obtained by taking pictures, or collecting images from [BitBots ImageTagger](https://imagetagger.bit-bots.de/).
 
-## Setting Up The Data
+### Setting Up The Data
 
 The [Visual Mesh repository](https://github.com/Fastcode/VisualMesh) contains information on how to set up the datasets. It contains [a script](https://github.com/Fastcode/VisualMesh/blob/master/training/build_dataset.py) that takes data and converts it into the tfrecord format that the Visual Mesh expects. The script requires a folder of raw images, segmentation masks, and metadata. NUpbr will provide all these as output, and such data can be found on the NAS. If using output from NUgan, use the corresponding NUpbr segmentation masks and metadata, and add in the generated NUgan images in the image folder.
 
-# The Visual Mesh
+## The Visual Mesh
 
-## Training
+### Training
 
 Ensure you have followed the above steps to get a dataset to train on.
 
@@ -79,7 +85,7 @@ Execute the training by running
 
 Where `[config.yaml]` is the options yaml file as specified above, and the output directory is the name of the directory you want the progress and results to be saved to. Progress can be monitored with TensorBoard.
 
-## Testing
+### Testing
 
 Testing the network is executed similarly to training. Run
 
@@ -89,17 +95,23 @@ Testing the network is executed similarly to training. Run
 
 Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision.
 
-## Exporting Configuration
+### Exporting Configuration
 
 The weights and biases will be output into a yaml file like the one found at [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) or [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
 
 Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. For further information about Git, view the [Git Guide](/guides/general/git).
 
-# Testing
+## Camera Calibration
+
+If the cameras are not calibrated correctly, the vision system will not work well. Information on calibration is available on [the input page](/system/subsystems/input).
+
+An automatic camera calibration tool is available to use in the NUbots repository that can be used to calibrate the cameras. A guide on how to calibrate the cameras will be available on NUbook soon.
+
+## Testing
 
 Now that the Visual Mesh has been updated in the NUbots repository, you should test it before merging.
 
-Build the code, ensuring `VisualMesh.role` is on in `./b configure -i`. Go to the [Getting Started page](/guides/nubots/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/nubots/build-system) to find out more about options when installing onto the robot.
+Build the code, ensuring `VisualMesh.role` is on in `./b configure -i`. Go to the [Getting Started page](/guides/main/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system) to find out more about options when installing onto the robot.
 
 When your new Visual Mesh is installed onto the robot, connect to the robot and ensure NUsight is on.
 
@@ -107,7 +119,7 @@ When your new Visual Mesh is installed onto the robot, connect to the robot and 
 nano config/NUsight.yaml
 ```
 
-Turn `vision object` and `visual mesh` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser.
+Turn `vision object` and `compressed images` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight page](/system/tools/nusight).
 
 Run the visualmesh role
 
@@ -115,24 +127,8 @@ Run the visualmesh role
 ./visualmesh
 ```
 
-Wait for the cameras to load and then watch the Vision or Visual Mesh tabs in NUsight. To determine if the output is correct, consult the [vision page](/system/nubots/vision) for images of the expected output.
+Wait for the cameras to load and then watch the Vision tab in NUsight. To determine if the output is correct, consult the [vision page](/system/subsystems/vision) for images of the expected output.
 
-If the output has improved make sure you create a PR and get the changes merged in to the GitHub repository.
+If you would like to see the visual mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Add into the `visualmesh.role` file `support::logging::DataLogging`. Build to the robot and rerun the visual mesh binary with `./visualmesh`. An NBS file will be created on the robot in `logs/visualmesh/`. Copy this across the network to the computer you built on using `scp <robot_address>:logs/visualmesh/<file_name> ./recordings` on the computer in the NUbots folder. Read [the Logging page](/system/subsystems/logging) to find out how to play an NBS file back.
 
-# Other Considerations
-
-## Odometry
-
-Vision relies on good odometry. Ensure the robot knows what its orientation is by enabling sensor data in `NUsight.yaml` on the robot, navigating to the NUsight localisation tab or chart view, and running sensortest
-
-```
-./sensortest
-```
-
-Move the robot around in each axis to determine the general accuracy of the odometry. If it is not accurate, vision is unlikely to work due to the green horizon.
-
-## Camera Calibration
-
-If the cameras are not calibrated correctly, the vision system will not work well. Information on calibration is available on [the vision page](/system/nubots/vision).
-
-An automatic camera calibration tool is available to use in the NUbots repository that can be used to calibrate the cameras. A guide on how to calibrate the cameras will be available on NUbook soon.
+If the output has improved, create a PR and get the changes merged in to the GitHub repository. For further information about Git, view the [Git Guide](/guides/general/git).
