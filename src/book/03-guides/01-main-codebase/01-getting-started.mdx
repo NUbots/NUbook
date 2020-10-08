@@ -188,7 +188,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    ./b build
    ```
 
-4. Some built roles use data from `.yaml` [configuration files](/system/nubots/config-script). If you change a configuration file, you will need to run `./b build` again.
+4. Some built roles use data from `.yaml` [configuration files](/system/foundations/config-script). If you change a configuration file, you will need to run `./b build` again.
 
 ## Running the Code
 
@@ -216,7 +216,7 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
    Where:
 
-   - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/nubots/build-system#install)
+   - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/foundations/build-system#install)
    - `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`
 
 2. Next, open a new terminal and `ssh` into the robot by running:
@@ -235,7 +235,7 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
    This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
 
-4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/nubots/config-script) for details.
+4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
 
 5. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role:
 
