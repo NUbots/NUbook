@@ -80,6 +80,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
+        hidden: node.frontmatter.hidden,
       },
     })
   })
