@@ -65,7 +65,7 @@ const Layout = ({ children, data, pageContext }) => {
               )}
             </div>
             <div className='px-6 pt-26 pb-12 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'>
-              <article className='page-content' id='content'>
+              <article className='content' id='page-content'>
                 <ArticleHeader
                   section={currentSection}
                   chapter={currentChapter}
