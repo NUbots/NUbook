@@ -243,3 +243,49 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
    ```bash
    ./robocup
    ```
+
+## NUsight
+
+NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
+
+Install [Node.js](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install). Install instructions are available through the links on the website. If you are using Ubuntu, you can use the following commands.
+
+To get Node.js, run
+
+```bash
+sudo apt install node
+```
+
+To get Yarn, configure the package repository and install
+
+```bash
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update && sudo apt install yarn
+```
+
+!! if on Windows, run Powershell as administrator and run the following command to get windows build tools.
+
+```bash
+yarn global add windows-build-tools
+```
+
+Get the dependencies for NUsight by running
+
+```bash
+yarn
+```
+
+Build NUsight by running
+
+```bash
+yarn build
+```
+
+Next is running NUsight. If you want a real robot to connect to NUsight, or a simulated robot through Docker that is being run in the lab on the lab network, run
+
+```bash
+yarn prod
+```
+
+However, if you are running this from outside the lab and want to connect to a robot in Docker, you will need to find the address of the Docker image.
