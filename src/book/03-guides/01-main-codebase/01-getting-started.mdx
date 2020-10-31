@@ -175,10 +175,11 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
    ```bash
+   ./b configure
    ./b configure -i
    ```
 
-   This will show a menu to choose roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
+   Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
    Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
 
