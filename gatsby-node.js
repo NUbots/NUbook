@@ -3,6 +3,7 @@
 const path = require('path')
 
 const menu = []
+const createdPages = new Set()
 
 /**
  * Create the site pages from MDX files in /src/book
@@ -15,6 +16,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         edges {
           node {
             id
+            fileAbsolutePath
             frontmatter {
               section
               chapter
@@ -56,7 +58,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   // Populate the menu
   posts
-    .filter(({ node }) => !node.frontmatter.hidden)
+    .filter(({ node }) => {
+      return (
+        !node.frontmatter.hidden && !createdPages.has(node.fileAbsolutePath)
+      )
+    })
     .forEach(({ node }) => {
       const section = findOrCreateSection(menu, node)
       const chapter = findOrCreateChapter(section, node)
@@ -67,6 +73,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       })
     })
 
+  const templatePath = path.resolve('./src/components/page-template.jsx')
+
   // Create a page for each MDX file
   posts.forEach(({ node, next, previous }, index) => {
     const nextPage = getNext(next, posts, index)
@@ -74,7 +82,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     actions.createPage({
       path: node.frontmatter.slug,
-      component: path.resolve('./src/components/page-template.jsx'),
+      component: templatePath,
       context: {
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
@@ -83,6 +91,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         hidden: node.frontmatter.hidden,
       },
     })
+
+    createdPages.add(node.fileAbsolutePath)
   })
 }
 
