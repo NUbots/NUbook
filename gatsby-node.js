@@ -1,4 +1,5 @@
-/*eslint-env node*/
+/*eslint-env node */
+/*eslint-env es6 */
 
 const path = require('path')
 
