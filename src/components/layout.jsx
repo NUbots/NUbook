@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import ArticleHeader from './article-header'
@@ -25,6 +25,7 @@ const Layout = ({ children, data, pageContext }) => {
   const currentChapter = currentSection.chapters.find(
     chapter => chapter.title === chapterTitle
   )
+  const sidebarWrapperRef = useRef(null)
   return (
     <>
       <SEO
@@ -48,9 +49,14 @@ const Layout = ({ children, data, pageContext }) => {
           <div className='hidden w-1/4 lg:block xl:w-1/5'>
             <div
               className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 max-h-screen overflow-y-auto border-t border-t-transparent'
+              ref={sidebarWrapperRef}
               style={{ borderTopWidth: '4rem' }}
             >
-              <Sidebar menu={menu} currentSection={currentSection} />
+              <Sidebar
+                menu={menu}
+                currentSection={currentSection}
+                wrapperRef={sidebarWrapperRef}
+              />
             </div>
           </div>
           <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
