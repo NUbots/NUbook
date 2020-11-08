@@ -5,3 +5,68 @@ title: Glossary
 description: Description of common terms, notations and conventions we use.
 slug: /guides/general/glossary
 ---
+## Internal
+
+**NUbook:** The NUbots documentation website. Available at https://nubook.nubots.net
+**NUClear:** The software framework which the NUbots codebase is built on. Put simply, it works by triggering callbacks when events occur. https://nuclear.readthedocs.io/en/latest/index.html
+    **Powerplant:** The central message system which connects the reactors.
+    **Reactor:** A NUClear module. Modules in the NUbots codebase are reactors. tk add links to the docs
+    **Reaction:** The callbacks which need to run when an event or conditions indicate as such. These manifest as DSL **on tk linkhttps://nuclear.readthedocs.io/en/latest/dsl.html#on-statements** statements.
+**NBS (NUClear Binary Stream):**
+**NUfsr:** A system designed to detect if a NUgus' foot is on the ground
+**NUgus:** NUbots robots as used in the RoboCup humanoid league.
+**NUsight:** NUbots' visualisation software, ran through the browser. Source is available at https://github.com/NUbots/NUsight  
+**NUsense:** A secret project for sensor IO.
+**Old Walk Engine:** A previously used walk engine, originally optimised with Gazebo (tk link)
+**quintic walk:** 
+**scripttuner:**
+**scriptrunner:**
+**Utilities:** Code which is meant for use across multiple modules, with more general applications. Usually in the **utility** namespace.
+**visualmesh:** A computer vision technique NUbots uses which overlays a mesh over the image input to more efficiently sample it and look for objects.
+
+## General
+
+**affine:**
+**container:** An isolated environment which decouples the environment an application runs in from the environment it's developed in.
+**continuous integration:** A development practice whereby frequent updates to a codebase from multiple developers are integrated and automated.
+**euler angles:**
+    **roll:**
+    **pitch:**
+    **yaw:**
+**IMU:**
+**inverse-kinematics:**
+**kalman filter:**
+**kinematics:** Mathematics which describes motion, which is used to calculate trajectories and servo outputs to control robots.
+**lambda expression:** A way of defining an anonymous function in C++.
+**mahony filter:**
+**mocap:**
+**Transform:** A matrix representation of a transformation
+**Transformation:** A spatial manipulation - often representated as a translation and a rotation.
+
+## External
+
+**arch:** A lightweight linux distribution which the NUgus robots use as their primary operating system.
+**bitbots:**
+**Armadillo (arma):** The C++ linear algebra library developed by the CSIRO NUbots used to use.
+**Buildkite:** A platform for running fast, secure, and scalable continuous integration pipelines, which NUbots runs on machines in the NUbots lab.
+**clang:** A compiler, frontend, and tooling infrastructure used for C and C++ which is part of the LLVM infrastructure.
+**clang-format:** A software which formats source code according to a given set of rules.
+**cm740?:**
+**Cmake**
+**darwin:**
+**docker:** A software service for developing containers which enable standardised cross-platform development consistency.
+**dockerhub:** A hosting service for docker images.
+**igus:** 
+**Eigen:** The C++ linear algebra library NUbots uses.
+**gazebo:** A simulation software used which was used to optimise the "OldWalkEngine" with a genetic algorithm.
+**Git:** A version control program used by NUbots.
+**GitHub:** A source code hosting service, which uses a git backend. NUbots uses GitHub to manage the source code.
+**LLVM:** A set of modular compiler and toolchain technologies.
+**nuc:** Intel's portable computing platform which is used in the NUgus robots.
+**opencl:** Open Computing Language is a framework NUbots uses to create programs which can run on graphics hardware.
+**Protobuf:** Protocol Buffers (Protobuf) is a method of serializing structured data, created by Google. Protobuf messages are the means of passing messages between NUClear reactors.
+**robahn:**
+**robocup:**
+**robocup symposium:**
+**simulink:**
+**yaml:**
