@@ -32,7 +32,9 @@ To use Git in the terminal on Windows, get [Git Bash](https://gitforwindows.org/
 
 Docker is a container system that allows you to install development tools and run builds in an isolated environment that won't affect the rest of your system. We use it to set up the NUbots build system and run builds and binaries.
 
-#### Ubuntu
+<details>
+
+<summary>Ubuntu</summary>
 
 1. Add Docker's stable repository and update the apt package index.
 
@@ -70,7 +72,11 @@ Docker is a container system that allows you to install development tools and ru
 
 4. Reboot to make the group change take effect.
 
-#### macOS
+</details>
+
+<details>
+
+<summary> MacOS </summary>
 
 1. Install Homebrew by following the instructions at [brew.sh](https://brew.sh/).
 
@@ -87,7 +93,11 @@ Docker is a container system that allows you to install development tools and ru
 
 4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
 
-#### Windows
+</details>
+
+<details>
+
+<summary>Windows</summary>
 
 <Alert type='warning'>
   Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
@@ -135,6 +145,8 @@ Notes on using WSL on Windows:
 - GitKraken will not allow you to open the repository outside of WSL. Use the steps described in this article to [set up your system to use GitKraken in WSL](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823).
 
 - To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
+
+</details>
 
 ### A Text Editor
 
