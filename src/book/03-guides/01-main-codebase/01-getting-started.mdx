@@ -237,6 +237,18 @@ If you are not running the code on a robot, you will need to use a simulated rob
 
 Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
 
+<Alert>
+
+Windows users who want to connect to NUsight will need to set up the docker network and run
+
+```
+./b run keyboardwalkfake --network nuclearnet
+```
+
+See the [NUsight](#nusight) section below for details.
+
+</Alert>
+
 ### Running on a Real Robot
 
 To run the code on a robot, you need to make sure the robot is powered on, install the built roles onto the robot, and then `ssh` into the robot to run the installed roles.
