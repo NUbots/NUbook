@@ -280,46 +280,189 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
-Install [Node.js](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install). Install instructions are available through the links on the website. If you are using Ubuntu, you can use the following commands.
+<details>
 
-To get Node.js, run
+<summary>Ubuntu</summary>
 
-```bash
-sudo apt install node
-```
+1. Get NUsight and move into the new directory by running
 
-To get Yarn, configure the package repository and install
+   ```bash
+   git clone https://github.com/NUbots/NUsight2.git NUsight
+   cd NUsight
+   ```
 
-```bash
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install yarn
-```
+2. Install Node.js by running
 
-!! if on Windows, run Powershell as administrator and run the following command to get windows build tools.
+   ```bash
+   sudo apt install node
+   ```
 
-```bash
-yarn global add windows-build-tools
-```
+3. Configure the package repository and install yarn by running
 
-Get the dependencies for NUsight by running
+   ```bash
+   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+   sudo apt update && sudo apt install yarn
+   ```
 
-```bash
-yarn
-```
+4. Get the dependencies for NUsight by running
 
-Build NUsight by running
+   ```bash
+   yarn
+   ```
 
-```bash
-yarn build
-```
+5. Build NUsight by running
 
-Next is running NUsight. If you want a real robot to connect to NUsight, or a simulated robot through Docker that is being run in the lab on the lab network, run
+   ```bash
+   yarn build
+   ```
 
-```bash
-yarn prod
-```
+6. Find the IP address of the Docker container. Run
 
-However, if you are running this from outside the lab and want to connect to a robot in Docker, you will need to find the address of the Docker image.
+   ```bash
+   ifconfig
+   ```
 
-in Ubuntu, use the command `ifconfig`. In Windows, use the command `ipconfig`.
+   There will be an entry called `docker`. Find the address after the word `inet`. We will refer to this address as `<ADDRESS>`.
+
+7. Run the following command to run NUsight
+
+   ```bash
+   yarn prod --address <ADDRESS>
+   ```
+
+   <Alert type='info'>
+
+   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `yarn prod`.
+
+   </Alert>
+
+   <Alert type='info'>
+
+   The IP address for the Docker container will not exist until you run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
+
+   </Alert>
+
+8. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
+
+</details>
+
+<details>
+
+<summary> MacOS </summary>
+
+<Alert type='info'>
+
+You will need Homebrew for this. If you have completed the Docker step previously, you should have Homebrew. If not, install from [brew.sh](https://brew.sh/).
+
+</Alert>
+
+1. Get NUsight and cd into the directory by running
+
+   ```bash
+   git clone https://github.com/NUbots/NUsight2.git NUsight
+   cd NUsight
+   ```
+
+2. Install node and yarn with Homebrew
+
+   ```bash
+   brew install node
+   brew install yarn
+   ```
+
+3. Get the dependencies for NUsight by running
+
+   ```bash
+   yarn
+   ```
+
+4. Build NUsight by running
+
+   ```bash
+   yarn build
+   ```
+
+5. Find the IP address of the Docker container. Run
+
+   ```bash
+   ifconfig
+   ```
+
+   There will be an entry called `docker`. Find the address after the word `inet`. We will refer to this address as `<ADDRESS>`.
+
+6. Run the following command to run NUsight
+
+   ```bash
+   yarn prod --address <ADDRESS>
+   ```
+
+   <Alert type='info'>
+
+   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `yarn prod`.
+
+   </Alert>
+
+   <Alert type='info'>
+
+   The IP address for the Docker container will not exist until you run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
+
+   </Alert>
+
+7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
+
+</details>
+
+<details>
+
+<summary> Windows </summary>
+
+1. Get NUsight and cd into the directory by running
+
+   ```bash
+   git clone https://github.com/NUbots/NUsight2.git NUsight
+   cd NUsight
+   ```
+
+2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
+
+   ```bash
+   docker network create nuclearnet
+   ```
+
+3. Make the Docker script executable by running
+
+   ```bash
+   chmod +x ./docker
+   ```
+
+4. Install the NUsight dependencies in the container and build NUsight for prod in the container
+
+   ```bash
+   ./docker yarn
+   ./docker yarn build
+   ```
+
+5. Inspect the network to find the NUbots container's IP address
+
+   ```bash
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
+   ```
+
+   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See the info bubble below.
+
+   <Alert type='info'>
+
+   The IP address for the Docker container will not exist unless you are run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
+
+   </Alert>
+
+6. Run NUsight with the NUbots container address
+
+   ```bash
+   ./docker yarn prod --address <ADDRESS>
+   ```
+
+7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
+
+</details>
