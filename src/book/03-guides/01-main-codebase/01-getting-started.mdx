@@ -189,7 +189,7 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
 To build the code, open a terminal and change into the NUbots code directory. Then do the following:
 
-1. Select the platform (e.g. type of computer) that the built binaries will run on. You do this by running a command in the form:
+1. Select the platform (e.g. type of computer) that the built binaries will run on and create the Docker image. You do this by running the command:
 
    ```bash
    ./b target <PLATFORM>
@@ -209,7 +209,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
    Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu with <kbd>e</kbd>.
 
 3. Now build the code by running:
 
@@ -217,11 +217,15 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    ./b build
    ```
 
-4. Some built roles use data from `.yaml` [configuration files](/system/foundations/config-script). If you change a configuration file, you will need to run `./b build` again.
+<Alert type='info'>
+
+Some built roles use data from `.yaml` [configuration files](/system/foundations/config-script). If you change a configuration file, you will need to run `./b build` again.
+
+</Alert>
 
 ## Running the Code
 
-With the code built, you have two options for running: on an actual robot, or on your computer using a simulated robot.
+With the code built, you can run the code on a real robot or on your computer using a simulated robot.
 
 ### Running with a Simulated Robot
 
@@ -264,9 +268,9 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
    This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
 
-4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
+   In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
 
-5. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role:
+4. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role enter the command:
 
    ```bash
    ./robocup
