@@ -305,6 +305,14 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
+Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
+
+```bash
+./b edit NUsight.yaml
+```
+
+Set the messages you would like NUsight to receive to 'true'. For our example, you need sensor data set to true.
+
 <details>
 
 <summary>Ubuntu</summary>
