@@ -6,9 +6,13 @@ description: Setting up your environment and getting started with NUbots develop
 slug: /guides/main/getting-started
 ---
 
+Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the keyboardwalkfake binary (which uses simulated hardware) and seeing the robot move in NUsight.
+
 ## Prerequisites
 
 ### Git
+
+For our example, we will need Git to get the codebase. This will happen later in this guide.
 
 [Git](https://git-scm.com/) is a [version control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) tool. We use it to track changes to the codebase and work together on the same codebase without getting in each other's way.
 
@@ -31,6 +35,8 @@ To use Git in the terminal on Windows, get [Git Bash](https://gitforwindows.org/
 ### Docker
 
 Docker is a container system that allows you to install development tools and run builds in an isolated environment that won't affect the rest of your system. We use it to set up the NUbots build system and run builds and binaries.
+
+You will need to perform the steps correctly to set up Docker for your operating system to complete the example.
 
 <details>
 
@@ -173,6 +179,8 @@ To be able to copy and paste into the Ubuntu terminal, right-click on the bar at
 
 ### A Text Editor
 
+This section is not required for our example, but it is a good step to do in case you need to edit code in the future.
+
 You'll need a text editor to make changes to the code. We recommend [Visual Studio Code](https://code.visualstudio.com/Download), but feel free to use your favourite editor.
 
 To ensure a consistent [code style](https://en.wikipedia.org/wiki/Programming_style), NUbots uses `clang-format`, a tool that reformats all code files in the repository to have the same style, even if they're written by different people. For convenience, you can install the `clang-format` [extension](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) in Visual Studio Code to automatically format the files when you make changes.
@@ -181,7 +189,7 @@ Another useful tool for editing NUbots code in Visual Studio Code is the Remote 
 
 ## Getting the Code
 
-With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and try things out.
+With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and run the code. This is an important step in our example.
 
 1. Clone the repo by running the following command in a terminal.
 
@@ -199,6 +207,8 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
    ```
 
 ## Building the Code
+
+Run all these commands for our example, and pay special attention to the instructions in the second step relating to our example.
 
 To build the code, open a terminal and change into the NUbots code directory. Then do the following:
 
@@ -222,9 +232,11 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
    Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu with <kbd>e</kbd>.
+   If you are following the keyboardwalkfake example, you will need to make sure `keyboardwalkfake` is set to `true`. Find the list of items that are prefixed with `ROLE_` and set all to `false` except for `keyboardwalkfake`, which should be `true`. Do not change any other lines unless you know what you are doing.
 
-3. Now build the code by running:
+   Press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu with <kbd>e</kbd>.
+
+3. Build the code by running:
 
    ```bash
    ./b build
@@ -238,7 +250,7 @@ Some built roles use data from `.yaml` [configuration files](/system/foundations
 
 ## Running the Code
 
-With the code built, you can run the code on a real robot or on your computer using a simulated robot.
+With the code built, you can run the code on a real robot or on your computer using a simulated robot. If you are following the example in this guide, go to 'Running with a Simulated Robot' below, and skip 'Running on a Real Robot'.
 
 ### Running with a Simulated Robot
 
@@ -250,9 +262,11 @@ If you are not running the code on a robot, you will need to use a simulated rob
 
 Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
 
+If you are following the example, run `./b run keyboardwalkfake`. If you are on Windows or MacOS, see the note below.
+
 <Alert>
 
-Windows users who want to connect to NUsight will need to set up the docker network and run
+Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
 
 ```
 ./b run keyboardwalkfake --network nuclearnet
@@ -263,6 +277,8 @@ See the [NUsight](#nusight) section below for details.
 </Alert>
 
 ### Running on a Real Robot
+
+You can skip this section if you are following the example.
 
 To run the code on a robot, you need to make sure the robot is powered on, install the built roles onto the robot, and then `ssh` into the robot to run the installed roles.
 
@@ -304,6 +320,8 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 ## NUsight
 
 NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
+
+You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
 
 Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
 
@@ -493,3 +511,7 @@ You will need Homebrew for this. If you have completed the Docker step previousl
 7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
 
 </details>
+
+If you are following the example, make sure you have the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS). With NUsight running and your browser open to [localhost:9090](localhost:9090), select the 'localisation' tab. You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective. To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.
+
+To find out more about NUsight, visit the [NUsight page](/system/tools/nusight).
