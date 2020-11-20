@@ -99,10 +99,6 @@ Docker is a container system that allows you to install development tools and ru
 
 <summary>Windows</summary>
 
-<Alert type='warning'>
-  Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
-</Alert>
-
 1. Ensure your Windows build is at least 2004.
 
    - Press <kbd>WIN</kbd> + <kbd>R</kbd>.
@@ -129,7 +125,15 @@ Docker is a container system that allows you to install development tools and ru
    - In Powershell, run `wsl --list --verbose`.
    - If the version is not 2, run `wsl --set-version ubuntu 2`.
 
-5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version.
+   <Alert type='info'> Note that 'ubuntu' in the last command may need to be capitalised. Check the exact spelling from the list output in the first command of this step. </Alert>
+
+   <Alert type='info'>
+
+   If you have issues with the Linux kernel needing to be updated, get the update from the [Microsoft page](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel).
+
+   </Alert>
+
+5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version. Ensure you enable WSL 2 features.
 
 6. Configure Docker settings.
    - In the system tray, right-click the Docker icon and select **Settings**.
