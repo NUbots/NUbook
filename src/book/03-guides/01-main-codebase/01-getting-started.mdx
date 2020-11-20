@@ -390,12 +390,6 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 <summary> MacOS </summary>
 
-<Alert type='info'>
-
-You will need Homebrew for this. If you have completed the Docker step previously, you should have Homebrew. If not, install from [brew.sh](https://brew.sh/).
-
-</Alert>
-
 1. Get NUsight and cd into the directory by running
 
    ```bash
@@ -403,50 +397,44 @@ You will need Homebrew for this. If you have completed the Docker step previousl
    cd NUsight
    ```
 
-2. Install node and yarn with Homebrew
+2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
 
    ```bash
-   brew install node
-   brew install yarn
+   docker network create nuclearnet
    ```
 
-3. Get the dependencies for NUsight by running
+3. Make the Docker script executable by running
 
    ```bash
-   yarn
+   chmod +x ./docker
    ```
 
-4. Build NUsight by running
+4. Install the NUsight dependencies in the container and build NUsight for prod in the container
 
    ```bash
-   yarn build
+   ./docker yarn
+   ./docker yarn build
    ```
 
-5. Find the IP address of the Docker container. Run
+5. Inspect the network to find the NUbots container's IP address
 
    ```bash
-   ifconfig
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
    ```
 
-   There will be an entry called `docker`. Find the address after the word `inet`. We will refer to this address as `<ADDRESS>`.
-
-6. Run the following command to run NUsight
-
-   ```bash
-   yarn prod --address <ADDRESS>
-   ```
+   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See the info bubble below.
 
    <Alert type='info'>
 
-   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `yarn prod`.
+   The IP address for the Docker container will not exist unless you are run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
 
    </Alert>
 
-   <Alert type='info'>
+6. Run NUsight with the NUbots container address
 
-   The IP address for the Docker container will not exist until you run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
-
-   </Alert>
+   ```bash
+   ./docker yarn prod --address <ADDRESS>
+   ```
 
 7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
 
