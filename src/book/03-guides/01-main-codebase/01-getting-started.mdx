@@ -136,9 +136,18 @@ Docker is a container system that allows you to install development tools and ru
 5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version. Ensure you enable WSL 2 features.
 
 6. Configure Docker settings.
+
    - In the system tray, right-click the Docker icon and select **Settings**.
    - In **General**, enable the **Use the WSL 2 based engine** option.
    - In **Resources: WSL Integration** enable Ubuntu.
+
+7. In Ubuntu run `sudo apt update` followed by `sudo apt upgrade`.
+
+8. Ensure you have pip3 by running
+
+   ```bash
+   sudo apt install python3-pip
+   ```
 
 <Alert type='info'>The commands in the rest of this guide should be run in the WSL Ubuntu terminal except where specified to run them elsewhere, such as on a real robot.</Alert>
 
