@@ -36,7 +36,7 @@ You will need to perform the steps correctly to set up Docker for your operating
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Add Docker's stable repository and update the apt package index.
+1. Add Docker's stable repository.
 
    ```bash
    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -44,8 +44,6 @@ You will need to perform the steps correctly to set up Docker for your operating
      "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
      focal \
      stable"
-   sudo add-apt-repository universe
-   sudo apt update
    ```
 
    If you are on Linux Mint, this will give a malformed input error. Remove `[arch=amd64]` and rerun.
@@ -57,20 +55,33 @@ You will need to perform the steps correctly to set up Docker for your operating
     stable"
    ```
 
-2. Install the latest version of Docker.
+   <Alert type='info'>
+      If you are not using the latest Ubuntu LTS, you will need to change this command. The latest Ubuntu LTS is Focal Fossa, hence the word `focal` in the command. If, for example, you are using Bionic Beaver, use `bionic` in place of `focal`.
+
+   The latest Linux Mint version, Ulyana, is built off Ubuntu Focal Fossa, therefore you would use `focal`. If you are using an old version of Linux Mint, you can find out what Ubuntu LTS it uses on the [Linux Mint all downloads page](https://www.linuxmint.com/download_all.php). For example, if you are using Linux Mint Tricia, use `bionic`.
+   </Alert>
+
+2. Add Docker's stable repository and update the apt package index.
+
+   ```bash
+   sudo add-apt-repository universe
+   sudo apt update
+   ```
+
+3. Install the latest version of Docker.
 
    ```bash
    sudo apt-get install docker-ce docker-ce-cli containerd.io
    sudo apt-get install python3 python3-pip
    ```
 
-3. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
+4. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
 
    ```bash
    sudo usermod -aG docker "${USER}"
    ```
 
-4. Reboot to make the group change take effect.
+5. Reboot to make the group change take effect.
 
 </details>
 
