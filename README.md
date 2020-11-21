@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/d89a0d60-217a-4563-ad03-65ccc90b9222/deploy-status)](https://app.netlify.com/sites/nubook/deploys)
 
-NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.netlify.com/.>
+NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.nubots.net/.>
 
 Read on if you want to add or update content.
 
@@ -262,7 +262,7 @@ When a pull request is merged into master, it is automatically deployed to the m
 
 As mentioned above, pull requests are automatically deployed as previews using Netlify.
 
-The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netlify.com/` where `[PR number]` is the pull request number. For example, `https://deploy-preview-21--nubook.netlify.com/` is the preview URL for pull request number 21.
+The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netlify.app/` where `[PR number]` is the pull request number. For example, `https://deploy-preview-21--nubook.netlify.app/` is the preview URL for pull request number 21.
 
 You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
 
