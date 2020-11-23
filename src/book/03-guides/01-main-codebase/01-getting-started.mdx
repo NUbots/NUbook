@@ -318,7 +318,7 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
    ./robocup
    ```
 
-## NUsight
+## Get, Build and Run NUsight
 
 NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
@@ -395,61 +395,9 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 <details>
 
-<summary> MacOS </summary>
-
-1. Get NUsight and cd into the directory by running
-
-   ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
-   ```
-
-2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
-
-   ```bash
-   docker network create nuclearnet
-   ```
-
-3. Make the Docker script executable by running
-
-   ```bash
-   chmod +x ./docker
-   ```
-
-4. Install the NUsight dependencies in the container and build NUsight for prod in the container
-
-   ```bash
-   ./docker yarn
-   ./docker yarn build
-   ```
-
-5. Inspect the network to find the NUbots container's IP address
-
-   ```bash
-   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
-   ```
-
-   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See the info bubble below.
-
-   <Alert type='info'>
-
-   The IP address for the Docker container will not exist unless you are run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
-
-   </Alert>
-
-6. Run NUsight with the NUbots container address
-
-   ```bash
-   ./docker yarn prod --address <ADDRESS>
-   ```
-
-7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
-
-</details>
-
 <details>
 
-<summary> Windows </summary>
+<summary> Windows/MacOS </summary>
 
 1. Get NUsight and cd into the directory by running
 
@@ -501,6 +449,23 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 </details>
 
-If you are following the example, make sure you have the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS). With NUsight running and your browser open to [localhost:9090](localhost:9090), select the 'localisation' tab. You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective. To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.
-
 To find out more about NUsight, visit the [NUsight page](/system/tools/nusight).
+
+## Example
+
+In this section we will finish off our example of setting up the codebase, running the keyboardwalkfake binary and seeing the robot walk in NUsight.
+
+By now you will have gone through this page and have everything set up to make the robot walk. Ensure you have all the following steps complete
+
+- Prerequisite: Git
+- Prerequisite: Docker
+- Getting the Code
+- Building the Code
+- Running the Code: Running with a Simulated Robot
+- Get, Build and Run NUsight
+
+With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
+
+- Select the 'localisation' tab in NUsight.
+- You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
+- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.
