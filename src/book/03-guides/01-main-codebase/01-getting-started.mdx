@@ -36,52 +36,44 @@ You will need to perform the steps correctly to set up Docker for your operating
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Add Docker's stable repository.
+To install on Ubuntu, use the [official Docker instructions](https://docs.docker.com/engine/install/ubuntu/). These work with Linux Mint, with some adjustments. There are multiple ways to install Docker, as detailed on the website. NUbots recommends the following for installing Docker
 
-   ```bash
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-   sudo add-apt-repository \
-     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-     focal \
-     stable"
-   ```
+1. Navigate to the section where you [Install Docker using the Repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Complete the three steps under the heading 'Set Up the Repository'.
 
-   If you are on Linux Mint, this will give a malformed input error. Remove `[arch=amd64]` and rerun.
-
-   ```bash
-   sudo add-apt-repository \
-    "deb https://download.docker.com/linux/ubuntu \
-    focal \
-    stable"
-   ```
+   If you are using Linux Mint, please read the info bubbles below.
 
    <Alert type='info'>
-      If you are not using the latest Ubuntu LTS, you will need to change this command. The latest Ubuntu LTS is Focal Fossa, hence the word `focal` in the command. If, for example, you are using Bionic Beaver, use `bionic` in place of `focal`.
 
-   The latest Linux Mint version, Ulyana, is built off Ubuntu Focal Fossa, therefore you would use `focal`. If you are using an old version of Linux Mint, you can find out what Ubuntu LTS it uses on the [Linux Mint all downloads page](https://www.linuxmint.com/download_all.php). For example, if you are using Linux Mint Tricia, use `bionic`.
+   The third step will not work on Linux Mint for two reasons.
+
+   1. You will get a malformed input error. Removing `[arch=amd64]` fixes this.
+
+   2. You cannot use the command `$(lsb_release -cs)` on Linux Mint. This command returns the name of the Ubuntu LTS. On Linux Mint, you will need to manually enter the LTS name.
+
+      If you are using the latest Linux Mint version, 'Ulyana', you will need to replace the command with `focal`. This refers to the Ubuntu LTS that Linux Mint Ulyana is build off, 'Focal Fossa'.
+
+      If you are using an old version of Linux Mint, you can find out what Ubuntu LTS it uses on the [Linux Mint all downloads page](https://www.linuxmint.com/download_all.php). For example, if you are using Linux Mint Tricia, use `bionic`.
+
+   If you are using Linux Mint Ulyana - the latest Linux Mint version - then your command for step three will be
+
+   ```bash
+   sudo add-apt-repository \
+   "deb https://download.docker.com/linux/ubuntu \
+   focal \
+   stable"
+   ```
+
    </Alert>
 
-2. Add Docker's stable repository and update the apt package index.
+2. Complete the three steps under the heading 'Install Docker Engine', which is just below the previous section, 'Set Up the Repository'. After you complete this step, you are finished with the Docker install page.
 
-   ```bash
-   sudo add-apt-repository universe
-   sudo apt update
-   ```
-
-3. Install the latest version of Docker.
-
-   ```bash
-   sudo apt-get install docker-ce docker-ce-cli containerd.io
-   sudo apt-get install python3 python3-pip
-   ```
-
-4. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
+3. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
 
    ```bash
    sudo usermod -aG docker "${USER}"
    ```
 
-5. Reboot to make the group change take effect.
+4. Reboot to make the group change take effect.
 
 </details>
 
