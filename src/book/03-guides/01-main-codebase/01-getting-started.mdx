@@ -40,7 +40,7 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
 1. Navigate to the section where you [Install Docker using the Repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Complete the three steps under the heading 'Set Up the Repository'.
 
-   If you are using Linux Mint, please read the info bubbles below.
+   If you are using Linux Mint, please read the info bubble below.
 
    <Alert type='info'>
 
@@ -220,6 +220,8 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
    - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the NUgus robots.
 
+   If you are following the example, use `generic`.
+
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
    ```bash
@@ -320,17 +322,17 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 ## Get, Build and Run NUsight
 
-NUsight is the debugging application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
+NUsight is a visual debugging web application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
 You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
 
 Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
 
 ```bash
-./b edit NUsight.yaml
+./b edit config/NUsight.yaml
 ```
 
-Set the messages you would like NUsight to receive to 'true'. For our example, you need sensor data set to true.
+Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
 
 <details>
 
@@ -389,7 +391,7 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
    </Alert>
 
-8. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
+8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
 
 </details>
 
@@ -410,44 +412,42 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
    docker network create nuclearnet
    ```
 
-3. Make the Docker script executable by running
+3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `keyboardwalkfake` binary, use the command
+
+   ```bash
+   ./b run keyboardwalkfake --network nuclearnet`
+   ```
+
+4. Make the Docker script executable by running
 
    ```bash
    chmod +x ./docker
    ```
 
-4. Install the NUsight dependencies in the container and build NUsight for prod in the container
+5. Install the NUsight dependencies in the container and build NUsight for prod in the container
 
    ```bash
    ./docker yarn
    ./docker yarn build
    ```
 
-5. Inspect the network to find the NUbots container's IP address
+6. Inspect the network to find the NUbots container's IP address
 
    ```bash
    docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
    ```
 
-   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See the info bubble below.
+   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
 
-   <Alert type='info'>
-
-   The IP address for the Docker container will not exist unless you are run a binary in it. See [Running with a Simulated Robot](#running-with-a-simulated-robot) for instructions.
-
-   </Alert>
-
-6. Run NUsight with the NUbots container address
+7. Run NUsight with the NUbots container address
 
    ```bash
    ./docker yarn prod --address <ADDRESS>
    ```
 
-7. Open up in your browser the link that is given as output in the terminal, [localhost:9090](localhost:9090).
+8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
 
 </details>
-
-To find out more about NUsight, visit the [NUsight page](/system/tools/nusight).
 
 ## Example
 
