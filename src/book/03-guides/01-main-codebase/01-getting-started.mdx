@@ -237,9 +237,9 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
    Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   If you are following the keyboardwalkfake example, you will need to make sure `keyboardwalkfake` is set to `true`. Find the list of items that are prefixed with `ROLE_` and set all to `false` except for `keyboardwalkfake`, which should be `true`. You do not need to change any other build options in this example.
+   If you are following the `keyboardwalkfake` example, you will need to make sure `keyboardwalkfake` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `keyboardwalkfake`, which should be `ON`. You do not need to change any other build options in this example.
 
-   Press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu with <kbd>e</kbd>.
+   Press <kbd>c</kbd> to configure. This will show a confirmation menu, press <kbd>e</kbd> to go back to the main menu. Press <kbd>g</kbd> to generate the build list, and then press <kbd>e</kbd> to exit.
 
 3. Build the code by running:
 
@@ -421,7 +421,7 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `keyboardwalkfake` binary, use the command
 
    ```bash
-   ./b run keyboardwalkfake --network nuclearnet`
+   ./b run keyboardwalkfake --network nuclearnet
    ```
 
 4. Make the Docker script executable by running
