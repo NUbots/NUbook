@@ -6,7 +6,19 @@ description: Description of common terms, notations and conventions we use.
 slug: /guides/general/glossary
 ---
 
-## Internal
+## Conventions and Notations
+
+**For naming conventions of matrices and vectors see the [Mathematics Section](/system/foundations/mathematics).**
+
+**Coordinate Orientation**: Robot's local coordinate system is x forward, y to the left, z up. Global coordinates are also z up.
+
+**Roll, Pitch, Yaw**: When Roll, Pitch and Yaw are in space and otherwise undefined, they are defined as a right hand rule around the x, y, z axes respectively.
+
+**Spherical Coordinates**: 3-Dimensional vectors in spherical coordinates are $(\rho, \theta, \phi )$, where $\rho$ is the radial distance, $\theta$ is the polar angle, and $\phi$ is the azimuthal angle.
+
+## Terms
+
+### Internal
 
 [**Calibration Tool**](https://github.com/NUbots/NUbots/blob/master/tools/nbs/calibrate_cameras.py): NUbots automatic tool for calibrating the cameras in the head which are used for the robot's vision.
 
@@ -48,7 +60,7 @@ slug: /guides/general/glossary
 
 [**VisualMesh**](https://arxiv.org/abs/1807.08405): A computer vision technique NUbots uses which overlays a mesh over the image input to more efficiently sample it and look for objects. Source can be found [here](https://github.com/Fastcode/VisualMesh).
 
-## General
+### General
 
 [**Affine Transform**](https://en.wikipedia.org/wiki/Affine_transformation): A transform which keeps straight lines straight, and parallel lines parallel, without preserving distances or angles between lines otherwise.
 
@@ -96,7 +108,7 @@ slug: /guides/general/glossary
 
 [**Zero Moment Point (ZMP)**](https://en.wikipedia.org/wiki/Zero_moment_point): With relation to walking motion, it is the point with respect to which the contact force of the foot on the ground produces zero moment in the horizontal direction.
 
-## External
+### External
 
 [**Arch**](https://www.archlinux.org/): A lightweight linux distribution which the NUgus robots use as their primary operating system.
 
