@@ -18,7 +18,7 @@ To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/script-tu
 
 ## Messages
 
-To execute a script, we emit an "execute script" message describing the script to execute. This message is received in the ScriptEngine, which executes the appropriate script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/master/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
+To execute a script, we emit an "execute script" message describing the script to execute. This message is received in the ScriptEngine, which executes the appropriate script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
 
 `ExecuteScriptByName` takes
 
@@ -40,7 +40,7 @@ emit(std::make_unique<ExecuteScriptByName>(
     id, std::vector<std::string>({"Stand.yaml", "KickRight.yaml", "Stand.yaml"})));
 ```
 
-Note these are only the names of the scripts, not the full paths. The names correspond to the names of YAML files in the [scripts folder](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine/data/scripts).
+Note these are only the names of the scripts, not the full paths. The names correspond to the names of YAML files in the [scripts folder](https://github.com/NUbots/NUbots/tree/16b4b20faf69c2c12b52e9ffd28c546a612dc033/module/motion/ScriptEngine/data/scripts).
 
 In addition to using the name of a script, we can also use [an instance of Script](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L43) directly. `Script` can be instantiated with all the information for the script to execute, and can be emitted using the `ExecuteScript` message. `ExecuteScript` takes:
 
@@ -61,7 +61,7 @@ An example of emitting this message is in [ScriptTuner.cpp](https://github.com/N
 emit(std::make_unique<ExecuteScript>(id, script, NUClear::clock::now()));
 ```
 
-The [ScriptEngine](https://github.com/NUbots/NUbots/tree/master/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It collects the servo positions and time for each frame and modifies them if needed based on the given duration and start time in the message. The information is then emitted as a [ServoCommand](https://github.com/NUbots/NUbots/blob/master/shared/message/behaviour/ServoCommand.proto) message.
+The [ScriptEngine](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It collects the servo positions and time for each frame and modifies them if needed based on the given duration and start time in the message. The information is then emitted as a [ServoCommand](https://github.com/NUbots/NUbots/blob/cbb5d3ebc2a7c56944ec9afe3f70faf7e2900217/shared/message/behaviour/ServoCommand.proto) message.
 
 ## Script files
 
