@@ -80,10 +80,12 @@ The script files are YAML files specifying a duration and list of servo targets,
       torque: 100
     - id: R_HIP_YAW
       position: -0.03
-      gain: 30
+      gain: 20
       torque: 100
 ```
 
-Duration is an integer in milliseconds. Position, gain and torque are floats. ID is one of a list of servo IDs found in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30).
+Duration is an integer in milliseconds. Position is a float representing the angle of the servo in radians. Gain is a float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30. Torque is a float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.
+
+ID is one of a list of servo IDs found in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30).
 
 These script files are in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.
