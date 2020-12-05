@@ -7,6 +7,7 @@ module.exports = {
     title: 'NUbook',
     description: 'The NUbots team handbook.',
     keywords: ['nubots', 'team', 'handbook', 'help', 'documentation'],
+    siteUrl: 'https://nubook.nubots.net',
     githubUrl: 'https://github.com/NUbots/',
     slackUrl: 'https://nubotsteam.slack.com',
     facebookUrl: 'https://www.facebook.com/NubotsRobotics/',
@@ -97,6 +98,37 @@ module.exports = {
         theme_color: '#F9A50D',
         display: 'minimal-ui',
         icon: 'src/images/nubots-icon.png', // Relative to site root
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-sitemap',
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                siteUrl
+              }
+            }
+            allSitePage(filter: {context: {hidden: {ne: true}}}) {
+              nodes {
+                path
+              }
+            }
+          }
+        `,
+        resolveSiteUrl: ({ site }) => {
+          return site.siteMetadata.siteUrl
+        },
+        serialize: ({ site, allSitePage }) => {
+          return allSitePage.nodes.map(node => {
+            return {
+              url: `${site.siteMetadata.siteUrl}${node.path}`,
+              changefreq: `weekly`,
+              priority: 0.7,
+            }
+          })
+        },
       },
     },
     {
