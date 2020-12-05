@@ -1,0 +1,229 @@
+---
+section: System
+chapter: Tools
+title: NUpbr
+description: A physically-based rendering pipeline for generating realistic semi-synthetic data.
+slug: /system/tools/nupbr
+keywords:
+  [
+    vision,
+    data,
+    synthetic-data,
+    annotation,
+    deep-learning,
+    machine-learning,
+    learning,
+    ai,
+  ]
+---
+
+<Alert type='warning'>
+  NUpbr currently only supports Blender 2.79. Ensure this version is installed.
+</Alert>
+
+## Motivation
+
+As the power of state-of-the-art deep learning methods increases, so does the requirement for large, fully annotated datasets. Particularly in terms of object recognition and classification computer vision tasks, annotation of this data requires considerable time and effort when performed manually by humans.
+
+The NUpbr project aims to reduce this annotation time by allowing for synthetic generation and automatic annotation of image data via the [Blender](https://www.blender.org/) 3D rendering engine. To ensure the data is comparable to that of realistically obtained data, [physically-Based Rendering (PBR)](https://en.wikipedia.org/wiki/Physically_based_rendering) materials are used. Additionally, [Image-Based Lighting (IBL)](http://ict.usc.edu/pubs/Image-Based%20Lighting.pdf) is used with High-Dynamic Range (HDR) environment maps to provide semi-synthetic image support.
+
+The tool is capable of outputting raw RGB images taken from random points of view within the scene, as well as generating the corresponding segmentation image, depth map, and various metadata for the current scene.
+
+## How it Works
+
+NUpbr constructs a soccer field scene with user-specified dimensions. By default, this includes two goals, a soccer ball and multiple NUgus robots.
+
+<details>
+
+<summary>Environment</summary>
+
+The environment map defines how the IBL will light the scene, as well as the background
+for the RGB image. NUpbr will recursively perform regular expression searches to find three files per environment map:
+
+| Item              | Regex Search    | Example        | Description                                 |
+| ----------------- | --------------- | -------------- | ------------------------------------------- |
+| Raw HDR map       | `.*raw.*\.hdr`  | `001_raw.hdr`  | HDR RGB pixel image filename                |
+| Segmentation mask | `.*mask.*\.png` | `001_mask.png` | Semantic segmentation mask of the HDR image |
+| Metadata file     | `.*json`        | `001.json`     | Metadata file for the HDR image             |
+
+The **raw HDR map** will contain the RGB image as typically perceived. The HDR format is ideal for this image, as it allows for changing of exposure within Blender.
+
+The **segmentation mask** will define the desired class of each pixel within the HDR map. Colour is used to distinguish between the classes, as shown in the examples within this page.
+
+The **metadata file** contains positional and rotational camera parameters for when the image was taken, as well as configuration for which objects to render, including if balls, goals or the synthetic field are draw during rendering. Additionally, manual limits for where the ball can be placed in the scene can be specified in metres.
+
+<Alert type='info'>
+
+The configurable properties for the environment can be found in `scene_config.py`
+within `resources["environment"]`.
+
+</Alert>
+
+</details>
+
+<details>
+<summary>Balls</summary>
+
+The ball is either constructed using a preconstructed model (`.fbx`) with corresponding
+colour and/or normal maps, or via a UV colour map for the ball. Again, a recursive regex search is applied to populate the ball resources:
+
+#### UV Map
+
+| Item     | Regex Search         | Example          | Description                          |
+| -------- | -------------------- | ---------------- | ------------------------------------ |
+| UV Image | `.*colou?rs?.*\.jpg` | `001_colour.jpg` | RGB image of the UV map for the ball |
+
+#### FBX File
+
+| Item       | Regex Search             | Example          | Description                                                                 |
+| ---------- | ------------------------ | ---------------- | --------------------------------------------------------------------------- |
+| Colour map | `.*colou?rs?.*\.jpg`     | `001_colour.png` | RGB pixel image filename for the colour map which can be applied to the FBX |
+| Normal map | `.*norm(?:al)?s?.*\.png` | `001_norm.png`   | Normal map of the FBX                                                       |
+
+The normal and colour maps are then applied to the ball using a material controlled by a [PBR node](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html).
+
+<Alert type='info'>
+
+The configurable properties for the ball can be found in `scene_config.py`
+within `resources["ball"]`.
+
+</Alert>
+
+</details>
+
+<details>
+<summary>Field</summary>
+
+When the user specifies that the field is to be synthetically generated, a hair particle system is used to create grass on the field.
+
+#### Colouring the Field
+
+A UV map of the field lines is generated based on the specified field dimensions in `scene_config.py` within `cfg["field"]`, which is then mixed with the grass colour to create field lines within the synthetic grass.
+A [PBR node](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html) is used for the grass, using the grass and field line colouring for the base colour of the field.
+
+#### Segmenting the Field
+
+The segmentation of the field is performed using [scene composites](https://docs.blender.org/manual/en/latest/compositing/introduction.html), where the UV map projection on the field (in the camera viewpoint) is recoloured based on the desired segmentation mask colour of the field lines. This scene composite is then applied over the segmentation mask from the field, to ensure that the field lines appear over the top of the field.
+
+<Alert type='info'>
+
+The configurable properties for the field can be found in `scene_config.py`
+within `resources["field"]`.
+
+</Alert>
+
+</details>
+
+<details>
+<summary>Goals</summary>
+
+The goals are constructed based on the desired goal dimensions in `scene_config.py` within `cfg["goal"]`. These goals can either be generated as rectangular or rounded, as defined in `scene_config.py`, in `cfg["goal"]["shape"]`.
+
+Using a [PBR node](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html), the goals are given a colour, metallicity and roughness as specified in `blend_config.py` within `goal`.
+
+The segmentation colouring for the goals are **only applied to the front quad** (goal posts and crossbar).
+
+<Alert type='info'>
+
+The configurable properties for the
+goals can be found in `scene_config.py` within `resources["goal"]`.
+
+</Alert>
+
+</details>
+
+<details>
+
+<summary>Robots</summary>
+
+<Alert type='warning'>
+
+Robots within NUpbr are still a **work in progress**. Currently only a
+specific implementation of the NUgus robot is supported, and is likely subject to change in the future.
+
+</Alert>
+
+#### Configuration
+
+Configuration for the NUgus robot can be found in `scene_config.py` within `resources["robot"]`. This configuration is composed of four parameters:
+
+| Parameter             | Example                | Description                                                                             |
+| --------------------- | ---------------------- | --------------------------------------------------------------------------------------- |
+| `mesh_path`           | `"./robot/NUgus.fbx"`  | Path to the file which holds the NUgus FBX file                                         |
+| `texture_path`        | `"./robot/textures/"`  | Path to the directory which holds the NUgus robot's materials and texture maps          |
+| `kinematics_path`     | `"./robot/NUgus.json"` | Path to the file which holds kinematics limits and part names to assemble robot         |
+| `kinematics_variance` | `0.5`                  | Floating point value for the maximum variation from the neutral pose of each robot part |
+| `texture_path`        | `"./robot/textures/"`  | Path to colour and normal maps for each robot part                                      |
+
+Additionally, the number of robots generated within the scene can be configured with `scene_config.py` with `num_robots`.
+
+#### Kinematics
+
+The kinematics of the robot are read from the `kinematics_path`, and the individual FBX files for each part are assembled as per the read kinematics configuration. Robot parts will randomly be placed according to `kinematics_variance`, where `kinematics_variance = 0.0` will place robots in their neutral pose, and `kinematics_variance = 1.0` will allow for random placement up to the kinematic limits of the robot.
+
+<Alert type='info'>
+
+The configurable properties for robots can be found in `scene_config.py` within `resources["robot"]`.
+
+</Alert>
+
+</details>
+
+#### Segmentation
+
+The segmentation colouring for the field is specified through `scene_config.py` within `resources[object]["mask"]`. By default the scene segmentation is configured as:
+
+| Class          | Description                       | Colour                                                                                                               |
+| -------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `unclassified` | Environment or unclassified areas | <div style='border: 1px solid grey; background-color: rgba(0, 0, 0, 0.9); width : 200px; height: 20px;'></div>       |
+| `balls`        | Balls                             | <div style='border: 1px solid grey; background-color: rgba(255, 0, 0, 0.9); width : 200px; height: 20px;'></div>     |
+| `field`        | Grass and/or field area           | <div style='border: 1px solid grey; background-color: rgba(0, 255, 0, 0.9); width : 200px; height: 20px;'></div>     |
+| `field lines`  | Field lines                       | <div style='border: 1px solid grey; background-color: rgba(255, 255, 255, 0.9); width : 200px; height: 20px;'></div> |
+| `robot`        | General robots                    | <div style='border: 1px solid grey; background-color: rgba(0, 0, 255, 0.9); width : 200px; height: 20px;'></div>     |
+
+However, these colours can be configured as per user requirements in `scene_config.py`, under `resources[<class>]["mask"]`.
+
+## Examples
+
+![RGB, segmentation and depth images for a generated ball on a synthetic field](images/ball_L.png 'RGB, segmentation and depth images for a generated ball on a synthetic field')
+![RGB, segmentation and depth images with a generated robot](images/robot_outside.png 'RGB, segmentation and depth images with a generated robot')
+
+## Usage
+
+The NUpbr repository can be found [within the NUbots organisation](https://github.com/NUbots/NUpbr). To run the data generation script, ensure [Blender 2.79](https://www.blender.org/download/previous-versions/) is installed. Ensure that the configuration properties are established as desired, as found in `pbr/config/output_config.py`
+This includes:
+
+| Config Parameter | Type    | Example Value | Description                                                                                                                                |
+| ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `num_images`     | `int`   | `10`          | Number of generated image sets (where a raw image, segmentation mask and depth image will be generated for each camera)                    |
+| `output_stereo`  | `bool`  | `True`        | Determines if stereo images will be generated, separated by `0.5 * camera["stereo_camera_distance"]` (configured in `pbr/scene_config.py`) |
+| `output_depth`   | `bool`  | `True`        | Determines if depth images will be generated.                                                                                              |
+| `output_base`    | `str`   | `"./run_{}"`  | Defines the output directory format string to allow for new output directory creation on regeneration.                                     |
+| `filename_len`   | `int`   | `10`          | Length of the output file, e.g. for `filename_len = 10`, the first raw image generated will be saved as `0000000000.jpg`.                  |
+| `image_dirname`  | `str`   | `"raw"`       | Directory name in which raw images are saved. e.g. `./run_0/raw`.                                                                          |
+| `mask_dirname`   | `str`   | `"seg"`       | Directory name in which segmentation are saved. e.g. `./run_0/seg`.                                                                        |
+| `depth_dirname`  | `str`   | `"depth"`     | Directory name in which depth images are saved. e.g. `./run_0/depth`.                                                                      |
+| `meta_dirname`   | `str`   | `"meta"`      | Directory name in which the metadata for each image set is saved. e.g. `./run_0/meta`.                                                     |
+| `max_depth`      | `float` | `20`          | Maximum depth for the normalised depth map (in metres).                                                                                    |
+
+Once the parameters are set, NUpbr can be run using
+
+```bash
+# Show Blender GUI
+blender --python pbr.py
+
+# Headless
+blender --python pbr.py -b
+```
+
+## Status
+
+#### Ongoing Work
+
+- Rigging of robot models to generate realistic poses
+- Replacement of hair particle system with grass cards to reduce performance overhead
+
+#### Future Work
+
+- Porting to Blender 2.8
+- Porting field UV map generation to OpenCV

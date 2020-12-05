@@ -1,0 +1,69 @@
+---
+section: Guides
+chapter: General
+title: Git
+description: How to contribute to a NUbots project using Git.
+slug: /guides/general/git
+---
+
+## Prerequisites
+
+This guide assumes you know the basics of using a command line (also called a terminal). Specifically, it assumes you know how to navigate around the filesystem and run commands. You can [learn how to use the command line in this article](https://www.freecodecamp.org/news/conquering-the-command-line-f85f5e46c07c/). If you are on Windows, you should [install WSL to use the Bash terminal](https://docs.microsoft.com/en-us/windows/wsl/install-win10), since many of the commands you will be using are not available in the default Command Prompt.
+
+It also assumes you know the basics of using Git, such as cloning a repository, adding and committing changes, and pushing your changes to a remote. If you don't, you can [learn about that in this short introduction to Git](https://www.freecodecamp.org/news/learn-the-basics-of-git-in-under-10-minutes-da548267cc91/).
+
+## Getting Code Into a Repository
+
+Let's suppose you have created a file which you would like to add to a NUbots repository called `MakeRobotStand.cpp`, which is part of your project to make the robot stand up.
+
+In the terminal, change directory to the location where the repository is cloned.
+
+### Select Branch
+
+If you are working within an existing project, then you need to find out which branch the work is on. To list the branches, use the command `git branch -r`. When you have found the branch you want to push to, swap to it using the following command:
+
+```sh
+git checkout <branch name>
+```
+
+Where `<branch name>` corresponds to the branch you found in the last step.
+
+If you are not working on an existing project, you need to make a branch to commit your changes to. The format for branch names is `your_surname/brief_description_of_project`. So if your surname is Hamiltons, and your project is making the robot stand up, a good branch name would be `hamiltons/stand_up`.
+
+### Making a Pull Request
+
+Once you have a set of commits on your branch which you think should be added to the main codebase, you can make a Pull Request (PR). PRs are where users ask the repository to pull their branch into the `master` branch.
+
+GitHub has [documentation about PRs here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+
+Title your PR with a description of the changes that it will make. For this example we could use `Add stand-up script`. If you need to give more detail about what the code does, put that as a comment.
+
+To be approved, you should add reviewers to the pull request. If you have a project mentor, they should be a reviewer, as well as someone else who knows about that part of the codebase. Once the reviewers have approved the changes, the changes can be merged into the master branch.
+
+### Code Review
+
+The reviewers will give constructive feedback about your code, by making comments on code snippets from your changes. You can respond to these on GitHub. They can also directly suggest changes to specific sections. Additional commits you make to the branch will update the PR and will reset reviews of the changed sections.
+
+Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and Buildkite Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `master` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
+
+## Commit Etiquette
+
+Commits should make minor changes, and the changes in each commit should have a common theme. A general mantra for contributing code is **commit often, push once**, but this isn't strict at all. Committing often means that the code is built up incrementally. Pushing once means that you don't spam all the other contributors with notifications.
+
+Commit messages should describe what you did, starting with an action verb in the <abbr title="Why? Think of your commit message as completing the sentence 'When applied, this commit will ...'">present tense</abbr>. If you added a file with a new stand script, for example, prefer "Add new stand script" over "Added new stand script" or "Adding new stand script" or "Add script".
+
+## Formatting and Buildkite Checks
+
+Before making a pull request, it is important that your code adheres to the code style and formatting rules for the project you are contributing to.
+
+- For code in the [NUbots](https://github.com/NUbots/NUbots) repository, run `./b format` to fix formatting issues before making a commit.
+- For code in [NUsight](https://github.com/NUbots/NUsight2), run `yarn eslint:fix` to fix formatting issues before making a commit.
+- For code in [NUbook](https://github.com/NUbots/NUbook), run `yarn format` to fix formatting issues before making a commit.
+
+If your code is in a different repository and it uses C++ or protobuf files, use the `.clang-format` file in the NUbots repo to format them.
+
+If you push your changes to GitHub and get a message that the build failed due to formatting issues, try running the relevant format commands, commit any changes, and push to GitHub again. This will trigger a new build, which will check the formatting again. You won't be able to merge the PR until the build checks pass.
+
+## Work in Progress PRs
+
+If you have an incomplete project you would like feedback on, you can make a draft PR to get your code reviewed. Prepend `[WIP]` to the PR title when making draft pull requests. Draft PRs cannot be merged, so there is no need to worry about merging in bad code. GitHub has [documentation about draft PRs here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests).
