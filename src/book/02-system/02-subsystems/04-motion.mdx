@@ -42,7 +42,7 @@ The implementation of this walk is currently a work in progress. See the impleme
 
 The walk uses the Footstep class to generate the targets for the foot. It handles the special cases of side stepping and turning to prevent collisions with the other foot.
 
-The SplineContainer class holds Points and multiple Spline objects. As the SplineContainer gets points, it creates Splines based on these points. These Spline objects are matched to some name in a mapping.
+The SplineContainer class holds Points and multiple Spline objects. As the SplineContainer gets points, it creates Splines based on these points. These Spline objects are each mapped to names.
 
 The Spline that the SplineContainer holds is a generic Spline class that holds all the information for a mathematical spline. Each piecewise polynomial in the spline is represented by a Polynom object that contains the coefficients for a polynomial.
 
