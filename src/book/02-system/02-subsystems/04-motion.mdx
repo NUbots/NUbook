@@ -6,7 +6,7 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-The motion subsystem includes modules that send servo targets to the motors. These include walking, kicking, moving the head, and running scripts.
+The motion subsystem contains modules that send servo targets to the motors. These include walking, kicking, moving the head, and running scripts.
 
 The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
@@ -14,7 +14,7 @@ The Script Engine is detailed on this page, while Script Runner and Script Tuner
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint positions. For example, standing up is a basic script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
-To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/script-tuner).
+To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
 ## Messages
 
@@ -84,8 +84,14 @@ The script files are YAML files specifying a duration and list of servo targets,
       torque: 100
 ```
 
-Duration is an integer in milliseconds. Position is a float representing the angle of the servo in radians. Gain is a float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30. Torque is a float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.
+The fields are described in the table below.
 
-ID is one of a list of servo IDs found in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30).
+| Field    | Description                                                                                                                                                         |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Duration | An integer in milliseconds.                                                                                                                                         |
+| Position | A float representing the angle of the servo in radians.                                                                                                             |
+| Gain     | A float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30.                                             |
+| Torque   | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.             |
+| ID       | One of a list of servo IDs found in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
 
-These script files are in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.
+Script files can be found in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.
