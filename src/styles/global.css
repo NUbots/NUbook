@@ -33,6 +33,8 @@ body {
   Algolia search dropdown styling
 */
 
+/* purgecss start ignore */
+
 .algolia-autocomplete {
   width: 100%;
 }
@@ -72,3 +74,5 @@ body {
     }
   }
 }
+
+/* purgecss end ignore */
