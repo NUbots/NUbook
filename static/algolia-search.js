@@ -5,8 +5,9 @@ docsearch({
   indexName: 'nubots',
   inputSelector: '#search',
   debug: false,
-  // Replace the URL on hits with the current origin,
+  // Update the URL on hits to have the current origin,
   // to support local development and deploy previews
+  // (they point to the production site otherwise)
   transformData: function(hits) {
     hits.forEach(hit => {
       const { origin } = new URL(hit.url)
