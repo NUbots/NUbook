@@ -15,6 +15,7 @@ const Search = ({ background }) => (
     <input
       id='search'
       placeholder='Search NUbook...'
+      title='Keyboard shortcut: /'
       className={`${style.searchInput} h-10 w-full pl-10 md:pl-14 pr-3 md:pr-4 rounded appearance-none text-lg outline-none`}
     />
     <SearchIcon
