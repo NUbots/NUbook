@@ -5,6 +5,14 @@ docsearch({
   indexName: 'nubots',
   inputSelector: '#search',
   debug: false,
+  // Replace the URL on hits with the current origin,
+  // to support local development and deploy previews
+  transformData: function(hits) {
+    hits.forEach(hit => {
+      const { origin } = new URL(hit.url)
+      hit.url = hit.url.replace(origin, window.location.origin)
+    })
+  },
 })
 
 // Add support for the / keyboard shortcut
