@@ -8,7 +8,7 @@ slug: /guides/hardware/servo-calibration
 
 Servos are electromechanical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it should be removed and replaced with a new servo.
 
-Before a servo is first used, its default parameters need to be updated to ensure correct operation of the limbs. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
+Before a servo is first used, its default parameters need to be updated to ensure correct operation. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
 
 ## Set Up
 
@@ -24,25 +24,27 @@ To start testing, calibrating or updating the parameters of a servo do the follo
 
 ## Calibration
 
-**TODO**: actually see what the instructions are and get screenshots, this is just from memory.
-
 To calibrate a servo perform the following instructions:
 
-1. Select Tools -> Calibrate. A window will pop up with instructions on how to calibrate the servo.
+1. Select "**Tools -> Calibration**". A window will pop up with instructions on how to calibrate the servo.
 
-2. Select the correct servo model. The model will be written on the servo, either MX-64 for head and arm servos or MX-106 for leg servos.
+2. Select the correct servo model. The model will be written on the servo (either MX-64 for head and arm servos or MX-106 for leg servos). Do not select the 2.0 versions.
 
-3. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The software will then install the firmware to the servo.
+3. Select the correct communication port from the dropdown menu.
 
-4. Rotate the servo so that the dot is in the 6-o'clock position. Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
+4. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The software will then install the firmware to the servo.
 
-5. Continue to rotate to each of the 3-o'clock, 12-o'clock and 9-o'clock positions when told by the software.
+5. Rotate the servo so that the dot is in the 6-o'clock position (as seen in the instructions). Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
+
+![Photo of the servo rotating tool](./images/servo_calibration/servo_tool.jpg)
+
+6. Continue to rotate to each of the 3-o'clock, 12-o'clock and 9-o'clock positions when told by the software.
 
 ## Parameters
 
 To update the servo parameters, perform the following instructions:
 
-1. Select Scan and wait for the attached servo to be discovered.
+1. Select "**Scan**" and wait for the attached servo to be discovered.
 
    Optional: brand new servos should be preset to an ID of 1. Lower the ID range in "**Options > Scan**" to speed up discovery.
    ![Screenshot of Dynamixel Wizard performing a scan with no servos discovered](./images/servo_calibration/scan.png)
