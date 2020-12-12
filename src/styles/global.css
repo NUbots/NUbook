@@ -73,6 +73,13 @@ body {
       display: none !important;
     }
   }
+
+  .algolia-autocomplete
+    .algolia-docsearch-suggestion
+    .algolia-docsearch-suggestion--subcategory-column::after {
+    content: '|';
+    margin-right: 4px;
+  }
 }
 
 /* purgecss end ignore */
