@@ -1,0 +1,115 @@
+---
+section: Kitchen Sink
+chapter: Markdown
+title: Math and Code
+description: Math and code in Markdown
+keywords:
+  - markdown
+  - math
+  - code blocks
+slug: /kitchen-sink/math-and-code
+hidden: true
+---
+
+# Math
+
+## Inline
+
+This inline equation $a^2 + b^2 = c^2$ has surrounding text.
+
+## Block
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+## In a grid
+
+<Grid columns='1fr 1fr'>
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+$$
+e^{i\phi} = \cos(\phi) + i \sin(\phi)
+$$
+
+</Grid>
+
+# Code blocks
+
+```jsx
+import React from 'react'
+import Highlight, { defaultProps } from 'prism-react-renderer'
+
+export default ({ children, className }) => {
+  const language = className.replace(/language-/, '')
+
+  return (
+    <Highlight {...defaultProps} code={children.trim()} language={language}>
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <code className={`${className} w-full p-4 rounded`} style={style}>
+          {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                <span key={key} {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          ))}
+        </code>
+      )}
+    </Highlight>
+  )
+}
+```
+
+## Code in a grid
+
+<Grid columns='1fr 1fr' caption="Hello world in different languages" seamless>
+
+```java
+// Java
+public class HelloWorld {
+  public static void main(String[] args) {
+    System.out.println("Hello world!");
+  }
+}
+```
+
+```cpp
+// C++
+int main(void) {
+  std::cout << "Hello world!" << std::endl;
+  return 0;
+}
+```
+
+```py
+# Python
+print('Hello world!')
+```
+
+```js
+// JavaScript
+console.log('Hello world!')
+```
+
+```php
+// PHP
+<?php
+
+echo 'Hello world!';
+
+?>
+```
+
+```c
+// C
+int main(void) {
+  printf("Hello world!");
+  return 0;
+}
+```
+
+</Grid>

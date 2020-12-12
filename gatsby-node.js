@@ -60,9 +60,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Populate the menu
   posts
     .filter(({ node }) => {
-      return (
-        !node.frontmatter.hidden && !createdPages.has(node.fileAbsolutePath)
-      )
+      return !createdPages.has(node.fileAbsolutePath)
     })
     .forEach(({ node }) => {
       const section = findOrCreateSection(menu, node)
@@ -71,8 +69,18 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       chapter.pages.push({
         title: node.frontmatter.title,
         slug: node.frontmatter.slug,
+        hidden: node.frontmatter.hidden,
       })
     })
+
+  // Hide sections and chapters in the menu if all their content is hidden
+  menu.forEach(section => {
+    section.chapters.forEach(chapter => {
+      chapter.hidden = chapter.pages.every(page => page.hidden)
+    })
+
+    section.hidden = section.chapters.every(chapter => chapter.hidden)
+  })
 
   const templatePath = path.resolve('./src/components/page-template.jsx')
 
