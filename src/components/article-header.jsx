@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
 const ArticleHeader = ({ section, chapter, title, description }) => (
-  <div className='mb-8'>
+  <div className='mb-8 article-header'>
     {(chapter || section) && (
       <div>
         {section && (
           <>
             <Link
               to={section.slug}
-              className='text-secondary hover:text-nubots-700'
+              className='text-secondary hover:text-nubots-700 current-section'
             >
               {section.title}
             </Link>
@@ -21,7 +21,7 @@ const ArticleHeader = ({ section, chapter, title, description }) => (
           <>
             <Link
               to={chapter.slug}
-              className='text-secondary hover:text-nubots-700'
+              className='text-secondary hover:text-nubots-700 current-chapter'
             >
               {chapter.title}
             </Link>
