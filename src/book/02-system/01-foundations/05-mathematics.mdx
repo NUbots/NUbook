@@ -309,4 +309,4 @@ These particular quintic splines have interpolation points $(x_0, y_0, y'_0, y''
 - $S'_0(x_0) = b_{0}$ and $S'_{n-1}(x_n) = y'_{n}$
 - $S''_0(x_0) = b_{0}$ and $S''_{n-1}(x_n) = y''_{n}$
 
-These conditions result in a smooth spline. Each data point has an x and y value, as well as first and second derivative value. The conditions above ensure the splines satisfy the given values for each data point.
+These conditions result in smooth joints between each polynomial, meaning the position, velocity and acceleration at those joints is the same for both polynomials. Each data point has an x and y value, as well as first and second derivative value. The conditions above ensure the splines satisfy the given values for each data point.
