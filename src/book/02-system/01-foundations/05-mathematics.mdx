@@ -308,6 +308,5 @@ These particular quintic splines have interpolation points $(x_0, y_0, y'_0, y''
 - $S''_{j+1}(x_{j+1}) = S''_j(x_{j+1}) = y''_{j+1}$ for each $j = 0, \cdots , n-2$
 - $S'_0(x_0) = b_{0}$ and $S'_{n-1}(x_n) = y'_{n}$
 - $S''_0(x_0) = b_{0}$ and $S''_{n-1}(x_n) = y''_{n}$
-- $S_j'''(x_j) = S_{j}'''(x_j+1) = 0$ for each $j = 0, \cdots , n-1$
 
-These conditions result in a smooth spline. Each data point has an x and y value, as well as first and second derivative value. The conditions above ensure the splines satisfy the given values for each data point. The value of the third derivative is required to have enough constraints to give a unique solution, which is 0 for all data points.
+These conditions result in a smooth spline. Each data point has an x and y value, as well as first and second derivative value. The conditions above ensure the splines satisfy the given values for each data point.
