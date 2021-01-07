@@ -6,28 +6,26 @@ description: Recording data and playing it back.
 slug: /guides/main/recording-playback
 ---
 
-NUbots data is stored in [NUClear Binary Stream (NBS) files](/system/nubots/nuclear#nbs-files). Any [messages](https://github.com/NUbots/NUbots/tree/master/shared/message) that are passed around the NUbots system can be recorded.
+NUbots data is stored in [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). Any [messages](https://github.com/NUbots/NUbots/tree/master/shared/message) that are passed around the NUbots system can be recorded.
 
-# Recording Data
+## Recording Data
 
-The following steps detail how to record data.
+The following steps detail how to record data. An example will be given throughout involving recording sensors messages.
 
 1. Set up the role. Most of the time this involves making minor changes to an existing role.
 
    1. The role must contain the module/s which emit the message/s you want to record.
    2. The role must contain the module `support::logging::DataLogging`.
 
-   For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto) messages. You would use the existing [sensortest](https://github.com/NUbots/NUbots/blob/master/roles/sensortest.role) role and add `support::logging::DataLogging` to it.
+   For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto) messages. You could use the existing [sensortest](https://github.com/NUbots/NUbots/blob/master/roles/sensortest.role) role and add `support::logging::DataLogging` to it.
 
 2. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/nubots/getting-started) page.
 
 3. Make changes to the `DataLogging.yaml` configuration file.
 
-   1. On the robot, open the file in your favourite editor, eg `nano config/DataLogging.yaml`.
-   2. Set all messages you would like to record to `true`.
+   1. On the robot, open the file in an editor: `nano config/DataLogging.yaml`. If you are in Docker, you will need to open it using the **b** script: `./b edit config/DataLogging.yaml`.
+   2. List all messages you would like to record in the file. In our example, we would want to list `input::sensors` in the file.
    3. Save and exit.
-
-   In our example, we would want to set all `input::sensors::` messages to true.
 
 4. Run the binary. In our example, this would be `./sensortest`.
 
@@ -37,7 +35,7 @@ The following steps detail how to record data.
    1. The NBS file will be located on the robot in the `log/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `log/sensortest/18072020T082100.nbs`.
    2. Copy the file across. On the destination computer, run `scp nubots@<address>:log/role_name/file_name path/to/destination`. In our example, we may want to run `scp nubots@<address>:log/sensortest/18072020T082100.nbs .`. The file will then be copied to the folder you ran the command in. `<address>` corresponds to the address of the robot.
 
-# Extracting Data
+## Extracting Data
 
 The NBS file is not easily understood by humans. Certain tools in the NUbots codebase convert NBS files to file formats that are easier for us to understand.
 
@@ -46,10 +44,10 @@ The tools are run with the **b** script in the NUbots codebase. [NBS tools](http
 Tools are executed by running
 
 ```sh
-./b nbs <tool_name> <nbs_file_name>
+./b nbs <tool_name> <nbs_file_name> <arguments>
 ```
 
-## Stats
+### Stats
 
 Decodes an NBS file into a series of file statistics.
 
@@ -57,11 +55,11 @@ Decodes an NBS file into a series of file statistics.
 | ------------------- | ----------------------------------------------------------------- |
 | --message-timestamp | Uses the message's `.timestamp` field as the time of the message. |
 
-## JSON
+### JSON
 
 Outputs the data in the NBS file to a JSON file. It is useful to redirect the output to a file by appending `> file.json` to the command.
 
-## Extract Images
+### Extract Images
 
 Decodes an NBS file and extracts any compressed jpeg files into jpeg files.
 
@@ -69,7 +67,7 @@ Decodes an NBS file and extracts any compressed jpeg files into jpeg files.
 | -------- | ------------------------------------------- | ----------------------------- |
 | --output | Specifies the folder to save the images to. | The current working directory |
 
-## Video
+### Video
 
 This will take images in an NBS file and create a video.
 
@@ -79,7 +77,7 @@ This will take images in an NBS file and create a video.
 | --quality | Specifies the quality to save the video in.           | 30M                           |
 | --encoder | specifies the encoder to use when encoding the video. | h264_nvenc                    |
 
-## Calibrate Cameras
+### Calibrate Cameras
 
 Calculate camera intrinsics using an NBS recording of asymmetric circles grid patterns.
 
@@ -92,10 +90,10 @@ Calculate camera intrinsics using an NBS recording of asymmetric circles grid pa
 | -- no-intrisics | Does not change the intrinsic configuration values.                  | -        |
 | --no-extrinsics | Does not change the extrinsic configuration values.                  | -        |
 
-## Foot Down
+### Foot Down
 
 Trains a foot down network using sensor data from the legs.
 
-# Playing Back Data
+## Playing Back Data
 
 Messages can be emitted from an NBS file. When using prerecorded data, ensure you remove the modules in the role which emit those message types that you would like to emit from the NBS file, otherwise you will get potentially conflicting data. The role file must include `support::logging::DataPlayback`.
