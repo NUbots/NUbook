@@ -1,5 +1,9 @@
 .grid {
   @apply w-full max-w-full leading-none p-2 bg-gray-100;
+
+  .gridContent > figure {
+    @apply mt-0;
+  }
 }
 
 .gridSeamless {
