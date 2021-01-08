@@ -6,13 +6,13 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-The motion subsystem contains modules that send servo targets to the motors. These include walking, kicking, moving the head, and running scripts.
+The motion subsystem contains modules that are responsible for walking, kicking, moving the head, and running scripts. They perform these motions by sending servo commands (called targets) to the motors.
 
 The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 # Script Engine
 
-Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint positions. For example, standing up is a basic script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do more complex movements like getting up or kicking.
 
 To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
@@ -22,7 +22,7 @@ To execute a script, we emit an "execute script" message describing the script t
 
 `ExecuteScriptByName` takes
 
-- a subsumption ID (subsumption is a priority for the servos)
+- a subsumption ID (this is used to determine servo access priority)
 - the name of the script/s as a string or a vector of strings
 - the duration of the scripts
 - the time that these scripts should start executing
@@ -44,7 +44,7 @@ Note these are only the names of the scripts, not the full paths. The names corr
 
 In addition to using the name of a script, we can also use [an instance of Script](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L43) directly. `Script` can be instantiated with all the information for the script to execute, and can be emitted using the `ExecuteScript` message. `ExecuteScript` takes:
 
-- a subsumption ID (subsumption is a priority for the servos)
+- a subsumption ID (this is used to determine servo access priority)
 - a Script or vector of Scripts
 - the duration of the scripts
 - the time that these scripts should start executing
@@ -88,10 +88,10 @@ The fields are described in the table below.
 
 | Field    | Description                                                                                                                                                         |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Duration | An integer in milliseconds.                                                                                                                                         |
-| Position | A float representing the angle of the servo in radians.                                                                                                             |
-| Gain     | A float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30.                                             |
-| Torque   | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.             |
-| ID       | One of a list of servo IDs found in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
+| `duration` | An integer in milliseconds.                                                                                                                                         |
+| `position` | A float representing the angle of the servo in radians.                                                                                                             |
+| `gain` | A float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30.                                             |
+| `torque` | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.             |
+| `id` | One of the servo IDs listed in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
 
 Script files can be found in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.

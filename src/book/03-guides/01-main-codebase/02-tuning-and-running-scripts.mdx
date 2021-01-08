@@ -6,7 +6,7 @@ description: How to tune and run scripts.
 slug: /guides/main/tuning-and-running-scripts
 ---
 
-Scripts are static motions for the robot. By static, we mean they are preconfigured motions that won't change at runtime. They specify what joint angles to move to and how long the robot should take to go to those joint positions. For example, standing up is a small script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. By static, we mean they are preconfigured motions that won't change at runtime. They specify what joint angles to move to and how long the robot should take to go to those joint angles. For example, standing up is a small script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
 The Script Engine executes script files by performing the robot motions that they describe. It takes each joint position and time from the `.yaml` file and sends the information to the servos, causing the robot to move.
 
@@ -34,7 +34,7 @@ Script tuner is a tool that can be used to create and modify scripts. To use scr
 ./scripttuner <script_path>
 ```
 
-`<script_path>` is the path to the script you want to tune, such as `scripts/nugus/Stand.yaml`. The path can be to an existing script, if you want to edit it, or to a script that does not exist yet if you would like to create a new script.
+`<script_path>` is the path to the script you want to tune, such as `scripts/nugus/Stand.yaml`. The path can be to an existing script, if you want to edit it, or to a script that does not exist yet if you want to create a new script.
 
 Running a command like the above will open the following interface, which will enable you to tune the script:
 
@@ -76,7 +76,7 @@ Type :help for a full list of commands
 ----------------------------------------------------------------------------------
 ```
 
-The first line tells you the name and path of the script you are creating or editing.
+The first line shows the name and path of the script you are creating or editing.
 
 The second line specifies the number of frames and the current frame, which is highlighted. Each frame specifies different joint (i.e. servo) positions, and when these frames are combined they result in a motion.
 
@@ -132,6 +132,6 @@ When you have finished making or editing your script, copy it from the robot to 
 scp nubots@<address>:<path_to_script> <path_on_your_computer>
 ```
 
-`<address>` is the address of the robot, such a `10.1.1.1` for NUgus 1. `<path_to_script>` is the path to the script. `<path_on_your_computer>` is the path you want to copy the script to on your computer. Run this command on your computer.
+`<address>` is the address of the robot, such as `10.1.1.1` for NUgus 1. `<path_to_script>` is the path to the script. `<path_on_your_computer>` is the path you want to copy the script to on your computer. Run this command on your computer.
 
 After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `master` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git visit the [Git guide](/guides/general/git).
