@@ -86,12 +86,12 @@ The script files are YAML files specifying a duration and list of servo targets,
 
 The fields are described in the table below.
 
-| Field    | Description                                                                                                                                                         |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `duration` | An integer in milliseconds.                                                                                                                                         |
-| `position` | A float representing the angle of the servo in radians.                                                                                                             |
-| `gain` | A float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30.                                             |
-| `torque` | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.             |
-| `id` | One of the servo IDs listed in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
+| Field      | Description                                                                                                                                                    |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `duration` | An integer in milliseconds.                                                                                                                                    |
+| `position` | A float representing the angle of the servo in radians.                                                                                                        |
+| `gain`     | A float representing how much effort the servo will use to get to the target position. Gain is often between 10 and 30.                                        |
+| `torque`   | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.        |
+| `id`       | One of the servo IDs listed in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
 
 Script files can be found in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.
