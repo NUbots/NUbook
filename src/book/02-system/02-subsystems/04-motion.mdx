@@ -6,7 +6,7 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-# Walk Engine
+## Walk Engine
 
 Currently NUbots has two walk engines. One is an **open loop hybrid walk controller** and the other is an **open loop walk** based on **quintic splines**. These engines take care of the mathematics and control involved in taking steps without falling over. The walk engines do not plan where to walk to, only how to walk.
 
@@ -20,7 +20,7 @@ A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NU
 
 The [behaviour](/system/subsystems/behaviour) of the robot determines what the walk command will be.
 
-## Open Loop Hybrid Walk
+### Open Loop Hybrid Walk
 
 This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**. To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
 
@@ -28,7 +28,7 @@ This walk is based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.
 
 The module for this walk is located in the [OldWalkEngine module folder](https://github.com/NUbots/NUbots/tree/master/module/motion/OldWalkEngine).
 
-## Quintic Spline Walk
+### Quintic Spline Walk
 
 The Quintic Walk is an **open loop controller** based on **quintic splines** (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
 
@@ -38,7 +38,7 @@ The code used for this walk comes from [**BitBots**](https://github.com/bit-bots
 
 The implementation of this walk is currently a work in progress. See the implementation on the [QuinticWalk branch](https://github.com/NUbots/NUbots/tree/biddulph/quintic_walk/module/motion/QuinticWalk).
 
-### Implementation
+#### Implementation
 
 The walk uses the Footstep class to generate the targets for the foot. It handles the special cases of side stepping and turning to prevent collisions with the other foot.
 
@@ -73,13 +73,13 @@ The motion subsystem contains modules that are responsible for walking, kicking,
 
 The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
-# Script Engine
+## Script Engine
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do more complex movements like getting up or kicking.
 
 To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
-## Messages
+### Messages
 
 To execute a script, we emit an "execute script" message describing the script to execute. This message is received in the ScriptEngine, which executes the appropriate script. These are specified in [Script.h](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h) as [ExecuteScriptByName](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L224) and [ExecuteScript](https://github.com/NUbots/NUbots/blob/96357855b059cd499021552b3e25a4b158828dc5/shared/extension/Script.h#L261).
 
@@ -126,7 +126,7 @@ emit(std::make_unique<ExecuteScript>(id, script, NUClear::clock::now()));
 
 The [ScriptEngine](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/motion/ScriptEngine) module receives either of these messages and processes the information for the script. It collects the servo positions and time for each frame and modifies them if needed based on the given duration and start time in the message. The information is then emitted as a [ServoCommand](https://github.com/NUbots/NUbots/blob/cbb5d3ebc2a7c56944ec9afe3f70faf7e2900217/shared/message/behaviour/ServoCommand.proto) message.
 
-## Script files
+### Script files
 
 The script files are YAML files specifying a duration and list of servo targets, in a format like the following:
 
