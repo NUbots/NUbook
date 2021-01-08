@@ -16,6 +16,8 @@ module.exports = {
       },
     ],
     'no-descending-specificity': null,
+    'selector-descendant-combinator-no-non-space': null, // covered by Prettier
+    'indentation': null, // covered by Prettier
     'declaration-empty-line-before': 'never',
     'declaration-block-no-duplicate-properties': true,
     'selector-pseudo-class-no-unknown': [
