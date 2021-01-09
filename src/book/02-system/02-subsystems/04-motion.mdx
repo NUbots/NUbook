@@ -40,7 +40,7 @@ The implementation of this walk is currently a work in progress. See the impleme
 
 #### Implementation
 
-The walk uses the Footstep class to generate the targets for the foot. It handles the special cases of side stepping and turning to prevent collisions with the other foot.
+The walk uses the Footstep class to generate the targets for the foot, which are based off the calculated splines.
 
 The SplineContainer class holds Points and multiple Spline objects. As the SplineContainer gets points, it creates Splines based on these points. These Spline objects are each mapped to names.
 
