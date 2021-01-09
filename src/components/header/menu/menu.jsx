@@ -33,22 +33,29 @@ const Menu = ({ menu, currentSection, open, isHome }) => {
         <div className={style.wrapper}>
           <nav className={style.menu}>
             <div className='mb-8'>
-              {menu.map(section => {
-                const className = `${style.sectionLink} ${
-                  !isHome && section.title === currentSection.title
-                    ? `${style.sectionLinkActive}`
-                    : ''
-                }`
-                return (
-                  <Link
-                    to={section.slug}
-                    key={section.slug}
-                    className={className}
-                  >
-                    {section.title}
-                  </Link>
-                )
-              })}
+              {menu
+                // Only show a section if it's currently selected or it's not hidden
+                .filter(section => {
+                  return (
+                    section.title === currentSection.title || !section.hidden
+                  )
+                })
+                .map(section => {
+                  const className = `${style.sectionLink} ${
+                    !isHome && section.title === currentSection.title
+                      ? `${style.sectionLinkActive}`
+                      : ''
+                  }`
+                  return (
+                    <Link
+                      to={section.slug}
+                      key={section.slug}
+                      className={className}
+                    >
+                      {section.title}
+                    </Link>
+                  )
+                })}
             </div>
 
             {currentSection.chapters.map(chapter => {
