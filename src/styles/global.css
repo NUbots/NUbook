@@ -21,6 +21,8 @@ body {
   color: rgba(0, 0, 0, 0.87);
 }
 
+/* purgecss start ignore */
+
 /*
   This will hide the focus indicator if an element receives focus via the mouse,
   but it will still show up on keyboard focus.
@@ -66,8 +68,6 @@ body {
 /*
   Algolia search dropdown styling
 */
-
-/* purgecss start ignore */
 
 .algolia-autocomplete {
   width: 100%;
