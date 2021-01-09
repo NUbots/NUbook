@@ -1,0 +1,34 @@
+---
+section: Kitchen Sink
+chapter: Markdown
+title: GraphViz Diagrams
+description: GraphViz diagrams in Markdown
+keywords:
+  - markdown
+  - graphviz
+  - diagram
+slug: /kitchen-sink/graphviz-diagrams
+hidden: true
+---
+
+# Graphs and Diagrams
+
+```circo
+# A graph showing a circular dependency structure
+# More detailed description for a11y
+graph {
+  A -- B [label="OK Boomer"]
+  B -- D; B -- C; C -- D;
+  C -- A
+  D -- A
+}
+```
+
+# Overview
+
+```dot
+digraph {
+  rankdir=LR;
+  Strategy -> Planning -> Skills -> Motions -> "Hardware IO" -> Strategy
+}
+```
