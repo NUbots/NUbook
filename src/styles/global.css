@@ -29,6 +29,40 @@ body {
   outline: none;
 }
 
+/**
+ * Remark Graphviz
+ */
+.remark-graphviz-figure {
+  @apply p-3 rounded bg-gray-100 leading-none;
+
+  /* Allow the graph to overflow and scroll on small screens */
+  .remark-graphviz-graph {
+    overflow: auto;
+  }
+
+  svg {
+    /* Center the graph in the figure */
+    display: block;
+    margin: 0 auto;
+
+    /* Make the graph background transparent */
+    g.graph > path:first-child {
+      fill: transparent;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  /* Scale the graph to fit the figure on larger screens */
+  svg {
+    max-width: 100%;
+  }
+}
+
+.remark-graphviz-figcaption {
+  @apply pt-3 italic text-base;
+}
+
 /*
   Algolia search dropdown styling
 */

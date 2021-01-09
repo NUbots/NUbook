@@ -1285,12 +1285,11 @@
   dependencies:
     core-js "^2.5.7"
 
-"@josephuspaye/gatsby-remark-graphviz@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.1.0.tgz#fa1f9f49dd4427a92e164911e29327ffe3dbfcf8"
-  integrity sha512-Ymwr9qIbu0l+l6jErDUqMl+j4j0f682IZk0Bh5Ol3FeVfoXj5CLBsStNcglKolnmVNU+rO4zHuwKHSoTHeJYxA==
+"@josephuspaye/gatsby-remark-graphviz@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.3.0.tgz#0677aa01ee83b03793d44484de0d3c5fb2aab1d2"
+  integrity sha512-2xyRsc9SH6k2GYG02rg46nynoFjFw/dBusJY0wcpH46jejFvSrquXMf/7JKFA7AFu8ybUiqn78VBKPTqKDTEkA==
   dependencies:
-    deasync "^0.1.20"
     node-graphviz "^0.1.0"
     svgo "^1.3.2"
     unist-util-visit "^2.0.3"
@@ -4083,14 +4082,6 @@ dataloader@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/dataloader/-/dataloader-1.4.0.tgz#bca11d867f5d3f1b9ed9f737bd15970c65dff5c8"
   integrity sha512-68s5jYdlvasItOJnCuI2Q9s4q98g0pCyL3HrcKJu8KNugUl8ahgmZYg38ysLTgQjjXX3H8CJLkAvWrclWfcalw==
-
-deasync@^0.1.20:
-  version "0.1.20"
-  resolved "https://registry.yarnpkg.com/deasync/-/deasync-0.1.20.tgz#546fd2660688a1eeed55edce2308c5cf7104f9da"
-  integrity sha512-E1GI7jMI57hL30OX6Ht/hfQU8DO4AuB9m72WFm4c38GNbUD4Q03//XZaOIHZiY+H1xUaomcot5yk2q/qIZQkGQ==
-  dependencies:
-    bindings "^1.5.0"
-    node-addon-api "^1.7.1"
 
 debug@2, debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.3, debug@^2.6.6, debug@^2.6.9:
   version "2.6.9"
@@ -9535,11 +9526,6 @@ node-abi@^2.7.0:
   integrity sha512-9HrZGFVTR5SOu3PZAnAY2hLO36aW1wmA+FDsVkr85BTST32TLCA1H/AEcatVRAsWLyXS3bqUDYCAjq5/QGuSTA==
   dependencies:
     semver "^5.4.1"
-
-node-addon-api@^1.7.1:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-1.7.2.tgz#3df30b95720b53c24e59948b49532b662444f54d"
-  integrity sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==
 
 node-emoji@^1.10.0, node-emoji@^1.8.1:
   version "1.10.0"
