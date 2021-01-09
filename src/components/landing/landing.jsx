@@ -25,7 +25,7 @@ const LandingPage = props => {
 
       <Header
         menu={menu}
-        currentSection={menu[0]}
+        currentSection={menu.filter(section => !section.hidden)[0]}
         background='transparent'
         height='h-20'
       />
