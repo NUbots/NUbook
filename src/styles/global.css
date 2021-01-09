@@ -28,3 +28,11 @@ body {
 .js-focus-visible :focus:not(.focus-visible) {
   outline: none;
 }
+
+.remark-graphviz-figure {
+  @apply p-2 bg-gray-100 leading-none;
+}
+
+.remark-graphviz-figcaption {
+  @apply pt-3 italic text-base;
+}

@@ -5,6 +5,7 @@
   "author": "NUbots",
   "private": true,
   "dependencies": {
+    "@josephuspaye/gatsby-remark-graphviz": "^0.1.0",
     "@mdx-js/mdx": "^1.1.5",
     "@mdx-js/react": "^1.1.5",
     "babel-eslint": "^10.0.2",

@@ -50,6 +50,7 @@ module.exports = {
         },
         remarkPlugins: [require('remark-unwrap-images')],
         gatsbyRemarkPlugins: [
+          '@josephuspaye/gatsby-remark-graphviz',
           'gatsby-remark-copy-linked-files',
           {
             resolve: 'gatsby-remark-autolink-headers',
