@@ -1,9 +1,11 @@
-/*eslint-env node*/
+/*eslint-env node */
+/*eslint-env es6 */
 
 const path = require('path')
 const { createBibNode } = require('./bib-transformer')
 
 const menu = []
+const createdPages = new Set()
 
 exports.onCreateNode = async ({
   node,
@@ -116,7 +118,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   // Populate the menu
   posts
-    .filter(({ node }) => !node.frontmatter.hidden)
+    .filter(({ node }) => {
+      return (
+        !node.frontmatter.hidden && !createdPages.has(node.fileAbsolutePath)
+      )
+    })
     .forEach(({ node }) => {
       const section = findOrCreateSection(menu, node)
       const chapter = findOrCreateChapter(section, node)
@@ -126,6 +132,8 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         slug: node.frontmatter.slug,
       })
     })
+
+  const templatePath = path.resolve('./src/components/page-template.jsx')
 
   // Create a page for each MDX file
   posts.forEach(({ node, next, previous }, index) => {
@@ -145,15 +153,18 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     actions.createPage({
       path: node.frontmatter.slug,
-      component: path.resolve('./src/components/page-template.jsx'),
+      component: templatePath,
       context: {
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
         references,
+        hidden: node.frontmatter.hidden,
       },
     })
+
+    createdPages.add(node.fileAbsolutePath)
   })
 }
 
