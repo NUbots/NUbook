@@ -162,7 +162,9 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
 <Alert type='info'>
 
-When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Run `cd ~` to navigate to your home folder in Ubuntu.
+
+Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
 
 </Alert>
 
@@ -337,6 +339,8 @@ Before setting up NUsight you'll need to configure what messages you will use. O
 ```bash
 ./b edit config/NUsight.yaml
 ```
+
+This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
 
 Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
 
