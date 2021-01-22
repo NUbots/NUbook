@@ -6,9 +6,13 @@ description: Setting up your environment and getting started with NUbots develop
 slug: /guides/main/getting-started
 ---
 
+Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the keyboardwalkfake binary (which uses simulated hardware) and seeing the robot move in NUsight.
+
 ## Prerequisites
 
 ### Git
+
+For our example, we will need Git to get the codebase. This will happen later in this guide.
 
 [Git](https://git-scm.com/) is a [version control](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control) tool. We use it to track changes to the codebase and work together on the same codebase without getting in each other's way.
 
@@ -26,45 +30,62 @@ There is a guide to using Git in NUbots [here](/guides/general/git).
 
 Docker is a container system that allows you to install development tools and run builds in an isolated environment that won't affect the rest of your system. We use it to set up the NUbots build system and run builds and binaries.
 
-#### Ubuntu
+You will need to perform the steps correctly to set up Docker for your operating system to complete the example.
 
-1. Add Docker's stable repository and update the apt package index.
+<details>
+
+<summary>Ubuntu/Linux Mint</summary>
+
+To install on Ubuntu, use the [official Docker instructions](https://docs.docker.com/engine/install/ubuntu/). These work with Linux Mint, with some adjustments. There are multiple ways to install Docker, as detailed on the website. NUbots recommends the following for installing Docker
+
+1. Navigate to the section where you [Install Docker using the Repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Complete the three steps under the heading 'Set Up the Repository'.
+
+   If you are using Linux Mint, please read the info bubble below.
+
+   <Alert type='info'>
+
+   The third step will not work on Linux Mint for two reasons.
+
+   1. You will get a malformed input error. Removing `[arch=amd64]` fixes this.
+
+   2. You cannot use the command `$(lsb_release -cs)` on Linux Mint. This command returns the name of the Ubuntu LTS. On Linux Mint, you will need to manually enter the LTS name.
+
+      If you are using the latest Linux Mint version, 'Ulyana', you will need to replace the command with `focal`. This refers to the Ubuntu LTS that Linux Mint Ulyana is build off, 'Focal Fossa'.
+
+      If you are using an old version of Linux Mint, you can find out what Ubuntu LTS it uses on the [Linux Mint all downloads page](https://www.linuxmint.com/download_all.php). For example, if you are using Linux Mint Tricia, use `bionic`.
+
+   If you are using Linux Mint Ulyana - the latest Linux Mint version - then your command for step three will be
 
    ```bash
-   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
    sudo add-apt-repository \
-     "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-     bionic \
-     stable"
-   sudo add-apt-repository universe
-   sudo apt update
+   "deb https://download.docker.com/linux/ubuntu \
+   focal \
+   stable"
    ```
 
-   If you are on Linux Mint, this will give a malformed input error. Remove `[arch=amd64]` and rerun.
+   </Alert>
+
+2. Complete the three steps under the heading 'Install Docker Engine', which is just below the previous section, 'Set Up the Repository'. After you complete this step, you are finished with the Docker install page.
+
+3. Install python3 and pip.
 
    ```bash
-   sudo add-apt-repository \
-    "deb https://download.docker.com/linux/ubuntu \
-    bionic \
-    stable"
-   ```
-
-2. Install the latest version of Docker.
-
-   ```bash
-   sudo apt-get install docker-ce docker-ce-cli containerd.io
    sudo apt-get install python3 python3-pip
    ```
 
-3. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
+4. Add the current user to the Docker group, so you can run Docker commands without `sudo`.
 
    ```bash
    sudo usermod -aG docker "${USER}"
    ```
 
-4. Reboot to make the group change take effect.
+5. Reboot to make the group change take effect.
 
-#### macOS
+</details>
+
+<details>
+
+<summary> MacOS </summary>
 
 1. Install Homebrew by following the instructions at [brew.sh](https://brew.sh/).
 
@@ -81,11 +102,11 @@ Docker is a container system that allows you to install development tools and ru
 
 4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
 
-#### Windows
+</details>
 
-<Alert type='warning'>
-  Currently, Windows 10 Pro, Enterprise, or Education is needed to use Docker.
-</Alert>
+<details>
+
+<summary>Windows</summary>
 
 1. Ensure your Windows build is at least 2004.
 
@@ -113,36 +134,69 @@ Docker is a container system that allows you to install development tools and ru
    - In Powershell, run `wsl --list --verbose`.
    - If the version is not 2, run `wsl --set-version ubuntu 2`.
 
-5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version.
+   <Alert type='info'> Note that 'ubuntu' in the last command may need to be capitalised. Check the exact spelling from the list output in the first command of this step. </Alert>
+
+   <Alert type='info'>
+
+   If you have issues with the Linux kernel needing to be updated, get the update from the [Microsoft page](https://docs.microsoft.com/en-us/windows/wsl/wsl2-kernel).
+
+   </Alert>
+
+5. Download and install [Docker for Windows](https://docs.docker.com/docker-for-windows/install/). Choose the latest stable version. Ensure you enable WSL 2 features.
 
 6. Configure Docker settings.
+
    - In the system tray, right-click the Docker icon and select **Settings**.
    - In **General**, enable the **Use the WSL 2 based engine** option.
    - In **Resources: WSL Integration** enable Ubuntu.
 
-Notes on using WSL on Windows:
+7. In Ubuntu run `sudo apt update` followed by `sudo apt upgrade`.
 
-- The commands in the rest of this guide should be run in the WSL Ubuntu terminal, except for the commands that should be run on a real robot.
+8. Ensure you have pip3 by running
 
-- When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+   ```bash
+   sudo apt install python3-pip
+   ```
 
-- GitKraken will not allow you to open the repository outside of WSL. Use the steps described in this article to [set up your system to use GitKraken in WSL](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823).
+<Alert type='info'>The commands in the rest of this guide should be run in the WSL Ubuntu terminal except where specified to run them elsewhere, such as on a real robot.</Alert>
 
-- To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
+<Alert type='info'>
+
+When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Run `cd ~` to navigate to your home folder in Ubuntu.
+
+Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+
+</Alert>
+
+<Alert type='info'>
+
+GitKraken will not allow you to open the repository outside of WSL. Use the steps described in this article to [set up your system to use GitKraken in WSL](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823).
+
+</Alert>
+
+<Alert type='info'>
+
+To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
+
+</Alert>
+
+</details>
 
 ### A Text Editor
 
+This section is not required for our example, but it is a good step to do in case you need to edit code in the future.
+
 You'll need a text editor to make changes to the code. We recommend [Visual Studio Code](https://code.visualstudio.com/Download), but feel free to use your favourite editor.
 
-To ensure a consistent [code style](https://en.wikipedia.org/wiki/Programming_style), NUbots uses `clang-format`, a tool that reformats all code files in the repository to have the same style, even if they're written by different people. For convenience, you can install the `clang-format` [extension](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) in Visual Studio Code to automatically format the files when you make changes.
+To ensure a consistent [code style](https://en.wikipedia.org/wiki/Programming_style), NUbots uses [clang-format](https://clang.llvm.org/docs/ClangFormat.html), a tool that reformats code files in the repository to have the same style, even if they're written by different people. For convenience, you can install the `clang-format` [extension](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) in Visual Studio Code to automatically format the files when you make changes.
 
 Another useful tool for editing NUbots code in Visual Studio Code is the Remote Development [extension pack](https://code.visualstudio.com/docs/remote/containers). This pack allows Visual Studio Code to work from within the Docker container, using the tools and libraries installed there.
 
 ## Getting the Code
 
-With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and try things out.
+With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and run the code. This is an important step in our example.
 
-1. Clone the repo by running the following command in a terminal. If you're on Windows, do this in the WSL Ubuntu terminal, after running `cd ~` to go to your home folder.
+1. Clone the repo by running the following command in a terminal.
 
    ```bash
    git clone --recursive https://github.com/NUbots/NUbots.git
@@ -159,9 +213,11 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
 ## Building the Code
 
+Run all these commands for our example, and pay special attention to the instructions in the second step relating to our example.
+
 To build the code, open a terminal and change into the NUbots code directory. Then do the following:
 
-1. Select the platform (e.g. type of computer) that the built binaries will run on. You do this by running a command in the form:
+1. Select the platform (e.g. type of computer) that the built binaries will run on and create the Docker image. You do this by running the command:
 
    ```bash
    ./b target <PLATFORM>
@@ -172,27 +228,36 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
    - `nuc7i7bnh` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the NUgus robots.
 
+   If you are following the example, use `generic`.
+
 2. With the target platform selected, choose the binaries (called "roles") that you want to build. You do this by running the following command:
 
    ```bash
+   ./b configure
    ./b configure -i
    ```
 
-   This will show a menu to choose roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
+   Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   Next, press <kbd>c</kbd> to configure and then <kbd>g</kbd> to generate the build list and exit the menu.
+   If you are following the `keyboardwalkfake` example, you will need to make sure `keyboardwalkfake` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `keyboardwalkfake`, which should be `ON`. You do not need to change any other build options in this example.
 
-3. Now build the code by running:
+   Press <kbd>c</kbd> to configure. This will show a confirmation menu, press <kbd>e</kbd> to go back to the main menu. Press <kbd>g</kbd> to generate the build list, and then press <kbd>e</kbd> to exit.
+
+3. Build the code by running:
 
    ```bash
    ./b build
    ```
 
-4. Some built roles use data from `.yaml` [configuration files](/system/foundations/config-script). If you change a configuration file, you will need to run `./b build` again.
+<Alert type='info'>
+
+Some built roles use data from `.yaml` [configuration files](/system/foundations/config-script). If you change a configuration file, you will need to run `./b build` again.
+
+</Alert>
 
 ## Running the Code
 
-With the code built, you have two options for running: on an actual robot, or on your computer using a simulated robot.
+With the code built, you can run the code on a real robot or on your computer using a simulated robot. If you are following the example in this guide, go to 'Running with a Simulated Robot' below, and skip 'Running on a Real Robot'.
 
 ### Running with a Simulated Robot
 
@@ -204,7 +269,27 @@ If you are not running the code on a robot, you will need to use a simulated rob
 
 Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
 
+If you are following the example, run `./b run keyboardwalkfake`. If you are on Windows or MacOS, see the note below.
+
+<Alert>
+
+Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
+
+```
+./b run keyboardwalkfake --network nuclearnet
+```
+
+See the [NUsight](#nusight) section below for details.
+
+</Alert>
+
 ### Running on a Real Robot
+
+<Alert type='warn'>
+   When running on a real robot, make sure you understand how to safely handle a robot. To make the robot's servos relax, hit the red button on the back of the robot. This is an emergency stop button to prevent harm. 
+</Alert>
+
+You can skip this section if you are following the example.
 
 To run the code on a robot, you need to make sure the robot is powered on, install the built roles onto the robot, and then `ssh` into the robot to run the installed roles.
 
@@ -235,10 +320,167 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
    This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
 
-4. In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
+   In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
 
-5. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role:
+4. You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role enter the command:
 
    ```bash
    ./robocup
    ```
+
+## Get, Build and Run NUsight
+
+NUsight is a visual debugging web application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
+
+You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
+
+Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
+
+```bash
+./b edit config/NUsight.yaml
+```
+
+This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
+
+Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
+
+<details>
+
+<summary>Ubuntu/Linux Mint</summary>
+
+1. Get NUsight and move into the new directory by running
+
+   ```bash
+   git clone https://github.com/NUbots/NUsight2.git NUsight
+   cd NUsight
+   ```
+
+2. Install Node.js by running
+
+   ```bash
+   sudo apt install node
+   ```
+
+3. Configure the package repository and install yarn by running
+
+   ```bash
+   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+   sudo apt update && sudo apt install yarn
+   ```
+
+4. Get the dependencies for NUsight by running
+
+   ```bash
+   yarn
+   ```
+
+5. Build NUsight by running
+
+   ```bash
+   yarn build
+   ```
+
+6. Find the IP address of the Docker container. Run
+
+   ```bash
+   ifconfig
+   ```
+
+   There will be an entry called `docker0`, or similar. Find the address after the word `broadcast`. We will refer to this address as `<ADDRESS>`.
+
+7. Run the following command to run NUsight
+
+   ```bash
+   yarn prod --address <ADDRESS>
+   ```
+
+   <Alert type='info'>
+
+   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `yarn prod`.
+
+   </Alert>
+
+8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
+
+</details>
+
+<details>
+
+<summary> Windows/MacOS </summary>
+
+1. Get NUsight and cd into the directory by running
+
+   ```bash
+   git clone https://github.com/NUbots/NUsight2.git NUsight
+   cd NUsight
+   ```
+
+2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
+
+   ```bash
+   docker network create nuclearnet
+   ```
+
+3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `keyboardwalkfake` binary, use the command
+
+   ```bash
+   ./b run keyboardwalkfake --network nuclearnet
+   ```
+
+4. Make the Docker script executable by running
+
+   ```bash
+   chmod +x ./docker
+   ```
+
+5. Install the NUsight dependencies in the container and build NUsight for prod in the container
+
+   ```bash
+   ./docker yarn
+   ./docker yarn build
+   ```
+
+6. Inspect the network to find the NUbots container's IP address
+
+   ```bash
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
+   ```
+
+   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
+
+7. Run NUsight with the NUbots container address
+
+   ```bash
+   ./docker yarn prod --address <ADDRESS>
+   ```
+
+8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
+
+</details>
+
+## Example
+
+In this section we will finish off our example of setting up the codebase, running the keyboardwalkfake binary and seeing the robot walk in NUsight.
+
+By now you will have gone through this page and have everything set up to make the robot walk. Ensure you have all the following steps complete
+
+- Prerequisite: Git
+
+- Prerequisite: Docker
+
+- Getting the Code
+
+- Building the Code
+
+- Running the Code: Running with a Simulated Robot
+
+- Get, Build and Run NUsight
+
+With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
+
+- Select the 'localisation' tab in NUsight.
+
+- You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
+
+- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.

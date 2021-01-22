@@ -71,7 +71,7 @@ A module can create multiple `Configuration` reactions, each one monitoring a di
 
 ## The Script System
 
-The script system follows a similar structure as the configuration system. However, default scripts are moved to a platform type folder and the overriding system is not used as it doesn't make much sense to try and merge two scripts.
+The script system works very much like the configuration system described above. However, default scripts are moved to a platform type folder and the merging of values is skipped as it doesn't make sense to try and merge two scripts.
 
 In the script system, we first check for a robot-specific script. If a robot-specific script does not exist, then we check for a platform-specific script.
 
@@ -85,5 +85,5 @@ scripts/
 
 To reiterate how the script system loads script files
 
-1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded
-1. If it doesn't exist, then a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded
+1. A check is made to see if `config/RobotName/Script.yaml` exists. If it does, it is loaded.
+2. If it doesn't exist, a check is made to see if `config/PlatformName/Script.yaml` exists. If it does, it is loaded.
