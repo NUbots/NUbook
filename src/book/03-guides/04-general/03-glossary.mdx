@@ -24,13 +24,15 @@ slug: /guides/general/glossary
 
 **Dynamic Motion**: We tend to refer to motion which changes based on sensor data as _Dynamic Motion_.
 
-[**Green Horizon**](https://nubook.nubots.net/system/subsystems/vision#green-horizon-detector): The edge of the football field, as calculated by the vision system.
+[**Green Horizon**](/system/subsystems/vision#green-horizon-detector): The edge of the football field, as calculated by the vision system.
 
 [**NUbook**](https://nubook.nubots.net): The NUbots documentation website. Source is hosted on [GitHub](https://github.com/NUbots/NUbook).
 
 [**NUClear**](https://github.com/Fastcode/NUClear): The software framework which the NUbots codebase is built on. Put simply, it works by triggering callbacks when events occur. Documentation for NUClear is [here](https://nuclear.readthedocs.io/en/latest/index.html).
 
-[**NUClear Binary Stream (NBS)**](https://nubook.nubots.net/system/foundations/build-system#nbs): NUClear logging file format, which is basically concatenated protobuf messages with headers.
+[**NUClear Binary Stream (NBS)**](/system/foundations/build-system#nbs): NUClear logging file format, which is basically concatenated protobuf messages with headers.
+
+**NUClear Neutron**: A message from a NUClear reactor, which is a C++ wrapped protobuf message.
 
 [**NUClear Powerplant**](https://nuclear.readthedocs.io/en/latest/components.html#powerplant): The central message system which connects the reactors.
 
@@ -44,13 +46,13 @@ slug: /guides/general/glossary
 
 [**NUgan**](https://github.com/NUbots/NUgan): A custom [cycle-gan](https://junyanz.github.io/CycleGAN/) implementation to generate more realistic images for training the vision networks.
 
-[**NUgus**](https://nubook.nubots.net/system/hardware/overview#igus-modifications): NUbots robots as currently used in the RoboCup humanoid league. They are modified [igus Humanoid Open Platform](https://arxiv.org/abs/1809.11110) robots, which we 3D-printed.
+[**NUgus**](/system/hardware/overview#igus-modifications): NUbots robots as currently used in the RoboCup humanoid league. They are modified [igus Humanoid Open Platform](https://arxiv.org/abs/1809.11110) robots, which we 3D-printed.
 
 [**NUpbr**](https://github.com/NUbots/NUpbr): The software NUbots uses to generate Physically Based Rendered football fields, used to train vision networks.
 
 [**NUsight**](https://github.com/NUbots/NUsight2): NUbots' visualisation software, ran through a browser on an external computer.
 
-**NUsense**: A secret project for sensor IO.
+**NUSense**: A secret project for sensor IO.
 
 **Old Walk Engine**: A previously used walk engine, originally optimised using genetic algorithms.
 
@@ -62,7 +64,7 @@ slug: /guides/general/glossary
 
 **Static Motion**: We tend to refer to motion which is fully controlled by scripts which do not change at run-time as _Static Motion_.
 
-**Subsumption**: TODO!
+**Subsumption**: The priority system that determines if a neutron gets access to the servos it wants to control.
 
 [**VisualMesh**](https://arxiv.org/abs/1807.08405): A computer vision technique NUbots uses which overlays a mesh over the image input to more efficiently sample it and look for objects. Source can be found [here](https://github.com/Fastcode/VisualMesh).
 
@@ -70,7 +72,7 @@ slug: /guides/general/glossary
 
 [**Affine Transform**](https://en.wikipedia.org/wiki/Affine_transformation): A transform which keeps straight lines straight, and parallel lines parallel, without preserving distances or angles between lines otherwise.
 
-[**Closed Loop Control**](https://en.wikipedia.org/wiki/Closed-loop_transfer_function): Control which uses output from the thing being used as input for controlling it.
+[**Closed Loop Control**](https://en.wikipedia.org/wiki/Closed-loop_transfer_function): Control action which uses output from the system being controlled as input.
 
 [**Container**](https://cloud.google.com/containers): An isolated environment which decouples the environment an application runs in from the environment it's developed in.
 
@@ -108,7 +110,7 @@ slug: /guides/general/glossary
 
 [**Odometry**](https://en.wikipedia.org/wiki/Odometry): Estimation of change in position and orientation based on sensor inputs.
 
-[**Open Loop Controller**](https://en.wikipedia.org/wiki/Open-loop_controller): A controller whose actions aren't affected by feedback from its actions.
+[**Open Loop Controller**](https://en.wikipedia.org/wiki/Open-loop_controller): Control action that does not use output from the system being controlled as input.
 
 [**Particle Filter**](https://en.wikipedia.org/wiki/Particle_filter): A system which represents potential real-world-state estimates as _particles_ which are each assigned a probability.
 
@@ -180,6 +182,6 @@ slug: /guides/general/glossary
 
 [**Simulink**](https://www.mathworks.com/products/simulink.html): A MATLAB-based graphical simulation software.
 
-[**Simscape**](https://www.mathworks.com/products/simscape.html): A MATLAB-based simulation tool for creating models of physical systems in the Simulink environment.
+[**Simscape**](https://www.mathworks.com/products/simscape.html): A MATLAB-based simulation tool for creating models of physical systems in the Simulink environment. Also the name of the [GitHub repository](https://github.com/NUbots/Simscape) that contains the solution that models and simulates the NUgus robot using Simulink and Simscape.
 
 [**YAML**](https://yaml.org/): A markup/serialisation language NUbots uses for module configurations.
