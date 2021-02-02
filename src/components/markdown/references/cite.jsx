@@ -14,8 +14,8 @@ const CiteSingle = ({ children }) => {
 
   if (referenceEntry === undefined) {
     return (
-      <span className='text-white bg-red-600'>
-        (unknown reference: {referenceId})
+      <span className={style.citeLink + ' ' + style.citeUnknown}>
+        unknown reference: {referenceId}
       </span>
     )
   }
@@ -37,7 +37,7 @@ const CiteSingle = ({ children }) => {
       title={`${title} (${author} ${year})`}
       className={style.citeLink}
     >
-      [{referenceNumber}]
+      {referenceNumber}
     </a>
   )
 }
@@ -52,11 +52,11 @@ const Cite = ({ children }) => {
     .map(id => id.trim())
 
   return (
-    <sup>
+    <span className={style.citeWrapper}>
       {referenceIds.map((id, index) => (
         <CiteSingle key={id + index}>{id}</CiteSingle>
       ))}
-    </sup>
+    </span>
   )
 }
 

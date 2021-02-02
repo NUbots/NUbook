@@ -1,8 +1,33 @@
-.citeLink {
-  text-decoration: none !important;
+.citeWrapper {
+  display: inline-flex;
 }
 
-.citeLink:hover,
-.citeLink:focus {
-  text-decoration: underline !important;
+.citeLink {
+  @apply inline-block align-top leading-none bg-gray-400 py-px;
+  @apply text-white no-underline !important;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+
+  &:first-child {
+    @apply rounded-l-full;
+    padding-left: 0.7rem;
+  }
+
+  &:last-child {
+    @apply rounded-r-full;
+    padding-right: 0.7rem;
+  }
+
+  & + .citeLink {
+    margin-left: 1px;
+  }
+
+  &.citeUnknown {
+    @apply text-white bg-red-600 cursor-default;
+  }
+}
+
+.citeLink:not(.citeUnknown):hover,
+.citeLink:not(.citeUnknown):focus {
+  @apply bg-gray-700;
 }

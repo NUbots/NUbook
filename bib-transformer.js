@@ -9,7 +9,21 @@ function bibToJson(bib) {
     const fieldsJson = {}
 
     for (const [fieldKey, fieldValue] of Object.entries(entryValue.fields)) {
-      fieldsJson[fieldKey] = normalizeFieldValue(fieldValue)
+      if (fieldKey == 'author') {
+        fieldsJson.author = {
+          normalized: normalizeFieldValue(fieldValue),
+          authors: fieldValue.authors$.map(author => {
+            return {
+              initials: author.initials,
+              firstNames: author.firstNames,
+              lastNames: author.lastNames,
+              vons: author.vons,
+            }
+          }),
+        }
+      } else {
+        fieldsJson[fieldKey] = normalizeFieldValue(fieldValue)
+      }
     }
 
     const entryJson = {

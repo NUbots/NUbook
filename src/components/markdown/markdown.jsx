@@ -53,7 +53,7 @@ const MDXComponents = {
   code: Code,
   table: Table,
   cite: Cite,
-  references: References,
+  References: References,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
   h3: createHeading('h3'),
