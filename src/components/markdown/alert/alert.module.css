@@ -20,7 +20,7 @@
   @apply text-sm;
   @apply px-1;
   @apply leading-none;
-  @apply whitespace-no-wrap;
+  @apply whitespace-nowrap;
   @apply text-red-600;
   @apply font-mono;
   @apply align-baseline;
@@ -33,18 +33,18 @@
 
 .alertInfo {
   background-color: rgba(33, 150, 243, 0.12);
-  border-color: rgba(33, 150, 243, 0.7);
+  @apply border-blue-400;
 }
 
 .alertInfo .alertIcon {
-  @apply text-blue-600;
+  @apply text-blue-500;
 }
 
 .alertWarning {
   background-color: rgba(255, 152, 0, 0.12);
-  border-color: rgba(255, 152, 0, 0.7);
+  @apply border-orange-400;
 }
 
 .alertWarning .alertIcon {
-  @apply text-orange-600;
+  @apply text-orange-500;
 }
