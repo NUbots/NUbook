@@ -1,10 +1,7 @@
 /*eslint-env node*/
 
 module.exports = {
-  purge: [
-    './src/**/*.jsx',
-    './src/**/*.js',
-  ],
+  purge: ['./src/**/*.jsx', './src/**/*.js'],
   theme: {
     screens: {
       'xxs': '425px',

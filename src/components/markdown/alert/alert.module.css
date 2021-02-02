@@ -32,8 +32,8 @@
 }
 
 .alertInfo {
-  background-color: rgba(33, 150, 243, 0.12);
   @apply border-blue-400;
+  background-color: rgba(33, 150, 243, 0.12);
 }
 
 .alertInfo .alertIcon {
@@ -41,8 +41,8 @@
 }
 
 .alertWarning {
-  background-color: rgba(255, 152, 0, 0.12);
   @apply border-orange-400;
+  background-color: rgba(255, 152, 0, 0.12);
 }
 
 .alertWarning .alertIcon {
