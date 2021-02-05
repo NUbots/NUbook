@@ -109,20 +109,20 @@ As is the case with modules and messages, utilities are grouped together into me
 
 NUClear Roles introduces the `b` command that wraps up all of the functionality needed to create modules and build the NUbots code.
 
-| Command           | Description                                                                 |
-| ----------------- | --------------------------------------------------------------------------- |
-| build             | Build the currently configured code                                         |
-| configure         | Configure the CMake system for the current target                           |
-| edit              | Edit configuration files                                                    |
-| footdown          | Trains a neural network to detect foot down based on leg loads              |
-| format            | Applies code formatting rules to the codebase                               |
-| install           | Install built code to the specified robot                                   |
-| module            | Generate new modules                                                        |
-| nbs               | For working with NBS recordings                                             |
-| run               | Run a role locally                                                          |
-| shell             | Exposes a shell in the Docker image                                         |
-| target            | Select a target to work on                                                  |
-| extract-reactions | Dump documentation of each module's ons, emits and reactions in JSON format |
+| Command               | Description                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| build                 | Build the currently configured code                                         |
+| configure             | Configure the CMake system for the current target                           |
+| edit                  | Edit configuration files                                                    |
+| footdown              | Trains a neural network to detect foot down based on leg loads              |
+| format                | Applies code formatting rules to the codebase                               |
+| install               | Install built code to the specified robot                                   |
+| module                | Generate new modules                                                        |
+| nbs                   | For working with NBS recordings                                             |
+| run                   | Run a role locally                                                          |
+| shell                 | Exposes a shell in the Docker image                                         |
+| target                | Select a target to work on                                                  |
+| extract-documentation | Dump documentation of each module's ons, emits and reactions in JSON format |
 
 ##### Build
 
@@ -345,9 +345,9 @@ The `nuc7i7bnh` target should be used for building and running code on the robot
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
 
-##### Extract-Reactions
+##### Extract-Documentation
 
-The `extract-reactions` command of `b` generates a JSON file documenting each Module. It lists each reactor, with their on statements and emit statements. The on and emit statements have their location in the file and their dsl worlds also.
+The `extract-documentation` command of `b` generates a JSON file documenting each Module. It lists each reactor, with their on statements and emit statements. The on and emit statements have their location in the file and their dsl worlds also.
 
 The `--indir` argument gives the root of the directories that will be documented, defaults to the `./module/` directory.
 
