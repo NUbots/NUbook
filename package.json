@@ -8,6 +8,7 @@
     "@josephuspaye/gatsby-remark-graphviz": "^0.3.0",
     "@mdx-js/mdx": "^1.1.5",
     "@mdx-js/react": "^1.1.5",
+    "autoprefixer": "^10.2.4",
     "babel-eslint": "^10.0.2",
     "eslint": "^6.2.1",
     "eslint-config-prettier": "^6.1.0",
@@ -22,8 +23,7 @@
     "gatsby-plugin-manifest": "^2.2.4",
     "gatsby-plugin-mdx": "^1.0.0",
     "gatsby-plugin-offline": "^2.2.4",
-    "gatsby-plugin-postcss": "^2.1.2",
-    "gatsby-plugin-purgecss": "^4.0.0",
+    "gatsby-plugin-postcss": "^3.6.0",
     "gatsby-plugin-react-helmet": "^3.1.3",
     "gatsby-plugin-react-svg": "^2.1.2",
     "gatsby-plugin-sharp": "^2.2.9",
@@ -38,7 +38,8 @@
     "gh-pages": "^2.1.1",
     "husky": "^3.0.4",
     "katex": "^0.11.0",
-    "postcss-nested": "^4.1.2",
+    "postcss": "^8.2.4",
+    "postcss-nested": "^5.0.3",
     "prettier": "^1.18.2",
     "prism-react-renderer": "^0.1.7",
     "prop-types": "^15.7.2",
@@ -50,7 +51,7 @@
     "rimraf": "^3.0.0",
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^20.0.0",
-    "tailwindcss": "^1.3.5"
+    "tailwindcss": "^2.0.2"
   },
   "license": "MIT",
   "scripts": {

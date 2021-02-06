@@ -83,16 +83,6 @@ module.exports = {
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-postcss',
     {
-      resolve: `gatsby-plugin-purgecss`,
-      options: {
-        printRejected: false,
-        tailwind: true,
-        ignore: ['katex/'],
-        whitelist: ['focus-visible'],
-        purgeOnly: ['global.css'],
-      },
-    },
-    {
       resolve: 'gatsby-plugin-react-svg',
       options: {
         rule: {
