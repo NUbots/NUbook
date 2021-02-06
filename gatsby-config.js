@@ -51,6 +51,18 @@ module.exports = {
         },
         remarkPlugins: [require('remark-unwrap-images')],
         gatsbyRemarkPlugins: [
+          {
+            resolve: '@josephuspaye/gatsby-remark-graphviz',
+            options: {
+              optimize: true,
+              wrapperTag: 'div',
+              wrapperClass: 'remark-graphviz-graph',
+              figureClass: 'remark-graphviz-figure',
+              figcaptionClass: 'remark-graphviz-figcaption',
+              firstCommentIsCaption: true,
+              generateAriaDescription: true,
+            },
+          },
           'gatsby-remark-copy-linked-files',
           {
             resolve: 'gatsby-remark-autolink-headers',
