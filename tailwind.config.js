@@ -2,6 +2,7 @@
 
 module.exports = {
   purge: ['./src/**/*.jsx', './src/**/*.js'],
+  darkMode: 'class',
   theme: {
     screens: {
       'xxs': '425px',
@@ -38,6 +39,7 @@ module.exports = {
           '700': '#616161',
           '800': '#424242',
           '900': '#212121',
+          '950': '#111111',
         },
         'orange': {
           '100': '#fffaf0',
@@ -69,7 +71,8 @@ module.exports = {
         'hint-inverted': 'rgba(255, 255, 255, 0.38)',
       },
       backgroundColor: {
-        well: 'rgba(255, 255, 255, 0.1)',
+        'well': 'rgba(255, 255, 255, 0.1)',
+        '950': '#111111',
       },
       padding: {
         '14': '3.5rem',
@@ -80,6 +83,11 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      display: ['dark'],
+      opacity: ['dark'],
+    },
+  },
   plugins: [],
 }

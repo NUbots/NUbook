@@ -1,18 +1,32 @@
 .sectionButton {
-  @apply inline-flex text-nubots-500 bg-white px-4 py-2 items-center justify-center flex-shrink-0 rounded-full border-2 border-nubots-500 mx-1 my-1;
+  @apply inline-flex px-4 py-2 items-center justify-center flex-shrink-0 rounded-full border-2 mx-1 my-1;
   min-width: 180px;
+
+  :global(.light) & {
+    @apply bg-white text-nubots-500 border-nubots-500;
+  }
+
+  :global(.dark) & {
+    @apply bg-gray-900 text-nubots-500 border-transparent;
+  }
 
   &:hover,
   &:focus {
-    background-color: rgba(249, 165, 13, 0.12);
+    :global(.light) &,
+    :global(.dark) & {
+      background-color: rgba(249, 165, 13, 0.12);
+    }
   }
 }
 
 .sectionButtonActive {
-  @apply text-white bg-nubots-500;
+  :global(.light) &,
+  :global(.dark) & {
+    @apply text-black bg-nubots-500;
 
-  &:hover,
-  &:focus {
-    @apply bg-nubots-500;
+    &:hover,
+    &:focus {
+      @apply bg-nubots-500;
+    }
   }
 }

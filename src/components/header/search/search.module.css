@@ -46,9 +46,18 @@
 
 .backgroundTransparent {
   .searchInput {
+    backdrop-filter: blur(4px);
+  }
+
+  .searchIcon {
+    @apply text-icon-inverted;
+  }
+}
+
+:global(.light) .backgroundTransparent {
+  .searchInput {
     @apply text-white;
     background-color: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(4px);
 
     &::placeholder {
       @apply text-secondary-inverted;
@@ -63,10 +72,6 @@
     }
   }
 
-  .searchIcon {
-    @apply text-icon-inverted;
-  }
-
   &:hover {
     .searchInput {
       @apply bg-white text-primary;
@@ -78,6 +83,39 @@
 
     .searchIcon {
       @apply text-icon;
+    }
+  }
+}
+
+:global(.dark) .backgroundTransparent {
+  .searchInput {
+    @apply text-white;
+    background-color: rgba(255, 255, 255, 0.15);
+
+    &::placeholder {
+      @apply text-secondary-inverted;
+    }
+
+    &:focus {
+      @apply bg-gray-800 text-primary-inverted;
+
+      &::placeholder {
+        @apply text-secondary-inverted;
+      }
+    }
+  }
+
+  .searchIcon {
+    @apply text-icon-inverted;
+  }
+
+  &:hover {
+    .searchInput {
+      @apply bg-gray-800 text-primary-inverted;
+
+      &::placeholder {
+        @apply text-secondary-inverted;
+      }
     }
   }
 }
