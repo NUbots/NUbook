@@ -1,3 +1,5 @@
+/*eslint-env node */
+
 const React = require('react')
 
 // Adds the dark mode class name to the body element before render
