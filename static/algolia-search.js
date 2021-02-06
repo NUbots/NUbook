@@ -1,6 +1,6 @@
 /* global docsearch */
 
-function insertAlgoliaScript() {
+function loadAlgoliaScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     const head = document.head || document.getElementsByTagName('head')[0]
@@ -16,12 +16,12 @@ function insertAlgoliaScript() {
   })
 }
 
-insertAlgoliaScript().then(() => {
+loadAlgoliaScript().then(() => {
   docsearch({
     apiKey: 'be16e460d9d03fa711df82d525dec3c1',
     indexName: 'nubots',
     inputSelector: '#search',
-    debug: true,
+    debug: false,
     // Update the URL on hits to have the current origin,
     // to support local development and deploy previews
     // (they point to the production site otherwise)
