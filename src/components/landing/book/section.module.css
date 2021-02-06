@@ -20,7 +20,15 @@
 }
 
 .sectionButtonActive {
-  :global(.light) &,
+  :global(.light) & {
+    @apply text-white bg-nubots-500;
+
+    &:hover,
+    &:focus {
+      @apply bg-nubots-500;
+    }
+  }
+
   :global(.dark) & {
     @apply text-black bg-nubots-500;
 
