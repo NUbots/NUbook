@@ -2,7 +2,7 @@
 
 const React = require('react')
 
-// Adds the dark mode class name to the body element before render
+// Adds the dark mode class name to the body element before render, inline to void a flash of white in dark mode
 exports.onRenderBody = ({ setHeadComponents }) => {
   const script = `
     const isDarkMode = localStorage.theme === 'dark' ||
