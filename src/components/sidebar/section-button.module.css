@@ -1,0 +1,48 @@
+.sectionButtonWrapper {
+  @apply block -mx-5;
+  width: 110%; /* compensates for being shifted left with negative margin */
+
+  &:not(:first-child) {
+    @apply mt-2;
+  }
+}
+
+.sectionButton {
+  @apply flex w-full px-4 py-1 items-center justify-start rounded-full border-2;
+
+  :global(.light) & {
+    @apply bg-white text-nubots-500 border-nubots-500;
+  }
+
+  :global(.dark) & {
+    @apply bg-gray-900 text-nubots-500 border-transparent;
+  }
+
+  &:hover,
+  &:focus {
+    :global(.light) &,
+    :global(.dark) & {
+      background-color: rgba(249, 165, 13, 0.12);
+    }
+  }
+}
+
+.sectionButtonActive {
+  :global(.light) & {
+    @apply text-white bg-nubots-500;
+
+    &:hover,
+    &:focus {
+      @apply bg-nubots-500;
+    }
+  }
+
+  :global(.dark) & {
+    @apply text-black bg-nubots-500;
+
+    &:hover,
+    &:focus {
+      @apply bg-nubots-500;
+    }
+  }
+}

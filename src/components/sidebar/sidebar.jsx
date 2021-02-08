@@ -2,7 +2,19 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
+import SectionButton from './section-button'
+import IconTeam from './icons/icon-team.svg'
+import IconSystem from './icons/icon-system.svg'
+import IconGuides from './icons/icon-guides.svg'
+import IconTools from './icons/icon-tools.svg'
 import style from './sidebar.module.css'
+
+const iconMap = {
+  Team: IconTeam,
+  System: IconSystem,
+  Guides: IconGuides,
+  ['Kitchen Sink']: IconTools,
+}
 
 function elementInView(element, container) {
   const top = element.offsetTop
@@ -40,15 +52,15 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
             return section.title === currentSection.title || !section.hidden
           })
           .map(section => {
-            const className = `${style.sectionLink} ${
-              section.title === currentSection.title
-                ? `${style.sectionLinkActive}`
-                : ''
-            }`
             return (
-              <Link to={section.slug} key={section.slug} className={className}>
+              <SectionButton
+                Icon={iconMap[section.title]}
+                active={section.title === currentSection.title}
+                key={section.slug}
+                to={section.slug}
+              >
                 {section.title}
-              </Link>
+              </SectionButton>
             )
           })}
       </div>
