@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 
 import style from './section-button.module.css'
 
-const getLinkProps = ({ isCurrent }) => {
+const getLinkProps = () => {
   return {
     className: style.sectionButtonWrapper,
   }
@@ -33,7 +33,7 @@ SectionButton.propTypes = {
   Icon: PropTypes.elementType,
   children: PropTypes.node,
   active: PropTypes.bool,
-  onClick: PropTypes.func,
+  to: PropTypes.string,
 }
 
 SectionButton.defaultProps = {
