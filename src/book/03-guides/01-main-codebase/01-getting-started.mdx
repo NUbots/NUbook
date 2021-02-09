@@ -344,15 +344,16 @@ This will open the file using the nano editor. If you are not familiar with nano
 
 Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
 
+Open up a new terminal to run NUsight and NUbots code side by side. 
+
 <details>
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Get NUsight and move into the new directory by running
+1. NUsight is within the NUbots repository. Move into the NUsight directory by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   cd nusight2
    ```
 
 2. Install Node.js by running
@@ -409,11 +410,10 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 <summary> Windows/MacOS </summary>
 
-1. Get NUsight and cd into the directory by running
+1. NUsight is within the NUbots repository. Move into the NUsight directory by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   cd nusight2
    ```
 
 2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
@@ -475,7 +475,7 @@ By now you will have gone through this page and have everything set up to make t
 
 - Running the Code: Running with a Simulated Robot
 
-- Get, Build and Run NUsight
+- Build and Run NUsight
 
 With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
 
