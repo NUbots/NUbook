@@ -353,11 +353,11 @@
   }
 
   > details {
-    @apply border border-b-0 border-gray-200;
+    @apply border border-transparent;
   }
 
   > details[open] {
-    @apply p-4 border-b;
+    @apply p-4 border-gray-200;
   }
 
   > details summary {

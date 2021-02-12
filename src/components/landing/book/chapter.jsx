@@ -17,7 +17,7 @@ const Chapter = ({ title, pages }) => {
             key={page.slug}
             className='flex py-2 text-lg text-nubots-700 hover:underline items-start'
           >
-            <IconArrowRight className='mt-px mr-4 text-secondary' />{' '}
+            <IconArrowRight className='mt-px mr-4 text-secondary flex-shrink-0' />{' '}
             {page.title}
           </a>
         ))}
