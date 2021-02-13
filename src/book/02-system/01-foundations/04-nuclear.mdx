@@ -186,6 +186,18 @@ NBS files are NUClear Binary Stream files. To make it easier to serialise stream
 
 All values within this format are little endian.
 
+NBS files can have an acsossiated index file. This allows for quicker random access to the coresponding nbs file. An `nbs.idx` file has the folowwing frames repeated continuously, which are then compressed with gzip:
+
+| Name      | Type   | Description                                                                      |
+| --------- | ------ | -------------------------------------------------------------------------------- |
+| hash      | uint64 | the 64bit hash for the payload type                                              |
+| subtype   | uint32 | the id field of the message if it exists, otherwise 0                            |
+| timestamp | uint64 | timestamp field of the message if it exists or the emit timestamp in nanoseconds |
+| offset    | uint64 | offset to start of radiation symbol ☢                                            |
+| size      | uint32 | Size of the whole packet from the radiation symbol                               |
+
+This index file is also little enidan.
+
 ## Neutrons
 
 Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
