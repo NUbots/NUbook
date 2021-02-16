@@ -8,14 +8,14 @@
 }
 
 .sectionButton {
-  @apply flex w-full px-4 py-1 items-center justify-start rounded-full border-2;
+  @apply flex w-full px-4 py-1 items-center justify-start rounded-full;
 
   :global(.light) & {
-    @apply bg-white text-nubots-500 border-nubots-500;
+    @apply text-nubots-500 border border-nubots-500;
   }
 
   :global(.dark) & {
-    @apply bg-gray-900 text-nubots-500 border-transparent;
+    @apply bg-gray-900 text-nubots-500;
   }
 
   &:hover,

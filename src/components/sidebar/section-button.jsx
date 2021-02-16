@@ -19,9 +19,9 @@ const SectionButton = ({ Icon, children, active, to }) => {
         }`}
       >
         <div className='mr-3'>
-          <Icon className='w-7 h-7 fill-current' />
+          <Icon className='w-6 h-6 fill-current' />
         </div>
-        <div className='text-lg font-semibold mr-2 leading-tight'>
+        <div className='text-base font-semibold mr-2 leading-tight'>
           {children}
         </div>
       </div>

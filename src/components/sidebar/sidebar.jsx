@@ -27,7 +27,11 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${style.link} ${isCurrent ? `${style.linkActive}` : ''}`,
+    className: `${
+      style.link
+    } text-primary-muted dark:text-primary-muted-inverted ${
+      isCurrent ? style.linkActive : ''
+    }`,
   }
 }
 
@@ -68,7 +72,11 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
       {currentSection.chapters.map(chapter => {
         return (
           <div className='mb-8' key={chapter.title}>
-            <div className={style.chapterTitle}>{chapter.title}</div>
+            <div
+              className={`${style.chapterTitle} text-hint dark:text-hint-inverted`}
+            >
+              {chapter.title}
+            </div>
             {chapter.pages.map(page => (
               <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}

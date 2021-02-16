@@ -1,21 +1,40 @@
 .chapterTitle {
-  @apply text-hint text-sm uppercase tracking-wider font-semibold mb-2;
+  @apply text-sm uppercase tracking-wider font-semibold mb-2;
 }
 
 .link {
-  @apply relative block py-1 mb-2 font-semibold text-primary-muted leading-snug;
+  @apply relative block py-1 mb-2 font-semibold leading-snug;
 
-  &:hover,
-  &:global(.focus-visible) {
-    @apply text-nubots-700;
+  :global(.light) & {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-700;
+    }
+  }
+
+  :global(.dark) & {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-500;
+    }
   }
 }
 
 .linkActive {
-  &,
-  &:hover,
-  &:global(.focus-visible) {
-    @apply text-primary;
+  :global(.light) & {
+    &,
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-primary;
+    }
+  }
+
+  :global(.dark) & {
+    &,
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-500;
+    }
   }
 
   &::before {

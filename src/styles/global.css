@@ -16,6 +16,16 @@
  */
 @tailwind utilities;
 
+html {
+  &.light {
+    color-scheme: light;
+  }
+
+  &.dark {
+    color-scheme: dark;
+  }
+}
+
 /* Reset the body text color */
 body {
   .light & {
