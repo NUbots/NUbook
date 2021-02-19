@@ -13,9 +13,9 @@ const Header = ({ menu, currentSection, background, height }) => {
   return (
     <>
       <div
-        className={`${style.header} w-full fixed z-30 ${
-          background === 'solid' ? 'bg-gray-900' : ''
-        }`}
+        className={`${style.header} ${
+          background === 'transparent' ? style.headerTransparent : ''
+        } w-full fixed z-30 ${background === 'solid' ? 'bg-gray-900' : ''}`}
       >
         <div className='max-w-screen-xl mx-auto px-6'>
           <div className={`-mx-6 flex items-center ${height}`}>
