@@ -16,7 +16,7 @@ The NUbots codebase uses a [CMake](https://cmake.org/) build system based on the
 
 #### Requirements and Setup
 
-See the [Getting Started guide](/guides/nubots/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
+See the [Getting Started guide](/guides/main/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
 
 ### NUClear Roles
 
@@ -131,7 +131,7 @@ As one might expect, `./b build` will build all enabled roles and required depen
 ./b build sensortest
 ```
 
-If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests.
+If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
 
 ##### Configure
 
