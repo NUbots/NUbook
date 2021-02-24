@@ -19,7 +19,21 @@ If this page does not solve your problem, the following people can help you with
 
 ## NUbots
 
-TODO
+### Why am I having no such file errors?
+
+If your compiler can't find `FileWatcher.h` as in the following error:
+
+```sh
+nuclear/roles/firmwareinstaller.cpp:3:10: fatal error: extension/FileWatcher/src/FileWatcher.h: No such file or directory
+    3 | #include "extension/FileWatcher/src/FileWatcher.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+then, run `./b configure --clean`. This refreshes the docker volumes, removing the offending file.
+
+### Why isn't my new file being compiled?
+
+If you have just added a new file to the codebase, make sure first that it's part of a role. After you have added it to a role, run `./b configure`, and the build system should detect the new file and compile it, next time you run `./b build`.
 
 ## NUsight
 
