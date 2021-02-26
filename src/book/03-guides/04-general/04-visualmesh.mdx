@@ -6,19 +6,59 @@ description: How to get started with the Visual Mesh.
 slug: /guides/general/visualmesh
 ---
 
-This guide compliments the quickstart guide on the [main Visual Mesh repo](https://github.com/Fastcode/VisualMesh) by being geared towards those with little experience of the Linux command line (i.e. bash) or of Machine Learning workflows. If you are already familiar with bash and machine learning, you may prefer to work off the Quickstart guide on the Visual Mesh repo as it is briefer than this guide.
+This guide compliments the quickstart guide on the [main Visual Mesh repo](https://github.com/Fastcode/VisualMesh) by being geared towards those with little experience of the [Linux command line (i.e. bash)](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview) or of Machine Learning workflows. If you are already familiar with bash and machine learning, you may prefer to work off the Quickstart guide on the Visual Mesh repo as it is briefer than this guide.
 
-## Check that python is installed
+To get started, run this line to check the installation and version of the required programs.
 
-The script to build the dataset is written in Python. Check that python is installed with `python3 --version`, which should return something like `Python 3.8.5`.
+```bash
+python3 --version && pip3 --version && git --version && docker --version
+```
 
-## Check that git is installed
+*this should provide a result similar to that listed below, possibly with higher version numbers, run through the installation guides if this doesn't appear*
 
-While you don't strictly need to use git to download the Visual Mesh repo (e.g. you could just download it from github's web interface), git is the recommended way to get and manage the code from the repo. Check if git is installed with `git --version`, which should return something like `git version 2.25.1`.
+```bash
+Python 3.8.5
+pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.8)
+git version 2.25.1
+Docker version 20.10.3, build 48d30b5
+
+```
+
+<details>
+
+<Summary>Installing Python3</Summary>
+
+The script to build the dataset is written in Python. The bash terminal simplifies your install massively, so all you need to do is run `sudo apt install python3.8` and it will automatically update to the most recent version of Python 3.8.x
+
+</details>
+
+<details>
+
+<Summary>Installing pip3</Summary>
+
+Pip 3 is a package manager that should be included by default in Python 3.8.x. Be sure to run `sudo apt install python3.8` first to make sure that you've installed it correctly. If for some reason (for example it was removed) pip3 is missing run `sudo apt install python3-pip`.
+
+</details>
+
+<details>
+
+<Summary>Installing Git</Summary>
+
+While you don't strictly need to use git to download the Visual Mesh repo (e.g. you could just download it from github's web interface), git is the recommended way to get and manage the code from the repo. It's recommended to [use GitKraken as a GUI on Linux](https://support.gitkraken.com/how-to-install/), but for the purposes of this tutorial run `sudo apt install git`
+
+</details>
+
+<details>
+
+<Summary>Installing Docker</Summary>
+
+Docker is a program development architecture that we use at NUbots, to install it, run `sudo apt install docker`. If you want to learn more about docker, [check out the documentation](https://docs.docker.com/get-started/overview/) and be sure to ask on Slack if you've got any questions.
+
+</details>
 
 ## Clone the Visual Mesh Repo
 
-Use git to clone the Visual mesh repo. When using git on the commandline, git will default to cloning the repo into a folder under your current working directory. Start by navigating to the folder where you want to store the repo: for example, if you wanted to store the visual mesh under `~/code/`, then you would accomplish that as follows:
+Use git to clone the Visual mesh repo. When using git on the commandline, git will default to cloning the repo into a folder under your current working directory. Start by navigating to the folder where you want to store the repo: for example, if you wanted to store the visual mesh under `~/code/`, run:
 
 ```bash
 cd ~
@@ -32,13 +72,9 @@ Once you're in the folder you wanted to be in (e.g. `~/code/`), clone the reposi
 git clone https://github.com/Fastcode/VisualMesh.git
 ```
 
-## Check that Docker is installed
-
-The Docker image is the current recommended way to run the Visual Mesh. You can check if docker is installed with `docker --version`, which should return something like `Docker version 20.10.3, build 48d30b5`.
-
 ## Build the docker image
 
-We specify build steps for docker using a file name `Dockerfile`. This uses similar syntax to a bash script, but is a format specifically used by docker. Navigate to the repository in the terminal (e.g. `cd ~/code/VisualMesh`), then open the dockerfile in a text editor/reader (e.g. `less ./Dockerfile`), and take note of the last two lines: (If you opened the Dockerfile with `less`, navigate with the arrow keys, or vim keys. The command to exit `less` is `q`)
+We specify build steps for docker using a file name `Dockerfile`. This uses similar syntax to a bash script, but is a format specifically used by docker. Navigate to the repository in the terminal (e.g. `cd ~/code/VisualMesh`), then open the dockerfile in a text editor/reader (e.g. `less ./Dockerfile`), and take note of the last two lines: (If you opened the Dockerfile with `less`, navigate with the arrow keys, or vim keys. The command to exit `less` is `q`) Note that you can also run `cat ./Dockerfile` to simply display it inline on your terminal.
 
 ```
 RUN mkdir /workspace
@@ -51,40 +87,39 @@ These lines tell us that the working directory of the container will be the `/wo
 docker build . --pull -t visualmesh:latest
 ```
 
+<details>
+
+<Summary>What does this command do?</Summary>
 - `docker` is the call to docker
 - `build` is the main command being sent to docker
 - `.` is telling docker that the build context is the current directory. Docker will look for a file named `Dockerfile` in the build context telling it what to build (so in this case, the current directory).
 - `--pull` tells docker to always attempt to pull a newer version of the image
 - `-t visualmesh:latest` tells docker that we want to tag the built image as `visualmesh:latest`. We'll see later that when we tell docker to run a container, that we tell docker which image to use by referencing this tag.
 
+</details>
+
 ## Make a dummy dataset
 
-For the sake of this guide, we'll use a dummy dataset containing the same image repeated over and over again. While this will lead to extreme overfitting, it's an easy way to quickly check that the code is running correctly. Download the example image, mask, and lens file [dummy_data.zip](assets/dummy_data.zip), and extract them. Assuming that the file downloaded to `~/Downloads/dummy_data.zip`, then this can be accomplished by the following:
+For the sake of this guide, we'll use a dummy dataset containing the same image repeated over and over again. *While this will lead to extreme overfitting, it's an easy way to quickly check that the code is running correctly.* Download the example image, mask, and lens file [dummy_data.zip](assets/dummy_data.zip) to your downloads folder.
+
+Now, we're going to make a dummy dataset by repeating these files. We can do this using a bash loop. Assuming that we have the dummy data in `~/Downloads/dummy_data`, and we're going to put the repeated data in `~/Downloads/repeated_data`, run the four commands below:
 
 ```bash
 cd ~/Downloads
+
 unzip dummy_data.zip
-```
 
-### Repeat the data on disk
-
-Now, we're going to make a dummy dataset by repeating these files. We can do this using a bash loop, such as the following one, which simply prints the numbers 1 to 10 to the terminal:
-
-```bash
-for i in {1..10}; do echo ${i}; done
-```
-
-Assuming that we have the dummy data in `~/Downloads/dummy_data`, and we're going to put the repeated data in `~/Downloads/repeated_data`, we can accomplish that as follows:
-
-```bash
-cd ~/Downloads
 mkdir repeated_data
-for i in {1..1000}; do cp ./dummy_data/image.jpg ./repeated_data/image${i}.jpg; done
-for i in {1..1000}; do cp ./dummy_data/mask.png ./repeated_data/mask${i}.png; done
-for i in {1..1000}; do cp ./dummy_data/lens.yaml ./repeated_data/lens${i}.yaml; done
+
+for i in {1..1000}; do cp ./dummy_data/image.jpg ./repeated_data/image${i}.jpg && cp ./dummy_data/mask.png ./repeated_data/mask${i}.png && cp ./dummy_data/lens.yaml ./repeated_data/lens${i}.yaml; done
 ```
 
-Note that the `cp` command copies a file as specified in the first argument to the path specified in second argument.
+To ensure that the data was copied sucessfully run the command below which will print all the filenames to the terminal window. Type `clear` afterward to clean up your display.
+
+```bash
+ls ~/Downloads/repeated_data
+clear
+```
 
 ### Install the prerequisites to make a tfrecord
 
@@ -114,7 +149,7 @@ mkdir output
 cp example_net.yaml ./output/config.yaml
 ```
 
-With that, we're almost ready to train the network. To save time, change the configuration to run less training epochs (500 epochs can easily take 30 hours to complete on CPU). Open the config file in a text editor, (e.g. `nano output/config.yaml`) and change the line that says `epochs: 500` to say `epochs: 5`. Also note that the paths for the training, testing and validation tfrecords are set in the config file.
+With that, we're almost ready to train the network. To save time, change the configuration to run less training epochs (500 epochs can easily take 30 hours to complete on CPU). Open the config file in a text editor, (e.g. `nano output/config.yaml`) and change the line that says `epochs: 500` to say `epochs: 5`. Also note that the paths for the training, testing and validation tfrecords are set in the config file. *If you have accidentally started training 500 epochs hit `ctrl+c` to keyboard interrupt training, if that doesn't work, open another bash terminal, type `xkill` then click on the training terminal window*
 
 ## Train the network
 
@@ -125,6 +160,9 @@ cd ~/code/VisualMesh
 docker run --gpus all -u $(id -u):$(id -g) -it --rm --volume $(pwd):/workspace visualmesh:latest ./mesh.py train output
 ```
 
+<details>
+
+<Summary>What does this command do?</Summary>
 - `docker` is the call to docker
 - `run` is the main command being sent to docker
 - `--gpus all` tells docker to use the gpus from your system (remove `--gpus all` if you're running on a system without a GPU)
@@ -133,6 +171,8 @@ docker run --gpus all -u $(id -u):$(id -g) -it --rm --volume $(pwd):/workspace v
 - `--volume $(pwd):/workspace` tells docker to mount the current working directory as `/workspace` inside the container
 - `visualmesh:latest` tells docker which image we want to run (note that we built this image and gave it this name in an earlier step)
 - `./mesh.py train <path/to/output>` is the command to run inside the container - note that the filesystem inside the container is different to the filesystem outside of the container, but that due to the `--volume` flag, the current working directory is mounted at `/workspace`.
+
+</details>
 
 ## Test the network
 
