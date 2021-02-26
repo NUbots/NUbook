@@ -358,10 +358,10 @@ In order to run unit tests, they must first be built. This can be done with:
 
 The `tests` command provides the following subcommands:
 
-| Subcommand | Description                 |
-| ---------- | --------------------------- |
-| list       | List all built tests        |
-| run        | Run all or individual tests |
+| Subcommand | Description                                        |
+| ---------- | -------------------------------------------------- |
+| list       | List all built tests                               |
+| run        | Run all tests (default), or named individual tests |
 
 If you would like to run an individual test (or group of tests), you can pass the `run` subcommand a string and it will only run tests that match the given string.
 Alternatively, `run` will run all built tests if no string is passed.
@@ -374,13 +374,13 @@ For example, if you would like to run all tests with the string 'vision' in thei
 
 The `run` subcommand also accepts the following flags:
 
-| Flag                               | Description                                               |
-| ---------------------------------- | --------------------------------------------------------- |
-| `-V` or `--verbose`                    | Enable verbose output from tests                          |
-| `-VV` or `--extra-verbose`             | Enable more verbose output from tests                     |
-| `-Q` or `--quiet`                      | Make CTest not print to stdout                            |
+| Flag                                   | Description                                              |
+| -------------------------------------- | -------------------------------------------------------- |
+| `-V` or `--verbose`                    | Enable verbose output from tests                         |
+| `-VV` or `--extra-verbose`             | Enable more verbose output from tests                    |
+| `-Q` or `--quiet`                      | Make CTest not print to stdout                           |
 | `-j NUM_JOBS` or `--parallel NUM_JOBS` | Run the tests in parallel using the given number of jobs |
-| --debug                            | Displaying more verbose internals of CTest                |
+| `--debug`                              | Displaying more verbose internals of CTest               |
 
 ## Docker Images
 
