@@ -53,7 +53,7 @@ body {
  * Remark Graphviz
  */
 .remark-graphviz-figure {
-  @apply p-3 rounded bg-gray-100 leading-none;
+  @apply p-3 rounded bg-gray-100 dark:bg-gray-900 leading-none;
 
   /* Allow the graph to overflow and scroll on small screens */
   .remark-graphviz-graph {
@@ -64,10 +64,25 @@ body {
     /* Center the graph in the figure */
     display: block;
     margin: 0 auto;
+    fill: currentColor;
 
     /* Make the graph background transparent */
     g.graph > path:first-child {
       fill: transparent;
+    }
+
+    text {
+      font-family: inherit;
+    }
+
+    *[stroke='#000'],
+    *[stroke='#000000'] {
+      stroke: currentColor;
+    }
+
+    *[fill='#000'],
+    *[fill='#000000'] {
+      fill: currentColor;
     }
   }
 }

@@ -61,9 +61,6 @@ module.exports = {
               figcaptionClass: 'remark-graphviz-figcaption',
               firstCommentIsCaption: true,
               generateAriaDescription: true,
-              transformSvg(svg) {
-                return svg.replace(/stroke="#000"/g, 'stroke="currentColor"')
-              },
             },
           },
           'gatsby-remark-copy-linked-files',
