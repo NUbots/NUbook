@@ -16,7 +16,7 @@ exports.onRenderBody = ({ setHeadComponents }) => {
         document.documentElement.classList.add(scheme)
       }
 
-      const isDarkMode =
+      var isDarkMode =
         localStorage.colorScheme === 'dark' ||
         (!('colorScheme' in localStorage) &&
           window.matchMedia('(prefers-color-scheme: dark)').matches)
