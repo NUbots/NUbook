@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 
 import Links from '../header/links/links'
+import ColorSchemeToggle from '../header/color-scheme-toggle/color-scheme-toggle'
 
 import style from './footer.module.css'
 import NUbotsIcon from './nubots-icon.svg'
@@ -41,6 +42,7 @@ const Footer = () => (
       </div>
       <div className='flex justify-center items-center lg:justify-end lg:w-1/3'>
         <Links color='black' />
+        <ColorSchemeToggle color='black' />
       </div>
     </div>
     <div className='flex items-center justify-center pb-16'>
