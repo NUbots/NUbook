@@ -1,20 +1,9 @@
 .grid {
   @apply w-full max-w-full leading-none p-2 rounded-sm;
-
-  :global(.light) & {
-    @apply bg-gray-100;
-  }
-
-  :global(.dark) & {
-    @apply bg-gray-900;
-  }
 }
 
 .gridSeamless {
-  :global(.light) &,
-  :global(.dark) & {
-    @apply p-0 bg-transparent;
-  }
+  @apply p-0;
 }
 
 .gridContent {
@@ -37,4 +26,24 @@
 
 .gridContent > pre code {
   @apply h-full;
+}
+
+:global(.light) {
+  .grid {
+    @apply bg-gray-100;
+  }
+
+  .gridSeamless {
+    @apply bg-transparent;
+  }
+}
+
+:global(.dark) {
+  .grid {
+    @apply bg-gray-900;
+  }
+
+  .gridSeamless {
+    @apply bg-transparent;
+  }
 }

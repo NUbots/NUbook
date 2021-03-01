@@ -72,7 +72,6 @@ module.exports = {
         'hint-inverted': 'rgba(255, 255, 255, 0.38)',
       },
       backgroundColor: {
-        'well': 'rgba(255, 255, 255, 0.1)',
         '950': '#111111',
       },
       padding: {

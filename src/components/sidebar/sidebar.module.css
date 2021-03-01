@@ -4,39 +4,9 @@
 
 .link {
   @apply relative block py-1 mb-2 font-semibold leading-snug;
-
-  :global(.light) & {
-    &:hover,
-    &:global(.focus-visible) {
-      @apply text-nubots-700;
-    }
-  }
-
-  :global(.dark) & {
-    &:hover,
-    &:global(.focus-visible) {
-      @apply text-nubots-500;
-    }
-  }
 }
 
 .linkActive {
-  :global(.light) & {
-    &,
-    &:hover,
-    &:global(.focus-visible) {
-      @apply text-primary;
-    }
-  }
-
-  :global(.dark) & {
-    &,
-    &:hover,
-    &:global(.focus-visible) {
-      @apply text-nubots-500;
-    }
-  }
-
   &::before {
     @apply absolute bg-nubots-500 rounded w-2 h-2;
     content: '';
@@ -46,6 +16,40 @@
 
     @screen xl {
       left: -20px;
+    }
+  }
+}
+
+:global(.light) {
+  .link {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-700;
+    }
+  }
+
+  .linkActive {
+    &,
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-700;
+    }
+  }
+}
+
+:global(.dark) {
+  .link {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-500;
+    }
+  }
+
+  .linkActive {
+    &,
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-500;
     }
   }
 }
