@@ -2,8 +2,8 @@
 
 const React = require('react')
 
-// Adds the dark mode class name to the body element before render,
-// inline to void a flash of white in dark mode
+// Adds the dark mode class name to the html element before render,
+// using an inline script to void a flash of white in dark mode
 exports.onRenderBody = ({ setHeadComponents }) => {
   const script = `
       function setColorScheme(scheme) {
