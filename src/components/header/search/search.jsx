@@ -16,6 +16,7 @@ const Search = ({ background }) => (
       id='search'
       placeholder='Search NUbook...'
       title='Keyboard shortcut: /'
+      autoComplete='off'
       className={`${style.searchInput} h-10 w-full pl-10 md:pl-14 pr-3 md:pr-4 rounded appearance-none text-lg outline-none`}
     />
     <SearchIcon
