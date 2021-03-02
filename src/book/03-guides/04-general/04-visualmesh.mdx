@@ -14,7 +14,7 @@ To get started, run this line to check the installation and version of the requi
 python3 --version && pip3 --version && git --version && docker --version
 ```
 
-*this should provide a result similar to that listed below, possibly with higher version numbers, run through the installation guides if this doesn't appear*
+_this should provide a result similar to that listed below, possibly with higher version numbers, run through the installation guides if this doesn't appear_
 
 ```bash
 Python 3.8.5
@@ -100,7 +100,7 @@ docker build . --pull -t visualmesh:latest
 
 ## Make a dummy dataset
 
-For the sake of this guide, we'll use a dummy dataset containing the same image repeated over and over again. *While this will lead to extreme overfitting, it's an easy way to quickly check that the code is running correctly.* Download the example image, mask, and lens file [dummy_data.zip](assets/dummy_data.zip) to your downloads folder.
+For the sake of this guide, we'll use a dummy dataset containing the same image repeated over and over again. _While this will lead to extreme overfitting, it's an easy way to quickly check that the code is running correctly._ Download the example image, mask, and lens file [dummy_data.zip](assets/dummy_data.zip) to your downloads folder.
 
 Now, we're going to make a dummy dataset by repeating these files. We can do this using a bash loop. Assuming that we have the dummy data in `~/Downloads/dummy_data`, and we're going to put the repeated data in `~/Downloads/repeated_data`, run the four commands below:
 
@@ -149,7 +149,7 @@ mkdir output
 cp example_net.yaml ./output/config.yaml
 ```
 
-With that, we're almost ready to train the network. To save time, change the configuration to run less training epochs (500 epochs can easily take 30 hours to complete on CPU). Open the config file in a text editor, (e.g. `nano output/config.yaml`) and change the line that says `epochs: 500` to say `epochs: 5`. Also note that the paths for the training, testing and validation tfrecords are set in the config file. *If you have accidentally started training 500 epochs hit `ctrl+c` to keyboard interrupt training, if that doesn't work, open another bash terminal, type `xkill` then click on the training terminal window*
+With that, we're almost ready to train the network. To save time, change the configuration to run less training epochs (500 epochs can easily take 30 hours to complete on CPU). Open the config file in a text editor, (e.g. `nano output/config.yaml`) and change the line that says `epochs: 500` to say `epochs: 5`. Also note that the paths for the training, testing and validation tfrecords are set in the config file. _If you have accidentally started training 500 epochs hit `ctrl+c` to keyboard interrupt training, if that doesn't work, open another bash terminal, type `xkill` then click on the training terminal window_
 
 ## Train the network
 
