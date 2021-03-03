@@ -28,15 +28,15 @@ Docker version 20.10.3, build 48d30b5
 
 <summary>Installing Python3</summary>
 
-The script to build the dataset is written in Python. The bash terminal simplifies your install massively, so all you need to do is run `sudo apt install python3.8` and it will automatically update to the most recent version of Python 3.8.x
+The script to build the dataset is written in Python. When using Ubuntu, the simplest way to install Python is to use the APT package manager. Run `sudo apt install python3` to have APT install to the most recent version of Python 3 for your system.
 
 </details>
 
 <details>
 
-<summary>Installing pip3</summary>
+<summary>Installing pip</summary>
 
-Pip 3 is a package manager that should be included by default in Python 3.8.x. Be sure to run `sudo apt install python3.8` first to make sure that you've installed it correctly. If for some reason (for example it was removed) pip3 is missing run `sudo apt install python3-pip`.
+Pip is the default package manager for Python. In systems with both Python2 and Python3, the pip3 specifically invokes the pip tied to the Python3. Because Ubuntu packages pip separately from Python, you may have to install it specifically by running `sudo apt install python3-pip`.
 
 </details>
 
@@ -44,7 +44,7 @@ Pip 3 is a package manager that should be included by default in Python 3.8.x. B
 
 <summary>Installing Git</summary>
 
-While you don't strictly need to use git to download the Visual Mesh repo (e.g. you could just download it from github's web interface), git is the recommended way to get and manage the code from the repo. It's recommended to [use GitKraken as a GUI on Linux](https://support.gitkraken.com/how-to-install/), but for the purposes of this tutorial run `sudo apt install git`
+While you don't strictly need to use git to download the Visual Mesh repo (e.g. you could just download it from github's web interface), git is the recommended way to get and manage the code from the repo. The git command line interface is installed on Ubuntu with APT by running `sudo apt install git`. If you prefer a GUI for git, try [GitKraken](https://support.gitkraken.com/how-to-install/).
 
 </details>
 
@@ -52,7 +52,7 @@ While you don't strictly need to use git to download the Visual Mesh repo (e.g. 
 
 <summary>Installing Docker</summary>
 
-Docker is a program development architecture that we use at NUbots, to install it, run `sudo apt install docker`. If you want to learn more about docker, [check out the documentation](https://docs.docker.com/get-started/overview/) and be sure to ask on Slack if you've got any questions.
+Docker is the container system that we use for standardised software environments at NUbots, to install it, [check out the documentation](https://docs.docker.com/engine/install/), as the version packaged by Ubuntu often lags behind the official version. Be sure to ask on Slack if you've got any questions.
 
 </details>
 
