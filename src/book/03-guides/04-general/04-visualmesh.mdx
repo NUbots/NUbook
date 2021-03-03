@@ -90,6 +90,7 @@ docker build . --pull -t visualmesh:latest
 <details>
 
 <summary>What does this command do?</summary>
+
 - `docker` is the call to docker
 - `build` is the main command being sent to docker
 - `.` is telling docker that the build context is the current directory. Docker will look for a file named `Dockerfile` in the build context telling it what to build (so in this case, the current directory).
@@ -165,6 +166,7 @@ docker run --gpus all -u $(id -u):$(id -g) -it --rm --volume $(pwd):/workspace v
 <details>
 
 <summary>What does this command do?</summary>
+
 - `docker` is the call to docker
 - `run` is the main command being sent to docker
 - `--gpus all` tells docker to use the gpus from your system (remove `--gpus all` if you're running on a system without a GPU)
