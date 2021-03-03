@@ -170,7 +170,7 @@ docker run --gpus all -u $(id -u):$(id -g) -it --rm --volume $(pwd):/workspace v
 - `--rm` tells docker to automatically clean up the temporary files associated with this container
 - `--volume $(pwd):/workspace` tells docker to mount the current working directory as `/workspace` inside the container
 - `visualmesh:latest` tells docker which image we want to run (note that we built this image and gave it this name in an earlier step)
-- `./mesh.py train <path/to/output>` is the command to run inside the container - note that the filesystem inside the container is different to the filesystem outside of the container, but that due to the `--volume` flag, the current working directory is mounted at `/workspace`.
+- `./mesh.py train output` is the command to run inside the container, so we're passing the command `train` with the path `output` to the `mesh.py` script. Note that the filesystem inside the container is different to the filesystem outside of the container, but that due to the `--volume` flag, the current working directory is mounted at `/workspace`, so in this example, the `output` folder ends up being the one in the code directory.
 
 </details>
 
