@@ -34,7 +34,7 @@ The script to build the dataset is written in Python. The bash terminal simplifi
 
 <details>
 
-<Summary>Installing pip3</Summary>
+<summary>Installing pip3</summary>
 
 Pip 3 is a package manager that should be included by default in Python 3.8.x. Be sure to run `sudo apt install python3.8` first to make sure that you've installed it correctly. If for some reason (for example it was removed) pip3 is missing run `sudo apt install python3-pip`.
 
@@ -42,7 +42,7 @@ Pip 3 is a package manager that should be included by default in Python 3.8.x. B
 
 <details>
 
-<Summary>Installing Git</Summary>
+<summary>Installing Git</summary>
 
 While you don't strictly need to use git to download the Visual Mesh repo (e.g. you could just download it from github's web interface), git is the recommended way to get and manage the code from the repo. It's recommended to [use GitKraken as a GUI on Linux](https://support.gitkraken.com/how-to-install/), but for the purposes of this tutorial run `sudo apt install git`
 
@@ -50,7 +50,7 @@ While you don't strictly need to use git to download the Visual Mesh repo (e.g. 
 
 <details>
 
-<Summary>Installing Docker</Summary>
+<summary>Installing Docker</summary>
 
 Docker is a program development architecture that we use at NUbots, to install it, run `sudo apt install docker`. If you want to learn more about docker, [check out the documentation](https://docs.docker.com/get-started/overview/) and be sure to ask on Slack if you've got any questions.
 
@@ -89,7 +89,7 @@ docker build . --pull -t visualmesh:latest
 
 <details>
 
-<Summary>What does this command do?</Summary>
+<summary>What does this command do?</summary>
 - `docker` is the call to docker
 - `build` is the main command being sent to docker
 - `.` is telling docker that the build context is the current directory. Docker will look for a file named `Dockerfile` in the build context telling it what to build (so in this case, the current directory).
@@ -162,7 +162,7 @@ docker run --gpus all -u $(id -u):$(id -g) -it --rm --volume $(pwd):/workspace v
 
 <details>
 
-<Summary>What does this command do?</Summary>
+<summary>What does this command do?</summary>
 - `docker` is the call to docker
 - `run` is the main command being sent to docker
 - `--gpus all` tells docker to use the gpus from your system (remove `--gpus all` if you're running on a system without a GPU)
