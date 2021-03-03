@@ -48,7 +48,7 @@ const Layout = ({ children, data, pageContext }) => {
         <div className='lg:flex -mx-6'>
           <div className='hidden w-1/4 lg:block xl:w-1/5'>
             <div
-              className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 max-h-screen overflow-y-auto border-t border-t-transparent'
+              className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 max-h-screen overflow-y-auto border-t border-transparent'
               ref={sidebarWrapperRef}
               style={{ borderTopWidth: '4rem' }}
             >
