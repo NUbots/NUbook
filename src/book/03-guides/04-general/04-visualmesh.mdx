@@ -114,7 +114,7 @@ mkdir repeated_data
 for i in {1..1000}; do cp ./dummy_data/image.jpg ./repeated_data/image${i}.jpg && cp ./dummy_data/mask.png ./repeated_data/mask${i}.png && cp ./dummy_data/lens.yaml ./repeated_data/lens${i}.yaml; done
 ```
 
-To ensure that the data was copied sucessfully run the command below which will print all the filenames to the terminal window. Type `clear` afterward to clean up your display.
+To ensure that the data was copied sucessfully run the command below which will print all the filenames to the terminal window. If you would like to clean up your display, you can use the `clear` command.
 
 ```bash
 ls ~/Downloads/repeated_data
@@ -138,6 +138,8 @@ cd ~/code/VisualMesh
 mkdir dataset
 ./training/make_dataset.py ~/Downloads/repeated_data ./dataset
 ```
+
+<Alert type='info'>The `make_dataset.py` won't complain if you give it an empty folder, so make sure that the created tfrecord files are not empty.</Alert>
 
 ## Configure the training
 
