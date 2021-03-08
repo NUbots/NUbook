@@ -1,11 +1,19 @@
+.sectionButtonWrapper {
+  @apply block -mx-5;
+  width: 110%; /* compensates for being shifted left with negative margin */
+
+  &:not(:first-child) {
+    @apply mt-2;
+  }
+}
+
 .sectionButton {
-  @apply inline-flex px-4 py-2 items-center justify-center flex-shrink-0 rounded-full border-2 mx-1 my-1;
-  min-width: 180px;
+  @apply flex w-full px-4 py-1 items-center justify-start rounded-full;
 }
 
 :global(.light) {
   .sectionButton {
-    @apply bg-white text-nubots-500 border-nubots-500;
+    @apply text-nubots-700 border border-transparent bg-gray-100;
 
     &:hover,
     &:focus {
@@ -25,7 +33,7 @@
 
 :global(.dark) {
   .sectionButton {
-    @apply bg-gray-900 text-nubots-500 border-transparent;
+    @apply bg-gray-900 text-nubots-500;
 
     &:hover,
     &:focus {
