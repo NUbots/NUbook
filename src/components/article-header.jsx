@@ -10,22 +10,26 @@ const ArticleHeader = ({ section, chapter, title, description }) => (
           <>
             <Link
               to={section.slug}
-              className='text-secondary hover:text-nubots-700 current-section'
+              className='text-secondary dark:text-secondary-inverted hover:text-nubots-700 dark:hover:text-nubots-500 focus:text-nubots-700 dark:focus:text-nubots-500 current-section'
             >
               {section.title}
             </Link>
-            <span className='text-secondary px-2'>›</span>
+            <span className='text-secondary dark:text-secondary-inverted px-2'>
+              ›
+            </span>
           </>
         )}
         {chapter && (
           <>
             <Link
               to={chapter.slug}
-              className='text-secondary hover:text-nubots-700 current-chapter'
+              className='text-secondary dark:text-secondary-inverted hover:text-nubots-700 dark:hover:text-nubots-500 focus:text-nubots-700 dark:focus:text-nubots-500 current-chapter'
             >
               {chapter.title}
             </Link>
-            <span className='text-secondary px-2'>›</span>
+            <span className='text-secondary dark:text-secondary-inverted px-2'>
+              ›
+            </span>
           </>
         )}
       </div>
@@ -33,7 +37,9 @@ const ArticleHeader = ({ section, chapter, title, description }) => (
     <h1 className='text-3xl md:text-4xl leading-tight font-semibold mb-2'>
       {title}
     </h1>
-    <div className='text-secondary text-base'>{description}</div>
+    <div className='text-secondary dark:text-secondary-inverted text-base'>
+      {description}
+    </div>
   </div>
 )
 
