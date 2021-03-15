@@ -6,8 +6,7 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-This page details motion modules within the NUbots main codebase, such as the walk engines and the Script Engine. The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
-
+This page details motion modules within the NUbots main codebase, such as the walk engine and the Script Engine. The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 ## Walk Engine
 
@@ -23,19 +22,11 @@ A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NU
 
 The [behaviour](/system/subsystems/behaviour) of the robot determines what the walk command will be.
 
-### Open Loop Hybrid Walk
-
-This walk is an **open loop hybrid walk controller**, dynamically switching between an analytically solved trajectory for the centre of mass based on the **linear inverted pendulum model**, and a **Zero Moment Point preview controller**. To add local feedback, positions for the pitch and roll ankle joints are prescribed based on information from the Inertial Measurement Unit (IMU) to counteract small imbalances.
-
-This walk is based on the work of [Yi et al.](https://doi.org/10.1109/HUMANOIDS.2013.7029960) and Song ('Development of an Omni-directional Gait Generator and a Stabilization Feedback Controller for Humanoid Robots'). The code is a refactored version of the [UPennalizers](https://fling.seas.upenn.edu/~robocup/wiki/) / Team DARwIn [2013 code release](https://github.com/UPenn-RoboCup/UPennalizers/tree/master). NUbots have made several improvements and simplifications.
-
-The module for this walk is located in the [OldWalkEngine module folder](https://github.com/NUbots/NUbots/tree/master/module/motion/OldWalkEngine).
-
 ### Quintic Spline Walk
 
 The Quintic Walk is an **open loop controller** based on **quintic splines** (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
 
-The engine has support for kicking, however this is not used at this time.
+The engine has support for kicking, however this is a work in progress.
 
 The code used for this walk comes from [**BitBots**](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
 
