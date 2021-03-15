@@ -280,13 +280,11 @@ For measurements on the field we use field space. For field coordinates the **x-
 
 # Interpolation
 
-Let's say we have a collection of data points. We want to find a function that contains all these points. We call this function an interpolant. Often we use a polynomial to describe this function.
+Given a set of data points, often we want to find a function that contains all these points, which we call an interpolant. Interpolants are commonly polynomials, because they can approximate complex curves with a few points, with relatively low computational costs. However, interpolant polynomials which are locally accurate for the given data can have oscillation issues at the edges of the interval which is being interpolated on - [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon).
 
 ## Splines
 
-Splines are used in the [Quintic Walk Engine](/system/subsystems/motion#walk-engine).
-
-Rather than have one global polynomial, it can be useful to use piecewise polynomials. These are all defined locally around the interpolation points.
+Rather than have one global polynomial, it can be useful to use piecewise polynomials, connected at their edges. These so-called [**splines**](https://en.wikipedia.org/wiki/Spline_(mathematics)) are all defined locally around the interpolation points, and can avoid Runge's phenomenon. Splines are used in the [Quintic Walk Engine](/system/subsystems/motion#walk-engine).
 
 ![2D graph plot of a piecewise polynomial function that passes through specific highlighted points.](./images/maths-spline.svg 'Spline. Interpolation points are in blue.')
 
