@@ -6,9 +6,9 @@ description: Learn how to calibrate cameras.
 slug: /guides/main/camera-calibration
 ---
 
-Camera calibration is done to determine optimal parameters for the cameras, such as focal length and the transform from one camera to the other. More on the parameters being optimised for camera calibration can be found on [the input page](/system/subsystems/input#cameras).
+Camera calibration determines optimal parameters for the cameras. These parameters include the focal length and the transform from one camera to the other. More on the parameters being optimised for camera calibration can be found on [the input page](/system/subsystems/input#cameras).
 
-The calibration is done in two steps. The first is creating the nbs recording and the second is using that nbs recording to find the camera parameters.
+The calibration requires two steps, creating the `nbs` recording and using it to find the camera parameters.
 
 ## Get the Data
 
@@ -43,7 +43,7 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
     The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
 
-    Next you will need to figure out which is left and which is right. Change the serial number for one camera to an incorrect number (this will ensure it is not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working, by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+    Next you need to figure out which serial number is left and which is right. Change the serial number for one camera to an incorrect number (this ensures it's not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively, you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
 5.  Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
@@ -73,13 +73,13 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
     </Grid>
 
-8.  Stop the binary and copy the nbs file created into the NUbots directory on your computer.
+8.  Stop the binary and copy the `nbs` file created into the NUbots directory on your computer.
 
     1. To stop the program running, hit <kbd>Ctrl</kbd> + <kbd>c</kbd>.
 
-    2. Discover the name of the log file created. The file will be in the `log/cameratest/` folder on the robot. The name will correspond to the date and time it was created, according to the robot. Run `ls log/cameratest/` to list all logs.
+    2. Discover the name of the log file created. The file is in the `log/cameratest/` folder on the robot. The name corresponds to the date and time it was created, according to the robot. Run `ls log/cameratest/` to list all logs.
 
-    3. (optional) Rename the log file so it is easier to copy across. The name can be changed with the command `mv <old path> <new path>`.
+    3. (optional) Rename the log file, making it easier to copy across to the computer. Change the name with the command `mv <old path> <new path>`.
 
     4. Run the command `scp <robot address>:<file path> .` from the NUbots directory on your computer, not on the robot.
 
@@ -101,9 +101,9 @@ The calibration is done in two steps. The first is creating the nbs recording an
     ./b nbs calibrate_cameras <nbs file name> -c <camera config folder>
     ```
 
-    `<nbs file name>` is the name of the nbs file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
+    `<nbs file name>` is the name of the `nbs` file you just created. `<camera config folder>` is the path to the folder with the two camera config files `Left.yaml` and `Right.yaml`. These exist in `./module/input/Camera/data/config/<robot name>/Cameras/`.
 
-    The calibration routine will change the values in the camera configuration files.
+    The calibration routine changes the values in the camera configuration files.
 
 3.  Verify these values by running vision and checking the output in NUsight.
 
@@ -114,4 +114,6 @@ The calibration is done in two steps. The first is creating the nbs recording an
 
     NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
 
-4.  Commit these changes in a new branch on GitHub to ensure they are not lost. If you are calibrating cameras on other robots, repeat the process with them. Once the calibration is complete, commit all changes and push to the branch. Make a pull request to get the changes into the master branch. Read the [Git guide](/guides/general/git) if you are unsure about this step.
+4. Repeat this process with other robots if needed.
+
+5. Commit these changes in a new branch on GitHub and make a Pull Request. Read the [Git guide](/guides/general/git) if you are unsure about this step.
