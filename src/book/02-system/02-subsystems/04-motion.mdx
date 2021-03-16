@@ -6,13 +6,13 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-This page details motion modules within the NUbots main codebase, such as the walk engine and the Script Engine. The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
+This page details motion modules within the NUbots main codebase, such as the walk engine and the Script Engine. Script Runner and Script Tuner are on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 ## Walk Engine
 
-Currently, NUbots has two walk engines. One is an **open loop hybrid walk controller** and the other is an **open loop walk** based on **quintic splines**. These engines take care of the mathematics and control involved in taking steps without falling over. The walk engines do not plan where to walk, only how to walk.
+NUbots use an **open loop walk** based on **quintic splines**. This walk engine takes care of the mathematics and control involved in taking steps without falling over. The walk engine does not plan where to walk, only how to walk.
 
-A walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
+The walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements). The walk command gives a vector [x, y, z] which represents:
 
 | Variable | Description                                                                                |
 | -------- | ------------------------------------------------------------------------------------------ |
