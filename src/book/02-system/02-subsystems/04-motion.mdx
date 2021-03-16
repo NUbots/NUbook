@@ -26,11 +26,9 @@ The [behaviour](/system/subsystems/behaviour) of the robot determines what the w
 
 The Quintic Walk is an **open loop controller** based on **quintic splines** (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
 
-The engine has support for kicking, however this is a work in progress.
+The engine has support for kicking using quintic splines. Integration of the kick is a work in progress.
 
 The code used for this walk comes from [**BitBots**](https://github.com/bit-bots/bitbots_motion/), which in turn was based off [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
-
-The implementation of this walk is currently a work in progress. See the implementation on the [QuinticWalk branch](https://github.com/NUbots/NUbots/tree/biddulph/quintic_walk/module/motion/QuinticWalk).
 
 #### Implementation
 
