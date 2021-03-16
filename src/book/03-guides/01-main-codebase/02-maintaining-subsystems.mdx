@@ -14,7 +14,7 @@ Before vision can work on the robot, odometry and kinematics must work on the ro
 
 ## Dataset Generation
 
-Datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS). If you don't have access to the NAS, ask a team leader for an account. The NAS contains millions of NUpbr training images and large TensorFlow records containing the correct data to train the Visual Mesh on.
+Synthetic and semi-synthetic training data for vision can be generated using NUpbr and NUgan. Pre-generated datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS) in the lab.
 
 ### NUpbr
 
@@ -48,7 +48,7 @@ git clone https://github.com/NUbots/NUgan.git
 
 The [NUgan repository](https://github.com/NUbots/NUgan) details how to train, test and generate images.
 
-NUpbr images can be found on the NAS for the A datasets. The B dataset can be obtained by taking pictures, or collecting images from [BitBots ImageTagger](https://imagetagger.bit-bots.de/).
+NUpbr images can be found on the NAS for the A datasets. The B dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/).
 
 ### Setting Up The Data
 
