@@ -32,15 +32,15 @@ The code used for this walk comes from [**BitBots**](https://github.com/bit-bots
 
 #### Implementation
 
-The walk uses the Footstep class to generate the targets for the foot, which are based off the calculated splines.
+The walk uses the Footstep class to generate the targets for the foot, using the calculated splines.
 
-The SplineContainer class holds Points and multiple Spline objects. As the SplineContainer gets points, it creates Splines based on these points. These Spline objects are each mapped to names.
+The `SplineContainer` class holds multiple `Spline` objects. As the `SplineContainer` gets points, they are used to create `Spline`s. These Spline objects are each mapped to names based on what they do. These mappings for the walk and kick are in the table below.
 
-The `Spline` that the `SplineContainer` holds is a generic spline class that holds all the information for a mathematical spline. Each piecewise polynomial in the spline is represented by a `Polynom` object that contains the coefficients for a polynomial.
+The `Spline` that the `SplineContainer` holds is a generic `Spline` class that holds all the information for a mathematical spline. Each piecewise polynomial in the spline is a `Polynom` object that contains the coefficients for a polynomial.
 
 The specific `Spline` type we use is a `SmoothSpline`, extended from the `Spline` class. Find out more about splines and this specific type of spline on the [mathematics](/system/foundations/mathematics#splines) page.
 
-The `TrajectoryUtils` file specifies the usage of the `SplineContainer` for the purpose of walking. It creates a `SplineContainer` with the following splines:
+The `TrajectoryUtils` file uses the `SplineContainer` for walking and kicking. It creates a `SplineContainer` with the following splines:
 
 | Name                 | Description                                                                              |
 | -------------------- | ---------------------------------------------------------------------------------------- |
@@ -59,9 +59,9 @@ The `TrajectoryUtils` file specifies the usage of the `SplineContainer` for the 
 | FOOT_AXIS_Y          | The orientation - y-axis of the robot's flying foot.                                     |
 | FOOT_AXIS_Z          | The orientation - z-axis of the robot's flying foot.                                     |
 
-The points that make up all these splines can be found in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/ff2cf1f7f38bf558494e305a99544e15affaf719/module/motion/QuinticWalk/src/engine/WalkEngine.cpp#L331). The [configuration parameters](https://github.com/NUbots/NUbots/blob/biddulph/quintic_walk/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
+The points that make-up all these splines are in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/ff2cf1f7f38bf558494e305a99544e15affaf719/module/motion/QuinticWalk/src/engine/WalkEngine.cpp#L331). The [configuration parameters](https://github.com/NUbots/NUbots/blob/biddulph/quintic_walk/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
 
-The motion subsystem contains modules that are responsible for walking, kicking, moving the head, and running scripts. They perform these motions by sending servo commands (called targets) to the motors.
+The motion subsystem contains modules responsible for walking, kicking, moving the head, and running scripts. They perform these motions by sending servo commands (called targets) to the motors.
 
 ## Script Engine
 
