@@ -37,7 +37,7 @@ If you have just added a new file to the codebase, make sure that it's part of a
 
 ### Why am I having CMakeCache errors when I do `./b run <role>`?
 
-If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet, you'll need to delete your `CMakeCache.txt` file, which forces it to be remade.
+If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet try running `./b configure --clean` then `./b build`.
 
 ```py
 Traceback (most recent call last):
@@ -50,15 +50,15 @@ Traceback (most recent call last):
 KeyError: 'USE_ASAN'
 ```
 
-To delete the `CMakeCache.txt` file, you'll have to go into the docker container, and delete the file manually. To do this, run the following commands in the NUbots folder
+If the problem persists, you probably have an extra `CMakeCache.txt` file in your NUbots directory, which is messing up the build's cache.
+Fixing this issue is as simple as finding the offending file and deleting it.
+You can find the file in your text editor, or by running the find command inside the NUbots directory:
 
 ```sh
-./b shell
-rm /home/nubots/build/CMakeCache.txt
-exit
+find ./ -name "CMakeCache.txt"
 ```
 
-Now, you'll have to run `./b build`, which should automatically configure and recreate that cache properly.
+Once you have found the file, delete it then run `./b configure` and `./b build`.
 
 ## NUsight
 
