@@ -35,6 +35,31 @@ Run `./b configure --clean`. This refreshes the docker volumes, removing the off
 
 If you have just added a new file to the codebase, make sure that it's part of a role. After you have added it to a role, run `./b configure`, and the build system should detect the new file and compile it the next time you run `./b build`.
 
+### Why am I having CMakeCache errors when I do `./b run <role>`?
+
+If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet, you'll need to delete your `CMakeCache.txt` file, which forces it to be remade.
+
+```py
+Traceback (most recent call last):
+  File "/home/nubots/NUbots/nuclear/b.py", line 113, in <module>
+    module.run(**vars(command.parse_args()))
+  File "/home/nubots/NUbots/tools/utility/dockerise/run.py", line 79, in _run
+    func(**kwargs)
+  File "/home/nubots/NUbots/tools/run.py", line 34, in run
+    use_asan = b.cmake_cache["USE_ASAN"] == "ON"
+KeyError: 'USE_ASAN'
+```
+
+To delete the `CMakeCache.txt` file, you'll have to go into the docker container, and delete the file manually. To do this, run the following commands in the NUbots folder
+
+```sh
+./b shell
+rm /home/nubots/build/CMakeCache.txt
+exit
+```
+
+Now, you'll have to run `./b build`, which should automatically configure and recreate that cache properly.
+
 ## NUsight
 
 TODO
