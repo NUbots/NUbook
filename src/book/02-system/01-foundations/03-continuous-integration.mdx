@@ -55,17 +55,18 @@ When Buildkite receives a webhook to build and test a PR, the Buildkite agents p
 
 In the process of building our docker image, serveral [pacman](https://wiki.archlinux.org/index.php/pacman) packages are downloaded from public mirrors (if that specific [layer](https://docs.docker.com/storage/storagedriver/#images-and-layers) itself is not cached). Because these packages are downloaded numerous times, across multiple PR's, caching them locally can speed up build times and save network bandwidth.
 
-In order to cache these packages, a [pacman](https://wiki.archlinux.org/index.php/pacman) package cache is setup on each buildkite agent. This cache uses the [nroi/flexo](https://hub.docker.com/r/nroi/flexo) docker image, and exposes itself on
+It is also possible that the [signature](https://wiki.archlinux.org/index.php/Pacman/Package_signing) on a package that is located on a public mirror changes. This change of signature can cause issues for us because we download version tagged packages and still expect an older signature. Caching these packages locally may alleviate these issues.
+
+To cache these packages locally, a [pacman](https://wiki.archlinux.org/index.php/pacman) package cache is setup on each buildkite agent. This cache uses the [nroi/flexo](https://hub.docker.com/r/nroi/flexo) docker image, and exposes itself on
 
 ```
 http://localhost:7878/$repo/os/$arch
 ```
 
-In order for [pacman](https://wiki.archlinux.org/index.php/pacman) to use this package cache, the cache must be added to `/etc/pacman.d/mirrorlist`. Because our build happens inside a [buildx](https://docs.docker.com/buildx/working-with-buildx/) container, we cannot use `localhost` as the address for the cache. Instead, because the buildx container runs on the `bridge` network, we can ping the host system on `172.17.0.1`.
-Therefore, the following is added too the mirrorlist:
+In order for [pacman](https://wiki.archlinux.org/index.php/pacman) to use this package cache, the cache must be added to `/etc/pacman.d/mirrorlist`. Because our build happens inside a [buildx](https://docs.docker.com/buildx/working-with-buildx/) container, we cannot use `localhost` as the address for the cache. Instead, we alias the IP address of the host machine as `host.docker.internal`. Therefore, the following is added too the mirrorlist:
 
 ```
-Server = http://172.17.0.1:7878/$repo/os/$arch
+Server = http://host.docker.internal:7878/$repo/os/$arch
 ```
 
 Adding mirror to the mirrorlist is done [here](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile#L14) in the Dockerfile.
