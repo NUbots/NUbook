@@ -51,7 +51,7 @@ To view the logs for a build, scroll to the build checks at the bottom of the PR
 
 ## Pacman Package Cache
 
-When buildkite receives a webhook to build and test a PR, the buildkite agents pulls down the code and starts building a docker image based off the Dockerfile in that branch.
+When Buildkite receives a webhook to build and test a PR, the Buildkite agents pulls down the code and starts building a Docker image based off the Dockerfile in that branch.
 
 In the process of building our docker image, serveral [pacman](https://wiki.archlinux.org/index.php/pacman) packages are downloaded from public mirrors (if that specific [layer](https://docs.docker.com/storage/storagedriver/#images-and-layers) itself is not cached). Because these packages are downloaded numerous times, across multiple PR's, caching them locally can speed up build times and save network bandwidth.
 
@@ -159,8 +159,11 @@ For more information about agent configuration and hooks, see the following page
 
 ### Setup Pacman Package Cache
 
-**NOTE:**
+<Alert type="info">
+
 Whenever we update our base archlinux image [here](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile#L13), both the mirror in the Dockerfile AND the mirror in the cache config need to be updated ([here](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile#L14) and [here](https://github.com/NUbots/NUbots/blob/master/doc/PacmanCache/docker-compose.yml#L14))
+
+</Alert>
 
 1. Create a directory to store cache config
 
