@@ -69,8 +69,6 @@ In order for [pacman](https://wiki.archlinux.org/index.php/pacman) to use this p
 Server = http://host.docker.internal:7878/$repo/os/$arch
 ```
 
-Adding mirror to the mirrorlist is done [here](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile#L14) in the Dockerfile.
-
 ## Setting Up a New Agent (Ubuntu)
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
