@@ -61,8 +61,6 @@ The `TrajectoryUtils` file uses the `SplineContainer` for walking and kicking. I
 
 The points that make up all these splines are in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/ff2cf1f7f38bf558494e305a99544e15affaf719/module/motion/QuinticWalk/src/engine/WalkEngine.cpp#L331). The [configuration parameters](https://github.com/NUbots/NUbots/blob/biddulph/quintic_walk/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
 
-The motion subsystem contains modules responsible for walking, kicking, moving the head, and running scripts. They perform these motions by sending servo commands (called targets) to the motors.
-
 ## Script Engine
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do more complex movements like getting up or kicking.
