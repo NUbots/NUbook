@@ -16,24 +16,7 @@ Webots is a physics environment created by Cyberbotics. This guide details how t
 
 1. Follow the instructions for setting up Ubuntu in WSL on the [Getting Started NUbook page under the Windows tab in the Docker section](/guides/main/getting-started#docker).
 
-2. In Windows (not WSL Ubuntu) Download and install [VcXsrv Windows X Server](https://sourceforge.net/projects/vcxsrv/files/latest/download). Use all the default install settings.
-
-3. In Windows (not WSL Ubuntu) Run XLaunch with the following settings
-
-   1. ![First XLaunch settings window](images/WindowsInstall1)
-      On the first screen, select multiple windows and set the display number to -1.
-
-   2. ![Second XLaunch settings window](images/WindowsInstall2)
-      On the second screen, select 'start no client'.
-
-   3. ![Third XLaunch settings window](images/WindowsInstall3)
-      On the third screen, check 'clipboard', 'primary selection' and 'disable'. Uncheck 'native opengl'.
-
-4. Launch Ubuntu and run
-
-   ```sh
-   sudo apt install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
-   ```
+2. Since Webots uses a GUI, we will need to set up a way to launch and display the program. Use [these instructions](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823) which is for a similar scenario, but with GitKraken instead of Webots. You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots.
 
    <Alert type='info'>
 
@@ -41,9 +24,11 @@ Webots is a physics environment created by Cyberbotics. This guide details how t
 
    </Alert>
 
-5. Back in Windows, open Powershell and run `ipconfig`. Look for an entry that does **not** contain `VEthernet` in the name and contains an IPv4 address. Note down the IPv4 address. We will refer to it as `<IPv4 Address>`.
+3. In Ubuntu run
 
-6. In Ubuntu, run `export DISPLAY=<IPv4 Address>:0.0`, using the IPv4 address from the previous step.
+   ```sh
+   sudo apt install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
+   ```
 
 Follow the rest of the steps on this page within Ubuntu.
 
@@ -51,8 +36,8 @@ Follow the rest of the steps on this page within Ubuntu.
 
 To ensure you have all the required packages, run
 
-```sh
-sudo apt-get install cmake
+```fsh
+sudo apt-get install
 ```
 
 ## Install Webots
@@ -102,4 +87,12 @@ To install Webots, use the instructions on the [Webots GitHub repository](https:
 
    2. In the pop-up, navigate to the [NUbots/Webots](https://github.com/NUbots/Webots/) repository on your computer and open the `worlds/kid.wbt` world file.
 
-Where <name of controller> is the name you want to use for the new controller. A folder and files will be created with this name, so they must be valid file names (don't use spaces in your controller name).
+## Creating a New Controller
+
+From the root of this repositry run
+
+```sh
+python3 ./scripts/create_controller.py <name of controller>
+```
+
+Where `<name of controller>` is the name you want to use for the new controller. A folder and files will be created with this name, so they must be valid file names (don't use spaces in your controller name).
