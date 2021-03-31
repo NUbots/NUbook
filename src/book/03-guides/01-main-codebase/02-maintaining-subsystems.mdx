@@ -20,35 +20,15 @@ Synthetic and semi-synthetic training data for vision can be generated using NUp
 
 NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding segmentation images for training.
 
-NUpbr requires Blender **2.79**. Download the appropriate file from the [Blender 2.79 Stable Release](https://download.blender.org/release/Blender2.79/).
-
-Clone the [NUpbr repository](https://github.com/NUbots/NUpbr) using
-
-```sh
-git clone https://github.com/NUbots/NUpbr.git
-```
-
-Navigate to the NUpbr directory and run
-
-```sh
-blender --python pbr.py
-```
-
-Find out more about NUpbr and how to edit the parameters on the [NUpbr NUbook page](/system/tools/nupbr).
+Find out how to get and use NUpbr on the [NUpbr NUbook page](/system/tools/nupbr) and the [GitHub repository](https://github.com/NUbots/NUpbr).
 
 ### NUgan
 
-The NUbots CycleGAN performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
+The NUbots CycleGAN (NUgan) performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
 
-Clone the [NUgan repository](https://github.com/NUbots/NUgan) using
+A full dataset for NUgan can be found on the NAS. In addition, you can make a new dataset by collecting NUpbr images from the NAS to get the synthetic image portion of the dataset. The real portion of the dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/). 
 
-```sh
-git clone https://github.com/NUbots/NUgan.git
-```
-
-The [NUgan repository](https://github.com/NUbots/NUgan) details how to train, test and generate images.
-
-NUpbr images can be found on the NAS for the A datasets. The B dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/).
+To find out more about NUgan and how to use it, visit the [NUbook NUgan page](/system/tools/nugan) and the [NUgan GitHub repository](https://github.com/NUbots/NUgan).
 
 ### Setting Up The Data
 
