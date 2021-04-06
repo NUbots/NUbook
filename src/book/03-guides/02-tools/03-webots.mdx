@@ -16,7 +16,11 @@ Webots is a physics environment created by Cyberbotics. This guide details how t
 
 1. Follow the instructions for setting up Ubuntu in WSL on the [Getting Started NUbook page under the Windows tab in the Docker section](/guides/main/getting-started#docker).
 
-2. Since Webots uses a GUI, we will need to set up a way to launch and display the program. Use [these instructions](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823) which is for a similar scenario, but with GitKraken instead of Webots. You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots.
+2. Since Webots uses a GUI, we will need to set up a way to launch and display the program. Use [these instructions](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823) which is for a similar scenario, but with GitKraken instead of Webots. **Take note of the following changes**:
+
+   - You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots. **Do not** skip the step under 'Installing GitKraken' where you set the DISPLAY environment variable - the other steps are not necessary, but this one is.
+
+   - When running XLaunch configuration, **uncheck 'Native opengl'** on the third window.
 
    <Alert type='info'>
 
