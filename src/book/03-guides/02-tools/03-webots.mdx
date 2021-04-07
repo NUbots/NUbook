@@ -22,6 +22,8 @@ slug: /guides/tools/webots-setup
 
    - When running XLaunch configuration, **uncheck 'Native opengl'** on the third window.
 
+   - Run `echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> ~/.bashrc` in Ubuntu.
+
    <Alert type='info'>
 
    To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
