@@ -18,11 +18,15 @@ slug: /guides/tools/webots-setup
 
 2. Since Webots uses a GUI, we will need to set up a way to launch and display the program. Use [these instructions](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823) which is for a similar scenario, but with GitKraken instead of Webots. **Take note of the following changes**:
 
-   - You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots. **Do not** skip the step under 'Installing GitKraken' where you set the DISPLAY environment variable - the other steps are not necessary, but this one is.
+   - You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots.
 
    - When running XLaunch configuration, **uncheck 'Native opengl'** on the third window.
 
-   - Run `echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> ~/.bashrc` in Ubuntu.
+   - To prevent having to set the DISPLAY environment variable every time, run the following command in Ubuntu:
+
+     ```sh
+     echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> ~/.bashrc
+     ```
 
    <Alert type='info'>
 
