@@ -59,35 +59,41 @@ To install Webots, use the instructions on the [Webots GitHub repository](https:
 
    1. Make a build folder and move into it
 
-   ```sh
-   mkdir build && cd build
-   ```
+      ```sh
+      mkdir build && cd build
+      ```
 
    2. Configure and generate the build files
 
-   ```sh
-   cmake ..
-   ```
+      ```sh
+      cmake ..
+      ```
 
    3. Compile the code
 
-   ```sh
-   make -j$(nproc)
-   ```
+      ```sh
+      make -j$(nproc)
+      ```
 
 ## Running Webots
 
-1. Launch Webots by running
+1. Navigate to the Webots folder
+
+   ```sh
+   cd ~/webots
+   ```
+
+2. Launch Webots by running
 
    ```sh
    ./webots
    ```
 
-2. Open the NUbots world file inside Webots.
+3. Open the NUbots world file inside Webots.
 
    1. Click on `File->Open World...`.
 
-   2. In the pop-up, navigate to the [NUbots/Webots](https://github.com/NUbots/Webots/) repository on your computer and open the `worlds/kid.wbt` world file.
+   2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
 
 ## Creating a New Controller
 
