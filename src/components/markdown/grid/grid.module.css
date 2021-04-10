@@ -1,5 +1,9 @@
 .grid {
   @apply w-full max-w-full leading-none p-2 rounded-sm;
+
+  .gridContent > figure {
+    @apply mt-0;
+  }
 }
 
 .gridSeamless {
