@@ -35,9 +35,9 @@ Run `./b configure --clean`. This refreshes the docker volumes, removing the off
 
 If you have just added a new file to the codebase, make sure that it's part of a role. After you have added it to a role, run `./b configure`, and the build system should detect the new file and compile it the next time you run `./b build`.
 
-### Why am I having CMakeCache errors when I do `./b run <role>`?
+### Why am I having CMakeCache errors when I run `./b <command>`?
 
-If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet try running `./b configure --clean` then `./b build`.
+If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet:
 
 ```py
 Traceback (most recent call last):
@@ -50,15 +50,16 @@ Traceback (most recent call last):
 KeyError: 'USE_ASAN'
 ```
 
-If the problem persists, you probably have an extra `CMakeCache.txt` file in your NUbots directory, which is messing up the build's cache.
-Fixing this issue is as simple as finding the offending file and deleting it.
-You can find the file in your text editor, or by running the find command inside the NUbots directory:
+you might have a `CMakeCache.txt` file in your NUbots directory messing up the build's cache.
+You can find and delete the file in your text editor, or by running the find command inside the NUbots directory:
 
-```sh
-find ./ -name "CMakeCache.txt"
+```bash
+# Make sure that you're in the NUbots project directory before executing this...
+find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -delete
 ```
 
-Once you have found the file, delete it then run `./b configure` and `./b build`.
+If the problem persists, try purging the build volume by running `./b configure --clean`.
+Note that purging the build volume means you'll have to rerun `./b build` to use built code.
 
 ## NUsight
 
