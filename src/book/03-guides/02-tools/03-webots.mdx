@@ -37,7 +37,8 @@ slug: /guides/tools/webots-setup
 3. In Ubuntu run
 
    ```sh
-   sudo apt install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
+   sudo apt-get update
+   sudo apt-get install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
    ```
 
 <Alert type='info'>
@@ -50,10 +51,11 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake and protobuf:
+Install libraries for cmake, protobuf, eigen, and yaml-cpp:
 
 ```sh
-sudo apt install cmake-curses-gui libprotobuf-dev protobuf-compiler
+sudo apt-get update
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev
 ```
 
 ## Install Webots
