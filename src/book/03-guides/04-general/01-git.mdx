@@ -42,6 +42,8 @@ To be approved, you should add reviewers to the pull request. If you have a proj
 
 ### Code Review
 
+When making a PR you can select a number of reviewers to review your code, they will get a notification. Please choose people that you feel will be able to understand the problem your code is trying to solve.
+
 The reviewers will give constructive feedback about your code, by making comments on code snippets from your changes. You can respond to these on GitHub. They can also directly suggest changes to specific sections. Additional commits you make to the branch will update the PR and will reset reviews of the changed sections.
 
 Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and Buildkite Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `master` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
@@ -63,6 +65,28 @@ Before making a pull request, it is important that your code adheres to the code
 If your code is in a different repository and it uses C++ or protobuf files, use the `.clang-format` file in the NUbots repo to format them.
 
 If you push your changes to GitHub and get a message that the build failed due to formatting issues, try running the relevant format commands, commit any changes, and push to GitHub again. This will trigger a new build, which will check the formatting again. You won't be able to merge the PR until the build checks pass.
+
+## Reviewing Code
+
+To review code on GitHub open up a PR and open the Files Changed tab. This will give you the diff of the PR. You can click on the lines of code in the diff to add a comment and/or a suggestion to those lines. You can either leave a single comment or start a review. In a review all comments you make will have pending written on them to say that they have not been posted yet. Please make each comment non-ambiguous and clearly state what your concern is.
+
+When reading the code, if there is anything that confuses you or think is incorrect make a comment with all your concerns. For example, if there is a nontrivial block of code without a comment explaining it you should ask for the author to provide such a comment. Another example is if there is a block of code that could do something that the autor may have not considered you should inform the author, with a comment, on what these other effects may be.
+
+When finished reading the code and you have a bunch of pending comments for your review you can do one of three things. The first is to request changes, this blocks the code from being merged until you approve the branch, even if others have approved it. The second is to approve the PR, this allows it to be merged into master, don't do this unless you are confident that the code is correct. The third is to leave a comment, do this if you are not too concerened about the comments you have made.
+
+Reviewing code that you may not be fully confident with and leaving comments on helps both yourself learn and the author make more readable code.
+
+## Writing Reviewable Code and Reviewee Etiquette
+
+Writting reviewable code is an art, here are some guidelines that you should stick to to make it easier for reviews:
+
+- **Atomicity**: A reviewable PR should only address one issue or add one feature.
+- **Length**: A reviewable PR should not change much more than 400 lines of code, anything above this super-exponentioally increases the time it takes to review.
+- **Name**: A reviewable PR should have be called after the issue it fixes or the feature it adds.
+
+To keep PRs small and atomic you may have to split your PR into multiple sub PRs. To do this make a new branch for the sub PR and move over some code. Then make a seperate PR and mention it in the original PR with `#123` where `123` is the PR number. After chanining the sub PR merge it back into the original PR.
+
+When your code is being reviewed and reviewers add comments, if you can answer these concerns in the code with comments, do so, as in the furture people don't have to read through hundreds of PRs and can instead just read the code. When this is done you can press Resolve Conversation and this will hide the conversation. Don't be alarmed when a reviewer make over a dozen comments on your PR, just work through them systematically. Finally when all the comments have been addressed from a reviewer that has requested changes you can request that they review your code by pressing the Re-request review button.
 
 ## Work in Progress PRs
 
