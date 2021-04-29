@@ -37,7 +37,8 @@ slug: /guides/tools/webots-setup
 3. In Ubuntu run
 
    ```sh
-   sudo apt install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
+   sudo apt-get update
+   sudo apt-get install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
    ```
 
 <Alert type='info'>
@@ -50,15 +51,16 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake and protobuf:
+Install libraries for cmake, protobuf, eigen, and yaml-cpp:
 
 ```sh
-sudo apt install cmake-curses-gui libprotobuf-dev protobuf-compiler
+sudo apt-get update
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev
 ```
 
 ## Install Webots
 
-To install Webots, use the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required. Note that you must clone the Webots directory into your home folder. To move to your home folder, run `cd ~`.
+To install Webots, use the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). After running the `git clone` command in the guide, run `git checkout develop`. Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required. Note that you must clone the Webots directory into your home folder. To move to your home folder, run `cd ~`.
 
 ## Get and Build the NUbots Environment
 
