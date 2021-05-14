@@ -51,6 +51,18 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
+<details>
+
+<summary> Arch Linux </summary>
+
+1. Run `pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb` to obtain the required dependencies.
+
+2. Download our [usb patch](assets/usb.patch) which helps the makefile link libusb properly.
+
+3. After you do the clone step below, move the patch file `usb.patch` into your webots install folder, and run `git apply usb.patch` inside that folder to apply it. After that, you should be able to `make -j$(nproc)` as usual.
+
+</details>
+
 Install libraries for cmake, protobuf, eigen, and yaml-cpp:
 
 ```sh
