@@ -55,11 +55,15 @@ Follow the rest of the steps on this page within Ubuntu.
 
 <summary> Arch Linux </summary>
 
-1. Run `pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb` to obtain the required dependencies.
+1. Run the following to obtain the required dependencies.
 
-2. Download our [usb patch](assets/usb.patch) which helps the makefile link libusb properly.
+     ```bash
+     pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb
+     ```
 
-3. After you do the clone step below, move the patch file `usb.patch` into your webots install folder, and run `git apply usb.patch` inside that folder to apply it. After that, you should be able to `make -j$(nproc)` as usual.
+2. Download our [usb patch](assets/webots_usb.patch) which helps the makefile link `libusb` properly.
+
+3. After you do the clone step below, move the patch file `webots_usb.patch` into your webots install folder, and run `git apply webots_usb.patch` inside that folder to apply it. After that, you should be able to `make -j$(nproc)` as usual.
 
 </details>
 
@@ -79,7 +83,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    git clone --branch develop --single-branch --recurse-submodules -j$(nproc) https://github.com/cyberbotics/webots.git
    ```
 
-   By using these commands, you'll be on the correct branch (`develop`) and you'll also grab the required submodules.
+   By using these commands, you'll be on the correct branch (`develop`) and you'll have the required submodules.
 
 2. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
 
