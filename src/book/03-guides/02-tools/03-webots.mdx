@@ -51,6 +51,22 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
+<details>
+
+<summary> Arch Linux </summary>
+
+1. Run the following to obtain the required dependencies.
+
+   ```bash
+   pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb
+   ```
+
+2. Download our [usb patch](assets/webots_usb.patch) which helps the makefile link `libusb` properly.
+
+3. After you do the clone step below, move the patch file `webots_usb.patch` into your webots install folder, and run `git apply webots_usb.patch` inside that folder to apply it. After that, you should be able to run `make -j$(nproc)` as usual.
+
+</details>
+
 Install libraries for cmake, protobuf, eigen, and yaml-cpp:
 
 ```sh
@@ -60,14 +76,23 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ## Install Webots
 
-To install Webots, use the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). After running the `git clone` command in the guide, run `git checkout develop`. Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required. Note that you must clone the Webots directory into your home folder. To move to your home folder, run `cd ~`.
+1. Open a terminal and swap to your home directory (note that webots should be cloned in your home directory). Then clone the repository:
+
+   ```sh
+   cd ~
+   git clone --branch develop --single-branch --recurse-submodules -j$(nproc) https://github.com/cyberbotics/webots.git
+   ```
+
+   By using these commands, you'll be on the correct branch (`develop`) and you'll have the required submodules.
+
+2. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
 
 ## Get and Build the NUbots Environment
 
 1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
 
    ```sh
-   git clone https://github.com/NUbots/NUWebots
+   git clone https://github.com/NUbots/NUWebots.git
    cd NUWebots
    ```
 
