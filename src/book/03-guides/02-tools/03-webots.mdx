@@ -99,6 +99,15 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 2. Configure the codebase by running
 
    ```sh
+   ./b configure
+   ```
+
+   <details>
+
+   <summary> Optional Flags </summary>
+   We can configure with several optional flags as follows:
+
+   ```sh
    ./b configure [-i] [-- <flags>]
    ```
 
@@ -106,11 +115,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    | Flag                              | Effect                                                                                                         | Default             |
    | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
-   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | OFF                 |
-   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | OFF                 |
-   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | OFF                 |
+   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
+   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
+   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
    | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
-   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release            |
+   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
+
+   </details>
 
 3. Build the codebase by running
 
