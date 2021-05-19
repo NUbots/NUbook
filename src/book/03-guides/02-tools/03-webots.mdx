@@ -67,7 +67,7 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake, protobuf, eigen, and yaml-cpp:
+Install libraries for cmake, protobuf, eigen, yaml-cpp, and ninja-build:
 
 ```sh
 sudo apt-get update
@@ -111,7 +111,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    ./b configure [-i] [-- <flags>]
    ```
 
-   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any combination of the following:
+   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
 
    | Flag                              | Effect                                                                                                         | Default             |
    | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
