@@ -67,11 +67,11 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake, protobuf, eigen, and yaml-cpp:
+Install libraries for cmake, protobuf, eigen, yaml-cpp, and ninja-build:
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build
 ```
 
 ## Install Webots
@@ -96,25 +96,38 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    cd NUWebots
    ```
 
-2. Compile the controllers with cmake
+2. Configure the codebase by running
 
-   1. Make a build folder and move into it
+   ```sh
+   ./b configure
+   ```
 
-      ```sh
-      mkdir build && cd build
-      ```
+   <details>
 
-   2. Configure and generate the build files
+   <summary> Optional Flags </summary>
+   We can configure with several optional flags as follows:
 
-      ```sh
-      cmake ..
-      ```
+   ```sh
+   ./b configure [-i] [-- <flags>]
+   ```
 
-   3. Compile the code
+   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
 
-      ```sh
-      make -j$(nproc)
-      ```
+   | Flag                              | Effect                                                                                                         | Default             |
+   | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
+   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
+   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
+   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
+   | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
+   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
+
+   </details>
+
+3. Build the codebase by running
+
+   ```sh
+   ./b build
+   ```
 
 ## Running Webots
 
