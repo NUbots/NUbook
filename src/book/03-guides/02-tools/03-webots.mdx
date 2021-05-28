@@ -80,12 +80,20 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    ```sh
    cd ~
-   git clone --branch develop --single-branch --recurse-submodules -j$(nproc) https://github.com/cyberbotics/webots.git
+   git clone --branch release --single-branch --recurse-submodules -j$(nproc) https://github.com/RoboCup-Humanoid-TC/webots.git
    ```
 
-   By using these commands, you'll be on the correct branch (`develop`) and you'll have the required submodules.
+   By using these commands, you'll be on the correct branch (`release`) and you'll have the required submodules.
 
-2. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
+2. Change the download mirrors for Webots depedencies by running the following:
+
+   ```sh
+   cd webots
+   wget https://github.com/NUbots/WebotsDependenciesMirror/raw/master/change-mirrors.patch
+   git apply change-mirrors.patch
+   ```
+
+3. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
 
 ## Get and Build the NUbots Environment
 
