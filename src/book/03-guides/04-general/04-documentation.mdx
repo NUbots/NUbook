@@ -1,0 +1,48 @@
+---
+section: Guides
+chapter: General
+title: Documentation
+description: How to properly document code.
+slug: /guides/general/documentation
+---
+
+## Conventions
+
+We use the javadoc documentation style for comments that are able to be formatted with doxygen. Each variable, function and class declaration should have a comment detailing the information about it in the `.hpp` file.
+
+### Directives
+
+This is a list of directives that we use.
+
+- `@brief` A brief description of the following code. Everything should at least have this tag.
+- `@detail` A complete and detailed description of the code.
+- `@param` Details a paramter that is passed to a function.
+- `@return` Details what a function returns.
+- `@retval` Details specific return value meanings, usually for enums, booleans or error codes.
+- `@throws` Details on what a function throws.
+- `@tparam` Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.
+
+This is a list of extra things that may be used, see [doxygen](https://www.doxygen.nl/manual/commands.html#cmd_intro) documentation for the full list.
+
+- `@example <file-name>` An example of how the function or class should be used is at `<file-name>`.
+- `@see` Tells the reader to read documentation for another class, function or variable.
+- `@attention` Tells the reader that they must pay attention.
+- `@warning` Tells the reader something that may go wrong.
+- `@note` Tells the reader to take note.
+- `@remark` A remark about the thing.
+- `@todo` Adds a todo to the documentation.
+- `@post` Details a post condition.
+- `@pre` Details a pre condition.
+- `@code` and `@endcode` starts and finishes a code block, like \` and in NUbook.
+- `@copydoc` Copies the documentation from another thing.
+- `@dot` and `@enddot` Creates a dot graph.
+- `@msc` and `@endmsc` Creates a [mscgen](https://www.mcternan.me.uk/mscgen/) diagram.
+- `@startuml` and `@enduml` Creates a [uml](https://plantuml.com/) diagram.
+- `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` Creates latex mathematics.
+- `@verbatim` and `@endverbatim` Starts and finishes verbatim output.
+- `@author` The author of this code, this is not used often in NUbots as we generally rely on the git blame instead.
+
+Basic html can be used, like `<b>` and `<em>`.
+
+## Future
+In the future we are planning to use a combination of doxygen and our documentation generator for automatic low level documentation for NUbook.
