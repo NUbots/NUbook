@@ -44,5 +44,34 @@ This is a list of extra things that may be used, see [doxygen](https://www.doxyg
 
 Basic html can be used, like `<b>` and `<em>`.
 
+### Example
+
+This example is more than normally required, but tries to give an example of how most directives work.
+
+```c++
+/**
+ * @brief Is super cool.
+ * @detail Is cooler than all the other classes. It graduated from the university of cool.
+ * @tparam T The first template argument
+ * @tparam U The second template arguemnt
+ */
+template <typename T, typename U>
+class Cool_Class {
+    /// @brief Holds the meaning of life the universe and everything
+    private int a = 42;
+
+    /**
+     * @brief Calculates if this class is cool
+     * @detail Checks against the university of cool records to see if this class graduated.
+     * @param year The year that class graduated.
+     * @throws NotFoundError The class was not found in the university of cool records.
+     * @return Whether or not the class is cool.
+     * @retval true The class is cool.
+     * @retval flase The class is not cool.
+     */
+    bool is_cool(const int& year) const;
+};
+```
+
 ## Future
 In the future we are planning to use a combination of doxygen and our documentation generator for automatic low level documentation for NUbook.
