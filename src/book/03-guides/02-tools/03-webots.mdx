@@ -1,0 +1,160 @@
+---
+section: Guides
+chapter: Tools
+title: Setting Up Webots
+description: Setup instructions for Webots.
+slug: /guides/tools/webots-setup
+---
+
+[Webots](https://cyberbotics.com/) is a physics environment created by Cyberbotics. This guide details how to set up Webots. It gives instructions on setting up Ubuntu (WSL) inside Windows for Windows users, and the rest of the guide is aimed at Ubuntu users (including Windows WSL Ubuntu users).
+
+## Prerequisites
+
+<details>
+
+<summary>Windows</summary>
+
+1. Follow the instructions for setting up Ubuntu in WSL on the [Getting Started NUbook page under the Windows tab in the Docker section](/guides/main/getting-started#docker).
+
+2. Since Webots uses a GUI, we will need to set up a way to launch and display the program. Use [these instructions](https://medium.com/@chuckdries/installing-gitkraken-in-wsl-2-15bf6459f823) which is for a similar scenario, but with GitKraken instead of Webots. **Take note of the following changes**:
+
+   - You can ignore installing and launching GitKraken. Instead, we will use the Webots instructions later in this guide to install and launch Webots.
+
+   - When running XLaunch configuration, **uncheck 'Native opengl'** on the third window.
+
+   - To prevent having to set the DISPLAY environment variable every time, run the following command in Ubuntu:
+
+     ```sh
+     echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> ~/.bashrc
+     ```
+
+   <Alert type='info'>
+
+   To be able to copy and paste into the Ubuntu terminal, right-click on the bar at the top of the Ubuntu window. Then click on **Properties**, and enable **Use Ctrl+Shift+C/V as Copy/Paste** in the **Options** tab. Note that this is <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>/<kbd>V</kbd> not <kbd>Ctrl</kbd>+<kbd>C</kbd>/<kbd>V</kbd>.
+
+   </Alert>
+
+3. In Ubuntu run
+
+   ```sh
+   sudo apt-get update
+   sudo apt-get install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
+   ```
+
+<Alert type='info'>
+
+You will need XLaunch running every time you want to run Webots.
+
+</Alert>
+
+Follow the rest of the steps on this page within Ubuntu.
+
+</details>
+
+<details>
+
+<summary> Arch Linux </summary>
+
+1. Run the following to obtain the required dependencies.
+
+   ```bash
+   pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb
+   ```
+
+2. Download our [usb patch](assets/webots_usb.patch) which helps the makefile link `libusb` properly.
+
+3. After you do the clone step below, move the patch file `webots_usb.patch` into your webots install folder, and run `git apply webots_usb.patch` inside that folder to apply it. After that, you should be able to run `make -j$(nproc)` as usual.
+
+</details>
+
+Install libraries for cmake, protobuf, eigen, yaml-cpp, and ninja-build:
+
+```sh
+sudo apt-get update
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build
+```
+
+## Install Webots
+
+1. Open a terminal and swap to your home directory (note that webots should be cloned in your home directory). Then clone the repository:
+
+   ```sh
+   cd ~
+   git clone --branch develop --single-branch --recurse-submodules -j$(nproc) https://github.com/cyberbotics/webots.git
+   ```
+
+   By using these commands, you'll be on the correct branch (`develop`) and you'll have the required submodules.
+
+2. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
+
+## Get and Build the NUbots Environment
+
+1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
+
+   ```sh
+   git clone https://github.com/NUbots/NUWebots.git
+   cd NUWebots
+   ```
+
+2. Configure the codebase by running
+
+   ```sh
+   ./b configure
+   ```
+
+   <details>
+
+   <summary> Optional Flags </summary>
+   We can configure with several optional flags as follows:
+
+   ```sh
+   ./b configure [-i] [-- <flags>]
+   ```
+
+   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
+
+   | Flag                              | Effect                                                                                                         | Default             |
+   | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
+   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
+   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
+   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
+   | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
+   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
+
+   </details>
+
+3. Build the codebase by running
+
+   ```sh
+   ./b build
+   ```
+
+## Running Webots
+
+1. Navigate to the Webots folder
+
+   ```sh
+   cd ~/webots
+   ```
+
+2. Launch Webots by running
+
+   ```sh
+   ./webots
+   ```
+
+3. Open the NUbots world file inside Webots.
+
+   1. Click on `File->Open World...`.
+
+   2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
+
+## Creating a New Controller
+
+From the root of the NUWebots repository run
+
+```sh
+python3 ./scripts/create_controller.py <name of controller>
+```
+
+Where `<name of controller>` is the name you want to use for the new controller. A folder and files will be created with this name, so they must be valid file names (don't use spaces in your controller name).
