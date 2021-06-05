@@ -71,7 +71,7 @@ Install libraries for cmake, protobuf, eigen, yaml-cpp, ninja-build, and clang-t
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build clang-tidy python3-dev
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build clang-tidy python3-dev libjpeg9-dev
 ```
 
 ## Install Webots
@@ -102,6 +102,42 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    ```
    echo WEBOTS_HOME=$HOME/webots >> ~/.bashrc
+   ```
+
+5. Install dependencies for the referee:
+
+   ```sh
+   cd ~/webots/projects/samples/contests/robocup/controllers/referee
+   pip3 install -r requirements.txt
+   ```
+
+6. Build the Robocup controllers:
+
+   ```sh
+   cd ~/webots/projects/samples/contests/robocup
+   WEBOTS_HOME=$HOME/webots make -j$(nproc)
+   ```
+
+## Install Game Controller
+
+1. Install the ant build tool:
+
+   ```sh
+   sudo apt-get install ant default-jdk
+   ```
+
+2. Clone the Robocup TC GameController repo:
+
+   ```sh
+   cd ~
+   git clone https://github.com/RoboCup-Humanoid-TC/GameController
+   ```
+
+3. Change into the cloned directory and build the GameController:
+
+   ```sh
+   cd GameController
+   ant
    ```
 
 ## Get and Build the NUbots Environment
@@ -172,6 +208,14 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    1. Click on `File->Open World...`.
 
    2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
+
+## Running Webots with GameController
+
+Run the following to open Webots with the Robocup world and the GameController:
+
+```sh
+JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
+```
 
 ## Creating a New Controller
 
