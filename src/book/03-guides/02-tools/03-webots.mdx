@@ -211,13 +211,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ## Running Webots with GameController
 
-1. Find your local IP address by running the following.
+1. Find your primary local IP address by running the following.
 
    ```sh
    hostname -I
    ```
 
-   Your hostname will usually be the first one in the output returned. For example if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
+   Your primary IP address will usually be the first of the addresses in the output returned. For example, if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
 
 2. Set the `GAME_CONTROLLER_UDP_FILTER` env variable to your local IP address from step 1, to ensure your instance of GameController is not affected by other instances of GameController on the network.
 
