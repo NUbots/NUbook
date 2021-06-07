@@ -8,41 +8,42 @@ slug: /guides/general/documentation
 
 ## Conventions
 
-We use the javadoc documentation style for comments that are able to be formatted with doxygen. Each variable, function and class declaration should have a comment detailing the information about it in the `.hpp` file.
+We use the javadoc documentation _style_, all this means is that directives are formatted with a `@`. Note that `@` and `\\` are interchangeable when looking at other sources.
+
+Each declaration, or definition in the absence of declaration, that is a part of an api, e.g. declared in the `.hpp` file, should have a documenting comment.
 
 ### Directives
 
-This is a list of directives that we use.
+This is a list of directives some that we use.
 
-- `@brief` A brief description of the following code. Everything should at least have this tag.
-- `@detail` A complete and detailed description of the code.
-- `@param` Details a parameter that is passed to a function.
+- `@brief` A brief description of the following code. Every documenting comment should have this.
+- `@detail` All the details that someone using this thing might need to know beyond what is provided in other directives.
+- `@param[direction] <formal name>` Details a parameter that is passed to a function. Direction is either `in` or `out` and is usually omitted.
 - `@return` Details what a function returns.
-- `@retval` Details specific return value meanings, usually for enums, booleans or error codes.
-- `@throws` Details on what a function throws.
-- `@tparam` Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.
+- `@retval <value>` Details specific return value meanings, usually for enums, booleans or error codes.
+- `@throws <type name>` Details on what a function throws.
+- `@tparam <formal name>` Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.
 
 This is a list of extra things that may be used, see [doxygen](https://www.doxygen.nl/manual/commands.html#cmd_intro) documentation for the full list.
 
 - `@example <file-name>` Indicates that an example of how the function or class should be used is at `<file-name>`.
-- `@see` Tells the reader to read documentation for another class, function or variable.
+- `@see <name>` Tells the reader to read documentation for another class, function or variable.
 - `@attention` Tells the reader that they should pay attention to the following point.
-- `@warning` Tells the reader something that may go wrong.
-- `@note` Tells the reader to take note.
+- `@warning` Tells the reader something that may go wrong, and ways of avoiding such a fate.
+- `@note` Some extra "Spicy" info which does not fit in other tags.
 - `@remark` An aside or candid comment about the code or approach.
 - `@todo` Adds a todo to the documentation.
 - `@post` Details a post condition.
 - `@pre` Details a pre condition.
-- `@code` and `@endcode` starts and finishes a code block, like \` and in NUbook.
-- `@copydoc` Copies the documentation from another thing.
-- `@dot` and `@enddot` Creates a dot graph.
-- `@msc` and `@endmsc` Creates a [mscgen](https://www.mcternan.me.uk/mscgen/) diagram.
-- `@startuml` and `@enduml` Creates a [(plant) uml](https://plantuml.com/) diagram.
+- `@code{.<language>}` and `@endcode` starts and finishes a code block respectively, like \` and in NUbook. `{.language}` is optional.
+- `@copydoc <name>` Copies the documentation from another thing.
 - `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` Creates latex mathematics.
-- `@verbatim` and `@endverbatim` Starts and finishes verbatim output.
+- `@verbatim` and `@endverbatim` Starts and finishes verbatim output respectively, outputs exactly what you wrote.
 - `@author` The author of this code. This is used sporadically in `NUbots`. We generally rely on the git blame instead.
 
-Basic html can be used, like `<b>` and `<em>`.
+### Extra formatting
+
+HTML can be used, but should be kept to simple tags like `<b>` and `<em>`.
 
 ### Example
 
@@ -56,9 +57,12 @@ This example is more than normally required, but tries to give an example of how
  * @tparam U The second template arguemnt
  */
 template <typename T, typename U>
-class Cool_Class {
+class CoolClass {
     /// @brief Holds the meaning of life the universe and everything
     private int douglas = 42;
+
+    /// @copydoc douglas
+    private int ryan = 42;
 
     /**
      * @brief Calculates if this class is cool
@@ -71,8 +75,14 @@ class Cool_Class {
      */
     [[nodiscard]] bool is_cool(const int& year) const;
 };
+
+/**
+ * @brief Prints the if CoolClass is cool or not.
+ * @see CoolClass::is_cool
+ */
+void print_cool();
 ```
 
 ## Future
 
-In the future we are planning to use a combination of doxygen and our documentation generator for automatic low level documentation for NUbook.
+In the future we are planning to use a combination of doxygen and our NUClear mapperfor automatic low level documentation for NUbook.
