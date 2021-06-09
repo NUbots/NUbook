@@ -67,36 +67,60 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake, protobuf, eigen, yaml-cpp, and ninja-build:
+Install libraries for cmake, protobuf, eigen, yaml-cpp, ninja-build, and clang-tidy:
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build clang-tidy python3-dev
 ```
 
 ## Install Webots
 
-1. Open a terminal and swap to your home directory (note that webots should be cloned in your home directory). Then clone the repository:
+1. Open a terminal and swap to your home directory (note that Webots should be cloned in your home directory). Then clone the repository and change into the cloned directory:
 
    ```sh
    cd ~
-   git clone --branch develop --single-branch --recurse-submodules -j$(nproc) https://github.com/cyberbotics/webots.git
+   git clone --branch nubots-changes --single-branch --recurse-submodules -j$(nproc) https://github.com/NUbots/webots.git
+   cd webots
    ```
 
-   By using these commands, you'll be on the correct branch (`develop`) and you'll have the required submodules.
+   By using these commands, you'll be on the correct branch (`nubots-changes`) and you'll have the required submodules.
 
-2. Follow the rest of the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required.
+2. Install Webots build dependencies:
+
+   ```sh
+   sudo ./scripts/install/linux_compilation_dependencies.sh
+   ```
+
+3. Build Webots:
+
+   ```sh
+   make -j$(nproc)
+   ```
+
+4. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+
+   ```
+   echo WEBOTS_HOME=$HOME/webots >> ~/.bashrc
+   ```
 
 ## Get and Build the NUbots Environment
 
 1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
 
    ```sh
+   cd ~
    git clone https://github.com/NUbots/NUWebots.git
    cd NUWebots
    ```
 
-2. Configure the codebase by running
+2. Install the python dependencies:
+
+   ```sh
+   pip3 install -r requirements.txt
+   ```
+
+3. Configure the codebase by running
 
    ```sh
    ./b configure
@@ -123,7 +147,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    </details>
 
-3. Build the codebase by running
+4. Build the codebase by running
 
    ```sh
    ./b build
