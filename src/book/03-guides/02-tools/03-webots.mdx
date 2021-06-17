@@ -233,7 +233,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    <Alert>
 
-   Sometimes closing Webots doesn't properly close the GameController subprocess. When this happens you'll get an error about GameController when next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
+   Sometimes closing Webots doesn't properly close the GameController subprocess. When this happens you'll get an error about GameController when you next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
 
    ```sh
    kill -9 $(pgrep -fi GameControllerSimulator.jar)
