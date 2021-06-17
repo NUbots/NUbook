@@ -231,6 +231,16 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
    ```
 
+   <Alert>
+
+   Sometimes closing Webots doesn't properly close the GameController subprocess. When this happens you'll get an error about GameController when next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
+
+   ```sh
+   kill -9 $(pgrep -fi GameControllerSimulator.jar)
+   ```
+
+   </Alert>
+
 ## Creating a New Controller
 
 From the root of the NUWebots repository run
