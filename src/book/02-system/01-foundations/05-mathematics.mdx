@@ -209,24 +209,24 @@ Eigen::Vector3d rA_tAb = vAb * t;
 
 ## Spherical Coordinates
 
-Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \theta, \phi\right)$, where `r` is radial distance, $\theta$ is the polar angle, and $\phi$ is the azimuthal angle. This convention is defined by ISO 80000-2:2019.
+Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
 
-!['Spherical coordinates $(r, \theta, \phi)$ as defined by the ISO 80000-2:2019 standard. Radial distance r to the origin, polar angle $\theta$, and azimuthal angle $\phi$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image (modified) from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical.svg')
+!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
 
 Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
 
 $$
 r = \sqrt{x^2 + y^2 + z^2} \\
-\theta = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
-\phi = \textrm{atan}\left(\frac{y}{x}\right)
+\varphi = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
+\theta = \textrm{atan}\left(\frac{y}{x}\right)
 $$
 
 Cartesian coordinates can be calculated from spherical coordinates using the follow equations:
 
 $$
-x = r\textrm{cos}\left(\phi\right)\textrm{sin}\left(\theta\right) \\
-y = r\textrm{sin}\left(\phi\right)\textrm{sin}\left(\theta\right) \\
-z = r\textrm{cos}\left(\theta\right) \\
+x = r\textrm{cos}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+z = r\textrm{cos}\left(\varphi\right) \\
 $$
 
 A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
@@ -235,13 +235,13 @@ In order to ensure a unique representation of coordinates, the following restric
 
 $$
 r \geqslant 0 \\
-0 \leqslant \theta \leqslant \pi \\
-0 \leqslant \phi \leqslant 2\pi \\
+0 \leqslant \varphi \leqslant \pi \\
+0 \leqslant \theta \leqslant 2\pi \\
 $$
 
 ### Reciprocal Distance
 
-A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \theta, \phi\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \theta, \phi\right)$.
+A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
 
 This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means we that our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
 
