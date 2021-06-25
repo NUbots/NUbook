@@ -75,7 +75,7 @@ The reference frame is the **physical rigid body** and the coordinate system is 
 
 NUbots use a **right-handed coordinate system** to measure positions and rotations.
 
-![A right hand with the index finger pointed forwards and labelled 'x', the middle finger pointing to the left and labelled 'y', and the thumb pointing upwards and labelled 'z'](./images/right-hand-rule.svg 'Right-Hand Rule. Image (modified) from Wikimedia Commons https://en.wikipedia.org/wiki/File:Right_hand_rule_cross_product.svg')
+![A right hand with the index finger pointed forwards and labelled 'x', the middle finger pointing to the left and labelled 'y', and the thumb pointing upwards and labelled 'z'](./images/right-hand-rule.svg "Right-Hand Rule. Image (modified) from Wikimedia Commons https://en.wikipedia.org/wiki/File:Right_hand_rule_cross_product.svg")
 
 **Rotations** are defined by a 3x3 matrix. If we have a vector $\mathbf{r}^a$, that is the vector $\mathbf{r}$ in the coordinate system $a$, the rotation
 
@@ -211,7 +211,7 @@ Eigen::Vector3d rA_tAb = vAb * t;
 
 Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
 
-!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
+!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg "Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg")
 
 Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
 
@@ -243,13 +243,13 @@ $$
 
 A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
 
-This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means we that our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
+This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
 
-If $s_{AB}^b$ is is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
+If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
 
 ## Examples
 
-Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and can be instead `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
 
 It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
 
