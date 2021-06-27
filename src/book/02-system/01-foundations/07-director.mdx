@@ -12,53 +12,113 @@ It allows composable behaviours that can take advantage of transition rules to e
 The Director does this by providing a set of new DSL keywords to NUClear that describe what tasks to run, what conditions are required, and how those tasks build on other tasks.
 It then uses these keywords to make a graph that it will use to decide which tasks to execute in order to achive the goals of the modules.
 
-## The Director Graph
-TODO algorithm development in progress
-
+The two DSL components that are added are Providers and Tasks.
 
 ## Providers
-TODO describe the concept of a provider
+Providers are implemented as NUClear reactions and live in a NUClear `on` statement.
+They are the components which "provide" the functionality needed to perform a task, either by doing it directly or by running a series of subtasks.
+They form the basis of the modules that implement behaviours.
+Each provider will provide for a specific message type in a specific situation.
+For example a provider which executed a walk task, the code might look like:
+```cpp
+on<Provides<Walk>>().then(...);
+```
+
+Provider are triggered whenever a task needs to be executed by the director, however they can also be triggered using other NUClear keywords.
+The director will ensure that any provider which is not currently active will not run if it is not active, even if the other triggers would make it run.
+For example if the walk engine module wants to update at 10Hz when it is running a provider may look like.
+```
+on<Provides<Walk>, Every<10, Per<std::chrono::seconds>>().then(...);
+```
+This provider would then run once every time the walk command was updated, as well as running at 10Hz while the provider is active.
+
+If you do want a provider to run even when it is inactive you can make them optional (e.g. `on<Optional<Provides<Walk>>>().then(...);`).
+Then this will still run although its task will be empty.
+Non active providers are unable to emit subtasks and will show an error if they attempt to.
+
+Note that for the director to recognise subtasks as coming from a specific provider, those tasks MUST be emitted from that specific reaction.
+Otherwise they will be considered root tasks and can cause all sorts of chaos.
 
 ### Provider Groups
-TODO these are made up of all the providers that
+When there are multiple providers which provide for a single task type they are considered a provider group.
+When a new task is emitted the director will determine which of the providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the providers decleration.
+The director may also update which provider in a group is running if a state update means that the currently active provider can no longer run.
+In this case it will attempt to reassign that task to a provider which is able to run it.
+
+Provider groups operate together as a single unit, so any task that is emitted from a provider in a group is considered as beign emitted from that group.
+So if you are running one Provider, and the director changes you to another provider, if that provider emits different subtasks than the original the subtasks that were not emitted will be considered "finished" and removed from the graph.
 
 ### Provider Types
-TODO describe what is different between provider types
+There are three different provider types that can be used.
+These three provider along with their `When` and `Causing` DSL words determine the flow of a provider, executing code as the director changes which tasks it executes.
 
 #### Entering
-TODO describe the purpose of an entering provider
-TODO describe the interaction with when and causing
+An entering provider is used to set up the state of a provider when it is running, or to ensure that a When condition of a main provider is met.
+They are executed in two scenarios:
+1. when a provider group has no active tasks and then is given to one.
+2. when it was running a task normally but the only `Provides` reaction that is running has its when condition fail and needs to re-enter to provide a `Causing`.
+
 Example:
 ```cpp
 on<Entering<Walk>>().then()
 ```
 
 #### Provides
-TODO describe what happens with a regular provider
-TODO describe the interaction with when and causing
+Provides are the normal providers which will be expected to execute a task.
+They will be chosen as the active provider in a group if there are no Entering statements in a provider group, or if at least one entering provider has executed making this group "entered".
+However an entering provider may be repeatedly run still if all the providers have `When` conditions that are not yet met.
+
 Example:
 ```cpp
 on<Provides<Walk>>().then()
 ```
 
 #### Leaving
-TODO describe the purpose of a leaving provider
-TODO describe the interaction with when and causing
+Leaving providers are used for the state when a provider group is losing control and will no longer have access to subtasks, or when a higher priority task elsewhere needs a causing that it provides.
+Leaving providers are executed in two scenarios:
+
+Firstly, A leaving provider will be executed once when the provider no longer has an active task.
+Note: If there no leaving providers that are satisfied in this situation (due to when conditions) the system will stop executing the provider without informing it.
+It may be advantageous to have a `Leaving` provider with no when conditions if you want to always know when you no longer have a task.
+
+Secondly, a leaving provider may be executed as a result of it having a causing reaction that another task needs if it has a higher priority than this task.
+For example, if a higher priority kick engine wanted to kick being staticallys stable, and the walk engine had a leaving which caused statically stable, then the leaving .
+In the event that the kick providers task had a lower priority than this providers task, then it is only able to change this module to run other non `Leaving` providers to achive its causing.
+
+In order for a leaving provider to be run however, it must have first been in the entering or normal states.
+The system cannot immediately jump to a leaving provider.
+
 Example:
 ```cpp
 on<Provides<Walk>>().then()
 ```
 
 ### When
-TODO conditions needed for a provider to run
+A when condition is used to ensure that a provider will only execute when its conditions are met.
+These conditions are provided using a global enum message along with a statement that describes what condition you want.
+For example if you wanted a kick engine to only run if the robot is statically stable or better.
+```cpp
+on<Provides<Kick>, When<Stability, std::greater_equal, Stability::STATIC>>().then(...);
+```
+These when conditions are updated by using normal NUClear emits.
 
 ### Causing
-TODO conditions that will be caused by a provider running
+A causing statement is a promise that by running this provider, the desired state will be eventually reached.
+This is used to allow smooth transitions beween modules.
+For example when the walk engine stopped moving it would be in a "Standing" stability state.
+This means the walk engine could have a `Leaving` reaction that caused this state so other modules know it can use this to be standing before they execute their actions.
+```cpp
+on<Leaving<Walk>, Causing<Stability, Stability::STANDING>().then(...);
+```
 
-### Example
-TODO show an example combining when and causing to show how the system would run
+Other providers will take advantage of this in two ways.
+If the other provider has higher priority than this one, it will force this provider group to switch to a `Provides` or `Leaving` that has a causing that satisfies the when condition it is limited on.
+If the other provider has lower priority than this one, it will only be able to force this provider to change to another `Provides` statement and not a leavign one.
 
 ## Tasks
+Tasks are the jobs that should be executed using the providers.
+Tasks are implemented using NUClears `emit` along with a custom scope `emit<
+
 TODO describe tasks:
 
 ### Root level tasks
@@ -73,6 +133,9 @@ TODO describe how priority works with tasks as well as optional
 ### Done tasks
 TODO describe the special `Done` task
 
+
+## The Director Graph
+TODO algorithm development in progress
 
 ## Behaviours Layout
 In the NUbots codebase there are several different levels of behaviours that are used to group what each task will do.
@@ -96,8 +159,8 @@ Some examples of strategy level modules would be:
 - WalkToBall: Tells the walk path planner to walk to the ball location
 - LookForBall: Tells the look planner to look for a specific set of objects
 
-
 ### Planners
+Planners are where the system starts to think about the "how" part of behavour.
 They live in `modules/behaviour/planner` in the source code.
 Planner modules are modules which string together a set of skills in order to achive their goal.
 They are only interested in a single component of perofrming an action, such as walking a path or
@@ -118,4 +181,5 @@ The motions layer is concenred with implmementing the primitive actions
 The platform layer deals with sending commands to the hardware itself.
 These modules should not have subtasks and will form the leaf nodes in the directors graph.
 Examples are modules such as:
-Webots
+- Webots
+- HardwareIO
