@@ -1,0 +1,121 @@
+---
+section: System
+chapter: Foundations
+title: Director
+description: Introduction to the Director and how to use it to build behaviours.
+slug: /system/foundations/director
+---
+
+The NUbots use the director system to control all their behaviour elements.
+It allows composable behaviours that can take advantage of transition rules to ensure that the robot performs the right task at the right time.
+
+The Director does this by providing a set of new DSL keywords to NUClear that describe what tasks to run, what conditions are required, and how those tasks build on other tasks.
+It then uses these keywords to make a graph that it will use to decide which tasks to execute in order to achive the goals of the modules.
+
+## The Director Graph
+TODO algorithm development in progress
+
+
+## Providers
+TODO describe the concept of a provider
+
+### Provider Groups
+TODO these are made up of all the providers that
+
+### Provider Types
+TODO describe what is different between provider types
+
+#### Entering
+TODO describe the purpose of an entering provider
+TODO describe the interaction with when and causing
+Example:
+```cpp
+on<Entering<Walk>>().then()
+```
+
+#### Provides
+TODO describe what happens with a regular provider
+TODO describe the interaction with when and causing
+Example:
+```cpp
+on<Provides<Walk>>().then()
+```
+
+#### Leaving
+TODO describe the purpose of a leaving provider
+TODO describe the interaction with when and causing
+Example:
+```cpp
+on<Provides<Walk>>().then()
+```
+
+### When
+TODO conditions needed for a provider to run
+
+### Causing
+TODO conditions that will be caused by a provider running
+
+### Example
+TODO show an example combining when and causing to show how the system would run
+
+## Tasks
+TODO describe tasks:
+
+### Root level tasks
+TODO describe root level tasks
+
+### Subtasks
+TODO describe subtasks
+
+### Priority
+TODO describe how priority works with tasks as well as optional
+
+### Done tasks
+TODO describe the special `Done` task
+
+
+## Behaviours Layout
+In the NUbots codebase there are several different levels of behaviours that are used to group what each task will do.
+To the Director they are all equivalent but to make it easier for developers they are split into several different layers.
+
+### Behaviour
+Behavour modules are the highest level modules and during normal debugging these will be the primary tasks that will be executed by the system.
+They live in `modules/behaviour/behaviour` in the source code.
+The generally will describe the overall goals and behavour of the robot.
+Some examples of a behavour level module would be:
+- Striker: Combines stratigies to walk to the ball and kick it to the opposing goal
+- Defender: Combines strategies needed to intercept and defend incoming goals
+- Goalie: Combines strategies needed to stay near the goal and prevents the opponents to score
+
+### Strategy
+Behaviours are modules that make high level strategy decisions for the robot.
+They live in `modules/behaviour/strategy` in the source code.
+These modules are the behaviour elements that provide the "what" components rather than the "how" components.
+They will generally combine information from multiple systems in order to
+Some examples of strategy level modules would be:
+- WalkToBall: Tells the walk path planner to walk to the ball location
+- LookForBall: Tells the look planner to look for a specific set of objects
+
+
+### Planners
+They live in `modules/behaviour/planner` in the source code.
+Planner modules are modules which string together a set of skills in order to achive their goal.
+They are only interested in a single component of perofrming an action, such as walking a path or
+- WalkPathPlanner: Strings together walk commands
+- LookPlanner: Controls how the robot is looking for a specific object or set of objects
+
+### Skills
+- Walk: The walk engine which walks given a walk command
+- Kick: Kicks the ball according to the desired direction
+- Look: Gets the head to look at a paticular location
+
+### Motions
+The motions layer is concenred with implmementing the primitive actions
+- ScriptRunner: Executes scripts given to it
+- InverseKinematics: Takes limb positions/head positions and converts them into servo positions
+
+### Platform
+The platform layer deals with sending commands to the hardware itself.
+These modules should not have subtasks and will form the leaf nodes in the directors graph.
+Examples are modules such as:
+Webots
