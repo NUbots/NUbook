@@ -117,22 +117,32 @@ If the other provider has lower priority than this one, it will only be able to 
 
 ## Tasks
 Tasks are the jobs that should be executed using the providers.
-Tasks are implemented using NUClears `emit` along with a custom scope `emit<
-
-TODO describe tasks:
+Tasks are implemented using NUClears `emit` along with a custom scope `emit<Task>`.
 
 ### Root level tasks
-TODO describe root level tasks
+When a task is emitted from a reaction which is not a provider, that task is considered a root level task.
+These root level tasks are all considered siblings within the priority comparision system at the root level of the graph.
+When a root level task is emitted with 0 priority it is removed from the list of tasks.
 
 ### Subtasks
-TODO describe subtasks
+A subtask is a task that is emitted by a provider.
+When multiple tasks are emitted by a provider, each of these are sibling tasks in the director graph.
 
 ### Priority
-TODO describe how priority works with tasks as well as optional
+Priority in the Director is considered based on the closest common anscestor.
+For root tasks this will be the root element.
+Once the closest common anscestor is determined, the priority of the branch we are on is compared to the priority of the branch of the other task.
+The winner gets to use the resources and potentially evict the other task to wait in the queue for the provider group.
+
+Tasks can also be emitted as optional tasks, if when finding a common anscestor between two tasks, an optional task is found in the parantage of a task before the common anscestor that task is considered "optional".
+If one task has an optional parentage and the other does not then the optional task will automatically lose.
+If both have optional tasks in their perantage, then the tasks will be compared using their common anscestor as normal as if the optional was not there.
+This means the higher priority root tasks optional elements are more important than a lower priority tasks optional elements.
 
 ### Done tasks
-TODO describe the special `Done` task
-
+A Done task is a special task that can be emitted by a provider to signal to its parent that it has completed the task that was assigned to it.
+The provider group that created this task will then be re-executed with the knowledge that it was triggered as a done event from below.
+If a root task emits a `Done` task then it will be removed from the Director's root tasks as if it were emitted with a priority of 0.
 
 ## The Director Graph
 TODO algorithm development in progress
