@@ -15,11 +15,13 @@ It then uses these keywords to make a graph that it will use to decide which tas
 The two DSL components that are added are Providers and Tasks.
 
 ## Providers
+
 Providers are implemented as NUClear reactions and live in a NUClear `on` statement.
 They are the components which "provide" the functionality needed to perform a task, either by doing it directly or by running a series of subtasks.
 They form the basis of the modules that implement behaviours.
 Each provider will provide for a specific message type in a specific situation.
 For example a provider which executed a walk task, the code might look like:
+
 ```cpp
 on<Provides<Walk>>().then(...);
 ```
@@ -27,9 +29,11 @@ on<Provides<Walk>>().then(...);
 Provider are triggered whenever a task needs to be executed by the director, however they can also be triggered using other NUClear keywords.
 The director will ensure that any provider which is not currently active will not run if it is not active, even if the other triggers would make it run.
 For example if the walk engine module wants to update at 10Hz when it is running a provider may look like.
+
 ```
 on<Provides<Walk>, Every<10, Per<std::chrono::seconds>>().then(...);
 ```
+
 This provider would then run once every time the walk command was updated, as well as running at 10Hz while the provider is active.
 
 If you do want a provider to run even when it is inactive you can make them optional (e.g. `on<Optional<Provides<Walk>>>().then(...);`).
@@ -40,6 +44,7 @@ Note that for the director to recognise subtasks as coming from a specific provi
 Otherwise they will be considered root tasks and can cause all sorts of chaos.
 
 ### Provider Groups
+
 When there are multiple providers which provide for a single task type they are considered a provider group.
 When a new task is emitted the director will determine which of the providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the providers decleration.
 The director may also update which provider in a group is running if a state update means that the currently active provider can no longer run.
@@ -49,31 +54,38 @@ Provider groups operate together as a single unit, so any task that is emitted f
 So if you are running one Provider, and the director changes you to another provider, if that provider emits different subtasks than the original the subtasks that were not emitted will be considered "finished" and removed from the graph.
 
 ### Provider Types
+
 There are three different provider types that can be used.
 These three provider along with their `When` and `Causing` DSL words determine the flow of a provider, executing code as the director changes which tasks it executes.
 
 #### Entering
+
 An entering provider is used to set up the state of a provider when it is running, or to ensure that a When condition of a main provider is met.
 They are executed in two scenarios:
+
 1. when a provider group has no active tasks and then is given to one.
 2. when it was running a task normally but the only `Provides` reaction that is running has its when condition fail and needs to re-enter to provide a `Causing`.
 
 Example:
+
 ```cpp
 on<Entering<Walk>>().then()
 ```
 
 #### Provides
+
 Provides are the normal providers which will be expected to execute a task.
 They will be chosen as the active provider in a group if there are no Entering statements in a provider group, or if at least one entering provider has executed making this group "entered".
 However an entering provider may be repeatedly run still if all the providers have `When` conditions that are not yet met.
 
 Example:
+
 ```cpp
 on<Provides<Walk>>().then()
 ```
 
 #### Leaving
+
 Leaving providers are used for the state when a provider group is losing control and will no longer have access to subtasks, or when a higher priority task elsewhere needs a causing that it provides.
 Leaving providers are executed in two scenarios:
 
@@ -89,24 +101,30 @@ In order for a leaving provider to be run however, it must have first been in th
 The system cannot immediately jump to a leaving provider.
 
 Example:
+
 ```cpp
 on<Provides<Walk>>().then()
 ```
 
 ### When
+
 A when condition is used to ensure that a provider will only execute when its conditions are met.
 These conditions are provided using a global enum message along with a statement that describes what condition you want.
 For example if you wanted a kick engine to only run if the robot is statically stable or better.
+
 ```cpp
 on<Provides<Kick>, When<Stability, std::greater_equal, Stability::STATIC>>().then(...);
 ```
+
 These when conditions are updated by using normal NUClear emits.
 
 ### Causing
+
 A causing statement is a promise that by running this provider, the desired state will be eventually reached.
 This is used to allow smooth transitions beween modules.
 For example when the walk engine stopped moving it would be in a "Standing" stability state.
 This means the walk engine could have a `Leaving` reaction that caused this state so other modules know it can use this to be standing before they execute their actions.
+
 ```cpp
 on<Leaving<Walk>, Causing<Stability, Stability::STANDING>().then(...);
 ```
@@ -116,19 +134,23 @@ If the other provider has higher priority than this one, it will force this prov
 If the other provider has lower priority than this one, it will only be able to force this provider to change to another `Provides` statement and not a leavign one.
 
 ## Tasks
+
 Tasks are the jobs that should be executed using the providers.
 Tasks are implemented using NUClears `emit` along with a custom scope `emit<Task>`.
 
 ### Root level tasks
+
 When a task is emitted from a reaction which is not a provider, that task is considered a root level task.
 These root level tasks are all considered siblings within the priority comparision system at the root level of the graph.
 When a root level task is emitted with 0 priority it is removed from the list of tasks.
 
 ### Subtasks
+
 A subtask is a task that is emitted by a provider.
 When multiple tasks are emitted by a provider, each of these are sibling tasks in the director graph.
 
 ### Priority
+
 Priority in the Director is considered based on the closest common anscestor.
 For root tasks this will be the root element.
 Once the closest common anscestor is determined, the priority of the branch we are on is compared to the priority of the branch of the other task.
@@ -140,56 +162,70 @@ If both have optional tasks in their perantage, then the tasks will be compared 
 This means the higher priority root tasks optional elements are more important than a lower priority tasks optional elements.
 
 ### Done tasks
+
 A Done task is a special task that can be emitted by a provider to signal to its parent that it has completed the task that was assigned to it.
 The provider group that created this task will then be re-executed with the knowledge that it was triggered as a done event from below.
 If a root task emits a `Done` task then it will be removed from the Director's root tasks as if it were emitted with a priority of 0.
 
 ## The Director Graph
+
 TODO algorithm development in progress
 
 ## Behaviours Layout
+
 In the NUbots codebase there are several different levels of behaviours that are used to group what each task will do.
 To the Director they are all equivalent but to make it easier for developers they are split into several different layers.
 
 ### Behaviour
+
 Behavour modules are the highest level modules and during normal debugging these will be the primary tasks that will be executed by the system.
 They live in `modules/behaviour/behaviour` in the source code.
 The generally will describe the overall goals and behavour of the robot.
 Some examples of a behavour level module would be:
+
 - Striker: Combines stratigies to walk to the ball and kick it to the opposing goal
 - Defender: Combines strategies needed to intercept and defend incoming goals
 - Goalie: Combines strategies needed to stay near the goal and prevents the opponents to score
 
 ### Strategy
+
 Behaviours are modules that make high level strategy decisions for the robot.
 They live in `modules/behaviour/strategy` in the source code.
 These modules are the behaviour elements that provide the "what" components rather than the "how" components.
 They will generally combine information from multiple systems in order to
 Some examples of strategy level modules would be:
+
 - WalkToBall: Tells the walk path planner to walk to the ball location
 - LookForBall: Tells the look planner to look for a specific set of objects
 
 ### Planners
+
 Planners are where the system starts to think about the "how" part of behavour.
 They live in `modules/behaviour/planner` in the source code.
 Planner modules are modules which string together a set of skills in order to achive their goal.
 They are only interested in a single component of perofrming an action, such as walking a path or
+
 - WalkPathPlanner: Strings together walk commands
 - LookPlanner: Controls how the robot is looking for a specific object or set of objects
 
 ### Skills
+
 - Walk: The walk engine which walks given a walk command
 - Kick: Kicks the ball according to the desired direction
 - Look: Gets the head to look at a paticular location
 
 ### Motions
+
 The motions layer is concenred with implmementing the primitive actions
+
 - ScriptRunner: Executes scripts given to it
 - InverseKinematics: Takes limb positions/head positions and converts them into servo positions
 
 ### Platform
+
 The platform layer deals with sending commands to the hardware itself.
 These modules should not have subtasks and will form the leaf nodes in the directors graph.
 Examples are modules such as:
+
 - Webots
 - HardwareIO
