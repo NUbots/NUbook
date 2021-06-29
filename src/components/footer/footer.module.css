@@ -1,0 +1,17 @@
+.logo {
+  svg {
+    @apply w-8 opacity-25;
+    transition: all 0.3s ease;
+    filter: grayscale(0.6);
+  }
+
+  &:hover,
+  &:focus {
+    svg {
+      filter: none;
+      transform: rotate(40deg);
+
+      @apply opacity-100;
+    }
+  }
+}

@@ -1,7 +1,14 @@
-/*eslint-env node*/
+/*eslint-env node */
+/*eslint-env es6 */
 
 const path = require('path')
 
+const menu = []
+const createdPages = new Set()
+
+/**
+ * Create the site pages from MDX files in /src/book
+ */
 exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get the MDX pages sorted by file path (this is why we have the numeric prefixes)
   const result = await graphql(`
@@ -10,6 +17,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         edges {
           node {
             id
+            fileAbsolutePath
             frontmatter {
               section
               chapter
@@ -49,12 +57,11 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get all MDX files
   const posts = result.data.allMdx.edges
 
-  // Create the navigation menu
-  const menu = []
-
   // Populate the menu
   posts
-    .filter(({ node }) => !node.frontmatter.hidden)
+    .filter(({ node }) => {
+      return !createdPages.has(node.fileAbsolutePath)
+    })
     .forEach(({ node }) => {
       const section = findOrCreateSection(menu, node)
       const chapter = findOrCreateChapter(section, node)
@@ -62,8 +69,20 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       chapter.pages.push({
         title: node.frontmatter.title,
         slug: node.frontmatter.slug,
+        hidden: node.frontmatter.hidden,
       })
     })
+
+  // Hide sections and chapters in the menu if all their content is hidden
+  menu.forEach(section => {
+    section.chapters.forEach(chapter => {
+      chapter.hidden = chapter.pages.every(page => page.hidden)
+    })
+
+    section.hidden = section.chapters.every(chapter => chapter.hidden)
+  })
+
+  const templatePath = path.resolve('./src/components/page-template.jsx')
 
   // Create a page for each MDX file
   posts.forEach(({ node, next, previous }, index) => {
@@ -72,15 +91,39 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
     actions.createPage({
       path: node.frontmatter.slug,
-      component: path.resolve('./src/components/page-template.jsx'),
+      component: templatePath,
       context: {
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
+        hidden: node.frontmatter.hidden,
       },
     })
+
+    createdPages.add(node.fileAbsolutePath)
   })
+}
+
+/**
+ * Pass the menu through context to the landing page.
+ */
+exports.onCreatePage = ({ page, actions }) => {
+  if (page.path === '/') {
+    const { createPage, deletePage } = actions
+
+    // Delete the Gatsby-generated landing page
+    deletePage(page)
+
+    // Create a replacement page with the menu
+    createPage({
+      ...page,
+      context: {
+        ...page.context,
+        menu,
+      },
+    })
+  }
 }
 
 /**

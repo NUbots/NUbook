@@ -1,0 +1,317 @@
+---
+section: System
+chapter: Foundations
+title: Mathematics
+description: Detailed explanation of how mathematics is written in the NUbots codebase.
+slug: /system/foundations/mathematics
+---
+
+The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
+
+We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
+
+## Bases
+
+A **basis** is a **maximal** set of **linearly independent** vectors.
+
+In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three-dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
+
+$$
+\mathbf{u} = a_1 \cdot \mathbf{b}_1 + a_2 \cdot \mathbf{b}_2 + a_3 \cdot \mathbf{b}_3
+$$
+
+where $a_1, a_2, a_3 \in \mathbb{R}$. In other words, $a_1, a_2, a_3$ are scalars. These scalars are **unique**.
+
+If the vectors in the basis are mutually perpendicular, then they are **orthogonal**.
+
+An **orthonormal basis (ONB)** is a basis which is orthogonal and each vector has length 1.
+
+An example of an ONB is the **standard basis**
+
+$$
+e_1 = (1, 0, 0) \quad
+e_2 = (0, 1, 0) \quad
+e_3 = (0, 0, 1)
+$$
+
+## Vectors
+
+As mentioned in the previous section, any vector $\mathbf{r}$ can be expressed as a linear combination of the elements of a basis
+
+$$
+\mathbf{r}^a = r_1^a \mathbf{a}_1 + r_2^a \mathbf{a}_2 + r_3^a \mathbf{a}_3
+$$
+
+The scalars $r_1^a, r_2^a, r_3^a$ are the **coordinates** for the vector $\mathbf{r}$ in the basis $a$.
+
+In the NUbots codebase, vectors are written as `rABb` which denotes a vector from point $B$ to point $A$ in the basis (or **space**) $b$. These are column matrices of the coordinates of the vectors
+
+$$
+\mathbf{r}^a = \begin{bmatrix}
+r_1^a \\
+r_2^a \\
+r_3^a \end{bmatrix}
+$$
+
+To make computations such as **inner product** (also called **dot product**) or **cross product** with coordinates, the vectors must be relative to the **same basis**.
+
+When drawing a vector $\mathbf{r}_{AB}^b$, that is a vector from $B$ to $A$ in the space $b$, the **tail** is at $B$ and the **head** is at $A$. **Vector addition** requires that the head of one vector is the same as the tail of the other. This is demonstrated [here](http://mathworld.wolfram.com/VectorAddition.html). We have that
+
+$$
+\mathbf{r}^b_{AC} = \mathbf{r}^b_{AB} + \mathbf{r}^b_{BC} = \mathbf{r}^b_{BC} + \mathbf{r}^b_{AB}
+$$
+
+since vector addition is **commutative**. This is written in code as
+
+```cpp
+Eigen::Vector3d rACb = rABb + rBCb;
+```
+
+## Rotations
+
+To describe the motion of the robot, we need a **reference frame** and a **coordinate system**.
+
+The reference frame is the **physical rigid body** and the coordinate system is a **mathematical concept**, which is represented as a **basis**.
+
+NUbots use a **right-handed coordinate system** to measure positions and rotations.
+
+![A right hand with the index finger pointed forwards and labelled 'x', the middle finger pointing to the left and labelled 'y', and the thumb pointing upwards and labelled 'z'](./images/right-hand-rule.svg 'Right-Hand Rule. Image (modified) from Wikimedia Commons https://en.wikipedia.org/wiki/File:Right_hand_rule_cross_product.svg')
+
+**Rotations** are defined by a 3x3 matrix. If we have a vector $\mathbf{r}^a$, that is the vector $\mathbf{r}$ in the coordinate system $a$, the rotation
+
+$$
+\begin{bmatrix}
+\cos(\psi) & -\sin(\psi) & 0 \\
+\sin(\psi) & \cos(\psi) & 0 \\
+0 & 0 & 1 \end{bmatrix}
+$$
+
+will rotate $\mathbf{r}^a$ by $\psi$ radians around the coordinate axis $\mathbf{a}_3$.
+
+More on rotation matrices can be found [here](http://mathworld.wolfram.com/RotationMatrix.html).
+
+The orientation of the basis $b$ relative to $a$ can be described by **three consecutive rotations** about the main axis. There are 12 different orders to do these rotations in, and each triplet of rotated angles is called a set of **Euler angles**. In robotics, the triplet is **yaw**, **pitch** and **roll** (Z-Y-X).
+
+In the NUbots codebase, we denote a rotation matrix from space $b$ to space $a$ as `Rab`.
+
+The rotation matrices used for changing between spaces belong to the **special orthogonal group of order 3**. These all have the following properties
+
+$$
+\mathbf{R}^{-1} = \mathbf{R}^T
+$$
+
+$$
+\text{det}(\mathbf{R}) = 1
+$$
+
+The first property reduces the **complexity** of the computation to find the inverse matrix. The second property tells us this matrix can be inverted and it **preserves scale** between the two spaces.
+
+If we have a vector $\mathbf{r}_{CD}^a$, that is it goes from point D to point C in a space $a$, and we want to **rotate** it from space $a$ to space $b$, we write
+
+$$
+\mathbf{r}^b_{CD} = \mathbf{R}^b_a \cdot \mathbf{r}^a_{CD}
+$$
+
+This is written in the NUbots codebase as `rCDb = Rba * rCDa`. Note that the notation is $\mathbf{R}_{from}^{to}$.
+
+## Homogeneous Transformations
+
+A homogeneous transformation matrix in three dimensions is a 4x4 matrix containing a **rotation** component and a **translation** component.
+
+If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b_{AB}$, then we have a transformation matrix that transforms from space $a$ to space $b$:
+
+$$
+\mathbf{H}_a^b = \begin{bmatrix}
+\mathbf{R}_a^b & \mathbf{r}_{AB}^b \\
+\mathbf{0} & 1
+\end{bmatrix}
+$$
+
+This is written in the NUbots codebase as `Hba`.
+
+The vector $\mathbf{r}_{AB}^b$ is the vector from B (the origin of space b) to A (the origin of space a) in b space, which would be written in the codebase as `rABb`.
+
+The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system. The vector is from B to A because a point (0, 0, 0) in space $a$ should be moved to the origin of $a$ in $b$ space after transformation. Thus, the translation vector is $\mathbf{r}_{AB}^b$.
+
+This is illustrated in the following diagram.
+
+![Two three dimensional coordinate spaces, one labelled as space 'a' and the other as space 'b'. There is a vector from space 'a' to some point 'c', and is labelled 'rCAb'. There is another vector from 'b' to 'a' and is labelled 'rABb'. There is a final vector from 'b' to 'c' which is labelled 'rCBb = rABb + rCAb'](./images/maths-translation.svg)
+
+This assumes the original vector, `rCAa` **has already been rotated** into space $b$, i.e. we have `rCAb`.
+
+Finding the inverse of $H^b_a$ is made simpler by the properties of the matrix.
+
+$$
+(H^b_a)^{-1} = H^a_b = \begin{bmatrix}
+(\mathbf{R}_a^b)^T & (\mathbf{R}_a^b)^T \cdot -\mathbf{r}_{AB}^b \\
+\mathbf{0} & 1
+\end{bmatrix}
+$$
+
+Transformation matrices **left multiply** with vectors to get a vector in the new space. This vector is **rotated and then translated**.
+
+$$
+\mathbf{r}^b_{CB} = \mathbf{H}^b_a \cdot \mathbf{r}^a_{CA}
+$$
+
+This is written in the codebase as `rCBb = Hba * rCAa`.
+
+This is equivalent to
+
+$$
+r_{CB}^b = r_{AB}^b + (R^b_a * r_{CA}^a)
+$$
+
+or in code,
+
+```cpp
+Eigen::Vector3d rCBb = rABb + (Rba * rCAa);
+```
+
+<Alert>
+
+Vectors should only be multiplied with a transformation matrix if the **last two
+letters** of the vector match. That is, the position they are going from should match the
+origin of the space they are measured in. This means that `Hab * rCBb` is
+valid, but `Hab * rCDb` is invalid. Note that the first vector is rC**B**b and the second is rC**D**b.
+
+</Alert>
+
+If you would like the vector **only rotated**, extract the **rotational component** of the transform and apply it to the vector. The **spaces** that the vector and rotation matrix are in should **match**.
+
+```cpp
+Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
+```
+
+Homogeneous transformation matrices can be **multiplied** together to get a **new homogeneous transformation** matrix.
+
+$$
+\mathbf{H}_a^c = \mathbf{H}_b^c \cdot \mathbf{H}^b_a
+$$
+
+This is written in the codebase as
+
+```cpp
+Eigen::Affine3d Hca = Hcb * Hba;
+```
+
+## Velocity
+
+The velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
+
+Velocities can only be **rotated**, **not translated**. They should **not** be multiplied by a homogeneous transformation matrix, but they can be multiplied by a **rotation matrix**.
+
+If a velocity is multiplied with **time**, it becomes a **vector**.
+
+```cpp
+Eigen::Vector3d rA_tAb = vAb * t;
+```
+
+## Spherical Coordinates
+
+Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
+
+!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
+
+Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
+
+$$
+r = \sqrt{x^2 + y^2 + z^2} \\
+\varphi = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
+\theta = \textrm{atan}\left(\frac{y}{x}\right)
+$$
+
+Cartesian coordinates can be calculated from spherical coordinates using the follow equations:
+
+$$
+x = r\textrm{cos}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+z = r\textrm{cos}\left(\varphi\right) \\
+$$
+
+A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
+
+In order to ensure a unique representation of coordinates, the following restrictions are enforced on spherical coordinates:
+
+$$
+r \geqslant 0 \\
+0 \leqslant \varphi \leqslant \pi \\
+0 \leqslant \theta \leqslant 2\pi \\
+$$
+
+### Reciprocal Distance
+
+A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
+
+This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
+
+If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
+
+## Examples
+
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+
+It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
+
+When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
+
+```cpp
+Eigen::Affine3d Htw(sensors.Htw);
+```
+
+If you have a transformation matrix `Htw` (**world** to **torso** transform) and you want the matrix `Hwt` (**torso** to **world** transform), this is can be achieved by calling `Htw.inverse()`. The inverse function **swaps** the letter order. The returned inverse matrix is not **mutable**.
+
+If you have a vector `rTWf` (**world** to **torso** in **foot** space) and you want the opposite letter order (**torso** to **world** in **foot** space), this is done by negating the vector, `rWTf = -rTWf`.
+
+<Alert>
+
+Negating does not change the space the vector is measured in.
+
+</Alert>
+
+If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the **inner two letters** should be **identical**, i.e. the same space.
+
+```cpp
+Eigen::Affine3d Htf = Htw * Hwf;
+```
+
+This gives the **foot** to **torso** transform by **multiplying** the **world** to **torso** transform with the **foot** to **world** transform.
+
+These two **inner** letters are **cancelled**, with the outer two remaining. This also works for rotation matrices.
+
+If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **cancelled** in a similar way to the transformation matrices.
+
+```cpp
+Eigen::Vector3d rXZa = rXYa + rYZa;
+```
+
+In general, `t` is reserved for the **torso**, `w` for the **world**, `f` for the **foot** (which one is determined by context, but is usually the **support foot**), and `b` for **ball**.
+
+When measured relative to the robot the **x-axis** is **forward** out of the torso, the **y-axis** is to the **left** and the **z-axis** is **up** the neck. This is robot space, also called torso space. The origin of this space is the base of the torso between the legs.
+
+World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
+
+For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
+
+## Summary
+
+| Item                  | Description                                                                  |
+| --------------------- | ---------------------------------------------------------------------------- |
+| `Hab`                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
+| `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
+| `rABb`                | Denotes a vector from point $B$ to point $A$ in space $b$.                   |
+| `vAb`                 | The velocity of $A$ in space $b$.                                            |
+| `rXZa = rXYa + rYZa`  | Create a new vector from two other vectors.                                  |
+| `rACc = Hcb * rABb`   | Changing a vector from one space to another using a homogeneous transform.   |
+| `rABd = Rdc * rABc`   | Changing a vector from one space to another using a rotation transform       |
+| `Hba = Hab.inverse()` | Inverting a matrix swaps the letter order.                                   |
+| `Hac = Hab * Hbc`     | Creating a new transform from two other transforms.                          |
+| Euler Angles          | Are of the form Z-Y-X.                                                       |
+
+## Useful Links
+
+- [Essence of Linear Algebra by 3blue1brown](https://www.3blue1brown.com/essence-of-linear-algebra-page)
+
+- [Wolfram MathWorld](http://mathworld.wolfram.com/)
+
+- [Eigen Documentation](http://eigen.tuxfamily.org/dox/)
