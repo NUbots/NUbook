@@ -8,35 +8,35 @@ slug: /guides/main/maintaining-subsystems
 
 This page details how to maintain various subsystems within the main codebase.
 
-# Vision
+## Vision
 
 Before vision can work on the robot, odometry and kinematics must work on the robot. If these are inaccurate, then the green horizon will be inaccurate.
 
-## Dataset Generation
+### Dataset Generation
 
 Synthetic and semi-synthetic training data for vision can be generated using NUpbr and NUgan. Pre-generated datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS) in the lab.
 
-### NUpbr
+#### NUpbr
 
 NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding segmentation images for training.
 
 Find out how to get and use NUpbr on the [NUpbr NUbook page](/system/tools/nupbr) and the [GitHub repository](https://github.com/NUbots/NUpbr).
 
-### NUgan
+#### NUgan
 
 The NUbots CycleGAN (NUgan) performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
 
-A full dataset for NUgan can be found on the NAS. In addition, you can make a new dataset by collecting NUpbr images from the NAS to get the synthetic image portion of the dataset. The real portion of the dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/). 
+A full dataset for NUgan can be found on the NAS. In addition, you can make a new dataset by collecting NUpbr images from the NAS to get the synthetic image portion of the dataset. The real portion of the dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/).
 
 To find out more about NUgan and how to use it, visit the [NUbook NUgan page](/system/tools/nugan) and the [NUgan GitHub repository](https://github.com/NUbots/NUgan).
 
-### Setting Up The Data
+#### Setting Up The Data
 
 The [Visual Mesh repository](https://github.com/Fastcode/VisualMesh) contains information on how to set up the datasets. It contains [a script](https://github.com/Fastcode/VisualMesh/blob/master/training/build_dataset.py) that takes data and converts it into the tfrecord format that the Visual Mesh expects. The script requires a folder of raw images, segmentation masks, and metadata. NUpbr will provide all these as output, and such data can be found on the NAS. If using output from NUgan, use the corresponding NUpbr segmentation masks and metadata, and add in the generated NUgan images in the image folder.
 
-## The Visual Mesh
+### The Visual Mesh
 
-### Training
+#### Training
 
 Ensure you have followed the above steps to get a dataset to train on.
 
@@ -65,7 +65,7 @@ Execute the training by running
 
 Where `[config.yaml]` is the options yaml file as specified above, and the output directory is the name of the directory you want the progress and results to be saved to. Progress can be monitored with TensorBoard.
 
-### Testing
+#### Testing
 
 Testing the network is executed similarly to training. Run
 
@@ -75,19 +75,19 @@ Testing the network is executed similarly to training. Run
 
 Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision.
 
-### Exporting Configuration
+#### Exporting Configuration
 
 The weights and biases will be output into a yaml file like the one found at [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) or [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
 
 Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. For further information about Git, view the [Git Guide](/guides/general/git).
 
-## Camera Calibration
+### Camera Calibration
 
 If the cameras are not calibrated correctly, the vision system will not work well. Information on calibration is available on [the input page](/system/subsystems/input).
 
 An automatic camera calibration tool is available to use in the NUbots repository that can be used to calibrate the cameras. A guide on how to calibrate the cameras will be available on NUbook soon.
 
-## Testing
+### Testing
 
 Now that the Visual Mesh has been updated in the NUbots repository, you should test it before merging.
 
