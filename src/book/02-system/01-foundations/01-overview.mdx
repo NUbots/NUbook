@@ -10,7 +10,7 @@ The NUbots repository is the main codebase that runs on the robots. Its purpose 
 
 The main parts of the NUbots codebase are behaviour, motion, vision, and localisation. Behaviours include strategy, planning and skills. Motion includes kicking, getting up, and walking. Vision includes ball, goal and field detectors. Localisation determines where the robot, ball and the field are in the world through odometry.
 
-At the top level, the robot will use strategy to decide what to do, such as whether it will act as a goalkeeper or if it will act like a striker.
+At the top level, the robot will use strategy to decide what to do based on the game state. This includes unique behaviour for penalty shoot-outs.
 
 The next level down is planning. This includes planning the path to walk along to get to the ball facing the right goal.
 Below planning is skills. Skills include kicking, walking, getting up, and looking at objects.
