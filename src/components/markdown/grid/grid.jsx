@@ -10,16 +10,17 @@ function nextId() {
 
 const Grid = ({ children, rows, columns, caption, seamless }) => {
   const id = 'grid-' + nextId()
+  const styleContent = `
+    @media (min-width: 768px) {
+      #${id} {
+        grid-template-columns: ${columns || 'none'};
+        grid-template-rows: ${rows || 'none'};
+      }
+    }
+  `
   return (
     <figure className={`${style.grid} ${seamless ? style.gridSeamless : ''} `}>
-      <style>{`
-        @media (min-width: 768px) {
-          #${id} {
-            grid-template-columns: ${columns || 'none'};
-            grid-template-rows: ${rows || 'none'};
-          }
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{ __html: styleContent }}></style>
       <div id={id} className={style.gridContent}>
         {children}
       </div>

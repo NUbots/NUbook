@@ -18,6 +18,8 @@ slug: /guides/general/glossary
 
 ## Terms
 
+[**Address Sanitizer/ASAN**](https://clang.llvm.org/docs/AddressSanitizer.html): A package you can build into your program which detects and reports memory errors when you run the program.
+
 [**Affine Transform**](https://en.wikipedia.org/wiki/Affine_transformation): A transform which keeps straight lines straight, and parallel lines parallel, without preserving distances or angles between lines otherwise.
 
 [**Arch**](https://www.archlinux.org/): A lightweight linux distribution which the NUgus robots use as their primary operating system.
@@ -32,7 +34,9 @@ slug: /guides/general/glossary
 
 [**Clang**](https://clang.llvm.org/): A compiler, frontend, and tooling infrastructure used for C and C++ which is part of the LLVM infrastructure.
 
-[**ClangFormat**](https://clang.llvm.org/docs/ClangFormat.html): A software which formats source code according to a given set of rules.
+[**ClangFormat**](https://clang.llvm.org/docs/ClangFormat.html): A package which formats source code according to a given set of rules.
+
+[**ClangTidy**](https://clang.llvm.org/extra/clang-tidy/): A package which statically analyses source code, generating warnings based on arbitrarily defined rules you provide.
 
 [**Closed Loop Control**](https://en.wikipedia.org/wiki/Closed-loop_transfer_function): Control action which uses output from the system being controlled as input.
 
@@ -46,11 +50,11 @@ slug: /guides/general/glossary
 
 [**Convolution**](https://en.wikipedia.org/wiki/Convolution): A function which transforms two functions into another. [Convolutional Neural Networks](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNNs) are very commonly used for image processing and computer vision, working by passing filters across the image and combining those outputs in further layers.
 
-[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before mak[ing the NUgus.
+[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before making the NUgus.
 
 [**Deep Learning**](https://en.wikipedia.org/wiki/Deep_learning): Machine learning techniques which utilise artificial neural networks with many layers.
 
-[**Docker**](https://www.dock[er.com/): A software service for developing containers which enable standardised cross-platform development consistency.
+[**Docker**](https://www.docker.com/): A software service for developing containers which enable standardised cross-platform development consistency.
 
 [**Dockerhub**](https://hub.docker.com/): A hosting service for docker container images.
 
@@ -170,9 +174,17 @@ slug: /guides/general/glossary
 
 **Subsumption**: The priority system that determines if a neutron gets access to the servos it wants to control.
 
+[**Tensorboard**](https://www.tensorflow.org/tensorboard): Visualisation toolkit used to inspect the training performance of the visual mesh.
+
+[**Tensorflow**](https://www.tensorflow.org): Machine Learning library used by the Visual Mesh, which powers most of NUbots vision.
+
 [**Transform**](https://en.wikipedia.org/wiki/Transformation_matrix): Short for transformation. Sometimes, a matrix representation of a transformation.
 
 [**Transformation**](<https://en.wikipedia.org/wiki/Transformation_(function)>): A function which maps a set to itself (sometimes called an operator on that set). Often, it is used in the context of a spatial manipulation - regularly representated as a translation and a rotation.
+
+[**TFRecord**](https://www.tensorflow.org/tutorials/load_data/tfrecord): Binary format used by the Visual Mesh to store input data - contains image, mask, and lens metadata records.
+
+[**Undefined Behaviour Sanitizer/UBSAN**](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html): A package which you can build into your program to detect C++ undefined behaviour when you run your program.
 
 [**VisualMesh**](https://arxiv.org/abs/1807.08405): A computer vision technique NUbots uses which overlays a mesh over the image input to more efficiently sample it and look for objects. Source can be found [here](https://github.com/Fastcode/VisualMesh).
 
