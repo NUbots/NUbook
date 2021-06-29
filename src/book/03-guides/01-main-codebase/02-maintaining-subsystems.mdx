@@ -10,25 +10,17 @@ This page details how to maintain various subsystems within the main codebase.
 
 ## Vision
 
-Before vision can work on the robot, odometry and kinematics must work on the robot. If these are inaccurate, then the green horizon will be inaccurate.
+Before vision can work on the robot, odometry and kinematics must work on the robot. If these are inaccurate, then the green horizon is inaccurate.
 
 ### Dataset Generation
 
-Synthetic and semi-synthetic training data for vision can be generated using NUpbr and NUgan. Pre-generated datasets for training the Visual Mesh can be found on the Network-Attached Storage (NAS) in the lab.
+NUpbr generates semi-synthetic data to train vision. Pre-generated datasets for training the Visual Mesh are on the Network-Attached Storage (NAS) in the lab.
 
 #### NUpbr
 
 NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding segmentation images for training.
 
 Find out how to get and use NUpbr on the [NUpbr NUbook page](/system/tools/nupbr) and the [GitHub repository](https://github.com/NUbots/NUpbr).
-
-#### NUgan
-
-The NUbots CycleGAN (NUgan) performs style transfer from the semi-synthetic style to a real image style. It creates more realistic images from the semi-synthetic images from NUpbr. It can be used for style transfer to a specific field for fine-tuning vision.
-
-A full dataset for NUgan can be found on the NAS. In addition, you can make a new dataset by collecting NUpbr images from the NAS to get the synthetic image portion of the dataset. The real portion of the dataset can be obtained by taking pictures, or collecting images from [Bit-Bots ImageTagger](https://imagetagger.bit-bots.de/).
-
-To find out more about NUgan and how to use it, visit the [NUbook NUgan page](/system/tools/nugan) and the [NUgan GitHub repository](https://github.com/NUbots/NUgan).
 
 #### Setting Up The Data
 
