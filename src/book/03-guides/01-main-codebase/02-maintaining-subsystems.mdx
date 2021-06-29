@@ -34,9 +34,17 @@ Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) t
 
 #### Exporting Configuration
 
-The weights and biases will be output into a yaml file like the one found at [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) or [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
+The resulting networking will need to be exported to a yaml file and added to the NUbots codebase.
 
-Replace the NUbots repository `VisualMesh.yaml` configuration with the configuration you just obtained from training the Visual Mesh. Ensure you create a new branch so you can make a PR and get any changes merged in. For further information about Git, view the [Git Guide](/guides/general/git).
+Example yaml files are [model.yaml on the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) and [VisualMesh.yaml on the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml). Assuming such a file is in the output directory, run
+
+```
+./mesh.py export [output_dir]
+```
+
+to export the weights to the file.
+
+Replace the NUbots repository `VisualMesh.yaml` configuration with this configuration file. Ensure you create a new branch so you can make a PR and get any changes merged in. For further information about Git, view the [Git Guide](/guides/general/git).
 
 ### Camera Calibration
 
