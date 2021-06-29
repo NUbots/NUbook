@@ -14,7 +14,7 @@ Before vision can work on the robot, odometry and kinematics must work on the ro
 
 ### Dataset Generation
 
-NUpbr generates semi-synthetic data to train vision. Pre-generated datasets for training the Visual Mesh are on the Network-Attached Storage (NAS) in the lab.
+Synthetic and semi-synthetic training data for vision can be generated using NUpbr and NUgan. Pre-generated datasets for training the Visual Mesh can be found on the <abbr title="Network-Attached Storage">NAS</abbr> in the lab.
 
 #### NUpbr
 
@@ -83,7 +83,7 @@ An automatic camera calibration tool is available to use in the NUbots repositor
 
 Now that the Visual Mesh has been updated in the NUbots repository, you should test it before merging.
 
-Build the code, ensuring `VisualMesh.role` is on in `./b configure -i`. Go to the [Getting Started page](/guides/main/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system) to find out more about options when installing onto the robot.
+Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`. Go to the [Getting Started page](/guides/main/getting-started) to find out more on how to build the code and install onto a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system) to find out more about options when installing onto the robot.
 
 When your new Visual Mesh is installed onto the robot, connect to the robot and ensure NUsight is on.
 
