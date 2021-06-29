@@ -10,12 +10,14 @@ slug: /guides/general/troubleshooting
 
 If this page does not solve your problem, the following people can help you with specific parts of the system:
 
-- **Hardware**: Taylor Young, Alex Biddulph, Timothy Mullen, Shawn Hain
-- **NUbots codebase**: Alex Biddulph, Trent Houliston, Taylor Young
-- **Toolchain and build**: Alex Biddulph, Josephus Paye II
-- **NUClear**: Trent Houliston
-- **NUsight**: Brendan Annable, Josephus Paye II, Trent Houliston
-- **Mathematics**: Ysobel Sims, Timothy Mullen
+- **Hardware**: Taylor Young
+- **Toolchain and build**: Kip Hamiltons
+- **NUClear**: Cameron Murtagh
+- **NUsight**: Josephus Paye II, Brendan Annable
+- **Machine Learning**: Joel Wong
+- **Mathematics**: Kip Hamiltons, Cameron Murtagh, Taylor Young, Ysobel Sims
+
+Team mentors Alex Biddulph and Trent Houliston can help with most parts of the system if this list does not help.
 
 ## NUbots
 
@@ -61,9 +63,25 @@ find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -
 If the problem persists, try purging the build volume by running `./b configure --clean`.
 Note that purging the build volume means you'll have to rerun `./b build` to use built code.
 
+### Not enough memory in Docker? (Mac OS)
+
+By default the docker install will allocate 2GB of memory to docker images. When building the images this is insufficent for some of the libraries and will result in an error. In the menu bar go to advanced settings and increase the memory available.
+
 ## NUsight
 
-TODO
+### Multiple Docker robots in NUsight?
+
+This means someone else is also running a Docker robot. You can modify the name of your Docker robot by doing the following.
+
+```bash
+nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
+```
+
+Write in the name you want to use in the `name: ""` section and press `CTRL+S` to save the file and then `CTRL+X` to exit.
+
+Rebuild using `./b build` for the changes to take effect.
+
+In NUsight, toggle off the robots you do not want to see by clicking the robot icon in the top right of the NUsight GUI and toggling the slider next to the name of the robot you want to toggle off.
 
 ## Hardware
 
