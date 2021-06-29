@@ -6,16 +6,20 @@ description: Debriefs and takeaways from our performances at RoboCup.
 slug: /team/robocup/debriefs
 ---
 
-# 2019: Sydney, Australia
+## 2020: France, Bordeaux
 
-## What went wrong
+Due to COVID-19 the 2020 competition in France, Bordeaux was cancelled.
 
-### Walking
+## 2019: Sydney, Australia
+
+### What went wrong
+
+#### Walking
 
 - We were using a legacy walk engine (open loop with no reactive balance control, designed for smaller robots (Darwins))
 - The simple walk path planner was previously not configured for iGus and the planner did not tell the robot to go to the correct position when it could not see the ball
 
-### Vision
+#### Vision
 
 - Wasn’t properly implemented until the second day of the competition.
 - There was no integration testing with vision and the rest of the system.
@@ -26,34 +30,34 @@ slug: /team/robocup/debriefs
   - Couldn’t see the goals though because they were thinner than what was in the training data.
   - Visual Mesh packets to NUsight were too big, there was lots of dropped packets.
 
-### Odometry
+#### Odometry
 
 - Since moving to the CM740 the axis of the gyroscope and accelerometer changed. This change resulted in uncovering an error in the Kalman Filter, which was corrected during the competition.
 - Foot down detection was not accurate
   - neural network training was inadequate to determine foot-downness. Tuning of the walk was performed after training the network, so the trained models were not accurate. The walk was inadequate for getting good network training data as the robots weren’t lifting their feet off the ground enough to get good data - there were lots of noise in the small steps.
 
-### Mechanical/Hardware issues
+#### Mechanical/Hardware issues
 
 - Problems with servos overloading and locking, possibly due to motor drive shafts bending, or motors magnetically locking to one set.
 - Head fell off due to not being bolted in correctly.
 - Studs fell off/got stuck in the turf, possibly due to lack of adequate threading and inappropriate studs for our usage.
 - Robot disconnected from power supply when it fell over.
 
-### Configuration issues
+#### Configuration issues
 
 - Multiple layers of configuration (with multiple platforms, robot-specific configurations, and multiple configuration files for each system) led to confusion and made it difficult to tune the walk, vision camera parameters, etc.
 - Changing network configurations for different fields could be made faster/easier - perhaps a script that takes params and updates the network configuration correctly
 
-### Scripts
+#### Scripts
 
 - Needed re-tuning because: different fields (turf), different robots (scripts weren’t tuned before RoboCup for the new robots).
 
-### NUsight2
+#### NUsight2
 
 - Chart view rendering was slow (especially when running `start/dev`)
 - Network issues with NUsight when trying to run the robots with a static, direct ethernet connection.
 
-### RoboCup competition and games
+#### RoboCup competition and games
 
 - Team members didn’t go to see most of the games, was demotivating. Robot handling/computer operation during games should be shared or rostered - every team member should be trained on how to do this, to share the load. This year it was tough having just one/two people do it.
 - Wrong prioritization of tasks, could have focused more on immediately important things.
@@ -64,7 +68,7 @@ slug: /team/robocup/debriefs
 - Post RoboCup de-briefing with a physical debriefing meeting should be done.
 - Should write an entry in the team handbook about what went wrong, what was done well, what to do for next RoboCup.
 
-## What went well
+### What went well
 
 - NUsight2 was very useful for debugging the odometry filter, less problems than NUsight 1. Had the NUgus models which was good.
 - Code errors in odometry problem were fixed, but it still needs tuning.
@@ -83,7 +87,7 @@ slug: /team/robocup/debriefs
   - Recordings are NBS files saved on Trent’s laptop, to be stored on the NAS.
 - Starting writing team handbook and more comprehensive documentation
 
-## What’s next
+### What’s next
 
 - Better testing for next year.
 - Finish up initial documentation/team handbook.

@@ -6,7 +6,7 @@ description: Detailed explanation of how mathematics is written in the NUbots co
 slug: /system/foundations/mathematics
 ---
 
-The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. Specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
+The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
 
 We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
 
@@ -14,7 +14,7 @@ We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library 
 
 A **basis** is a **maximal** set of **linearly independent** vectors.
 
-In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
+In this context, bases usually span $\mathbb{R}^3$. That is, they cover **three-dimensional space**. Given a basis with three vectors $\mathbf{b}_1, \mathbf{b}_2, \mathbf{b}_3$, any three dimensional vector $\mathbf{u}$ can be written as
 
 $$
 \mathbf{u} = a_1 \cdot \mathbf{b}_1 + a_2 \cdot \mathbf{b}_2 + a_3 \cdot \mathbf{b}_3
@@ -183,7 +183,7 @@ If you would like the vector **only rotated**, extract the **rotational componen
 Eigen::Vector3d rCDb = Hba.rotation() * rCDa;
 ```
 
-Homogeneous transformation matrices can be **multiplied** together to get a **new homogemeous transformation** matrix.
+Homogeneous transformation matrices can be **multiplied** together to get a **new homogeneous transformation** matrix.
 
 $$
 \mathbf{H}_a^c = \mathbf{H}_b^c \cdot \mathbf{H}^b_a
@@ -197,7 +197,7 @@ Eigen::Affine3d Hca = Hcb * Hba;
 
 ## Velocity
 
-Velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
+The velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
 
 Velocities can only be **rotated**, **not translated**. They should **not** be multiplied by a homogeneous transformation matrix, but they can be multiplied by a **rotation matrix**.
 
@@ -207,9 +207,49 @@ If a velocity is multiplied with **time**, it becomes a **vector**.
 Eigen::Vector3d rA_tAb = vAb * t;
 ```
 
+## Spherical Coordinates
+
+Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
+
+!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
+
+Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
+
+$$
+r = \sqrt{x^2 + y^2 + z^2} \\
+\varphi = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
+\theta = \textrm{atan}\left(\frac{y}{x}\right)
+$$
+
+Cartesian coordinates can be calculated from spherical coordinates using the follow equations:
+
+$$
+x = r\textrm{cos}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+z = r\textrm{cos}\left(\varphi\right) \\
+$$
+
+A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
+
+In order to ensure a unique representation of coordinates, the following restrictions are enforced on spherical coordinates:
+
+$$
+r \geqslant 0 \\
+0 \leqslant \varphi \leqslant \pi \\
+0 \leqslant \theta \leqslant 2\pi \\
+$$
+
+### Reciprocal Distance
+
+A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
+
+This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
+
+If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
+
 ## Examples
 
-Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and can be instead `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
 
 It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
 
@@ -239,7 +279,7 @@ This gives the **foot** to **torso** transform by **multiplying** the **world** 
 
 These two **inner** letters are **cancelled**, with the outer two remaining. This also works for rotation matrices.
 
-If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **canceled** in a similar way to the transformation matrices.
+If you have two **vectors** in the **same space** and their **inner** (or **outer**, since vector addition is **commutative**) **letters** are both the same then they can be **cancelled** in a similar way to the transformation matrices.
 
 ```cpp
 Eigen::Vector3d rXZa = rXYa + rYZa;
@@ -251,7 +291,7 @@ When measured relative to the robot the **x-axis** is **forward** out of the tor
 
 World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
 
-For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the center of the field.
+For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
 
 ## Summary
 

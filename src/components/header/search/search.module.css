@@ -1,27 +1,143 @@
-.search:focus-within {
-  .searchIcon {
-    @apply text-icon;
-  }
+.search {
+  position: relative;
 }
 
-.backgroundSolid {
-  @apply bg-gray-800 text-white;
-
-  &:focus {
-    @apply bg-white text-primary;
-  }
+.searchIcon,
+.searchInput,
+.searchInput::placeholder {
+  transition: all 0.2s ease-in-out;
 }
 
 .backgroundTransparent {
-  @apply text-white;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(4px);
+  .searchInput {
+    backdrop-filter: blur(4px);
+  }
+}
 
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.54);
+:global(.light) {
+  .search:focus-within {
+    .searchIcon {
+      @apply text-icon;
+    }
   }
 
-  &:focus {
-    @apply bg-white text-primary;
+  .backgroundSolid {
+    &:hover {
+      .searchInput {
+        @apply bg-white text-primary;
+
+        &::placeholder {
+          @apply text-secondary;
+        }
+      }
+
+      .searchIcon {
+        @apply text-icon;
+      }
+    }
+
+    .searchInput {
+      @apply bg-gray-800 text-white;
+
+      &::placeholder {
+        @apply text-secondary-inverted;
+      }
+
+      &:focus {
+        @apply bg-white text-primary;
+
+        &::placeholder {
+          @apply text-secondary;
+        }
+      }
+    }
+
+    .searchIcon {
+      @apply text-icon-inverted;
+    }
+  }
+
+  .backgroundTransparent {
+    &:hover {
+      .searchInput {
+        @apply bg-white text-primary;
+
+        &::placeholder {
+          @apply text-secondary;
+        }
+      }
+
+      .searchIcon {
+        @apply text-icon;
+      }
+    }
+
+    .searchInput {
+      @apply text-white;
+      background-color: rgba(255, 255, 255, 0.15);
+
+      &::placeholder {
+        @apply text-secondary-inverted;
+      }
+
+      &:focus {
+        @apply bg-white text-primary;
+
+        &::placeholder {
+          @apply text-secondary;
+        }
+      }
+    }
+
+    .searchIcon {
+      @apply text-icon-inverted;
+    }
+  }
+}
+
+:global(.dark) {
+  .backgroundTransparent,
+  .backgroundSolid {
+    &:hover {
+      .searchInput {
+        @apply bg-gray-800 text-primary-inverted;
+
+        &::placeholder {
+          @apply text-secondary-inverted;
+        }
+      }
+    }
+
+    .searchInput {
+      @apply text-primary-inverted;
+
+      &::placeholder {
+        @apply text-secondary-inverted;
+      }
+
+      &:focus {
+        @apply bg-gray-800 text-primary-inverted;
+
+        &::placeholder {
+          @apply text-secondary-inverted;
+        }
+      }
+    }
+
+    .searchIcon {
+      @apply text-icon-inverted;
+    }
+  }
+
+  .backgroundTransparent {
+    .searchInput {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  .backgroundSolid {
+    .searchInput {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }

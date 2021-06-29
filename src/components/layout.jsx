@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import ArticleHeader from './article-header'
@@ -25,6 +25,7 @@ const Layout = ({ children, data, pageContext }) => {
   const currentChapter = currentSection.chapters.find(
     chapter => chapter.title === chapterTitle
   )
+  const sidebarWrapperRef = useRef(null)
   return (
     <>
       <SEO
@@ -47,10 +48,15 @@ const Layout = ({ children, data, pageContext }) => {
         <div className='lg:flex -mx-6'>
           <div className='hidden w-1/4 lg:block xl:w-1/5'>
             <div
-              className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 max-h-screen overflow-y-auto border-t border-t-transparent'
+              className='pl-6 pr-8 pt-10 pb-6 sticky top-0 left-0 max-h-screen overflow-y-auto border-t border-transparent'
+              ref={sidebarWrapperRef}
               style={{ borderTopWidth: '4rem' }}
             >
-              <Sidebar menu={menu} currentSection={currentSection} />
+              <Sidebar
+                menu={menu}
+                currentSection={currentSection}
+                wrapperRef={sidebarWrapperRef}
+              />
             </div>
           </div>
           <div className='w-full lg:flex lg:w-3/4 xl:w-4/5'>
@@ -65,13 +71,15 @@ const Layout = ({ children, data, pageContext }) => {
               )}
             </div>
             <div className='px-6 pt-26 pb-12 w-full max-w-3xl mx-auto xl:px-12 lg:ml-0 lg:mr-auto xl:mx-0 xl:w-3/4'>
-              <ArticleHeader
-                section={currentSection}
-                chapter={currentChapter}
-                title={title}
-                description={description}
-              />
-              <Markdown>{children}</Markdown>
+              <article className='content' id='page-content'>
+                <ArticleHeader
+                  section={currentSection}
+                  chapter={currentChapter}
+                  title={title}
+                  description={description}
+                />
+                <Markdown>{children}</Markdown>
+              </article>
               <ArticleNavigation next={next} previous={previous} />
             </div>
           </div>

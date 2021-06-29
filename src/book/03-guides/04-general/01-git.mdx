@@ -1,8 +1,8 @@
 ---
 section: Guides
 chapter: General
-title: Git
-description: How to contribute to a NUbots project using Git.
+title: Git and PR Workflow
+description: How to contribute to a NUbots project using Git and GitHub PRs.
 slug: /guides/general/git
 ---
 
@@ -38,7 +38,7 @@ GitHub has [documentation about PRs here](https://help.github.com/en/github/coll
 
 Title your PR with a description of the changes that it will make. For this example we could use `Add stand-up script`. If you need to give more detail about what the code does, put that as a comment.
 
-To be approved, you should add reviewers to the pull request. If you have a project mentor, they should be a reviewer, as well as someone else who knows about that part of the codebase. Once the reviewers have approved the changes, the changes can be merged into the master branch.
+To be approved, you should add reviewers to the pull request. Each reviewer will receive a notification. If you have a project mentor, they should be a reviewer, and at least one other person who knows about that part of the codebase or the problem you are trying to solve. Once the reviewers have approved the changes, the changes can be merged into the master branch.
 
 ### Code Review
 
@@ -66,4 +66,44 @@ If you push your changes to GitHub and get a message that the build failed due t
 
 ## Work in Progress PRs
 
-If you have an incomplete project you would like feedback on, you can make a draft PR to get your code reviewed. Prepend `[WIP]` to the PR title when making draft pull requests. Draft PRs cannot be merged, so there is no need to worry about merging in bad code. GitHub has [documentation about draft PRs here](#https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests).
+If you have an incomplete project you would like feedback on, you can make a draft PR to get your code reviewed. Prepend `[WIP]` to the PR title when making draft pull requests. Draft PRs cannot be merged, so there is no need to worry about merging in bad code. GitHub has [documentation about draft PRs here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests#draft-pull-requests).
+
+## Reviewing Code
+
+To review code on GitHub, go to the relevant PR page and open the **Files Changed** tab. This will show the <abbr title="The difference between the current repository files and the changes in the PR">diff</abbr> of the PR.
+
+You can add <abbr title="General remarks or questions">comments</abbr> and/or <abbr title="Specific code changes that can be added automatically if accepted by the PR author">suggestions</abbr> to one or more lines in the diff. For a single line, move your mouse cursor over the line and click the plus button that appears next to the line number. For multiple lines, click and drag the plus button down, starting on the first line. A Markdown editor will pop up to write your comment or suggestion. To make a code suggestion, click the button that looks like a file icon with **±** inside it, and then make your changes to the code snippet that is inserted. Click the **Preview** tab to preview your changes. When done, you can either leave a single comment or start a review. In a review, all comments you make will be pending until you finish your review, when they will all be posted at once.
+
+Try to be as clear as possible when making comments. The contributor should be able to understand if the comment is asking for clarification, or asking for changes. Be kind and make sure to word your comments constructively. Prefer "we" over "you" when making suggestions for what to do.
+
+When reading the code, if there is anything you find confusing or potentially incorrect, make a comment with all your concerns. For example, if there is a nontrivial block of code without a comment explaining it, you should ask the author to add a comment. Another example is if there is a block of code that has a side effect that the author may not have considered. You should inform the author of such and suggest an alternative if possible.
+
+When reviewing documentation PRs, you should look for factual inaccuracies, omissions of important information, awkward sentences, and typos.
+
+After reading the code and adding your pending comments, click **Finish your review** at the top right. This will show a popup with an input for overall comments, as well as the three actions you can take to finish your review:
+
+- **Request changes**: this blocks the code from being merged until you subsequently approve the PR in another review, even if others have approved it. Your review may be dismissed, but this is generally discouraged.
+- **Approve**: this allows the PR to be merged, so don't do this unless you are _reasonably_ confident that the changes are correct.
+- **Comment**: this adds your comments without blocking or approving the changes. Do this if you are not too concerned about the comments you have made, or if you're not sure when you'll be able to approve the PR once the changes are made.
+
+Reviewing code that you may not be fully confident with and leaving comments asking for clarification helps you learn and helps the author write more readable code, which is better for everyone.
+
+## Writing Reviewable Code
+
+Writing reviewable code is a skill that can be developed with practice. Here are some general guidelines to make your PR easier to review:
+
+- **Make it atomic**: A reviewable PR should only address one issue or add one feature.
+- **Keep it small**: Ideally, a reviewable PR should not change much more than 400 lines of code, anything above this super-exponentially increases the time it takes to review, and makes it more likely that an error will be missed.
+- **Name it well**: A reviewable PR should be named starting with a verb saying what you did, what issue was fixed, or what feature added. Prefer the present tense, e.g. "Update dependency X to version Y" instead of "Updated dependency X to version Y".
+
+To keep PRs small and atomic you may have to split your PR into multiple sub PRs. To do this, make a new branch branch from the original PR and move over some code. Then make a separate PR targeting the original PR's branch. Make sure to mention the original PR in the new PR's description, using `#123`, where `123` is the sub PR's number. After completing the sub PR, merge it back into the original PR.
+
+## Handling Reviews and Reviewee Etiquette
+
+Here are some tips for handling reviews as the author of a PR:
+
+- When a review comment is left on your PR, you may respond with a reply on GitHub, or with a comment in the code. Prefer comments in the code where appropriate, so in the future others don't have to read through several PRs and can instead just read the code.
+- When applying suggested changes, you can go to the **Files Changed** tab and see the comments with the context of the code. Here you can also batch apply suggestions, so they only take one commit.
+- After addressing a review comment, you can click **Resolve Conversation** to hide the conversation thread and reduce visual clutter. It is the reviewer's responsibility to check that your changes adequately addressed their concerns.
+- Don't be alarmed when a reviewer makes over a dozen comments on your PR, just work through them systematically, and don't hesitate to ask for help or clarification if you need more details.
+- Finally, when all the comments have been addressed from a review that requested changes, you can request another review by clicking the **Re-request review** button next to the reviewer's name.

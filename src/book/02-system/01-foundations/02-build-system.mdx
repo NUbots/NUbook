@@ -16,7 +16,7 @@ The NUbots codebase uses a [CMake](https://cmake.org/) build system based on the
 
 #### Requirements and Setup
 
-See the [Getting Started guide](/guides/nubots/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
+See the [Getting Started guide](/guides/main/getting-started) for setup instructions and how to build the code on Linux, macOS, and Windows.
 
 ### NUClear Roles
 
@@ -70,7 +70,7 @@ nuclear_role(
   # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
   motion::KinematicsConfiguration
   support::configuration::GlobalConfig
-  support::configuration::NetworkConfiguration
+  network::NUClearNetwork
   platform::darwin::HardwareIO
   platform::darwin::SensorFilter
   support::NUsight
@@ -122,6 +122,7 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | run       | Run a role locally                                             |
 | shell     | Exposes a shell in the Docker image                            |
 | target    | Select a target to work on                                     |
+| tests     | Run built unit tests                                           |
 
 ##### Build
 
@@ -131,7 +132,7 @@ As one might expect, `./b build` will build all enabled roles and required depen
 ./b build sensortest
 ```
 
-If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests.
+If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
 
 ##### Configure
 
@@ -343,6 +344,43 @@ The `generic` target is useful if you would like to build and run code on your l
 The `nuc7i7bnh` target should be used for building and running code on the robots.
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
+
+##### Tests
+
+The `tests` command allows you to run built unit tests. It will automatically run tests in parallel, and dump a timestamped log file to the project directory. Currently, we use [CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html) which is included as part of CMake.
+
+In order to run unit tests, they must first be built. This can be done with:
+
+```bash
+./b configure -- -DBUILD_TESTS=ON
+./b build
+```
+
+The `tests` command provides the following subcommands:
+
+| Subcommand | Description                                        |
+| ---------- | -------------------------------------------------- |
+| list       | List all built tests                               |
+| run        | Run all tests (default), or named individual tests |
+
+If you would like to run an individual test (or group of tests), you can pass the `run` subcommand a string and it will only run tests that match the given string.
+Alternatively, `run` will run all built tests if no string is passed.
+
+For example, if you would like to run all tests with the string 'vision' in their name, you would do:
+
+```bash
+./b tests run vision
+```
+
+The `run` subcommand also accepts the following flags:
+
+| Flag                                   | Description                                              |
+| -------------------------------------- | -------------------------------------------------------- |
+| `-V` or `--verbose`                    | Enable verbose output from tests                         |
+| `-VV` or `--extra-verbose`             | Enable more verbose output from tests                    |
+| `-Q` or `--quiet`                      | Make CTest not print to stdout                           |
+| `-j NUM_JOBS` or `--parallel NUM_JOBS` | Run the tests in parallel using the given number of jobs |
+| `--debug`                              | Displaying more verbose internals of CTest               |
 
 ## Docker Images
 
