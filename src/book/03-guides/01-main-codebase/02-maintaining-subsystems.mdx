@@ -28,44 +28,9 @@ The [Visual Mesh repository](https://github.com/Fastcode/VisualMesh) contains in
 
 ### The Visual Mesh
 
-#### Training
+#### Training and Testing
 
-Ensure you have followed the above steps to get a dataset to train on.
-
-As specified in the [Visual Mesh repository README](https://github.com/Fastcode/VisualMesh), install the dependencies from `requirements.txt`.
-
-```sh
-pip3 install -r requirements
-```
-
-Using [`cmake`](https://cmake.org/) and a C++ compiler with C++11 or later, build the custom TensorFlow op.
-
-```sh
-mkdir build
-cd build
-cmake ..
-make
-```
-
-A yaml file must be created with options for training. An example of this is in [the example_net.yaml file](https://github.com/Fastcode/VisualMesh/blob/master/example_net.yaml).
-
-Execute the training by running
-
-```sh
-./mesh.py train [config.yaml] [output_dir]
-```
-
-Where `[config.yaml]` is the options yaml file as specified above, and the output directory is the name of the directory you want the progress and results to be saved to. Progress can be monitored with TensorBoard.
-
-#### Testing
-
-Testing the network is executed similarly to training. Run
-
-```sh
-./mesh.py test [config.yaml] [output_dir]
-```
-
-Where `[config.yaml]` and `[output_dir]` are the same as for training. The output will be the average precision for each class, as well as the precision/recall curves and the final mean average precision.
+Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) to find out how to train and test a network, with an example dummy dataset.
 
 #### Exporting Configuration
 
