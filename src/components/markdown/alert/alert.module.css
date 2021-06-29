@@ -20,8 +20,7 @@
   @apply text-sm;
   @apply px-1;
   @apply leading-none;
-  @apply whitespace-no-wrap;
-  @apply text-red-600;
+  @apply whitespace-nowrap;
   @apply font-mono;
   @apply align-baseline;
   @apply font-normal;
@@ -31,20 +30,50 @@
   @apply mr-4 self-start;
 }
 
-.alertInfo {
-  background-color: rgba(33, 150, 243, 0.12);
-  border-color: rgba(33, 150, 243, 0.7);
+:global(.light) {
+  .alertContent code {
+    @apply text-red-600;
+  }
+
+  .alertInfo {
+    @apply border-blue-400;
+    background-color: rgba(33, 150, 243, 0.12);
+  }
+
+  .alertInfo .alertIcon {
+    @apply text-blue-500;
+  }
+
+  .alertWarning {
+    @apply border-orange-400;
+    background-color: rgba(255, 152, 0, 0.12);
+  }
+
+  .alertWarning .alertIcon {
+    @apply text-orange-500;
+  }
 }
 
-.alertInfo .alertIcon {
-  @apply text-blue-600;
-}
+:global(.dark) {
+  .alertContent code {
+    @apply text-red-500;
+  }
 
-.alertWarning {
-  background-color: rgba(255, 152, 0, 0.12);
-  border-color: rgba(255, 152, 0, 0.7);
-}
+  .alertInfo {
+    @apply border-blue-400;
+    background-color: rgba(33, 150, 243, 0.12);
+  }
 
-.alertWarning .alertIcon {
-  @apply text-orange-600;
+  .alertInfo .alertIcon {
+    @apply text-blue-400;
+  }
+
+  .alertWarning {
+    @apply border-orange-400;
+    background-color: rgba(255, 152, 0, 0.12);
+  }
+
+  .alertWarning .alertIcon {
+    @apply text-orange-400;
+  }
 }

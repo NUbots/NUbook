@@ -162,7 +162,9 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
 <Alert type='info'>
 
-When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
+When you clone/download the code, you should do so in the WSL Ubuntu terminal, from your home folder. Run `cd ~` to navigate to your home folder in Ubuntu.
+
+Outside of WSL, the path to the cloned NUbots code folder will be of the form `\\wsl$\Ubuntu\home\<USERNAME>\NUbots`, where `<USERNAME>` is the username you set up for Ubuntu. This path should be the one you use to open the code in text editors such as Visual Studio Code.
 
 </Alert>
 
@@ -338,17 +340,20 @@ Before setting up NUsight you'll need to configure what messages you will use. O
 ./b edit config/NUsight.yaml
 ```
 
+This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
+
 Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
+
+Open up a new terminal to run NUsight and NUbots code side by side.
 
 <details>
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Get NUsight and move into the new directory by running
+1. NUsight is within the NUbots repository. Move into the NUsight directory by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   cd nusight2
    ```
 
 2. Install Node.js by running
@@ -405,11 +410,10 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 <summary> Windows/MacOS </summary>
 
-1. Get NUsight and cd into the directory by running
+1. NUsight is within the NUbots repository. Move into the NUsight directory by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   cd nusight2
    ```
 
 2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
@@ -471,7 +475,7 @@ By now you will have gone through this page and have everything set up to make t
 
 - Running the Code: Running with a Simulated Robot
 
-- Get, Build and Run NUsight
+- Build and Run NUsight
 
 With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
 
@@ -479,4 +483,4 @@ With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using
 
 - You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
 
-- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.
+- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.

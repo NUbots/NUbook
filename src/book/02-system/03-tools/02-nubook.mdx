@@ -161,6 +161,77 @@ int main() {
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See [the KaTeX support table](https://katex.org/docs/support_table.html) for supported symbols and functions.
 
+### Graphviz graphs
+
+NUbook includes [Graphviz](https://graphviz.org/), which you can use to draw graphs by writing specially-formatted code blocks in Markdown.
+
+To create a graph, use triple backticks ` ``` ` on separate lines to open and close the graph, then specify the Graphviz layout algorithm after the opening backticks, followed by the source code for the graph.
+
+For example, the following code block in Markdown creates a directed graph with three connected nodes using the `dot` layout algorithm.
+
+````
+```dot
+digraph {
+  A -> B -> C
+}
+```
+````
+
+When rendered in NUbook, it produces the following graph:
+
+```dot
+digraph {
+  A -> B -> C
+}
+```
+
+The available layouts you can use are:
+
+- `circo`
+- `dot`
+- `fdp`
+- `neato`
+- `osage`
+- `patchwork`
+- `twopi`
+
+You can view examples of each of these layouts in the [kitchen sink](/kitchen-sink/graphviz-diagrams).
+
+#### Graph Captions and Alternative Text
+
+Just like with [images](#images), you can add captions and alternative text to describe graphs. You do so by using comments in the graph source. The first line of comment at the start of the graph will be used as the caption, and subsequent lines of comment will be used as alternative text.
+
+For example, the following source:
+
+````
+```circo
+# The connections between modules A, B, and C
+# A directed graph showing node A connected to node B, which is connected to node C
+digraph {
+  A -> B -> C
+}
+```
+````
+
+Produces the following graph with the appropriate caption and alternative text:
+
+```circo
+# The connections between modules A, B, and C
+# A directed graph showing node A connected to node B, which is connected to node C
+digraph {
+  A -> B -> C
+}
+```
+
+#### Learning Graphviz
+
+Here are some resources for learning how to draw graphs with Graphviz:
+
+- [Graphviz Pocket Reference](https://graphs.grevian.org/)
+- [Drawing Graphs using Dot and Graphviz](https://www.tonyballantyne.com/graphs.html)
+- [Graphviz Tutorial](https://github.com/caseywatts/graphviz-tutorial)
+- [Drawing graphs with dot](https://www.graphviz.org/pdf/dotguide.pdf)
+
 ### Content in Grids
 
 You can show content such as images, code, and math equations side-by-side in a grid.

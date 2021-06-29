@@ -49,6 +49,26 @@ To view the logs for a build, scroll to the build checks at the bottom of the PR
 
 ![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
 
+## Pacman Package Cache
+
+When Buildkite receives a webhook to build and test a PR, the Buildkite agents pull down the code and start building a Docker image based off the Dockerfile in that branch.
+
+In the process of building our Docker image, several [pacman](https://wiki.archlinux.org/index.php/pacman) packages are downloaded from public mirrors (if that specific [layer](https://docs.docker.com/storage/storagedriver/#images-and-layers) itself is not cached). Because these packages are downloaded numerous times, across multiple PRs, caching them locally can speed up build times and save network bandwidth.
+
+It is also possible that the [signature](https://wiki.archlinux.org/index.php/Pacman/Package_signing) on a package that is located on a public mirror changes. This change of signature can cause issues for us because we download date-locked packages and still expect an older signature. Caching such packages locally may alleviate these issues.
+
+To cache packages locally, a [pacman](https://wiki.archlinux.org/index.php/pacman) package cache is setup on each Buildkite agent. This cache uses the [nroi/flexo](https://hub.docker.com/r/nroi/flexo) Docker image, and exposes itself on:
+
+```
+http://localhost:7878/$repo/os/$arch
+```
+
+In order for [pacman](https://wiki.archlinux.org/index.php/pacman) to use this package cache, the cache must be added to `/etc/pacman.d/mirrorlist`. Because our build happens inside a [buildx](https://docs.docker.com/buildx/working-with-buildx/) container, we cannot use `localhost` as the address for the cache. Instead, we alias the IP address of the host machine as `host.docker.internal`. Therefore, the following is added to the mirrorlist [here in the Dockerfile](https://github.com/NUbots/NUbots/blob/5149f1c0cd1e4ff902d749269d1aa90f52adc075/docker/Dockerfile#L14):
+
+```
+Server = http://host.docker.internal:7878/$repo/os/$arch
+```
+
 ## Setting Up a New Agent (Ubuntu)
 
 The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
@@ -135,3 +155,35 @@ For more information about agent configuration and hooks, see the following page
 
 - <https://buildkite.com/docs/agent/v3/hooks>
 - <https://buildkite.com/docs/agent/v3/configuration>
+
+### Setup Pacman Package Cache
+
+<Alert type="info">
+
+Whenever we update our base Arch Linux image [in the Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile), both [the mirror in the Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile) **_and_** [the mirror in the cache config](https://github.com/NUbots/NUbots/blob/master/doc/PacmanCache/docker-compose.yml) need to be updated.
+
+</Alert>
+
+1. Create a directory to store the cache config
+
+   ```
+   mkdir ~/pacman-cache && cd ~/pacman-cache
+   ```
+
+2. Download the install script
+
+   ```
+   wget https://raw.githubusercontent.com/NUbots/NUbots/master/doc/PacmanCache/install.sh
+   ```
+
+3. Make the install script executable
+
+   ```
+   chmod +x ./install.sh
+   ```
+
+4. Run the install script
+
+   ```
+   ./install.sh
+   ```
