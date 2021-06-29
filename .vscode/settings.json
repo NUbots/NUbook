@@ -1,3 +1,8 @@
 {
-    "editor.formatOnSave": true
+    "grammarly.dialect": "british",
+    "grammarly.domain": "technical",
+    "grammarly.userWords": [
+        "NUbots",
+        "NUbook"
+    ]
 }
