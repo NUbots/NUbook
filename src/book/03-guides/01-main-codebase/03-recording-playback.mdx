@@ -12,20 +12,20 @@ NUbots data is stored in [NUClear Binary Stream (NBS) files](/system/foundations
 
 The following steps detail how to record data. An example will be given throughout involving recording sensors messages.
 
-1. Set up the role. Most of the time this involves making minor changes to an existing role.
+1. Set up the [role](https://nubook.netlify.app/system/foundations/nuclear#nuclear-roles). Most of the time this involves making minor changes to an existing role.
 
    1. The role must contain the module/s which emit the message/s you want to record.
    2. The role must contain the module `support::logging::DataLogging`.
 
    For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto) messages. You could use the existing [sensortest](https://github.com/NUbots/NUbots/blob/master/roles/sensortest.role) role and add `support::logging::DataLogging` to it.
 
-2. Set up the configuration file. This involves making changes to the `DataLogging.yaml` file. Add in the message you want to log, specifying `true`.
+2. Set up the configuration file. This involves making changes to the [`DataLogging.yaml`](https://github.com/NUbots/NUbots/tree/master/module/support/logging/DataLogging/data/config) file. Add in the message you want to log, specifying `true`.
 
    In this example, the sensors message already exists in the file (`message.input.Sensors`). Set the boolean to `true` next to this message.
 
    If you would like to log a different message:
 
-   1. Find the `.proto` file that defines that message, such as `Sensors.proto`.
+1. Find the `.proto` file that defines that message, such as [`Sensors.proto`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto).
    2. Find what the `package` is. For `Sensor.proto`, it is `package message.input`.
    3. Piece this together with the message name (`message Sensors` in the `.proto` file) to get `message.input.Sensors`
    4. Add this to the configuration file with the other messages.
