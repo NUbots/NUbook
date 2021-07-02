@@ -73,9 +73,10 @@ By default Docker Desktop will allocate 2GB of memory to use for building images
 
 This means someone else is also running a Docker robot. You can modify the name of your Docker robot by doing the following.
 
-```bash
-nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
-```
+1. Open the `NetworkConfiguration.yaml` file in a text editor (here we are using nano on the command line):
+
+   ```bash
+   nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
 
 2. Update the `name` field with the name you want to use and press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save the file and then <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit.
 
