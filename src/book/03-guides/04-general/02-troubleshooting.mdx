@@ -17,7 +17,7 @@ If this page does not solve your problem, the following people can help you with
 - **Machine Learning**: Joel Wong
 - **Mathematics**: Kip Hamiltons, Cameron Murtagh, Taylor Young, Ysobel Sims
 
-Team mentors Alex Biddulph and Trent Houliston can help with most parts of the system if this list does not help.
+Team mentors **Alex Biddulph** and **Trent Houliston** can help with most parts of the system if this list does not help.
 
 ## NUbots
 
@@ -63,9 +63,9 @@ find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -
 If the problem persists, try purging the build volume by running `./b configure --clean`.
 Note that purging the build volume means you'll have to rerun `./b build` to use built code.
 
-### Not enough memory in Docker? (Mac OS)
+### Not enough memory in Docker? (macOS)
 
-By default the docker install will allocate 2GB of memory to docker images. When building the images this is insufficent for some of the libraries and will result in an error. In the menu bar go to advanced settings and increase the memory available.
+By default Docker Desktop will allocate 2GB of memory to use for building images. When building the NUbots image, this is insufficient and will result in an error. To fix this, open the Docker menu in the menu bar, go to advanced settings, and increase the memory available.
 
 ## NUsight
 
@@ -77,11 +77,11 @@ This means someone else is also running a Docker robot. You can modify the name 
 nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
 ```
 
-Write in the name you want to use in the `name: ""` section and press `CTRL+S` to save the file and then `CTRL+X` to exit.
+2. Update the `name` field with the name you want to use and press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save the file and then <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit.
 
-Rebuild using `./b build` for the changes to take effect.
+3. Rebuild using `./b build` for the changes to take effect.
 
-In NUsight, toggle off the robots you do not want to see by clicking the robot icon in the top right of the NUsight GUI and toggling the slider next to the name of the robot you want to toggle off.
+4. In NUsight, toggle off the robots you do not want to see by clicking the robot icon at the top right of the NUsight GUI and toggling the slider next to the name of every other robot except the one you set in step 2.
 
 ## Hardware
 
