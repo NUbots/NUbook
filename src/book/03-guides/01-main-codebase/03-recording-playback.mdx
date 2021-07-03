@@ -77,7 +77,7 @@ NBS files are binary and not easily human-readable. There are tools in the NUbot
 
 These tools are grouped under the [`./b nbs`](https://github.com/NUbots/NUbots/tree/master/tools/nbs) command in the NUbots codebase, and can be executed by running:
 
-```sh
+```bash
 ./b nbs <tool_name> <nbs_file_name> <arguments>
 ```
 
@@ -85,7 +85,7 @@ These tools are grouped under the [`./b nbs`](https://github.com/NUbots/NUbots/t
 
 Generates statistics about the messages in an NBS file. This includes a count of each message type in the file, and how many messages there are in total.
 
-```sh
+```bash
 # Example
 ./b nbs stats path/to/file.nbs
 ```
@@ -98,7 +98,7 @@ Generates statistics about the messages in an NBS file. This includes a count of
 
 Converts the data in an NBS file to JSON, and prints the output. To save the output to a file, append `> file.json` to the command.
 
-```sh
+```bash
 # Example
 ./b nbs json path/to/file.nbs > file.json
 ```
@@ -107,7 +107,7 @@ Converts the data in an NBS file to JSON, and prints the output. To save the out
 
 Extracts JPEG image files from `CompressedImage` messages in an NBS file. It will also write each image's metadata (`Hcw` and lens information) to a JSON file next to the extracted image.
 
-```sh
+```bash
 # Example
 ./b nbs extract_images path/to/file.nbs --output path/to/output-folder/
 ```
@@ -120,7 +120,7 @@ Extracts JPEG image files from `CompressedImage` messages in an NBS file. It wil
 
 Extracts images from `CompressedImage` messages in an NBS file, and combines them into an MP4 video.
 
-```sh
+```bash
 # Example
 ./b nbs video path/to/file.nbs --output path/to/output-folder/
 ```
@@ -148,7 +148,7 @@ Calculates camera intrinsics using an NBS recording of asymmetric circles grid p
 
 Trains a foot down network using sensor data from the legs.
 
-```sh
+```bash
 # Example
 ./b nbs footdown path/to/data-folder/
 ```
