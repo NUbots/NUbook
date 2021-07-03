@@ -51,45 +51,143 @@ Follow the rest of the steps on this page within Ubuntu.
 
 </details>
 
-Install libraries for cmake, protobuf, eigen, and yaml-cpp:
+<details>
+
+<summary> Arch Linux </summary>
+
+1. Run the following to obtain the required dependencies.
+
+   ```bash
+   pacman -S --needed git lsb-release cmake swig glu glib2 freeimage freetype2 libxml2 libzip boost-libs gd libgcrypt libzip readline pbzip2 pciutils wget zip unzip jdk-openjdk libusb
+   ```
+
+2. Download our [usb patch](assets/webots_usb.patch) which helps the makefile link `libusb` properly.
+
+3. After you do the clone step below, move the patch file `webots_usb.patch` into your webots install folder, and run `git apply webots_usb.patch` inside that folder to apply it. After that, you should be able to run `make -j$(nproc)` as usual.
+
+</details>
+
+Install libraries for cmake, protobuf, eigen, yaml-cpp, ninja-build, and clang-tidy:
 
 ```sh
 sudo apt-get update
-sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev
+sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build clang-tidy python3-dev libjpeg9-dev
 ```
 
 ## Install Webots
 
-To install Webots, use the instructions on the [Webots GitHub repository](https://github.com/cyberbotics/webots/wiki/Linux-installation). After running the `git clone` command in the guide, run `git checkout develop`. Follow these instructions inside Ubuntu (WSL) if you are a Windows user. See the previous section on how to set this up. The optional dependencies are not required. Note that you must clone the Webots directory into your home folder. To move to your home folder, run `cd ~`.
+1. Open a terminal and swap to your home directory (note that Webots should be cloned in your home directory). Then clone the repository and change into the cloned directory:
+
+   ```sh
+   cd ~
+   git clone --branch nubots-changes --single-branch --recurse-submodules -j$(nproc) https://github.com/NUbots/webots.git
+   cd webots
+   ```
+
+   By using these commands, you'll be on the correct branch (`nubots-changes`) and you'll have the required submodules.
+
+2. Install Webots build dependencies:
+
+   ```sh
+   sudo ./scripts/install/linux_compilation_dependencies.sh
+   ```
+
+3. Build Webots:
+
+   ```sh
+   make -j$(nproc)
+   ```
+
+4. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+
+   ```
+   echo WEBOTS_HOME=$HOME/webots >> ~/.bashrc
+   ```
+
+5. Install dependencies for the referee:
+
+   ```sh
+   cd ~/webots/projects/samples/contests/robocup/controllers/referee
+   pip3 install -r requirements.txt
+   ```
+
+6. Build the Robocup controllers:
+
+   ```sh
+   cd ~/webots/projects/samples/contests/robocup
+   WEBOTS_HOME=$HOME/webots make -j$(nproc)
+   ```
+
+## Install Game Controller
+
+1. Install the ant build tool:
+
+   ```sh
+   sudo apt-get install ant default-jdk
+   ```
+
+2. Clone the Robocup TC GameController repo:
+
+   ```sh
+   cd ~
+   git clone https://github.com/RoboCup-Humanoid-TC/GameController.git
+   ```
+
+3. Change into the cloned directory and build the GameController:
+
+   ```sh
+   cd GameController
+   ant
+   ```
 
 ## Get and Build the NUbots Environment
 
 1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
 
    ```sh
-   git clone https://github.com/NUbots/NUWebots
+   cd ~
+   git clone https://github.com/NUbots/NUWebots.git
    cd NUWebots
    ```
 
-2. Compile the controllers with cmake
+2. Install the python dependencies:
 
-   1. Make a build folder and move into it
+   ```sh
+   pip3 install -r requirements.txt
+   ```
 
-      ```sh
-      mkdir build && cd build
-      ```
+3. Configure the codebase by running
 
-   2. Configure and generate the build files
+   ```sh
+   ./b configure
+   ```
 
-      ```sh
-      cmake ..
-      ```
+   <details>
 
-   3. Compile the code
+   <summary> Optional Flags </summary>
+   We can configure with several optional flags as follows:
 
-      ```sh
-      make -j$(nproc)
-      ```
+   ```sh
+   ./b configure [-i] [-- <flags>]
+   ```
+
+   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
+
+   | Flag                              | Effect                                                                                                         | Default             |
+   | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
+   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
+   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
+   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
+   | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
+   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
+
+   </details>
+
+4. Build the codebase by running
+
+   ```sh
+   ./b build
+   ```
 
 ## Running Webots
 
@@ -111,12 +209,44 @@ To install Webots, use the instructions on the [Webots GitHub repository](https:
 
    2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
 
+## Running Webots with GameController
+
+1. Find your primary local IP address by running the following.
+
+   ```sh
+   hostname -I
+   ```
+
+   Your primary IP address will usually be the first of the addresses in the output returned. For example, if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
+
+2. Set the `GAME_CONTROLLER_UDP_FILTER` env variable to your local IP address from step 1, to ensure your instance of GameController is not affected by other instances of GameController on the network.
+
+   ```sh
+   export GAME_CONTROLLER_UDP_FILTER=<IP_ADDRESS> # replace <IP_ADDRESS> with your IP address from step 1
+   ```
+
+3. Run the following to open Webots with the Robocup world and the GameController:
+
+   ```sh
+   JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
+   ```
+
+   <Alert>
+
+   Sometimes closing Webots doesn't properly close the GameController subprocess. If this happens you'll get an error about GameController when you next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
+
+   ```sh
+   kill -9 $(pgrep -fi GameControllerSimulator.jar)
+   ```
+
+   </Alert>
+
 ## Creating a New Controller
 
 From the root of the NUWebots repository run
 
 ```sh
-python3 ./scripts/create_controller.py <name of controller>
+./b controller generate <name of controller>
 ```
 
 Where `<name of controller>` is the name you want to use for the new controller. A folder and files will be created with this name, so they must be valid file names (don't use spaces in your controller name).
