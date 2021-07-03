@@ -320,7 +320,7 @@ For measurements on the field we use field space. For field coordinates the **x-
 
 # Interpolation
 
-Given a set of data points, often we want to find a function that contains all these points, which we call an interpolant. Interpolants are commonly polynomials, because they can approximate complex curves with a few points, with relatively low computational costs. However, interpolant polynomials which are locally accurate for the given data can have oscillation issues at the edges of the interval which is being interpolated on - [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon).
+Given a set of data points, often we want to find a function that contains all these points, which we call an interpolant. Interpolants are commonly polynomials, because they can approximate complex curves with a few points, with relatively low computational costs. Interpolant polynomials can be affected by [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon), where the interpolant is locally accurate for the given data points but has oscillations issues beyond these points. A further issue with interpolants is uniqueness - if there are too few constraints then there may be an infinite number of interpolants, and if there are too many constraints then there may not be a solution. Generally, for $n+1$ distinct points, there is a unique polynomial of degree $\leq n$ that interpolates the points.
 
 ## Splines
 
