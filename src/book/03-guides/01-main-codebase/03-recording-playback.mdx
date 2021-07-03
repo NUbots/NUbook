@@ -36,7 +36,7 @@ The following steps detail how to record data. An example will be given througho
 
    - **If** you are **not** running on a real robot, e.g. you are logging data from a simulator, change the output directory of the logs.
 
-     1. Find the line `directory: log`.
+     1. Find the line `directory: log` in the configuration file.
      2. Change `log` to `recordings`.
 
 3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/nubots/getting-started) page.
@@ -45,7 +45,7 @@ The following steps detail how to record data. An example will be given througho
 
    **Locally in Docker:** In the same location you built the code, run the binary using the command `./b run <role_name>`.
 
-   **On a real robot:** SSH into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./sensortest`.
+   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./sensortest`.
 
 5. Stop the binary when you have finished recording by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 
