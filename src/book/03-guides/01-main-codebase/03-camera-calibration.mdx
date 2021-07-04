@@ -22,7 +22,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
     The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
 
-    Next you need to figure out which serial number is left and which is right. Change the serial number for one camera to an incorrect number (this ensures it's not found when running cameratest). Enable compressed images in `NUsight.yaml`. Run `./cameratest` and test which camera is working by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively, you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+    Next you need to figure out which serial number is left and which is right. Change the serial number for one camera to an incorrect number (this ensures it's not found when running cameratest). Enable compressed images in `NetworkForwarder.yaml`. Run `./cameratest` and test which camera is working by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively, you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
 5.  Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
@@ -87,7 +87,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
 3.  Verify these values by running vision and checking the output in NUsight.
 
-    1. Ensure `NUsight.yaml` has enabled compressed images and vision objects.
+    1. Ensure `NetworkForwarder.yaml` has enabled compressed images and vision objects.
     2. Stand the robot up with `./scriptrunner Stand.yaml`
     3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
     4. Run `visualmesh.role` and switch to the vision tab in NUsight
