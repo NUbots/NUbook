@@ -334,7 +334,7 @@ NUsight is a visual debugging web application used at NUbots that visually repre
 
 You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
 
-Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
+Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
 
 ```bash
 ./b edit config/NetworkForwarder.yaml
@@ -353,7 +353,8 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 1. Install npm and Node.js by running
 
    ```bash
-   sudo apt install npm nodejs
+   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+   sudo apt-get install -y nodejs
    ```
 
 2. Configure the package repository and install yarn by running
