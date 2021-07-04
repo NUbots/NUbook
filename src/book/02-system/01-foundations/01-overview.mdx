@@ -22,3 +22,19 @@ After motions is hardware IO. The hardware will output the commands and input th
 All these modules are connected using NUClear which is a message passing software architecture. More can be found on NUClear [here](https://nuclear.readthedocs.io/en/latest/).
 
 ![Flow of the NUbots codebase](./images/software-overview.svg)
+
+## Roles
+
+Roles in the main codebase are the building blocks for creating a binary to run on a robot. A role file lists all the modules to be used in that binary. If a module is not included in the role file, that module will not run. All roles can be found in the [roles folder](https://github.com/NUbots/NUbots/tree/master/roles) in the first level of the repository and have the extension `.role`. For specifics about the NUClear roles system, see the [NUClear page](/system/foundations/nuclear#nuclear-roles). 
+
+When adding modules to the list in a role, use the syntax `namespace::module_name`. For example, if you want to include the [`SensorFilter` module](https://github.com/NUbots/NUbots/tree/master/module/input/SensorFilter), then check the namespace in [`SensorFilter.hpp`](https://github.com/NUbots/NUbots/blob/master/module/input/SensorFilter/src/SensorFilter.hpp). The namespace is `namespace module::input`, so we have `module::input::SensorFilter`. However, all modules have `module::` so we drop this part of the namespace. The line in the role is therefore `input::SensorFilter`. 
+
+The following is a table of roles that exist in the NUbots codebase and possible use cases for them.
+
+| Role Name | What it contains | Why we have it |
+| --- | --- | --- |
+| `balllocalisation` | Real robot sensors, Visual Mesh, ball detector and ball localisation | Used to test and tune how well the robot detects balls on a field. |
+| `cameratest` | Real robot sensors and camera | Used to see if the cameras are working and often used for [calibrating the cameras](/guides/main/camera-calibration). | `filter_playback` | Filter sensor data, data playback and NUsight | Use for playing back raw sensor data and viewing the filtered data in NUsight. |
+ 
+
+In most cases, `platform::darwin::HardwareIO` and `platform::Webots` can be used interchangably depending on if you are running on the real robot or the simulated robot in Webots. In some cases `platform::darwin::HardwareSimulator` can also be used, but this simulated robot is very basic and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down.
