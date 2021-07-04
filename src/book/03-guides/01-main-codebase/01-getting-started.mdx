@@ -350,14 +350,20 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Install npm and Node.js by running
+1. Install Node.js by running
 
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
    sudo apt-get install -y nodejs
    ```
 
-2. Configure the package repository and install yarn by running
+2. Install npm by running
+
+   ```bash
+   sudo apt install npm
+   ```
+
+3. Configure the package repository and install yarn by running
 
    ```bash
    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -365,19 +371,19 @@ Open up a new terminal to run NUsight and NUbots code side by side.
    sudo apt update && sudo apt install yarn
    ```
 
-3. Get the dependencies for NUsight by running
+4. Get the dependencies for NUsight by running
 
    ```bash
    ./b yarn
    ```
 
-4. Build NUsight by running
+5. Build NUsight by running
 
    ```bash
    ./b yarn build
    ```
 
-5. Find the IP address of the Docker container. Run
+6. Find the IP address of the Docker container. Run
 
    ```bash
    ifconfig
@@ -385,7 +391,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
    There will be an entry called `docker0`, or similar. Find the address after the word `broadcast`. We will refer to this address as `<ADDRESS>`.
 
-6. Run the following command to run NUsight
+7. Run the following command to run NUsight
 
    ```bash
    ./b yarn prod --address <ADDRESS>
@@ -397,7 +403,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
    </Alert>
 
-7. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
+8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
 
 </details>
 
