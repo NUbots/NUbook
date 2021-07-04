@@ -12,28 +12,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
 ## Get the Data
 
-1.  Change `cameratest.role` to include `support::logging::DataLogging`
-
-    ```bash
-    nuclear_role(
-      # FileWatcher, ConsoleLogHandler and SignalCatcher must go first. KinematicsConfiguration usually goes after these
-      # and without it many roles do not run
-      extension::FileWatcher
-      support::SignalCatcher
-      support::logging::ConsoleLogHandler
-      support::logging::DataLogging
-      # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-      motion::KinematicsConfiguration
-      support::configuration::NetworkConfiguration
-      support::configuration::GlobalConfig
-      platform::darwin::HardwareIO
-      platform::darwin::SensorFilter
-      input::Camera
-      support::NUsight
-      output::ImageCompressor
-      support::configuration::SoccerConfig
-    )
-    ```
+1.  Change [`cameratest.role`](https://github.com/NUbots/NUbots/blob/master/roles/cameratest.role) to include `support::logging::DataLogging`
 
 2.  Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/main/getting-started) or the [Build System page](/system/foundations/build-system).
 
