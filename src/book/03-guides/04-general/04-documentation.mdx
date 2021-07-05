@@ -10,7 +10,7 @@ slug: /guides/general/documentation
 
 We use the javadoc documentation _style_. This means is that directives are formatted with a `@`. Note that `@` and `\\` are interchangeable when looking at other sources.
 
-Each declaration, or definition in the absence of declaration, that is a part of an api, e.g. declared in the `.hpp` file, should have a documenting comment.
+A documenting comment for each class, struct, function, method, global variable, member variable and anything extra that you think may need one, should be in the `.hpp` .
 
 ### Directives
 
@@ -23,6 +23,7 @@ This is a list of common directives
 | `@retval <value>` | Details specific return value meanings, usually for enums, booleans or error codes.|
 | `@throws <type name>` | Details on what a function throws.|
 | `@tparam <formal name>` | Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.|
+| `@author` | The author and maintainer of this code. Git blame is unreliable as some changes could just be formatting.|
 
 This is a list of less common directives that may be used, see the [doxygen](https://www.doxygen.nl/manual/commands.html#cmd_intro) documentation for the full list.
 
@@ -35,11 +36,10 @@ This is a list of less common directives that may be used, see the [doxygen](htt
 | `@todo` | Adds a todo to the documentation. |
 | `@post` | Details a post condition. |
 | `@pre` | Details a pre condition. |
-| `@code{.<language>}` and `@endcode` | starts and finishes a code block respectively, like \` and in NUbook. `{.language}` is optional.|
+| `@code{.<language>}` and `@endcode` | starts and finishes a code block respectively, similar to \` in NUbook. `{.language}` is optional.|
 | `@copydoc <name>` | Copies the documentation from another thing.|
 | `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` | Creates (latex)[https://www.overleaf.com/learn/latex/Mathematics] (doxygen formulas)[https://www.doxygen.nl/manual/formulas.html].|
 | `@verbatim` and `@endverbatim` | Starts and finishes verbatim output respectively, outputs exactly what you wrote.|
-| `@author` | The author of this code. This is used sporadically in `NUbots`. We generally rely on the git blame instead.|
 
 ### Extra formatting
 
@@ -85,4 +85,4 @@ void print_cool();
 
 ## Future
 
-In the future we are planning to use a combination of doxygen and our NUClear mapperfor automatic low level documentation for NUbook.
+In the future we are planning to use a combination of doxygen and our NUClear mapper for automatic low level documentation of our code for inclusion in NUbook.
