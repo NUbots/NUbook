@@ -10,12 +10,14 @@ slug: /guides/general/troubleshooting
 
 If this page does not solve your problem, the following people can help you with specific parts of the system:
 
-- **Hardware**: Taylor Young, Alex Biddulph, Timothy Mullen, Shawn Hain
-- **NUbots codebase**: Alex Biddulph, Trent Houliston, Taylor Young
-- **Toolchain and build**: Alex Biddulph, Josephus Paye II
-- **NUClear**: Trent Houliston
-- **NUsight**: Brendan Annable, Josephus Paye II, Trent Houliston
-- **Mathematics**: Ysobel Sims, Timothy Mullen
+- **Hardware**: Taylor Young
+- **Toolchain and build**: Kip Hamiltons
+- **NUClear**: Cameron Murtagh
+- **NUsight**: Josephus Paye II, Brendan Annable
+- **Machine Learning**: Joel Wong
+- **Mathematics**: Kip Hamiltons, Cameron Murtagh, Taylor Young, Ysobel Sims
+
+Team mentors **Alex Biddulph** and **Trent Houliston** can help with most parts of the system if this list does not help.
 
 ## NUbots
 
@@ -23,7 +25,7 @@ If this page does not solve your problem, the following people can help you with
 
 If your compiler can't find `FileWatcher.h` as in the following error:
 
-```sh
+```bash
 nuclear/roles/firmwareinstaller.cpp:3:10: fatal error: extension/FileWatcher/src/FileWatcher.h: No such file or directory
     3 | #include "extension/FileWatcher/src/FileWatcher.h"
       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,9 +63,27 @@ find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -
 If the problem persists, try purging the build volume by running `./b configure --clean`.
 Note that purging the build volume means you'll have to rerun `./b build` to use built code.
 
+### Not enough memory in Docker? (macOS)
+
+By default Docker Desktop will allocate 2GB of memory to use for building images. When building the NUbots image, this is insufficient and will result in an error. To fix this, open the Docker menu in the menu bar, go to advanced settings, and increase the memory available.
+
 ## NUsight
 
-TODO
+### Multiple Docker robots in NUsight?
+
+This means someone else is also running a Docker robot. You can modify the name of your Docker robot by doing the following.
+
+1. Open the `NetworkConfiguration.yaml` file in a text editor (here we are using nano on the command line):
+
+   ```bash
+   nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
+   ```
+
+2. Update the `name` field with the name you want to use and press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save the file and then <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit.
+
+3. Rebuild using `./b build` for the changes to take effect.
+
+4. In NUsight, toggle off the robots you do not want to see by clicking the robot icon at the top right of the NUsight GUI and toggling the slider next to the name of every other robot except the one you set in step 2.
 
 ## Hardware
 
@@ -72,20 +92,20 @@ TODO
 ## NUbook
 
 <Alert type="info">
-  The commands shown below should be run from the NUbook root folder, unless otherwise stated.  
+  The commands shown below should be run from the NUbook root folder, unless otherwise stated.
 </Alert>
 
 ### Why is my newly added page not showing up?
 
 When you add a new page, you should remove the Gatsby `.cache` and `public` folders, by running:
 
-```sh
+```bash
 rm -rf .cache public
 ```
 
 And then try building again:
 
-```sh
+```bash
 yarn dev
 ```
 
@@ -93,13 +113,13 @@ yarn dev
 
 Usually this happens when there is a problem with one or more packages in the `node_modules` folder. Try deleting `node_modules` and running `yarn` to reinstall dependencies:
 
-```sh
+```bash
 rm -rf node_modules && yarn
 ```
 
 Then try building again:
 
-```sh
+```bash
 yarn dev
 ```
 
@@ -109,7 +129,7 @@ If a page you have added or changed is not formatted correctly, your changes may
 
 To fix this, run:
 
-```sh
+```bash
 yarn format --fix
 ```
 
@@ -119,12 +139,12 @@ First, make sure you have saved the file, then refresh NUbook in the browser to 
 
 If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folders. To do so, run:
 
-```sh
+```bash
 rm -rf .cache public
 ```
 
 And then try building again:
 
-```sh
+```bash
 yarn dev
 ```
