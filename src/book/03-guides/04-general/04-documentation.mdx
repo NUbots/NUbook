@@ -16,8 +16,8 @@ Each declaration, or definition in the absence of declaration, that is a part of
 
 This is a list of directives some that we use.
 
-- `@brief` A brief description of the following code. Every documenting comment should have this.
-- `@detail` All the details that someone using this thing might need to know beyond what is provided in other directives.
+- `@brief` A brief description of the following code. Every documenting comment should have this. If the first line does not have a directive it is treated as `@brief`.
+- `@detail` All the details that someone using this thing might need to know beyond what is provided in other directives. Comment lines after the initial one but before any directive is treated as a `@detail`.
 - `@param[direction] <formal name>` Details a parameter that is passed to a function. Direction is either `in` or `out` and is usually omitted.
 - `@return` Details what a function returns.
 - `@retval <value>` Details specific return value meanings, usually for enums, booleans or error codes.
@@ -37,13 +37,13 @@ This is a list of extra things that may be used, see [doxygen](https://www.doxyg
 - `@pre` Details a pre condition.
 - `@code{.<language>}` and `@endcode` starts and finishes a code block respectively, like \` and in NUbook. `{.language}` is optional.
 - `@copydoc <name>` Copies the documentation from another thing.
-- `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` Creates latex mathematics.
+- `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` Creates (latex)[https://www.overleaf.com/learn/latex/Mathematics] (doxygen formulas)[https://www.doxygen.nl/manual/formulas.html].
 - `@verbatim` and `@endverbatim` Starts and finishes verbatim output respectively, outputs exactly what you wrote.
 - `@author` The author of this code. This is used sporadically in `NUbots`. We generally rely on the git blame instead.
 
 ### Extra formatting
 
-HTML can be used, but should be kept to simple tags like `<b>` and `<em>`.
+HTML can be used, but should be kept to simple tags like `<b>` and `<em>`. See the (official documentation)[https://www.doxygen.nl/manual/htmlcmds.html] for a full list.
 
 ### Example
 
