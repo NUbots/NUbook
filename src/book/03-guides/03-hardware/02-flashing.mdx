@@ -15,7 +15,7 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
    - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
    - Burn the Arch Linux ISO you just downloaded to the USB drive (in this example we are using `/dev/sdb`)
-   - ```sh
+   - ```bash
      sudo dd bs=4M if=~/Downloads/archlinux-2019.11.01-x86_64.iso of=/dev/sdb status=progress oflag=sync
      ```
 
@@ -48,20 +48,20 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
 
 5. Download the installation script [https://git.io/JeWaF](https://git.io/JeWaF) and make sure the script is executable
 
-   - ```sh
+   - ```bash
      curl -L https://git.io/JeWaF -o ./arch_install.sh
      chmod +x ./arch_install.sh
      ```
    - The installation script is located in the NUbots repository at [doc/ArchInstall/arch_install.sh](https://github.com/NUbots/NUbots/blob/master/doc/ArchInstall/arch_install.sh)
 
 6. Execute the script and follow the instructions
-   - ```sh
+   - ```bash
      ./arch_install.sh
      ```
 
 The installation script will end by downloading a secondary script and providing you with a command that you must run
 
-```sh
+```bash
 ROBOT_NUMBER=<N> arch-chroot /mnt ./arch-chroot_install.sh
 ```
 
@@ -71,7 +71,7 @@ Substitute `<N>` with the number of the robot that you are building. This will i
 
 The secondary script assumes that the network interfaces are named `eth0` for ethernet and `wlan0` for WiFi. If you _know_ this is not the case then execute the script as follows
 
-```sh
+```bash
 ROBOT_NUMBER=<N> \
 ETHERNET_INTERFACE=IF_NAME \
 WIFI_INTERFACE=IF_NAME \
@@ -82,7 +82,7 @@ arch-chroot /mnt ./arch-chroot_install.sh
 
 Finally, once that script has finished, you must run one more command.
 
-```sh
+```bash
 /mnt/arch-post_install.sh
 ```
 
@@ -118,7 +118,7 @@ These 5 files need to be both renamed (replacing `eth0` or `wlan0` with the new 
 
 Next, correct the `wpa_supplicant` service by running
 
-```sh
+```bash
 sudo systemctl disable wpa_supplicant@wlan0
 sudo systemctl enable wpa_supplicant@new_interface
 ```
@@ -131,7 +131,7 @@ Once these files have been fixed, reboot by typing `sudo systemctl reboot` and t
 
 To set up the WiFi interface you first need to know the name of the interface. To find this, run
 
-```sh
+```bash
 ip link
 ```
 
@@ -143,20 +143,20 @@ The rest of these instructions assume a network using WPA2 (like the network use
 
 1. Make sure the `wpa_supplicant` configuration directory exists
 
-   - ```sh
+   - ```bash
      mkdir -p /etc/wpa_supplicant
      ```
 
 2. Setup the network configuration
 
-   - ```sh
+   - ```bash
      wpa_passphrase <Network SSID> <Network Passphrase> > /etc/wpa_supplicant/wpa_supplicant-<WiFi Interface>.conf
      ```
    - Be sure to replace `<Network SSID>` with the SSID of the wireless network to connect to (either `epsilon-x` or `epsilon-z` in the lab), `<Network Passphrase>` with the password for the network (ask someone for the lab password if you don't know it), and `<WiFi Interface>` with the name of the interface found earlier.
 
 3. Now start all of the necessary services
 
-   - ```sh
+   - ```bash
      systemctl start dhcpcd.service
      systemctl start wpa_supplicant.service
      systemctl start wpa_supplicant@<Wifi Interface>.service
