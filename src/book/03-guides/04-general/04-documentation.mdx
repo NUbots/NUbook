@@ -16,30 +16,30 @@ Each declaration, or definition in the absence of declaration, that is a part of
 
 This is a list of common directives
 
-- `@brief` A brief description of the following code. Every documenting comment should have this. If the first line does not have a directive it is treated as `@brief`.
-- `@detail` All the details that someone using this thing might need to know beyond what is provided in other directives. Comment lines after the initial one but before any directive is treated as a `@detail`.
-- `@param[direction] <formal name>` Details a parameter that is passed to a function. Direction is either `in` or `out` and is usually omitted.
-- `@return` Details what a function returns.
-- `@retval <value>` Details specific return value meanings, usually for enums, booleans or error codes.
-- `@throws <type name>` Details on what a function throws.
-- `@tparam <formal name>` Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.
+| `@brief` | A brief description of the following code. Every documenting comment should have this. If the first line does not have a directive it is treated as `@brief`.|
+| `@detail` | All the details that someone using this thing might need to know beyond what is provided in other directives. Comment lines after the initial one but before any directive is treated as a `@detail`.|
+| `@param[direction] <formal name>` | Details a parameter that is passed to a function. Direction is either `in` or `out` and is usually omitted.|
+| `@return` | Details what a function returns.|
+| `@retval <value>` | Details specific return value meanings, usually for enums, booleans or error codes.|
+| `@throws <type name>` | Details on what a function throws.|
+| `@tparam <formal name>` | Details on the template parameter, usually a [named requirement](https://en.cppreference.com/w/cpp/named_req) or other requirements that must be fulfilled.|
 
 This is a list of less common directives that may be used, see the [doxygen](https://www.doxygen.nl/manual/commands.html#cmd_intro) documentation for the full list.
 
-- `@example <file-name>` Indicates that an example of how the function or class should be used is at `<file-name>`.
-- `@see <name>` Tells the reader to read documentation for another class, function or variable.
-- `@attention` Tells the reader that they should pay attention to the following point.
-- `@warning` Tells the reader something that may go wrong, and ways of avoiding such a fate.
-- `@note` Extra information that does not fit in other tags.
-- `@remark` An aside or candid comment about the code or approach.
-- `@todo` Adds a todo to the documentation.
-- `@post` Details a post condition.
-- `@pre` Details a pre condition.
-- `@code{.<language>}` and `@endcode` starts and finishes a code block respectively, like \` and in NUbook. `{.language}` is optional.
-- `@copydoc <name>` Copies the documentation from another thing.
-- `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` Creates (latex)[https://www.overleaf.com/learn/latex/Mathematics] (doxygen formulas)[https://www.doxygen.nl/manual/formulas.html].
-- `@verbatim` and `@endverbatim` Starts and finishes verbatim output respectively, outputs exactly what you wrote.
-- `@author` The author of this code. This is used sporadically in `NUbots`. We generally rely on the git blame instead.
+| `@example <file-name>` | Indicates that an example of how the function or class should be used is at `<file-name>`.|
+| `@see <name>` | Tells the reader to read documentation for another class, function or variable.|
+| `@attention` | Tells the reader that they should pay attention to the following point.|
+| `@warning` | Tells the reader something that may go wrong, and ways of avoiding such a fate.|
+| `@note` | Extra information that does not fit in other tags.|
+| `@remark` | An aside or candid comment about the code or approach.|
+| `@todo` | Adds a todo to the documentation. |
+| `@post` | Details a post condition. |
+| `@pre` | Details a pre condition. |
+| `@code{.<language>}` and `@endcode` | starts and finishes a code block respectively, like \` and in NUbook. `{.language}` is optional.|
+| `@copydoc <name>` | Copies the documentation from another thing.|
+| `@f$`, `@f[`, `@f]`, `@f{<environment>}{` and `@f}` | Creates (latex)[https://www.overleaf.com/learn/latex/Mathematics] (doxygen formulas)[https://www.doxygen.nl/manual/formulas.html].|
+| `@verbatim` and `@endverbatim` | Starts and finishes verbatim output respectively, outputs exactly what you wrote.|
+| `@author` | The author of this code. This is used sporadically in `NUbots`. We generally rely on the git blame instead.|
 
 ### Extra formatting
 
