@@ -10,6 +10,26 @@ The motion subsystem contains modules that are responsible for walking, kicking,
 
 The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
+## Forward Kinematics
+
+The NUgus platform can be treated as a robotic manipulator consisting of rigid-body **links** connected by **joints**. Such a configuration is called a **kinematic chain**. The complete kinematic chain for the NUgus system is shown below. 
+
+A **Forward Kinematic Model (FKM)** provides the position and orientation between two points on a chain given the value of robots joints in rads. For conventional reasons, the **joint frames** are orientated such that the direction of rotation always points in the joints z direction. 
+
+![Screenshot of the NUgus forward kinematic model](./images/FKM.png 'FKM')
+
+A FKM is constructed through the product of homogeneous transformations between joint frames. See the homogeneous transforms section here for more details.
+
+### Legs
+
+### Arms
+
+### Head
+
+## Inverse Kinematics
+
+Inverse kinematics is the process of determining the value of the joint variables given a desired position and orientation of the end effector.
+
 ## Script Engine
 
 Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do more complex movements like getting up or kicking.
