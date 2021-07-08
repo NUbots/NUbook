@@ -182,6 +182,9 @@ slug: /guides/general/glossary
 
 [**Transformation**](<https://en.wikipedia.org/wiki/Transformation_(function)>): A function which maps a set to itself (sometimes called an operator on that set). Often, it is used in the context of a spatial manipulation - regularly representated as a translation and a rotation.
 
+**Units**: [S.I. units](https://en.wikipedia.org/wiki/International_System_of_Units) are used for everything but time. Storage of values may have a different unit, e.g. [nbs and nbs index files](/system/foundations/nuclear#nbs-files).
+In c++ units are a templated parameter to [NUClear::clock::duration](https://en.cppreference.com/w/cpp/chrono/duration) and [NUClear::clock::time_point](https://en.cppreference.com/w/cpp/chrono/time_point) is unit agnostic.
+
 [**TFRecord**](https://www.tensorflow.org/tutorials/load_data/tfrecord): Binary format used by the Visual Mesh to store input data - contains image, mask, and lens metadata records.
 
 [**Undefined Behaviour Sanitizer/UBSAN**](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html): A package which you can build into your program to detect C++ undefined behaviour when you run your program.
