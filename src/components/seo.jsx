@@ -29,11 +29,6 @@ function SEO({ description, lang, meta, keywords, title }) {
             script={[
               {
                 defer: true,
-                src:
-                  'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js',
-              },
-              {
-                defer: true,
                 src: withPrefix('algolia-search.js'),
               },
             ]}

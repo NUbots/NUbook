@@ -12,7 +12,7 @@ const Link = ({ Icon, title, href, color, isLast }) => (
     className={`inline-block ${isLast ? '' : 'mr-6'} ${
       color === 'white'
         ? 'text-icon-inverted hover:text-white focus:text-white'
-        : 'text-gray-400 hover:text-gray-800 focus:text-gray-800'
+        : 'text-gray-400 dark:text-gray-600 hover:text-gray-800 focus:text-gray-800 dark:hover:text-gray-300 dark:focus:text-gray-300'
     }`}
     title={title}
     href={href}

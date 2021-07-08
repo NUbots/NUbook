@@ -1,8 +1,21 @@
 .link {
-  @apply block py-1 font-medium truncate text-primary-muted;
+  @apply block py-1 font-medium truncate;
+}
 
-  &:hover,
-  &:global(.focus-visible) {
-    @apply text-nubots-700;
+:global(.light) {
+  .link {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-700;
+    }
+  }
+}
+
+:global(.dark) {
+  .link {
+    &:hover,
+    &:global(.focus-visible) {
+      @apply text-nubots-500;
+    }
   }
 }

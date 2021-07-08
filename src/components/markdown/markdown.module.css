@@ -1,8 +1,8 @@
 .markdown {
   /* ============================
-   * Base text color and line height
+   * Baseline height
    * ============================ */
-  @apply text-primary leading-relaxed;
+  @apply leading-relaxed;
 
   /* ============================
    * Vertical rythm
@@ -38,11 +38,10 @@
    * Separator
    * ============================ */
   hr {
-    @apply border-t-0 border-r-0 border-l-0 border-b-2 border-gray-200 my-16;
+    @apply border-t-0 border-r-0 border-l-0 border-b-2 my-16;
   }
 
   a {
-    @apply text-nubots-700;
     @apply underline break-words;
 
     strong {
@@ -52,7 +51,6 @@
     code {
       @apply p-1;
       @apply font-semibold;
-      @apply text-nubots-700;
     }
   }
 
@@ -69,15 +67,12 @@
   :not(pre) > code {
     @apply inline-block;
     @apply rounded-sm;
-    @apply text-sm;
     @apply px-1;
     @apply leading-none;
     @apply whitespace-pre-line;
-    @apply text-red-600;
     @apply font-mono;
     @apply align-baseline;
     @apply font-normal;
-    background-color: rgba(0, 0, 0, 0.04);
   }
 
   strong code {
@@ -109,11 +104,7 @@
       }
 
       &::-webkit-scrollbar-thumb {
-        @apply bg-gray-500 rounded-full;
-
-        &:hover {
-          @apply bg-gray-600;
-        }
+        @apply rounded-full;
       }
     }
   }
@@ -125,41 +116,26 @@
     @apply inline-block text-sm align-middle font-mono font-semibold rounded-sm;
     padding: 3px 5px;
     line-height: 12px;
-    color: #444d56;
-    background-color: #fafbfc;
-    border: 1px solid #d1d5da;
-    box-shadow: inset 0 -1px 0 #d1d5da;
+    border-width: 1px;
+    border-style: solid;
   }
 
   /* ============================
    * Blockquotes
    * ============================ */
   blockquote {
-    @apply bg-gray-100;
-    @apply p-4;
-    @apply border-l-4 border-gray-200;
-    @apply text-primary;
-    @apply text-base;
+    @apply p-4 border-l-4 text-base;
   }
 
   /* ============================
    * Headings
    * ============================ */
   h1 {
-    @apply mb-1;
-    @apply leading-none;
-    @apply text-primary;
-    @apply font-light;
-    @apply text-3xl;
+    @apply mb-1 leading-none font-light text-3xl;
   }
 
   h2 {
-    @apply mt-10;
-    @apply mb-4;
-    @apply text-primary;
-    @apply leading-none;
-    @apply font-semibold;
-    @apply text-2xl;
+    @apply mt-10 mb-4 leading-none font-semibold text-2xl;
   }
 
   h2 + h3 {
@@ -167,26 +143,15 @@
   }
 
   h3 {
-    @apply mt-12 -mb-3;
-    @apply text-primary;
-    @apply leading-tight;
-    @apply font-semibold;
-    @apply text-xl;
+    @apply mt-12 -mb-3 leading-tight font-semibold text-xl;
   }
 
   h4 {
-    @apply mb-0;
-    @apply text-primary;
-    @apply leading-snug;
-    @apply font-semibold;
-    @apply text-lg;
+    @apply mb-0 leading-snug font-semibold text-lg;
   }
 
   h5 {
-    @apply text-primary;
-    @apply leading-snug;
-    @apply font-semibold;
-    @apply text-base;
+    @apply leading-snug font-semibold text-base;
   }
 
   h1 + p {
@@ -198,29 +163,20 @@
   h3 > code,
   h4 > code,
   h5 > code {
-    @apply text-red-600 font-mono;
+    @apply font-mono;
     font-size: inherit;
   }
 
   h3 > code {
-    @apply text-lg px-1 bg-gray-100 rounded;
+    @apply px-1 rounded;
   }
 
   h4 > code {
-    @apply text-base px-1 bg-gray-100 rounded;
+    @apply px-1 rounded;
   }
 
   h5 > code {
-    @apply text-base px-1 bg-gray-100;
-  }
-
-  p {
-    @apply text-base;
-    @apply mt-6;
-
-    &:first-child {
-      margin-top: 0;
-    }
+    @apply px-1;
   }
 
   h1,
@@ -236,12 +192,28 @@
       left: -32px;
       top: -4px;
       bottom: -4px;
+
+      svg {
+        fill: currentColor;
+      }
     }
 
     &:hover a[data-anchor],
     a[data-anchor]:hover,
     a[data-anchor]:focus {
       @apply opacity-100;
+    }
+  }
+
+  /* ============================
+   * Paragraphs
+   * ============================ */
+  p {
+    @apply text-base;
+    @apply mt-6;
+
+    &:first-child {
+      margin-top: 0;
     }
   }
 
@@ -255,8 +227,10 @@
       @apply relative pl-10;
 
       &::before {
-        @apply absolute left-0 top-0 ml-4 inline-block mr-3 text-icon;
-        content: '\25CF'; /* Bullet symbol */
+        @apply absolute left-0 top-0 ml-4 inline-block mr-3 bg-center bg-contain bg-no-repeat;
+        width: 0.6em;
+        height: 1.6em;
+        content: '';
       }
     }
   }
@@ -273,8 +247,7 @@
       @apply absolute top-0 left-0 mt-px ml-1;
       @apply flex items-center justify-center;
       @apply h-6 w-6 rounded-full;
-      @apply text-primary text-xs font-bold;
-      background-color: rgba(0, 0, 0, 0.07);
+      @apply text-xs font-bold;
       content: counter(item);
       counter-increment: item;
     }
@@ -305,7 +278,7 @@
   :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
   ul code,
   ol code {
-    @apply text-sm leading-normal;
+    @apply leading-normal;
   }
 
   /* ============================
@@ -318,22 +291,18 @@
   }
 
   table {
-    @apply w-full text-left border border-gray-200;
+    @apply w-full text-left border;
     border-collapse: collapse !important;
 
     th {
-      @apply font-semibold text-primary py-2 px-4 bg-gray-100;
+      @apply font-semibold py-2 px-4;
     }
 
     td {
-      @apply py-2 px-4 border-t border-gray-200;
+      @apply py-2 px-4 border-t;
 
       code {
-        @apply bg-gray-100 px-1 font-mono text-sm text-red-600 align-baseline;
-      }
-
-      &:first-child {
-        @apply border-gray-300;
+        @apply px-1 font-mono text-sm align-baseline;
       }
     }
   }
@@ -348,8 +317,12 @@
   /* ============================
    * Collapsible sections
    * ============================ */
+  details {
+    @apply rounded-sm;
+  }
+
   details summary {
-    @apply select-none cursor-pointer;
+    @apply select-none cursor-pointer rounded-sm;
   }
 
   > details {
@@ -357,18 +330,310 @@
   }
 
   > details[open] {
-    @apply p-4 border-gray-200;
+    @apply p-4;
   }
 
   > details summary {
-    @apply bg-gray-200 py-2 px-4;
+    @apply py-2 px-4;
   }
 
   > details[open] > summary {
-    @apply -mt-4 -mx-4;
+    @apply -mt-4 -mx-4 rounded-b-none;
   }
 
   > details summary + p {
     @apply mt-3;
+  }
+}
+
+:global(.light) .markdown {
+  /* ============================
+   * Base text color
+   * ============================ */
+  @apply text-primary;
+
+  /* ============================
+   * Separator
+   * ============================ */
+  hr {
+    @apply border-gray-200;
+  }
+
+  a {
+    @apply text-nubots-700;
+
+    strong {
+      @apply font-bold;
+    }
+
+    code {
+      @apply text-nubots-700;
+    }
+  }
+
+  /* ============================
+   * Inline code
+   * ============================ */
+  :not(pre) > code {
+    @apply text-red-600;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  /* ============================
+   * Code blocks
+   * ============================ */
+  pre {
+    code {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-gray-500;
+
+        &:hover {
+          @apply bg-gray-600;
+        }
+      }
+    }
+  }
+
+  /* ============================
+   * Keyboard commands
+   * ============================ */
+  kbd {
+    color: #444d56;
+    background-color: #fafbfc;
+    border-color: #d1d5da;
+    box-shadow: inset 0 -1px 0 #d1d5da;
+  }
+
+  /* ============================
+   * Blockquotes
+   * ============================ */
+  blockquote {
+    @apply bg-gray-100 border-gray-200 text-primary;
+  }
+
+  /* ============================
+   * Headings
+   * ============================ */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply text-primary;
+  }
+
+  h1 > code,
+  h2 > code,
+  h3 > code,
+  h4 > code,
+  h5 > code {
+    @apply text-red-600;
+  }
+
+  h3 > code,
+  h4 > code,
+  h5 > code {
+    @apply bg-gray-100;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    a[data-anchor] {
+      @apply text-primary;
+    }
+  }
+
+  /* ============================
+   * Lists
+   * ============================ */
+  ul {
+    > li::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16'%3E%3Ccircle cx='8' cy='8' r='6' fill='rgba(0,0,0,0.6)' /%3E%3C/svg%3E");
+    }
+  }
+
+  ol {
+    > li::before {
+      @apply text-primary;
+      background-color: rgba(0, 0, 0, 0.07);
+    }
+  }
+
+  /* ============================
+   * Tables
+   * ============================ */
+  table {
+    @apply border-gray-200;
+
+    th {
+      @apply text-primary bg-gray-100;
+    }
+
+    td {
+      @apply border-gray-200;
+
+      code {
+        @apply bg-gray-100 text-red-600;
+      }
+    }
+  }
+
+  /* ============================
+   * Collapsible sections
+   * ============================ */
+  > details[open] {
+    @apply border-gray-200;
+  }
+
+  > details summary {
+    @apply bg-gray-200;
+  }
+}
+
+:global(.dark) .markdown {
+  /* ============================
+   * Base text color
+   * ============================ */
+  @apply text-primary-inverted;
+
+  /* ============================
+   * Separator
+   * ============================ */
+  hr {
+    @apply border-gray-800;
+  }
+
+  a {
+    @apply text-nubots-500;
+
+    code {
+      @apply text-nubots-500;
+    }
+  }
+
+  /* ============================
+   * Inline code
+   * ============================ */
+  :not(pre) > code {
+    @apply text-red-500;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ============================
+   * Code blocks
+   * ============================ */
+  pre {
+    code {
+      &::-webkit-scrollbar-thumb {
+        @apply bg-gray-600;
+
+        &:hover {
+          @apply bg-gray-700;
+        }
+      }
+    }
+  }
+
+  /* ============================
+   * Keyboard commands
+   * ============================ */
+  kbd {
+    color: #ccc;
+    background-color: #222;
+    border-color: #444;
+    box-shadow: inset 0 -1px 0 #444;
+  }
+
+  /* ============================
+   * Blockquotes
+   * ============================ */
+  blockquote {
+    @apply bg-gray-900 border-gray-800 text-primary-inverted;
+  }
+
+  /* ============================
+   * Headings
+   * ============================ */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply text-primary-inverted;
+  }
+
+  h1 > code,
+  h2 > code,
+  h3 > code,
+  h4 > code,
+  h5 > code {
+    @apply text-red-500;
+  }
+
+  h3 > code,
+  h4 > code,
+  h5 > code {
+    @apply bg-gray-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    a[data-anchor] {
+      @apply text-primary-inverted;
+    }
+  }
+
+  /* ============================
+   * Lists
+   * ============================ */
+  ul {
+    > li::before {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' width='16' height='16'%3E%3Ccircle cx='8' cy='8' r='6' fill='rgba(255,255,255,0.6)' /%3E%3C/svg%3E");
+    }
+  }
+
+  ol {
+    > li::before {
+      @apply text-primary-inverted;
+      background-color: rgba(255, 255, 255, 0.07);
+    }
+  }
+
+  /* ============================
+   * Tables
+   * ============================ */
+  table {
+    @apply border-gray-800;
+
+    th {
+      @apply text-primary-inverted bg-gray-900;
+    }
+
+    td {
+      @apply border-gray-800;
+
+      code {
+        @apply bg-gray-900 text-red-500;
+      }
+    }
+  }
+
+  /* ============================
+   * Collapsible sections
+   * ============================ */
+  > details[open] {
+    @apply border-gray-900;
+  }
+
+  > details summary {
+    @apply bg-gray-900;
   }
 }
