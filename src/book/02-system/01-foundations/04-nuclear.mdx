@@ -10,27 +10,27 @@ NUClear is the software framework used in the main NUbots codebase. It is a mess
 
 This page is intended to be a practical summary of the official [NUClear documentation](https://nuclear.readthedocs.io/en/latest/), which contains a detailed description of NUClear. The [NUClear Roles repository](https://github.com/Fastcode/NUClearRoles) contains a detailed description of the NUClear roles system, much of which the [roles section](#nuclear-roles) in this page is based off.
 
-# Components
+## Components
 
-## PowerPlant
+### PowerPlant
 
 ![A collection of Reactors around the PowerPlant in the center. Double ended arrows point to and from the PowerPlant to each Reactor.](images/power_plant.svg 'PowerPlant with Reactors. Image: https://nuclear.readthedocs.io/en/latest/components.html')
 
 The PowerPlant is the central message system through which reactors communicate. It takes ownership of any data emitted by reactors into the system and executes the required reactions. NUClear is [multi-threaded](<https://en.wikipedia.org/wiki/Multithreading_(computer_architecture)>). The PowerPlant handles all threading logic.
 
-## Reactors
+### Reactors
 
 A reactor can be thought of as a module. All modules in the NUClear system are an extension of `NUClear::Reactor`. Reactors define reactions and the conditions under which they will process. They may also emit data to the PowerPlant.
 
-## Reactions and Tasks
+### Reactions and Tasks
 
 Reactions run tasks when the required data is available and/or when certain conditions are true. A task is the current execution of a defined reaction within the system. These functions are bound by NUClear as callbacks, and it is the execution of these callbacks which will assign tasks to a thread.
 
 Reactions are created by subscribing to the PowerPlant through [DSL On Statements](#on-statements).
 
-# NUClear DSL
+## NUClear DSL
 
-## On Statements
+### On Statements
 
 Reactors make subscriptions to the PowerPlant using on statements, which define the conditions for reactions to run.
 
@@ -42,7 +42,7 @@ on<...>(...).then(...);
 
 This can be split into three parts. The first is the `on<...>` which is the DSL request. The `(...)` contains any runtime arguments. `.then(...);` is the callback, which is what will be executed when the reaction is triggered.
 
-### DSL Request
+#### DSL Request
 
 The DSL request is "fused" together by combining any number of DSL words. The combination of these words will define the kind of reaction which is being requested. For example, `Trigger` will define a reaction that should occur when a required data type is emitted, while `Every` will define periodic reactions.
 
@@ -68,13 +68,13 @@ For reactions to occur, at least one Binding DSL word should be present in the D
 
 More information on DSL words for on statements can be found in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#on-statements).
 
-### Runtime arguments
+#### Runtime arguments
 
 Some DSL words will provide the ability to make changes to the system during runtime. This means that NUClear avoids the need for a system restart should a configuration, port number, or file need to be changed while the system is running.
 
 The DSL words that take runtime arguments are: `IO`, `TCP`, `UDP` and `Configuration`.
 
-### Callback
+#### Callback
 
 The callback which will execute when the reaction is triggered during runtime can be defined using a C++ lambda function. These are of the form
 
@@ -94,7 +94,7 @@ on<Trigger<dataType>>().then([this](const dataType& value) {
 
 Capturing the `this` pointer will allow your reaction to access other members of your `Reactor` (e.g. configuration data).
 
-## Emit Statements
+### Emit Statements
 
 Emit statements are used by Reactors wanting to emit data to the PowerPlant. When using NUClear, data will most likely be emitted during a reaction. However, where necessary, emissions can also occur during reactor construction, or in some cases from within the PowerPlant itself.
 
@@ -102,7 +102,7 @@ Any data emitted to the PowerPlant will be sent with a unique pointer. The Power
 
 Data can be emitted under varying scopes. These can be local or network emissions. More information can be found on emit statements in the [NUClear documentation](https://nuclear.readthedocs.io/en/latest/dsl.html#emit-statements).
 
-### Local Emissions
+#### Local Emissions
 
 Local emissions send data to the local instance of the NUClear PowerPlant. Essentially this is the current running process. There are a number of scopes under which these emissions can take place. The syntax for these emissions are `emit<Scope::SCOPE>(data, args...);`, where `SCOPE` is replaced with a scope as defined below.
 
@@ -113,7 +113,7 @@ Local emissions send data to the local instance of the NUClear PowerPlant. Essen
 | INITIALISE | This scope emits data as the system starts up.                                                                                               |
 | DELAY      | This will emit data, after the provided delay. The syntax includes a delay time `emit<Scope::DELAY>(data, delay(ticks));`.                   |
 
-### Network Emitting
+#### Network Emitting
 
 Network emissions can be used to send data through the network on which the current system is running.
 
@@ -122,7 +122,7 @@ Network emissions can be used to send data through the network on which the curr
 | UDP     | Emits data as a UDP packet over the network. Is of the form `emit<Scope::UDP>(data, to_addr, to_port);`.                                                                                                                                                               |
 | NETWORK | Emits data over the network to other NUClear environments. Is of the form `emit<Scope::NETWORK>(data, target, reliable);`. The `reliable` flag, if `true`, will cause NUClear to continue sending the `data` until it receives an `ACK`nowledgement from the `target`. |
 
-# Managing Reactions
+## Managing Reactions
 
 During system runtime, executing reactions can be managed via their associated reaction handles. A reaction handle is provided for binding `on` statements. Once an `on` statement has been bound, the reaction handle will be `enabled`. If necessary, reactions can toggle between `enabled` and `disabled` during runtime.
 
@@ -134,13 +134,13 @@ During system runtime, executing reactions can be managed via their associated r
 | enabled()        | Determines the current status of the reaction. Returns `true` if the reaction is enabled, and `false` otherwise.                                                                         |
 | unbind()         | Removes a reaction request from the runtime environment. This action is not reversible, once a reaction has been unbound, it is no longer available for further use during that runtime. |
 
-# NUClear Roles
+## NUClear Roles
 
 The NUClear Roles system is a build and messaging system for the NUClear framework. It uses [CMake](https://cmake.org/) and [Python](https://www.python.org/) to manage the construction of various executables made up of a selection of modules. These executables are called roles.
 
 CMake is used as the main system for generating the libraries and executables that are used for the final binary. Note that it utilises [globbing](<https://en.wikipedia.org/wiki/Glob_(programming)>) to find the sources that are used for modules. If you add or remove a file, you must rerun CMake to locate the new files.
 
-## Directories
+### Directories
 
 There are six main directories in the NUClear Roles system and can be seen in the main NUbots codebase.
 
@@ -153,7 +153,7 @@ There are six main directories in the NUClear Roles system and can be seen in th
 | `roles`     | contains all the NUClear role files.                                                                                                                                                                |
 | `tools`     | contains any command line extensions for the `b` script, such as `build` and `configure`.                                                                                                           |
 
-## Roles
+### Roles
 
 Roles are executables containing a specified list of modules. They are called `<executablename>.role`, where `<executablename>` is the name of the final binary that will be created.
 
@@ -172,7 +172,7 @@ NUCLEAR_ROLE(
 
 This role file would create an executable with the modules `module::extension::FileWatcher`, `module::support::logging::ConsoleLogHandler` and `module::input::Camera`. This file is a CMake file so you are able to use # to declare comments.
 
-## NBS Files
+### NBS Files
 
 NBS files are NUClear Binary Stream files. To make it easier to serialise streams of messages for storage sharing and playback, NUClear Roles defines a format for serialising messages to files. This format is based on the Neutron messaging system and NUClear's networking protocol. An `nbs` file has the following frames repeated continuously:
 
@@ -200,7 +200,7 @@ NBS files can have an associated index file. This allows for quicker random acce
 
 All values within the index file are little endian.
 
-## Neutrons
+### Neutrons
 
 Reactors emit data in the form of messages called Neutrons. Neutrons are [Protobuf](https://developers.google.com/protocol-buffers) messages in a C++ wrapper. These are all located in the `shared/message/` directory, and have the `.proto` extension. An example is [`WalkCommand.proto`](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/motion/WalkCommand.proto):
 
@@ -217,9 +217,9 @@ message WalkCommand {
 }
 ```
 
-# Examples
+## Examples
 
-## On Statements
+### On Statements
 
 Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
 
@@ -319,7 +319,7 @@ then([this] {
 });
 ```
 
-## Emit Statements
+### Emit Statements
 
 An example of local emission can be seen on line 590 of [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L590) where we call
 

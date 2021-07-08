@@ -25,7 +25,7 @@ Team mentors **Alex Biddulph** and **Trent Houliston** can help with most parts 
 
 If your compiler can't find `FileWatcher.h` as in the following error:
 
-```sh
+```bash
 nuclear/roles/firmwareinstaller.cpp:3:10: fatal error: extension/FileWatcher/src/FileWatcher.h: No such file or directory
     3 | #include "extension/FileWatcher/src/FileWatcher.h"
       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,20 +92,20 @@ TODO
 ## NUbook
 
 <Alert type="info">
-  The commands shown below should be run from the NUbook root folder, unless otherwise stated.  
+  The commands shown below should be run from the NUbook root folder, unless otherwise stated.
 </Alert>
 
 ### Why is my newly added page not showing up?
 
 When you add a new page, you should remove the Gatsby `.cache` and `public` folders, by running:
 
-```sh
+```bash
 rm -rf .cache public
 ```
 
 And then try building again:
 
-```sh
+```bash
 yarn dev
 ```
 
@@ -113,13 +113,13 @@ yarn dev
 
 Usually this happens when there is a problem with one or more packages in the `node_modules` folder. Try deleting `node_modules` and running `yarn` to reinstall dependencies:
 
-```sh
+```bash
 rm -rf node_modules && yarn
 ```
 
 Then try building again:
 
-```sh
+```bash
 yarn dev
 ```
 
@@ -129,7 +129,7 @@ If a page you have added or changed is not formatted correctly, your changes may
 
 To fix this, run:
 
-```sh
+```bash
 yarn format --fix
 ```
 
@@ -139,12 +139,12 @@ First, make sure you have saved the file, then refresh NUbook in the browser to 
 
 If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folders. To do so, run:
 
-```sh
+```bash
 rm -rf .cache public
 ```
 
 And then try building again:
 
-```sh
+```bash
 yarn dev
 ```
