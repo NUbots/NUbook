@@ -24,7 +24,7 @@ slug: /guides/tools/webots-setup
 
    - To prevent having to set the DISPLAY environment variable every time, run the following command in Ubuntu:
 
-     ```sh
+     ```bash
      echo 'export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '\''{print $2; exit;}'\''):0.0' >> ~/.bashrc
      ```
 
@@ -36,7 +36,7 @@ slug: /guides/tools/webots-setup
 
 3. In Ubuntu run
 
-   ```sh
+   ```bash
    sudo apt-get update
    sudo apt-get install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xfixes0 libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxkbcommon0
    ```
@@ -69,7 +69,7 @@ Follow the rest of the steps on this page within Ubuntu.
 
 Install libraries for cmake, protobuf, eigen, yaml-cpp, ninja-build, and clang-tidy:
 
-```sh
+```bash
 sudo apt-get update
 sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen3-dev libyaml-cpp-dev ninja-build clang-tidy python3-dev libjpeg9-dev
 ```
@@ -78,7 +78,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Open a terminal and swap to your home directory (note that Webots should be cloned in your home directory). Then clone the repository and change into the cloned directory:
 
-   ```sh
+   ```bash
    cd ~
    git clone --branch nubots-changes --single-branch --recurse-submodules -j$(nproc) https://github.com/NUbots/webots.git
    cd webots
@@ -88,13 +88,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 2. Install Webots build dependencies:
 
-   ```sh
+   ```bash
    sudo ./scripts/install/linux_compilation_dependencies.sh
    ```
 
 3. Build Webots:
 
-   ```sh
+   ```bash
    make -j$(nproc)
    ```
 
@@ -106,14 +106,14 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 5. Install dependencies for the referee:
 
-   ```sh
+   ```bash
    cd ~/webots/projects/samples/contests/robocup/controllers/referee
    pip3 install -r requirements.txt
    ```
 
 6. Build the Robocup controllers:
 
-   ```sh
+   ```bash
    cd ~/webots/projects/samples/contests/robocup
    WEBOTS_HOME=$HOME/webots make -j$(nproc)
    ```
@@ -122,20 +122,20 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Install the ant build tool:
 
-   ```sh
+   ```bash
    sudo apt-get install ant default-jdk
    ```
 
 2. Clone the Robocup TC GameController repo:
 
-   ```sh
+   ```bash
    cd ~
    git clone https://github.com/RoboCup-Humanoid-TC/GameController.git
    ```
 
 3. Change into the cloned directory and build the GameController:
 
-   ```sh
+   ```bash
    cd GameController
    ant
    ```
@@ -144,7 +144,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
 
-   ```sh
+   ```bash
    cd ~
    git clone https://github.com/NUbots/NUWebots.git
    cd NUWebots
@@ -152,13 +152,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 2. Install the python dependencies:
 
-   ```sh
+   ```bash
    pip3 install -r requirements.txt
    ```
 
 3. Configure the codebase by running
 
-   ```sh
+   ```bash
    ./b configure
    ```
 
@@ -167,7 +167,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    <summary> Optional Flags </summary>
    We can configure with several optional flags as follows:
 
-   ```sh
+   ```bash
    ./b configure [-i] [-- <flags>]
    ```
 
@@ -185,7 +185,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 4. Build the codebase by running
 
-   ```sh
+   ```bash
    ./b build
    ```
 
@@ -193,13 +193,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Navigate to the Webots folder
 
-   ```sh
+   ```bash
    cd ~/webots
    ```
 
 2. Launch Webots by running
 
-   ```sh
+   ```bash
    ./webots
    ```
 
@@ -213,7 +213,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Find your primary local IP address by running the following.
 
-   ```sh
+   ```bash
    hostname -I
    ```
 
@@ -221,13 +221,13 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 2. Set the `GAME_CONTROLLER_UDP_FILTER` env variable to your local IP address from step 1, to ensure your instance of GameController is not affected by other instances of GameController on the network.
 
-   ```sh
+   ```bash
    export GAME_CONTROLLER_UDP_FILTER=<IP_ADDRESS> # replace <IP_ADDRESS> with your IP address from step 1
    ```
 
 3. Run the following to open Webots with the Robocup world and the GameController:
 
-   ```sh
+   ```bash
    JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
    ```
 
@@ -235,7 +235,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    Sometimes closing Webots doesn't properly close the GameController subprocess. If this happens you'll get an error about GameController when you next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
 
-   ```sh
+   ```bash
    kill -9 $(pgrep -fi GameControllerSimulator.jar)
    ```
 
@@ -245,7 +245,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 From the root of the NUWebots repository run
 
-```sh
+```bash
 ./b controller generate <name of controller>
 ```
 

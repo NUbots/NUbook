@@ -67,13 +67,13 @@ within `resources["environment"]`.
 The ball is either constructed using a preconstructed model (`.fbx`) with corresponding
 colour and/or normal maps, or via a UV colour map for the ball. Again, a recursive regex search is applied to populate the ball resources:
 
-#### UV Map
+### UV Map
 
 | Item     | Regex Search         | Example          | Description                          |
 | -------- | -------------------- | ---------------- | ------------------------------------ |
 | UV Image | `.*colou?rs?.*\.jpg` | `001_colour.jpg` | RGB image of the UV map for the ball |
 
-#### FBX File
+### FBX File
 
 | Item       | Regex Search             | Example          | Description                                                                 |
 | ---------- | ------------------------ | ---------------- | --------------------------------------------------------------------------- |
@@ -96,12 +96,12 @@ within `resources["ball"]`.
 
 When the user specifies that the field is to be synthetically generated, a hair particle system is used to create grass on the field.
 
-#### Colouring the Field
+### Colouring the Field
 
 A UV map of the field lines is generated based on the specified field dimensions in `scene_config.py` within `cfg["field"]`, which is then mixed with the grass colour to create field lines within the synthetic grass.
 A [PBR node](https://docs.blender.org/manual/en/latest/render/shader_nodes/shader/principled.html) is used for the grass, using the grass and field line colouring for the base colour of the field.
 
-#### Segmenting the Field
+### Segmenting the Field
 
 The segmentation of the field is performed using [scene composites](https://docs.blender.org/manual/en/latest/compositing/introduction.html), where the UV map projection on the field (in the camera viewpoint) is recoloured based on the desired segmentation mask colour of the field lines. This scene composite is then applied over the segmentation mask from the field, to ensure that the field lines appear over the top of the field.
 
@@ -143,7 +143,7 @@ specific implementation of the NUgus robot is supported, and is likely subject t
 
 </Alert>
 
-#### Configuration
+### Configuration
 
 Configuration for the NUgus robot can be found in `scene_config.py` within `resources["robot"]`. This configuration is composed of four parameters:
 
@@ -157,7 +157,7 @@ Configuration for the NUgus robot can be found in `scene_config.py` within `reso
 
 Additionally, the number of robots generated within the scene can be configured with `scene_config.py` with `num_robots`.
 
-#### Kinematics
+### Kinematics
 
 The kinematics of the robot are read from the `kinematics_path`, and the individual FBX files for each part are assembled as per the read kinematics configuration. Robot parts will randomly be placed according to `kinematics_variance`, where `kinematics_variance = 0.0` will place robots in their neutral pose, and `kinematics_variance = 1.0` will allow for random placement up to the kinematic limits of the robot.
 
@@ -169,7 +169,7 @@ The configurable properties for robots can be found in `scene_config.py` within 
 
 </details>
 
-#### Segmentation
+### Segmentation
 
 The segmentation colouring for the field is specified through `scene_config.py` within `resources[object]["mask"]`. By default the scene segmentation is configured as:
 
@@ -218,12 +218,12 @@ blender --python pbr.py -b
 
 ## Status
 
-#### Ongoing Work
+## Ongoing Work
 
 - Rigging of robot models to generate realistic poses
 - Replacement of hair particle system with grass cards to reduce performance overhead
 
-#### Future Work
+## Future Work
 
 - Porting to Blender 2.8
 - Porting field UV map generation to OpenCV
