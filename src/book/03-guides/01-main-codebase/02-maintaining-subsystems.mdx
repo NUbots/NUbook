@@ -54,17 +54,17 @@ An automatic camera calibration tool is available in the NUbots repository. See 
 
 ### Testing
 
-After updating the Visual Mesh in the NUbots repository, it should be tested before merging.
+After updating the Visual Mesh in the NUbots repository, it should be tested before merging. Refer to the [Getting Started guide](/guides/main/getting-started) for assistance for the following steps.
 
-1. Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`, then install it to the robot. See the [Getting Started page](/guides/main/getting-started) for more information about this step. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
+1. Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`, and install it to the robot. Ensure the new configuration file is installed by using the `-cu` or `-co` options when installing - check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
 
-2. When your new Visual Mesh is installed onto the robot, connect to the robot using
+2. When your new Visual Mesh is installed onto the robot, connect to the robot using:
 
    ```bash
    ssh nubots@<address>
    ```
 
-3. Ensure NUsight is on.
+3. Ensure NUsight is on:
 
    ```bash
    nano config/NetworkForwarder.yaml
