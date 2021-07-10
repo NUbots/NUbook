@@ -36,15 +36,15 @@ Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) t
 
 The resulting network should be exported to a [yaml](https://yaml.org/) file and added to the NUbots codebase, by completing the following steps.
 
-Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml). Assuming such a file is in the output directory, run
+1. Create a base configuration file. Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
+
+2. Export the weights of your trained Mesh to this configuration file using the following command, where `<output_dir>` is the directory of the configuration file:
 
 ```bash
 ./mesh.py export <output_dir>
 ```
 
-to export the weights to a file in the directory `<output_dir>`.
-
-Replace the NUbots repository `VisualMesh.yaml` configuration with this configuration file. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
+3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
 
 ### Camera Calibration
 
