@@ -34,17 +34,17 @@ Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) t
 
 #### Exporting Configuration
 
-The resulting networking should be exported to a [yaml](https://yaml.org/) file and added to the NUbots codebase.
+The resulting network should be exported to a [yaml](https://yaml.org/) file and added to the NUbots codebase, by completing the following steps.
 
 Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml). Assuming such a file is in the output directory, run
 
 ```bash
-./mesh.py export [output_dir]
+./mesh.py export <output_dir>
 ```
 
-to export the weights to the file.
+to export the weights to a file in the directory `<output_dir>`.
 
-Replace the NUbots repository `VisualMesh.yaml` configuration with this configuration file. Ensure you create a new branch so you can make a PR and get any changes merged in. View the [Git Guide](/guides/general/git) for information on using Git.
+Replace the NUbots repository `VisualMesh.yaml` configuration with this configuration file. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
 
 ### Camera Calibration
 
@@ -56,7 +56,7 @@ An automatic camera calibration tool is available in the NUbots repository. See 
 
 After updating the Visual Mesh in the NUbots repository, it should be tested before merging.
 
-1. Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`. Go to the [Getting Started page](/guides/main/getting-started) to find out more on how to build the code and install to a robot. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
+1. Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`, then install it to the robot. See the [Getting Started page](/guides/main/getting-started) for more information about this step. Ensure the new configuration file has been installed. Check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
 
 2. When your new Visual Mesh is installed onto the robot, connect to the robot using
 
@@ -104,7 +104,7 @@ If the Visual Mesh trained with good results but when testing in the system the 
 
 4. Run NUsight using `yarn prod` on a computer. Set up NUsight using the [Getting Started page](/guides/main/getting-started) if necessary.
 5. Run `./visualmesh` on the robot.
-6. Alter the configuration file for the detectors while simultenously running the binary on the robot. In a new terminal, SSH onto the robot again and run:
+6. Alter the configuration file for the detectors while simultaneously running the binary on the robot. In a new terminal, SSH onto the robot again and run:
 
    ```bash
    nano config/BallDetector.yaml
@@ -118,4 +118,4 @@ If the Visual Mesh trained with good results but when testing in the system the 
    nano config/GoalDetector.yaml
    ```
 
-In general, it might be useful to adjust the `confidence_threshold` on both detectors to improve the results. Other variables may give better results with different values, except for `log_level` and the covariences, `goal_projection_covariance` and `ball_angular_cov`.
+In general, it might be useful to adjust the `confidence_threshold` on both detectors to improve the results. Other variables may give better results with different values, except for `log_level` and the covariances (`goal_projection_covariance` and `ball_angular_cov`).
