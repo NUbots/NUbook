@@ -8,11 +8,11 @@ slug: /system/foundations/mathematics
 
 The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
 
-# Linear Algebra
+## Linear Algebra
 
 We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
 
-## Bases
+### Bases
 
 A **basis** is a **maximal** set of **linearly independent** vectors.
 
@@ -36,7 +36,7 @@ e_2 = (0, 1, 0) \quad
 e_3 = (0, 0, 1)
 $$
 
-## Vectors
+### Vectors
 
 As mentioned in the previous section, any vector $\mathbf{r}$ can be expressed as a linear combination of the elements of a basis
 
@@ -69,7 +69,7 @@ since vector addition is **commutative**. This is written in code as
 Eigen::Vector3d rACb = rABb + rBCb;
 ```
 
-## Rotations
+### Rotations
 
 To describe the motion of the robot, we need a **reference frame** and a **coordinate system**.
 
@@ -116,7 +116,7 @@ $$
 
 This is written in the NUbots codebase as `rCDb = Rba * rCDa`. Note that the notation is $\mathbf{R}_{from}^{to}$.
 
-## Homogeneous Transformations
+### Homogeneous Transformations
 
 A homogeneous transformation matrix in three dimensions is a 4x4 matrix containing a **rotation** component and a **translation** component.
 
@@ -197,7 +197,7 @@ This is written in the codebase as
 Eigen::Affine3d Hca = Hcb * Hba;
 ```
 
-## Velocity
+### Velocity
 
 The velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
 
@@ -209,51 +209,7 @@ If a velocity is multiplied with **time**, it becomes a **vector**.
 Eigen::Vector3d rA_tAb = vAb * t;
 ```
 
-## Units
-
-See the (glossay)[../../03-guides/04-general/03-glossary.mdx].
-
-## Spherical Coordinates
-
-Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
-
-!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
-
-Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
-
-$$
-r = \sqrt{x^2 + y^2 + z^2} \\
-\varphi = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
-\theta = \textrm{atan}\left(\frac{y}{x}\right)
-$$
-
-Cartesian coordinates can be calculated from spherical coordinates using the follow equations:
-
-$$
-x = r\textrm{cos}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
-y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
-z = r\textrm{cos}\left(\varphi\right) \\
-$$
-
-A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
-
-In order to ensure a unique representation of coordinates, the following restrictions are enforced on spherical coordinates:
-
-$$
-r \geqslant 0 \\
-0 \leqslant \varphi \leqslant \pi \\
-0 \leqslant \theta \leqslant 2\pi \\
-$$
-
-### Reciprocal Distance
-
-A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
-
-This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
-
-If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
-
-## Examples
+### Examples
 
 Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
 
@@ -299,7 +255,7 @@ World space is defined with the **z-axis** pointing **up**. The other two axes a
 
 For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
 
-## Summary
+### Summary
 
 | Item                  | Description                                                                  |
 | --------------------- | ---------------------------------------------------------------------------- |
@@ -314,7 +270,7 @@ For measurements on the field we use field space. For field coordinates the **x-
 | `Hac = Hab * Hbc`     | Creating a new transform from two other transforms.                          |
 | Euler Angles          | Are of the form Z-Y-X.                                                       |
 
-## Useful Links
+### Useful Links
 
 - [Essence of Linear Algebra by 3blue1brown](https://www.3blue1brown.com/essence-of-linear-algebra-page)
 
@@ -322,11 +278,51 @@ For measurements on the field we use field space. For field coordinates the **x-
 
 - [Eigen Documentation](http://eigen.tuxfamily.org/dox/)
 
-# Interpolation
+## Spherical Coordinates
+
+Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
+
+!['Spherical coordinates $(r, \varphi, \theta)$. Radial distance r to the origin, polar angle $\varphi$, and azimuthal angle $\theta$'](./images/spherical-coordinates.svg 'Spherical Coordinates. Image from Wikimedia Commons https://en.wikipedia.org/wiki/File:3D_Spherical_2.svg')
+
+Spherical coordinates can be calculated from cartesian coordinates using the follow equations:
+
+$$
+r = \sqrt{x^2 + y^2 + z^2} \\
+\varphi = \textrm{acos}\left(\frac{z}{r}\right) = \textrm{atan}\left(\frac{\sqrt{x^2 + y^2}}{z}\right) \\
+\theta = \textrm{atan}\left(\frac{y}{x}\right)
+$$
+
+Cartesian coordinates can be calculated from spherical coordinates using the follow equations:
+
+$$
+x = r\textrm{cos}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
+z = r\textrm{cos}\left(\varphi\right) \\
+$$
+
+A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
+
+In order to ensure a unique representation of coordinates, the following restrictions are enforced on spherical coordinates:
+
+$$
+r \geqslant 0 \\
+0 \leqslant \varphi \leqslant \pi \\
+0 \leqslant \theta \leqslant 2\pi \\
+$$
+
+### Reciprocal Distance
+
+A common variation on spherical coordinates in our codebase is to use reciprocal distance. If a vector has spherical coordinates $\left(r, \varphi, \theta\right)$, then a vector in spherical coordinates with reciprocal distance has coordinates $\left(\frac{1}{r}, \varphi, \theta\right)$.
+
+This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
+
+If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
+
+## Interpolation
 
 Given a set of data points, often we want to find a function that contains all these points, which we call an interpolant. Interpolants are commonly polynomials, because they can approximate complex curves with a few points, with relatively low computational costs. Interpolant polynomials can be affected by [Runge's phenomenon](https://en.wikipedia.org/wiki/Runge%27s_phenomenon), where the interpolant is locally accurate for the given data points but has oscillations issues beyond these points. A further issue with interpolants is uniqueness - if there are too few constraints then there may be an infinite number of interpolants, and if there are too many constraints then there may not be a solution. Generally, for $n+1$ distinct points, there is a unique polynomial of degree $\leq n$ that interpolates the points. Polynomials of degree higher than $n$ may have [aliasing](https://en.wikipedia.org/wiki/Aliasing) issues where the interpolant is unnecessarily 'wiggly' between points.
 
-## Splines
+### Splines
 
 Rather than have one global polynomial, it can be useful to use piecewise polynomials, connected at their edges. These so-called [**splines**](<https://en.wikipedia.org/wiki/Spline_(mathematics)>) are all defined locally around the interpolation points, and can avoid Runge's phenomenon. Splines are used in the [Quintic Walk Engine](/system/subsystems/motion#walk-engine).
 
@@ -352,3 +348,7 @@ These particular quintic splines have interpolation points $(x_0, y_0, y'_0, y''
 - $S''_0(x_0) = b_{0}$ and $S''_{n-1}(x_n) = y''_{n}$
 
 These conditions result in smooth joints between each polynomial, meaning the position, velocity and acceleration at those joints is the same for both polynomials. Each data point has an `x` and `y` value, as well as first and second derivative value. The conditions above ensure the splines satisfy the given values for each data point.
+
+## Units
+
+See the (glossary)[../../03-guides/04-general/03-glossary.mdx].
