@@ -40,9 +40,9 @@ The resulting network should be exported to a [yaml](https://yaml.org/) file and
 
 2. Export the weights of your trained Mesh to this configuration file using the following command, where `<output_dir>` is the directory of the configuration file:
 
-```bash
-./mesh.py export <output_dir>
-```
+   ```bash
+   ./mesh.py export <output_dir>
+   ```
 
 3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
 
