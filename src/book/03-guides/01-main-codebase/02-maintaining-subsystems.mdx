@@ -72,7 +72,7 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 
    Turn `vision object` and `compressed images` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight NUbook page](/system/tools/nusight).
 
-4. Run the visualmesh role
+4. Run the `visualmesh` role
 
    ```bash
    ./visualmesh
@@ -80,11 +80,11 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 
 5. Wait for the cameras to load and then watch the Vision tab in NUsight. To determine if the output is correct, consult the [vision page](/system/subsystems/vision) for images of the expected output.
 
-If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. See the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback), considering the following:
+If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
 
-- Use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/master/roles/visualmesh.role) role to record the data.
-- Set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
-- Use the [`playback`](https://github.com/NUbots/NUbots/blob/master/roles/playback.role) role to playback the data, without changes.
+- In step 1 of Recording Data, use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/master/roles/visualmesh.role) role to record the data.
+- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
+- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/master/roles/playback.role) role to playback the data, without changes.
 
 ### Tuning Detectors
 
