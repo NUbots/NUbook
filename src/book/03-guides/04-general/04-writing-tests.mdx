@@ -1,9 +1,9 @@
 ---
 section: Guides
-chapter: Tools
+chapter: General
 title: How to Write Tests
-description: General Information About Making Tests
-slug: /guides/tools/catch-tests
+description: Information About Making Tests
+slug: /guides/general/writing-tests
 ---
 
 This guide presents some general information about unit testing and tests in general.
@@ -45,9 +45,9 @@ Later, you might consider what should happen on integer overflow/wraparound, mak
 
 ### Regression Tests
 
-When we find bugs in the codebase and fix them, we should add a test case which makes sure that that code doesn't _regress_ into the buggy behaviour. This test case is called a regression test. Regression tests should be labelled with comments to indicate the behaviour they're watching for. If there is a GitHub  The regression test should be written such that it would fail before the fix, and pass after the fix.
+When we find bugs in the codebase and fix them, we should add a test case which makes sure that that code doesn't _regress_ into the buggy behaviour. This test case is called a regression test. Regression tests should be labelled with comments to indicate the behaviour they're watching for. If there is a GitHub issue related to the bug, the comment with the test should reference it. The test should be written such that it would fail before the fix, and pass after the fix.
 
-For a concrete example, imagine that a bug was found with `add` where when both inputs were negative, it always returned 0. Good practice would be to add a test case or small set of test cases where both inputs were negative, labelling them as regression tests for that bug.
+For a concrete example, imagine that a bug was found with `add` where if both inputs were negative, it always returned 0. Good practice would be to add a test case or small set of test cases where both inputs were negative - such as `(-1, -1) == -2` and `(-123, -456) == -579` - labelling them as regression tests for that bug. These would clearly fail if the bug came back (although this example is quite contrived, because there should have already been tests with both inputs negative).
 
 ### Black Box vs White Box Testing
 
@@ -55,6 +55,6 @@ When we write tests, we can make them completely ignorant to the internals of th
 
 White box testing looks at the internals and makes tests which depend on them. This means that any significant change to the implementation of a function which doesn't change its interface is likely to break white box tests which depended on the old function. The fragility of white box tests to change is the chief reason that black box tests are preferred.
 
-Ideally, you're able to write tests as you design your software interfaces, writing the code afterwards such that it fulfills the needs of the tests. This is the basis of [**Test-Driven Development**](https://en.wikipedia.org/wiki/Test-driven_development), which is a powerful means of creating high quality software.
+Ideally, you're able to write tests as you design your software interfaces, writing the code afterwards such that it fulfills the needs of the tests. This is the basis of [**Test-Driven Development**](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), which is a powerful means of creating high quality software. Tests written as part of a TDD process should inherently be black box tests, because the implementations they're testing don't exist yet.
 
-
+Grey box testing is somewhere between black box and white box testing. It isn't completely ignorant of the implementation, but grey box tests should be easily adaptable if the implementation changes. It will usually be necessary to have some sort of insight into the implementation of the unit in order to get full code coverage, but a rule of thumb is the blacker the box, the better.
