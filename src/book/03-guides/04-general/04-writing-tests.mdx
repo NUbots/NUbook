@@ -10,7 +10,7 @@ This guide presents some general information about unit testing and tests in gen
 
 ## What is a Unit Test?
 
-A unit test is a test of a small piece of a codebase - a unit. Unit tests are meant to test only that piece of code and they serve to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function 
+A unit test is a test of a small piece of a codebase - a unit. Unit tests are meant to test only that piece of code and they serve to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function
 
 ```cpp
 [[nodiscard]] inline int add(const int a, const int b) noexcept {
@@ -39,7 +39,7 @@ There are many guidelines you can find online to help you to write good tests. H
 
 ### General Approach
 
-Write the easy tests first, then think about edge cases and code coverage. For `add`, you might make the `(2, 2) == 4` case first, then `(123000, 456) == 123456`. After you have some simple cases, you could consider throwing in some zeros and negative numbers - cases where the observed behaviour is different somehow. 
+Write the easy tests first, then think about edge cases and code coverage. For `add`, you might make the `(2, 2) == 4` case first, then `(123000, 456) == 123456`. After you have some simple cases, you could consider throwing in some zeros and negative numbers - cases where the observed behaviour is different somehow.
 
 Later, you might consider what should happen on integer overflow/wraparound, making sure that errors are handled correctly. At that stage you could also try to make a test case covering every possible branch of your code. The amount of code you execute in a set of tests is referred to as the "code coverage" of the tests.
 
