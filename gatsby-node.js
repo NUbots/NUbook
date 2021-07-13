@@ -2,16 +2,37 @@
 /*eslint-env es6 */
 
 const path = require('path')
+const { createBibNode } = require('./bib-transformer')
 
 const menu = []
 const createdPages = new Set()
+
+exports.onCreateNode = async ({
+  node,
+  actions,
+  loadNodeContent,
+  createNodeId,
+  createContentDigest,
+}) => {
+  if (node.ext !== `.bib`) {
+    return
+  }
+
+  await createBibNode({
+    node,
+    actions,
+    loadNodeContent,
+    createNodeId,
+    createContentDigest,
+  })
+}
 
 /**
  * Create the site pages from MDX files in /src/book
  */
 exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get the MDX pages sorted by file path (this is why we have the numeric prefixes)
-  const result = await graphql(`
+  const mdxResults = await graphql(`
     query {
       allMdx(sort: { fields: fileAbsolutePath }) {
         edges {
@@ -23,6 +44,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
               chapter
               title
               slug
+              references
               hidden
             }
           }
@@ -50,12 +72,49 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   `)
 
   // Panic and abort on query error
-  if (result.errors) {
-    reporter.panicOnBuild('🚨  ERROR: Loading "createPages" query')
+  if (mdxResults.errors) {
+    reporter.panicOnBuild(
+      '🚨  ERROR: Loading "createPages" query for all MDX files'
+    )
+  }
+
+  // Get all the bib reference files: these are created in the
+  // `bib-transformer.js` file registered with Gatsby in the
+  // `gatsby-node.js` file
+  const bibResults = await graphql(`
+    query {
+      allBibtex {
+        nodes {
+          bib
+          dir
+          base
+          relativeDirectory
+        }
+      }
+    }
+  `)
+
+  // Panic and abort on query error
+  if (bibResults.errors) {
+    reporter.panicOnBuild(
+      '🚨  ERROR: Loading "createPages" query for all Bib files'
+    )
+  }
+
+  // Create the map of references: each key is the path to the bib file,
+  // relative to the `src/book` directory, and each value is the file's
+  // bib content, parsed into a JS object
+  const bibReferences = {}
+  for (const bibNode of bibResults.data.allBibtex.nodes) {
+    const bibRelativePath = path.posix.join(
+      bibNode.relativeDirectory,
+      bibNode.base
+    )
+    bibReferences[bibRelativePath] = JSON.parse(bibNode.bib)
   }
 
   // Get all MDX files
-  const posts = result.data.allMdx.edges
+  const posts = mdxResults.data.allMdx.edges
 
   // Populate the menu
   posts
@@ -89,6 +148,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const nextPage = getNext(next, posts, index)
     const previousPage = getPrevious(previous, posts, index)
 
+    // Compute the path to this page's bib references file
+    // (relative to the `src/book` directory)
+    const directory = path.dirname(node.fileAbsolutePath)
+    const bibFilePath = path.posix.resolve(
+      directory,
+      node.frontmatter.references || 'references.bib'
+    )
+    const [, bibFileRelative] = bibFilePath.split('src/book/')
+
+    const references = bibReferences[bibFileRelative] || null
+
     actions.createPage({
       path: node.frontmatter.slug,
       component: templatePath,
@@ -97,6 +167,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
+        references,
         hidden: node.frontmatter.hidden,
       },
     })
