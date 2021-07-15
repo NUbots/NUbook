@@ -6,9 +6,60 @@ description: Motion and how it works in the NUbots codebase.
 slug: /system/subsystems/motion
 ---
 
-The motion subsystem contains modules that are responsible for walking, kicking, moving the head, and running scripts. They perform these motions by sending servo commands (called targets) to the motors.
+This page details motion modules within the NUbots main codebase, such as the walk engine and the script engine. Information about modules for running and tuning scripts can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
-The Script Engine is detailed on this page, while Script Runner and Script Tuner can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
+## Walk Engine
+
+NUbots use an **open loop walk** based on **quintic splines**. This walk engine takes care of the mathematics and control involved in taking steps without falling over. The walk engine does not plan where to walk, only how to walk.
+
+The walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements). The walk command gives a vector `[x, y, z]` which represents:
+
+| Variable | Description                                                                                |
+| -------- | ------------------------------------------------------------------------------------------ |
+| `x`      | velocity in metres per second in the direction of the x axis                               |
+| `y`      | velocity in metres per second in the direction of the y axis                               |
+| `z`      | yaw in radians per second, positive is counter-clockwise. The 0 point is straight forward. |
+
+The robot's [behaviour](/system/subsystems/behaviour) determines the walk command.
+
+### Quintic Spline Walk
+
+The Quintic Walk is an **open loop controller** based on [**quintic splines**](/system/foundations/mathematics#splines) (piecewise fifth degree polynomials). It sets points in each direction for rotation and translation and uses those points to create smooth quintic splines.
+
+The engine has support for kicking using quintic splines. Integration of the kick is a work in progress.
+
+The code used for this walk comes from the RoboCup team [**Hamburg Bit-Bots**](https://github.com/bit-bots/bitbots_motion/), which in turn is from [Quentin "Leph" Rouxel and Team Rhoban's walk](https://github.com/Rhoban/model/).
+
+#### Implementation
+
+The walk uses the `Footstep` class to generate the targets for the foot, using the calculated splines.
+
+The `SplineContainer` class holds multiple `Spline` objects. As the `SplineContainer` gets points, they are used to create `Spline`s. These Spline objects are each mapped to names based on what they do. These mappings for the walk and kick are in the table below.
+
+The splines that the `SplineContainer` holds are instances of a generic `Spline` class that holds all the information for a mathematical spline. Each piecewise polynomial in the spline is a `Polynom` object that contains the coefficients for a polynomial.
+
+The specific `Spline` type we use is a `SmoothSpline`, extended from the `Spline` class. Find out more about splines and this specific type of spline on the [**mathematics**](/system/foundations/mathematics#splines) page.
+
+The `TrajectoryUtils` file uses the `SplineContainer` for walking and kicking. It creates a `SplineContainer` with the following splines:
+
+| Name                   | Description                                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| `IS_DOUBLE_SUPPORT`    | Splines for when the robot is in double support phase, i.e. both feet are on the ground. |
+| `IS_LEFT_SUPPORT_FOOT` | Splines for the support foot.                                                            |
+| `TRUNK_POS_X`          | The Cartesian position of the robot's torso in the x-axis.                               |
+| `TRUNK_POS_Y`          | The Cartesian position of the robot's torso in the y-axis.                               |
+| `TRUNK_POS_Z`          | The Cartesian position of the robot's torso in the z-axis.                               |
+| `TRUNK_AXIS_X`         | The orientation of the robot's torso in the x-axis.                                      |
+| `TRUNK_AXIS_Y`         | The orientation of the robot's torso in the y-axis.                                      |
+| `TRUNK_AXIS_Z`         | The orientation of the robot's torso in the z-axis.                                      |
+| `FOOT_POS_X`           | The Cartesian position of the robot's flying foot in the x-axis.                         |
+| `FOOT_POS_Y`           | The Cartesian position of the robot's flying foot in the y-axis.                         |
+| `FOOT_POS_Z`           | The Cartesian position of the robot's flying foot in the z-axis.                         |
+| `FOOT_AXIS_X`          | The orientation of the robot's flying foot in the x-axis.                                |
+| `FOOT_AXIS_Y`          | The orientation of the robot's flying foot in the y-axis.                                |
+| `FOOT_AXIS_Z`          | The orientation of the robot's flying foot in the z-axis.                                |
+
+The points that make up all these splines are in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/889d5ec2e91b2dc0ab7be59429e3c21b786b7b65/module/motion/QuinticWalk/src/WalkEngine.cpp#L271). The [configuration parameters](https://github.com/NUbots/NUbots/blob/master/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
 
 ## Script Engine
 
