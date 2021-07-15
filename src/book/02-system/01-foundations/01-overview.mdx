@@ -59,5 +59,12 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | `webots_keyboard`    | `keyboardwalk` but with Webots instead of real robot sensors                                          | Used for easily testing motions in Webots.                                                                                                                                                                                                                              |
 | `webots`             | Webots connection module                                                                              | Used for testing the connection between the robot code and Webots.                                                                                                                                                                                                      |
 | `webotsrobocup`      | Identical to `robocup` but with webots instead of real robot sensors                                  | Used to play RoboCup games in the Webots simulator.                                                                                                                                                                                                                     |
+In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator`, `platform::Webots` and `platform::Gazebo`.
 
-In most cases, `platform::darwin::HardwareIO` and `platform::Webots` can be used interchangably depending on if you are running on the real robot or the simulated robot in Webots. In some cases `platform::darwin::HardwareSimulator` can also be used, but this simulated robot is very basic and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down.
+Any code should run with `platform::darwin::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
+
+`platform::darwin::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
+
+`platform::Webots` is used with the Webots simulator. The code will only run if an [appropriate Webots controller is running](/guides/tools/webots-setup).
+
+`platform::Gazebo` is used with the Gazebo simulator. It will only work with the [appropriate Gazebo plugin](/guides/tools/gazebo-install).
