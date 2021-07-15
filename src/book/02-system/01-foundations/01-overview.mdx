@@ -25,7 +25,7 @@ All these modules are connected using NUClear which is a message passing softwar
 
 ## Roles
 
-Roles in the main codebase are the building blocks for creating a binary to run on a robot. A role file lists all the modules to be used in that binary. If a module is not included in the role file, that module will not run. All roles can be found in the [roles folder](https://github.com/NUbots/NUbots/tree/master/roles) in the first level of the repository and have the extension `.role`. For specifics about the NUClear roles system, see the [NUClear page](/system/foundations/nuclear#nuclear-roles).
+The robot codebase contains roles, which are recipes for creating a binary to run on a robot. A role file lists all the modules to be used in that binary. Only modules included in the role file will run, provided the code is [triggered](/system/foundations/nuclear#nuclear-dsl). All roles can be found in the [roles folder](https://github.com/NUbots/NUbots/tree/master/roles) in the first level of the repository and have the extension `.role`. For specifics about the NUClear roles system, see the [NUClear page](/system/foundations/nuclear#nuclear-roles).
 
 When adding modules to the list in a role, use the syntax `namespace::module_name`. For example, if you want to include the [`SensorFilter` module](https://github.com/NUbots/NUbots/tree/master/module/input/SensorFilter), then check the namespace in [`SensorFilter.hpp`](https://github.com/NUbots/NUbots/blob/master/module/input/SensorFilter/src/SensorFilter.hpp). The namespace is `namespace module::input`, so we have `module::input::SensorFilter`. However, all modules have `module::` so we drop this part of the namespace. The line in the role is therefore `input::SensorFilter`.
 
