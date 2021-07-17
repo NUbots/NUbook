@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import error from '../images/error404.gif'
 
 import SEO from '../components/seo'
 
@@ -10,6 +11,7 @@ const NotFoundPage = () => (
       <h1 className='font-semibold text-2xl mb-4'>Page not found</h1>
       <p className='mb-4'>
         The page you are looking for was not found in NUbook 😢
+        <img src={error} alt="Page Not Found" />
       </p>
       <Link
         to='/'
