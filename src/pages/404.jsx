@@ -11,8 +11,8 @@ const NotFoundPage = () => (
       <h1 className='font-semibold text-2xl mb-4'>Page not found</h1>
       <p className='mb-4'>
         The page you are looking for was not found in NUbook 😢
-        <img src={error} alt='Page Not Found' />
       </p>
+      <iframe src="https://giphy.com/embed/kggVxrpq4fCmMJe0i8" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/kggVxrpq4fCmMJe0i8"></a></p>
       <Link
         to='/'
         className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
