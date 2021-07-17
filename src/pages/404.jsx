@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
+import error from '../images/error404.webp'
 
 import SEO from '../components/seo'
 
@@ -11,12 +12,9 @@ const NotFoundPage = () => (
       <p className='mb-4'>
         The page you are looking for was not found in NUbook 😢
       </p>
-      <iframe
-        src='https://giphy.com/embed/kggVxrpq4fCmMJe0i8'
-        width='480'
-        height='270'
-        frameBorder='0'
-      ></iframe>
+      <p>
+        <img src={error} alt='Page Not Found' />
+      </p>
       <Link
         to='/'
         className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
