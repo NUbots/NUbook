@@ -5,6 +5,7 @@ import { MDXProvider } from '@mdx-js/react'
 import Code from './code'
 import Image from './image'
 import Link from './link'
+import TabbedImages from './tabbed-images'
 
 import Alert from './alert/alert'
 import Grid from './grid/grid'
@@ -34,10 +35,21 @@ A.propTypes = {
   children: PropTypes.node.isRequired,
 }
 
+const Table = ({ children }) => (
+  <div data-table-responsive='true'>
+    <table>{children}</table>
+  </div>
+)
+
+Table.propTypes = {
+  children: PropTypes.node.isRequired,
+}
+
 const MDXComponents = {
   img: Img,
   a: A,
   code: Code,
+  table: Table,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
   h3: createHeading('h3'),
@@ -46,6 +58,7 @@ const MDXComponents = {
   h6: createHeading('h6'),
   Alert,
   Grid,
+  TabbedImages,
 }
 
 const Markdown = ({ children }) => (
