@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import error from '../images/error404.gif'
 
 import SEO from '../components/seo'
 
@@ -12,7 +11,13 @@ const NotFoundPage = () => (
       <p className='mb-4'>
         The page you are looking for was not found in NUbook 😢
       </p>
-      <iframe src="https://giphy.com/embed/kggVxrpq4fCmMJe0i8" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/kggVxrpq4fCmMJe0i8"></a></p>
+      <iframe
+        src='https://giphy.com/embed/kggVxrpq4fCmMJe0i8'
+        width='480'
+        height='270'
+        frameBorder='0'
+        allowFullScreen
+      ></iframe>
       <Link
         to='/'
         className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
