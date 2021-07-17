@@ -16,7 +16,6 @@ const NotFoundPage = () => (
         width='480'
         height='270'
         frameBorder='0'
-        allowFullScreen
       ></iframe>
       <Link
         to='/'
