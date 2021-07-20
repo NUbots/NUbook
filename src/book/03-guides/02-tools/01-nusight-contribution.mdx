@@ -10,14 +10,16 @@ This is a guide for how to contribute to NUsight. To see what NUsight can do che
 
 ## Yarn Commands
 
-| Command              | Use                                                                                                 |
-| -------------------- | --------------------------------------------------------------------------------------------------- |
-| `./b yarn`           | Installs dependencies for NUsight                                                                   |
-| `./b yarn build`     | Build the NUsight codebase - Used when you make changes                                             |
-| `./b yarn prod`      | Run NUsight on a local server to test changes (You will need to connect with your own NUbots image) |
-| `./b yarn start`     | Combines the `build` and `start` commands for a live update (Refresh browser)                       |
-| `./b yarn dev`       | Starts NUsight with some generic robots running a repeated pattern for some development testing     |
-| `./b yarn storybook` | Builds and starts a debug environment for NUsight using Stories to perform component tests          |
+Yarn is the system that we use to build and run NUsight. There are a number of different sub commands that can be used
+
+| Command              | Use                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------- |
+| `./b yarn`           | Installs dependencies for NUsight                                                                        |
+| `./b yarn build`     | Build the NUsight codebase - Used when you make changes                                                  |
+| `./b yarn prod`      | Run NUsight on a local server to test changes (You will need to connect with your own NUbots image)      |
+| `./b yarn start`     | Combines the `build` and `prod` commands for a live update (Refresh browser)                             |
+| `./b yarn dev`       | Starts NUsight with some generic robots running a repeated pattern for some development testing          |
+| `./b yarn storybook` | Builds and starts a live updating debug environment for NUsight using Stories to perform component tests |
 
 ## Creating a new tab in NUsight
 
@@ -29,7 +31,7 @@ All components for NUsight live in the `src/client/components` directory. The pr
 
 3. Create sub components for the tab
 
-4. Work on the top level `view.ts`, `model.ts`, and `style.css` documents to finalise the entire tab
+4. Work on the top level `view.tsx`, `model.ts`, and `style.css` documents to finalise the entire tab
 
 5. Edit `src/client/main.tsx` to include both an `import` command and an `install` command
 
@@ -45,4 +47,4 @@ All components for NUsight live in the `src/client/components` directory. The pr
 
 Creating stories allows you to run component tests as you work to ensure that everything is running as expected. Stories are created with the `.stories.tsx` extension. Running `./b yarn storybook` will automatically include any files with this extension.
 
-There are several different kinds of Stories in the NUsight codebase and you can learn more about them [here](https://storybook.js.org/docs/react/get-started/introduction)
+There are several different kinds of Stories in the NUsight codebase which you can learn from, and you can learn more about them [here](https://storybook.js.org/docs/react/get-started/introduction)
