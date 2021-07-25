@@ -6,9 +6,181 @@ description: Debriefs and takeaways from our performances at RoboCup.
 slug: /team/robocup/debriefs
 ---
 
+## 2021: Online Simulation
+
+Due to COVID-19, the 2021 competition was held online using the simulation software Webots.
+
+### What went wrong
+
+#### Walking
+
+- We underestimated dev time required to get walk optimiser working, so put dev resources on that that might have been better spent elsewhere
+- Better path planning is needed as the robot just walked straight towards the ball (now that we have strafing and pivoting abilities we should incorporate this)
+- An open loop walk needs to be implemented. The walk can have sensor feedback, but it has not been enabled because odometry was not working (until now)
+- The walk command that was sent and the actual output of the walk engine was different
+
+#### Vision
+
+- We didn’t allocate someone to merging in and testing visual mesh v2 until after vision data was collected - this should have been done in parallel
+- Vision data collection ran later than scheduled
+- Not enough people know how to run the vision pipeline through to something like NUsight for verification (needs more docs)
+- When we went for the ball, we made a complete bee-line for the ball and got penalised for walking into other teams. We need robot detection and avoidance!!
+
+#### Odometry
+
+- Yaw was not working, not enough members of the team understand how Odometry works
+- Still needs tuning
+
+#### Localisation
+
+- NaNs in BallLocalisation due to an invalid initialisation lead to us to having a NaN walk command at times
+- Robot localisation always assumed goal posts were opponent posts because of ancient (pre-2015??) code
+- All of localisation was old code that had not been tested in eons due to us being unable to test for many years
+- Localisation wasn’t used in our final game because of uncertainty/issues in the system. Mostly from goal detector and head behaviour.
+
+#### Behaviour
+
+- All of our robots would stop when one robot was penalized in game
+- Once we get in a stuck state, we don’t have a way to “reset”
+- Webots would teleport our robots when they were penalised which messes with our system. Lots of different components required flushing and not all were caught.
+- The walk engine was running faster than walk path planning which was running faster than soccer strategy. On a new state change from Game Controller, walk keeps running many times before soccer strategy executes. Only really an issue when the robot was teleported in Webots - related to above, need to keep everything flushed for a small amount of time until all the systems catch up
+- Head behaviour just looks for balls and doesn’t change to look for goals. Problematic with the small field of view we had in Webots.
+Possible problem with head behaviour since kinematics doesn’t go to camera anymore, just the pitch servo.
+
+#### Data Logging
+
+- We need to be more careful about what messages we log. We lost a lot of, potentially very valuable, data because our logs filled up the simulation instance and was discarded. Should run some tests with webots to see what sort of data rates we are dealing with so we can more easily choose what messages we want/need/can afford to have
+- In an effort to stop our logs getting too big we implemented a max size after which all logging would stop. As part of this we changed the FileLogHandler module to a sync group instead of a mutex and lost valuable time solving the resulting segmentation fault
+
+#### Webots + GameController
+
+- By running Webots on the local network on multiple devices it was necessary to implement a network traffic filter so as not to interfere with other running simulations. One such filter was accidentally committed to a submitted code image for a game and our robots did nothing all game. There should have been a checklist confirmed by at least two people other than the person doing the submission before the final code was submitted
+- Random crashes and connection issues ate up valuable development time
+- Need Devops, Code Review, and Deployment during RoboCup
+- We had a close call for one of the games where our final submission was completed just a minute or two before the deadline. Early and incremental merging, testing, and submissions (as suggested below) helped ensure we had a smooth submission.
+- Multiple people need to be aware of the building/submitting process so that we aren't relying on a single person be available/awake at critical moments
+- The system that we used to handle messages frm Game Controller was out of date and incorrect in places. Need to keep up to date with it.
+- There were some errors setting up robot-specific config files due to a misunderstanding of where Webots looked for the config file. `webots` config folders didn’t work, `webots1`, `webots2`, `webots3` did.
+
+#### Tools: NUsight, NUbook
+
+- NUsight: testing with many docker robots was difficult to filter and find our docker robot. A way to differentiate or filter out other images is required
+- NUbook: lots of little things that we were discovering though the dev process like UDP filter flags, which repo/branch to pull, are hard to document with the normal process. PRs need to be getting reviewed and merged quickly to save time particularly for necessary pages. The process for building the latest version of Webots with the correct configuration was not merged for nearly a month and people were building directly from the PR preview
+
+#### Team Morale, Participation and New Members
+- It’s hard to keep track of what needs to be done, who’s working on what and what our priorities are when the dev cycle speeds up. Makes finding a job daunting if you don’t feel confident to walk up to a group of people and ask them if they would like some input.
+
+#### Planning and Organisation
+Need to account for exam period a bit more explicitly
+Didn’t have access to back door for a while which made lab access difficult
+
+### What Went Well
+- Need to choose a good computer to be the dedicated building/commiting/pushing computer. Needs to be kept up to date so build times remain low and so it is always in a good state to make a new submission. 
+WE WON A GAME!!!
+Quarter finalist
+Scored a goal!
+Walking
+Walking pretty well tuned
+Ball tracking/path following
+Vision
+WOO GO ALEX!!!! Trained the mesh and made a real particle filter and did many other things 
+Could use vision data to find and walk towards the ball
+Head behaviour stopped fixating on missing objects
+Goal detector had issues and required some throw outs
+Ysobel: Implemented field length distance for goal throw outs
+Taylor: Implemented something for broken up goals (was is clustering?)
+Ball detector looked like it worked well!! I (Ysobel) didn’t see any false positives. Uncommon false negatives.
+Odometry
+Fixed exploding filter
+Pitch and roll very good
+Localisation
+Fixed cholesky decomposition causing us to stop working
+Ball detector Nans fixed 
+Robot particle localisation improved and we handle goal post measurements better
+We have a new particle filter (hopefully better implemented and with more documentation)
+Field line detection for improved field/robot is mostly implemented 
+Behaviour
+Identified potential 
+Penalty shootout behaviour
+Passed penalty shootout tests
+Fixed issue in head behaviour
+NUClear
+Yay NUClear!!
+Webots + GameController
+We now have a simulator!!!!!!!
+Fixed up game controller message
+We now!!!! Have!!! A!!!! simulator!!!!
+DevOps and Code Review
+Incremental submissions to prevent a final rush that may introduce improperly tested issues
+Add info on how to test PR, what PR is about, ...
+Tools: NUsight, NUbook
+Identified new concepts to include within NUbook based on junior team member code reviews 
+The answer is everything! ALL the documentation! 
+More info in the code review page on basic things to look for (spelling, enough comments, initialising variables, additions to NUbook…)
+Localisation page (there is a PR somewhere, probably needs rewritten) [Abi]
+Mathematics page expansion? ‘Unit vector thing’. Letters meaning (this requires an update to NUbots too because we have double ups), have a table of the common variable names and what they mean.
+Odometry
+Continue logging guide (I have a branch [Ysobel])
+Trent needs to explain field space, torso space, and world space and why certain things are tracked in the spaces that they are
+Team Morale, Participation, and New Members
+Introduced international meme review
+Had impactful work done by newer members
+Planning, Food, and Organisation
+World record for most Red bulls crimson cows consumed 
+Good idea to book the room, was good for watching matches
+
+
+
+
+
+
+
+
+
+
+
+
+### What's next
+Having a way to rapidly prototype ideas (i.e. python modules)
+E.g. when developing what is now `webots.cpp`
+A “digital whiteboard”
+Keep track of what needs to be done, and who’s doing what
+Keep track of specific dev things which don’t fit in NUbook - e.g. when is the next game, everyone needs to `./b target generic` again because something broke, etc.
+Github issues/projects? Trello?
+Get newer people confident before RoboCup because when we’re needing to be speedy there isn’t a lot of time to think about helping shy/less confident members.
+Improved walk engine - Tom’s FYP work looks promising - what about flex?
+Vision: how useful is improving the vision data collection tool? If we use webots again, maybe? Not useful for real world. Ideas for real world are
+Multimodal CycleGAN 
+Motion capture data
+All new vision members need to be able to train, run, test visual mesh (with dummy dataset)
+Consider more goal throw outs? Still need to do green horizon throw outs. 
+Optimise odometry values, motion capture set up?
+Add in goal looking head behaviour
+Proper state machine for behaviour, handle all cases. Kick-off in normal. Ball drop. Other things. Infrastructure to begin with rather than actual implementation of what to do in that stage.
+Implement isolated tests in Webot for modules.
+More NUbook pages!!
+We need the director.
+ROS bridge. Has a huge number of libraries that we can use if we can interface with ROS
+Investigate PlotJuggler to be used as potential alternative to NUsight charts
+Numerical optimization for IK (or someone do a phd on finding the analytical solution to our lower body IK)
+Highly accurate system identification so our model best translates from WeBots to the real world
+Path planning/tracking (vector fields that include obstacles or something similar)
+Diagram visualization of our behaviour. Auto generated would be neat
+Develop a simple program that uses sliders for tuning YAML files
+We lack as a team deep collective understanding of how the whole system works. Continuous work will build our confidence and prevent us from having to assume too much. We should be confused if something doesn’t work because we know how it should work, rather than how we assume it should. This can be improved by continuing to improve our system, writing tests and building out the director. Our current system overview is probably too broad.
+Multi-state walk engine, which starts in a slower state, then once it has speed it goes much faster - i.e. what Bit-bots do
+Behaviour visualisation would be cool. Either some indication in existing NUsight views of the state of the robot, or a new NUsight behaviour view, with some indication of graphs of previous states and possible future states. I can even imagine a floating box above a robot in webots indicating  its behavioural state. That would be insane, but probably way too much work lol 
+Trent is suggesting a different NUsight view for different providers e.g. a NUsight view for the walk engine behaviour provider
+Having time as an explicit feature. Graphs are lit
+Sync instead of single in GameController.cpp - Single can drop messages, but Sync won’t
+Remove if in ball detector that prevents us knowing there are no balls
+Different config for our playing role. We debug and test on one role, and play on the role for playing - to prevent breaking config changes like UDP filter
+B tool or command line args for dealing with UDP filter or some config stuff like that. NUClear has a commandlineargs trigger which could be worth looking into
+We should make PRs to webots to do stuff like use a different mirror for their deps
+
 ## 2020: France, Bordeaux
 
-Due to COVID-19 the 2020 competition in France, Bordeaux was cancelled.
+Due to COVID-19, the 2020 competition in France, Bordeaux was cancelled.
 
 ## 2019: Sydney, Australia
 
