@@ -178,13 +178,34 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ### Running One Robot
 
-If you want to test the behaviour of one robot in the Webots RoboCup scenario, you can run the binary from the normal NUbots docker container.
+If you want to test the behaviour of one robot in the Webots RoboCup scenario, you can run the binary from the normal NUbots docker container. This can be done on the same computer that Webots is running on, from the previous section, or on a different computer.
 
 1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
 
 2. Set your UDP filter on the NUbots side to prevent it receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
 
-3.
+3. Should say something about making sure you have the right stuff in `webots.yaml` for IP and port, and in GameController for team id and robot id. Also that on the webots side, the referee or whatever it is has the address of the robot computer if they are different.
+
+4. Run `./b run webotsrobocup`.
+
+### Running Multiple Robots
+
+If you're running more than one robot, you will need to set up a Docker container for each robot. There can be any combination of different or same computers for each robot container and webots itself. E.g. you can run webots itself and a robot on one computer, three robots on another computer, and three on another computer. Just the more computers you have, the more complicated the IP set up will be for the config files.
+
+1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
+
+2. Set your UDP filter on the NUbots side to prevent it receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
+
+3. Something about right ips on the webots side.
+
+4. Run `./b webots build webotsrobocup` to build the container with the `webotsrobocup` role.
+
+5. Run `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup>`
+
+   E.g. if you are running everything locally on one computer, and you want to connect to robot number 1 on the red team, run
+   `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.0.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup>`
+
+6. Open a new terminal and run the above command with different `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` combinations for each robot.
 
 ## Get and Build the NUbots Environment
 
