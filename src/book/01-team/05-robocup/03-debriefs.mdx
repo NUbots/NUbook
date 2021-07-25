@@ -45,7 +45,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 - Webots would teleport our robots when they were penalised which messes with our system. Lots of different components required flushing and not all were caught.
 - The walk engine was running faster than walk path planning which was running faster than soccer strategy. On a new state change from Game Controller, walk keeps running many times before soccer strategy executes. Only really an issue when the robot was teleported in Webots - related to above, need to keep everything flushed for a small amount of time until all the systems catch up
 - Head behaviour just looks for balls and doesn’t change to look for goals. Problematic with the small field of view we had in Webots.
-Possible problem with head behaviour since kinematics doesn’t go to camera anymore, just the pitch servo.
+  Possible problem with head behaviour since kinematics doesn’t go to camera anymore, just the pitch servo.
 
 #### Data Logging
 
@@ -68,79 +68,72 @@ Possible problem with head behaviour since kinematics doesn’t go to camera any
 - NUbook: lots of little things that we were discovering though the dev process like UDP filter flags, which repo/branch to pull, are hard to document with the normal process. PRs need to be getting reviewed and merged quickly to save time particularly for necessary pages. The process for building the latest version of Webots with the correct configuration was not merged for nearly a month and people were building directly from the PR preview
 
 #### Team Morale, Participation and New Members
+
 - It’s hard to keep track of what needs to be done, who’s working on what and what our priorities are when the dev cycle speeds up. Makes finding a job daunting if you don’t feel confident to walk up to a group of people and ask them if they would like some input.
 
 #### Planning and Organisation
+
 Need to account for exam period a bit more explicitly
 Didn’t have access to back door for a while which made lab access difficult
 
 ### What Went Well
-- Need to choose a good computer to be the dedicated building/commiting/pushing computer. Needs to be kept up to date so build times remain low and so it is always in a good state to make a new submission. 
-WE WON A GAME!!!
-Quarter finalist
-Scored a goal!
-Walking
-Walking pretty well tuned
-Ball tracking/path following
-Vision
-WOO GO ALEX!!!! Trained the mesh and made a real particle filter and did many other things 
-Could use vision data to find and walk towards the ball
-Head behaviour stopped fixating on missing objects
-Goal detector had issues and required some throw outs
-Ysobel: Implemented field length distance for goal throw outs
-Taylor: Implemented something for broken up goals (was is clustering?)
-Ball detector looked like it worked well!! I (Ysobel) didn’t see any false positives. Uncommon false negatives.
-Odometry
-Fixed exploding filter
-Pitch and roll very good
-Localisation
-Fixed cholesky decomposition causing us to stop working
-Ball detector Nans fixed 
-Robot particle localisation improved and we handle goal post measurements better
-We have a new particle filter (hopefully better implemented and with more documentation)
-Field line detection for improved field/robot is mostly implemented 
-Behaviour
-Identified potential 
-Penalty shootout behaviour
-Passed penalty shootout tests
-Fixed issue in head behaviour
-NUClear
-Yay NUClear!!
-Webots + GameController
-We now have a simulator!!!!!!!
-Fixed up game controller message
-We now!!!! Have!!! A!!!! simulator!!!!
-DevOps and Code Review
-Incremental submissions to prevent a final rush that may introduce improperly tested issues
-Add info on how to test PR, what PR is about, ...
-Tools: NUsight, NUbook
-Identified new concepts to include within NUbook based on junior team member code reviews 
-The answer is everything! ALL the documentation! 
-More info in the code review page on basic things to look for (spelling, enough comments, initialising variables, additions to NUbook…)
-Localisation page (there is a PR somewhere, probably needs rewritten) [Abi]
-Mathematics page expansion? ‘Unit vector thing’. Letters meaning (this requires an update to NUbots too because we have double ups), have a table of the common variable names and what they mean.
-Odometry
-Continue logging guide (I have a branch [Ysobel])
-Trent needs to explain field space, torso space, and world space and why certain things are tracked in the spaces that they are
-Team Morale, Participation, and New Members
-Introduced international meme review
-Had impactful work done by newer members
-Planning, Food, and Organisation
-World record for most Red bulls crimson cows consumed 
-Good idea to book the room, was good for watching matches
 
-
-
-
-
-
-
-
-
-
-
+- Need to choose a good computer to be the dedicated building/commiting/pushing computer. Needs to be kept up to date so build times remain low and so it is always in a good state to make a new submission.
+  WE WON A GAME!!!
+  Quarter finalist
+  Scored a goal!
+  Walking
+  Walking pretty well tuned
+  Ball tracking/path following
+  Vision
+  WOO GO ALEX!!!! Trained the mesh and made a real particle filter and did many other things
+  Could use vision data to find and walk towards the ball
+  Head behaviour stopped fixating on missing objects
+  Goal detector had issues and required some throw outs
+  Ysobel: Implemented field length distance for goal throw outs
+  Taylor: Implemented something for broken up goals (was is clustering?)
+  Ball detector looked like it worked well!! I (Ysobel) didn’t see any false positives. Uncommon false negatives.
+  Odometry
+  Fixed exploding filter
+  Pitch and roll very good
+  Localisation
+  Fixed cholesky decomposition causing us to stop working
+  Ball detector Nans fixed
+  Robot particle localisation improved and we handle goal post measurements better
+  We have a new particle filter (hopefully better implemented and with more documentation)
+  Field line detection for improved field/robot is mostly implemented
+  Behaviour
+  Identified potential
+  Penalty shootout behaviour
+  Passed penalty shootout tests
+  Fixed issue in head behaviour
+  NUClear
+  Yay NUClear!!
+  Webots + GameController
+  We now have a simulator!!!!!!!
+  Fixed up game controller message
+  We now!!!! Have!!! A!!!! simulator!!!!
+  DevOps and Code Review
+  Incremental submissions to prevent a final rush that may introduce improperly tested issues
+  Add info on how to test PR, what PR is about, ...
+  Tools: NUsight, NUbook
+  Identified new concepts to include within NUbook based on junior team member code reviews
+  The answer is everything! ALL the documentation!
+  More info in the code review page on basic things to look for (spelling, enough comments, initialising variables, additions to NUbook…)
+  Localisation page (there is a PR somewhere, probably needs rewritten) [Abi]
+  Mathematics page expansion? ‘Unit vector thing’. Letters meaning (this requires an update to NUbots too because we have double ups), have a table of the common variable names and what they mean.
+  Odometry
+  Continue logging guide (I have a branch [Ysobel])
+  Trent needs to explain field space, torso space, and world space and why certain things are tracked in the spaces that they are
+  Team Morale, Participation, and New Members
+  Introduced international meme review
+  Had impactful work done by newer members
+  Planning, Food, and Organisation
+  World record for most Red bulls crimson cows consumed
+  Good idea to book the room, was good for watching matches
 
 ### What's next
+
 Having a way to rapidly prototype ideas (i.e. python modules)
 E.g. when developing what is now `webots.cpp`
 A “digital whiteboard”
@@ -150,10 +143,10 @@ Github issues/projects? Trello?
 Get newer people confident before RoboCup because when we’re needing to be speedy there isn’t a lot of time to think about helping shy/less confident members.
 Improved walk engine - Tom’s FYP work looks promising - what about flex?
 Vision: how useful is improving the vision data collection tool? If we use webots again, maybe? Not useful for real world. Ideas for real world are
-Multimodal CycleGAN 
+Multimodal CycleGAN
 Motion capture data
 All new vision members need to be able to train, run, test visual mesh (with dummy dataset)
-Consider more goal throw outs? Still need to do green horizon throw outs. 
+Consider more goal throw outs? Still need to do green horizon throw outs.
 Optimise odometry values, motion capture set up?
 Add in goal looking head behaviour
 Proper state machine for behaviour, handle all cases. Kick-off in normal. Ball drop. Other things. Infrastructure to begin with rather than actual implementation of what to do in that stage.
@@ -169,7 +162,7 @@ Diagram visualization of our behaviour. Auto generated would be neat
 Develop a simple program that uses sliders for tuning YAML files
 We lack as a team deep collective understanding of how the whole system works. Continuous work will build our confidence and prevent us from having to assume too much. We should be confused if something doesn’t work because we know how it should work, rather than how we assume it should. This can be improved by continuing to improve our system, writing tests and building out the director. Our current system overview is probably too broad.
 Multi-state walk engine, which starts in a slower state, then once it has speed it goes much faster - i.e. what Bit-bots do
-Behaviour visualisation would be cool. Either some indication in existing NUsight views of the state of the robot, or a new NUsight behaviour view, with some indication of graphs of previous states and possible future states. I can even imagine a floating box above a robot in webots indicating  its behavioural state. That would be insane, but probably way too much work lol 
+Behaviour visualisation would be cool. Either some indication in existing NUsight views of the state of the robot, or a new NUsight behaviour view, with some indication of graphs of previous states and possible future states. I can even imagine a floating box above a robot in webots indicating its behavioural state. That would be insane, but probably way too much work lol
 Trent is suggesting a different NUsight view for different providers e.g. a NUsight view for the walk engine behaviour provider
 Having time as an explicit feature. Graphs are lit
 Sync instead of single in GameController.cpp - Single can drop messages, but Sync won’t
