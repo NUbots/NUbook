@@ -14,7 +14,7 @@ Before vision can work on the robot, odometry and kinematics must work on the ro
 
 ### Dataset Generation
 
-Synthetic and semi-synthetic training data for vision can be generated using NUpbr. Pre-generated datasets for training the Visual Mesh can be found on the <abbr title="Network-Attached Storage">NAS</abbr> in the lab.
+Synthetic and semi-synthetic training data for vision can be generated using [NUpbr](/system/tools/nupbr). Pre-generated datasets for training the Visual Mesh are on the <abbr title="Network-Attached Storage">NAS</abbr> in the lab.
 
 #### NUpbr
 
@@ -24,7 +24,7 @@ Find out how to get and use NUpbr on the [NUpbr NUbook page](/system/tools/nupbr
 
 #### Setting Up The Data
 
-The [Visual Mesh repository](https://github.com/Fastcode/VisualMesh) contains information on how to set up the datasets for training. It contains [a script](https://github.com/Fastcode/VisualMesh/blob/master/training/build_dataset.py) that takes data and converts it into the tfrecord format that the Visual Mesh expects. The script requires a folder of raw images, segmentation masks, and metadata. NUpbr will provide all these as output, and such data can be found on the NAS.
+The Visual Mesh requires raw images, [segmentation masks](https://paperswithcode.com/task/semantic-segmentation) and metadata, as outlined on the [Quick Start Guide](https://github.com/Fastcode/VisualMesh/blob/main/readme/quickstart.md#gathering-the-data). NUpbr can provide all of these as output, and premade data is available on the NAS. The data then needs to be converted to the tfrecord format using a script on the Visual Mesh repository. [The Quick Start Guide](https://github.com/Fastcode/VisualMesh/blob/main/readme/quickstart.md#building-the-dataset) describes how to use it.
 
 ### The Visual Mesh
 
