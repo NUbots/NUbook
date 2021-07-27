@@ -22,7 +22,7 @@ const Code = ({ children, className }) => {
             }}
             style={{ position: 'absolute', padding: '5px' }}
           >
-            <CopyImg width='16' height='24' />
+            Copy
           </button>
           <code
             className={`${className} w-full p-4 rounded block overflow-x-auto`}
