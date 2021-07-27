@@ -15,19 +15,19 @@ const Code = ({ children, className }) => {
       language={language}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <><button
-              onClick={() => {
-                navigator.clipboard.writeText(children)
-              }}
-              style={{ position:'absolute', padding:'5px'}}
-            >
-              <CopyImg width='16' height='24' />
-            </button>
+        <>
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(children)
+            }}
+            style={{ position: 'absolute', padding: '5px' }}
+          >
+            <CopyImg width='16' height='24' />
+          </button>
           <code
             className={`${className} w-full p-4 rounded block overflow-x-auto`}
             style={style}
           >
-
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line, key: i })}>
                 {line.map((token, key) => (
