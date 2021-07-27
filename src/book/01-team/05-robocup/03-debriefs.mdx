@@ -16,7 +16,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 
 - We underestimated dev time required to get walk optimiser working, so put dev resources on that that might have been better spent elsewhere
 - Better path planning is needed as the robot just walked straight towards the ball (now that we have strafing and pivoting abilities we should incorporate this)
-- An open loop walk needs to be implemented. The walk can have sensor feedback, but it has not been enabled because odometry was not working (until now)
+- An closed loop walk needs to be implemented. The walk can have sensor feedback, but it has not been enabled because odometry was not working (until now)
 - The walk command that was sent and the actual output of the walk engine was different
 
 #### Vision
@@ -87,7 +87,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 - Visual mesh was well trained and we had a working particle filter
 - Could use vision data to find and walk towards the ball
 - Head behaviour was sorted out to stop the robot from fixating on missing objects
-- Goal detector had issues and required a significant amount of post-vision processing
+- Goal detector had issues and required a significant amount of vision post-processing
   - Implemented field length distance for goal throw outs
   - Implemented clustering for broken up goals
 - Ball detector was working well, false negatives were uncommon
@@ -145,7 +145,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
   - Multimodal CycleGAN
   - Motion capture data
 - All new vision members need to be able to train, run, test visual mesh (with a dummy dataset)
-- Consider more post-vision processing including work on green horizon throw outs.
+- Consider more vision post-processing including work on green horizon throw outs.
 - Optimise odometry values, maybe for when motion capture is set up
 - Develop head behaviour to include searching for goals as well as the ball
 - Proper state machine for behaviour to handle all cases - Kick-off in Normal, Ball drop, Other things. Infrastructure to begin with rather than actual implementation of what to do in that stage.
@@ -163,7 +163,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 - Potentially a different NUsight view for different providers e.g. a NUsight view for the walk engine behaviour provider
 - Change `GameController.cpp` to use `Single` instead of `Sync` - `Single` can drop messages, but `Sync` will not
 - Fix `BallDetector` to properly let the system know if it can detect no balls
-- Set up a different config for our playing role, so we debug and test on one role, and play on the role for playing - to prevent breaking config changes like the network traffic filter
+- Set up different configuration files so we debug and test on one set of config files, and play on separate set of configs - to prevent breaking config changes like the network traffic filter
 - `b` tool or command line args for dealing with network traffic filter or some config stuff like that. NUClear has a `commandlineargs` trigger which could be worth looking into
 - We should make PRs to Webots to do stuff like use a different mirror for their deps
 - In general, we lack as a team deep collective understanding of how the whole system works. Continuous work will build our confidence and prevent us from having to assume too much. We should be confused if something doesn’t work because we know how it should work, rather than how we assume it should. This can be improved by continuing to improve our system, writing tests and building out the Director. Our current system overview is probably too broad. More documentation will also help with this.
