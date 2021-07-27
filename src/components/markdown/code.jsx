@@ -11,23 +11,23 @@ const Code = ({ children, className }) => {
     <Highlight
       {...defaultProps}
       theme={theme}
-      code={children.trim()}
+      code={'\n' + children.trim()}
       language={language}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <>
+        <><button
+              onClick={() => {
+                navigator.clipboard.writeText(children)
+              }}
+              style={{ position:'absolute', padding:'5px'}}
+            >
+              <CopyImg width='16' height='24' />
+            </button>
           <code
             className={`${className} w-full p-4 rounded block overflow-x-auto`}
             style={style}
           >
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(children)
-              }}
-              style={{ float: 'right' }}
-            >
-              <CopyImg width='16' height='24' />
-            </button>
+
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line, key: i })}>
                 {line.map((token, key) => (
