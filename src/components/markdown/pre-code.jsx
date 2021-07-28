@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/oceanicNext'
 
-const PreCode = ({ children }) => {
+const PreCode = ({ children, className }) => {
   // Get the data of the nested <code> element
-  const className = children.props.className
-  const language = className.replace(/language-/, '')
+  className = children.props.className
+  const language = className?.replace(/language-/, '')
   const code = children.props.children?.trim()
 
   const [copyLabel, setCopyLabel] = useState('Copy')
