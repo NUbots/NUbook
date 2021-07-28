@@ -40,7 +40,7 @@ const PreCode = ({ children, className }) => {
                 copyTimeoutRef.current = null
               }, 3000)
             }}
-            className='absolute right-0 top-0 mr-2 mt-2 bg-gray-800 px-6 py-2 rounded-full leading-none opacity-0 group-hover:opacity-100'
+            className='absolute right-0 top-0 mr-2 mt-2 bg-gray-800 px-6 py-2 rounded-full leading-none opacity-0 group-hover:opacity-100 text-primary-inverted'
           >
             {copyLabel}
           </button>
