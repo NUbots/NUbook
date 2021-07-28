@@ -118,11 +118,11 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
    - Open Windows Powershell in administrator mode.
    - Run the following to install WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
      ```
    - Run the following to enable the Virtual Machine Platform feature needed for WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
      ```
    - Restart your computer.
@@ -275,7 +275,7 @@ If you are following the example, run `./b run keyboardwalkfake`. If you are on 
 
 Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
 
-```
+```bash
 ./b run keyboardwalkfake --network nuclearnet
 ```
 
