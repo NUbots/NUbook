@@ -5,8 +5,8 @@ import theme from 'prism-react-renderer/themes/oceanicNext'
 
 const PreCode = ({ children }) => {
   // Assuming children is one child, the nested <code> element
-  const codeElement = children 
-  
+  const codeElement = children
+
   // Get the language and content of the <code> element
   const language = codeElement?.props?.className?.replace(/language-/, '') ?? ''
   const code = codeElement?.props?.children?.trim() ?? ''
