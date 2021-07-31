@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import theme from 'prism-react-renderer/themes/oceanicNext'
 
-const PreCode = ({ children, className }) => {
-  // Get the data of the nested <code> element
-  className = children.props.className
-  const language = className?.replace(/language-/, '')
-  const code = children.props.children?.trim()
+const PreCode = ({ children }) => {
+  // Assuming children is one child, the nested <code> element
+  const codeElement = children 
+  
+  // Get the language and content of the <code> element
+  const language = codeElement?.props?.className?.replace(/language-/, '') ?? ''
+  const code = codeElement?.props?.children?.trim() ?? ''
 
   const [copyLabel, setCopyLabel] = useState('Copy')
   const copyTimeoutRef = useRef(null)
@@ -64,11 +66,6 @@ const PreCode = ({ children, className }) => {
 
 PreCode.propTypes = {
   children: PropTypes.element,
-  className: PropTypes.string,
-}
-
-PreCode.defaultProps = {
-  className: 'language-txt',
 }
 
 export default PreCode
