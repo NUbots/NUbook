@@ -161,7 +161,6 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 - Multi-state walk engine, which starts in a slower state where it is more stable, then once it has started moving gradually increment the speed
 - Behaviour visualisation. Either some indication in existing NUsight views of the state of the robot, or a new NUsight behaviour view, with some indication of graphs of previous states and possible future states.
 - Potentially a different NUsight view for different providers e.g. a NUsight view for the walk engine behaviour provider
-- Change `GameController.cpp` to use `Single` instead of `Sync` - `Single` can drop messages, but `Sync` will not
 - Fix `BallDetector` to properly let the system know if it can detect no balls
 - Set up different configuration files so we debug and test on one set of config files, and play on separate set of configs - to prevent breaking config changes like the network traffic filter
 - `b` tool or command line args for dealing with network traffic filter or some config stuff like that. NUClear has a `commandlineargs` trigger which could be worth looking into
