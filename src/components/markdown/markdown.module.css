@@ -91,9 +91,6 @@
     }
 
     code {
-      @apply p-4;
-      overflow-x: auto;
-
       &::-webkit-scrollbar {
         width: 0.7rem;
         height: 0.7rem;
