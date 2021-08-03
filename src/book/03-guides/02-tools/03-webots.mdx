@@ -76,55 +76,68 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ## Install Webots
 
-1. Open a terminal and swap to your home directory (note that Webots should be cloned in your home directory). Then clone the repository and change into the cloned directory:
+1. Open a terminal, clone the NUWebots repository and change into the cloned directory:
 
    ```bash
    cd ~
-   git clone --branch nubots-changes --single-branch --recurse-submodules -j$(nproc) https://github.com/NUbots/webots.git
-   cd webots
+   git clone --recurse-submodules -j$(nproc) https://github.com/NUbots/NUWebots.git
+   cd NUWebots
    ```
 
-   By using these commands, you'll be on the correct branch (`nubots-changes`) and you'll have the required submodules.
+   The NUWebots repo contains both NUbots-specific Webots files and the files needed to install Webots itself.
+   The first command can be changed to any directory you would like. If you're not sure, just follow what is in this guide.
 
-2. Install Webots build dependencies:
+2. This step assumes you have done the previous step and are now in the NUWebots directory. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+
+   ```
+   echo export WEBOTS_HOME=$(pwd)/webots >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+3. Move into the webots directory and install the Webots build dependencies:
 
    ```bash
+   cd webots
    sudo ./scripts/install/linux_compilation_dependencies.sh
    ```
 
-3. Build Webots:
+4. Build Webots:
 
    ```bash
    make -j$(nproc)
    ```
 
-4. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+## Running the Official RoboCup Simulation in Webots
 
+### Set Up the Protos
+
+1. Set up the symlink for the NUgus proto:
+
+   ```bash
+   ln -s $WEBOTS_HOME/../protos/robot/NUgus $WEBOTS_HOME/projects/samples/contests/robocup/protos
    ```
-   echo WEBOTS_HOME=$HOME/webots >> ~/.bashrc
-   ```
 
-## Setting Up RoboCup in Webots
+   This allows us to use our NUgus robot with the official RoboCup simulation.
 
-### Set Up the RoboCup Controllers
+### Set Up the Controllers
 
 1. Install dependencies for the referee:
 
    ```bash
-   cd ~/webots/projects/samples/contests/robocup/controllers/referee
+   cd $WEBOTS_HOME/projects/samples/contests/robocup/controllers/referee
    pip3 install -r requirements.txt
    ```
 
 2. Build the Robocup controllers:
 
    ```bash
-   cd ~/webots/projects/samples/contests/robocup
-   WEBOTS_HOME=$HOME/webots make -j$(nproc)
+   cd $WEBOTS_HOME/projects/samples/contests/robocup
+   make -j$(nproc)
    ```
 
 ### Install Game Controller
 
-1. Install the ant build tool:
+1. Install the ant build tool and Java Development Kit:
 
    ```bash
    sudo apt-get install ant default-jdk
@@ -137,12 +150,24 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    git clone https://github.com/RoboCup-Humanoid-TC/GameController.git
    ```
 
+   The first command can be changed to any directory you would like. If you're not sure, just follow what is in this guide.
+
 3. Change into the cloned directory and build the GameController:
 
    ```bash
    cd GameController
    ant
    ```
+
+4. Add the `JAVA_HOME` and `GAME_CONTROLLER_HOME` env variable to your `.bashrc` file:
+
+   ```bash
+   echo export JAVA_HOME=/usr/lib/jvm/default-java >> ~/.bashrc
+   echo export GAME_CONTROLLER_HOME=$(pwd) >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+   The second command assumes you are still in the GameController directory from the previous step.
 
 ### Run Webots with GameController
 
@@ -163,7 +188,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 3. Run the following to open Webots with the Robocup world and the GameController:
 
    ```bash
-   JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
+   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
    ```
 
    <Alert>
