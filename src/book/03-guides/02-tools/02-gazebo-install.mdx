@@ -23,7 +23,7 @@ Follow the instructions to setup Ubuntu with WSL [here](/guides/main/getting-sta
 1. Install [Gazebo](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=9.0) (version 9 last tested) using Ubuntu.
 
 2. Install Gazebo dev libaries.
-   ```
+   ```bash
    sudo apt-get install libgazebo9-dev
    ```
 
@@ -36,12 +36,12 @@ Download and install VcXsrv [here](https://sourceforge.net/projects/vcxsrv/).
 ## Running NUbots simulation
 
 1. Clone this repo.
-   ```
+   ```bash
    git clone https://github.com/NUbots/Gazebo.git
    ```
 2. Install the plugin.
 
-   ```
+   ```bash
    cd gazebo
    sudo bash ./install_plugin.sh
    ```
@@ -52,7 +52,7 @@ Download and install VcXsrv [here](https://sourceforge.net/projects/vcxsrv/).
 
 3. Setup WSL to connect with VcXsrv server.
 
-   ```
+   ```bash
    export GAZEBO_IP=127.0.0.1
    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
    export LIBGL_ALWAYS_INDIRECT=0
@@ -67,7 +67,7 @@ Download and install VcXsrv [here](https://sourceforge.net/projects/vcxsrv/).
    ![Xlaunch settings](./images/extra-settings.png 'Extra settings')
 
 7. Run the plugin.
-   ```
+   ```bash
    sudo bash ./run_plugin.sh
    ```
 
