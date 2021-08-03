@@ -203,13 +203,21 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ### Running One Robot
 
-If you want to test the behaviour of one robot in the Webots RoboCup scenario, you can run the binary from the normal NUbots docker container. This can be done on the same computer that Webots is running on, from the previous section, or on a different computer.
+If you want to test the behaviour of one robot in the Webots RoboCup scenario, you can run the binary from the usual NUbots docker container. The robot can be run on the same computer or on a different computer to the Webots simulator.
 
 1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
 
-2. Set your UDP filter on the NUbots side to prevent it receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
+2. Set your UDP filter on the NUbots side to prevent it from receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
 
-3. Should say something about making sure you have the right stuff in `webots.yaml` for IP and port, and in GameController for team id and robot id. Also that on the webots side, the referee or whatever it is has the address of the robot computer if they are different.
+3. Ensure the IP and ports are set up correctly. If you are running everything locally on the one computer, the default settings should work. If Webots and the robot code are run on separate computers, do the following
+
+   1. As done previously, get the hostname of each computer by running `hostname -I` in the terminal.
+
+   2. On the computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step.
+
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in
+
+Should say something about making sure you have the right stuff in `webots.yaml` for IP and port, and in GameController for team id and robot id. Also that on the webots side, the referee or whatever it is has the address of the robot computer if they are different.
 
 4. Run `./b run webotsrobocup`.
 
