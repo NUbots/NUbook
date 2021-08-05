@@ -246,14 +246,14 @@ If you're running more than one robot, you will need to set up a Docker containe
 
 6. Open a new terminal and run the above command with different `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` combinations for each robot.
 
-## Get and Build the NUbots Environment
+## Running a NUbots Environment
 
-1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
+Follow these steps to set up a NUbots developed environment rather than the RoboCup environment.
+
+1. Move to the `NUWebots` folder:
 
    ```bash
-   cd ~
-   git clone https://github.com/NUbots/NUWebots.git
-   cd NUWebots
+   cd $WEBOTS_HOME/..
    ```
 
 2. Install the python dependencies:
@@ -262,7 +262,7 @@ If you're running more than one robot, you will need to set up a Docker containe
    pip3 install -r requirements.txt
    ```
 
-3. Configure the codebase by running
+3. Configure the codebase by running:
 
    ```bash
    ./b configure
@@ -295,25 +295,23 @@ If you're running more than one robot, you will need to set up a Docker containe
    ./b build
    ```
 
-## Running Webots
-
-1. Navigate to the Webots folder
+5. Navigate to the Webots folder
 
    ```bash
-   cd ~/webots
+   cd webots
    ```
 
-2. Launch Webots by running
+6. Launch Webots by running
 
    ```bash
    ./webots
    ```
 
-3. Open the NUbots world file inside Webots.
+7. Open a NUbots world file inside Webots.
 
    1. Click on `File->Open World...`.
 
-   2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
+   2. In the pop-up, navigate to the [NUbots/NUWebots/worlds](https://github.com/NUbots/NUWebots/worlds) folder on your computer and open the world you would like to run.
 
 ## Creating a New Controller
 
