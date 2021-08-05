@@ -101,12 +101,16 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    sudo ./scripts/install/linux_compilation_dependencies.sh
    ```
 
-4. Build Webots:
+4. Update the submodules for the Webots subtree
+
+    ```bash
+    git submodule update --init
+    ```
+
+5. Build Webots:
 
    ```bash
    make -j$(nproc)
-   ```
-
 ## Running the Official RoboCup Simulation in Webots
 
 ### Set Up the Protos
