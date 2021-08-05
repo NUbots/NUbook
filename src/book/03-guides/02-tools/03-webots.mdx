@@ -96,9 +96,9 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 3. Update the submodules for the Webots subtree
 
-    ```bash
-    git submodule update --init
-    ```
+   ```bash
+   git submodule update --init
+   ```
 
 4. Move into the webots directory and install the Webots build dependencies:
 
@@ -221,9 +221,9 @@ If you want to test the behaviour of one robot in the Webots RoboCup scenario, y
 
    2. On the computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step.
 
-   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one). 
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one).
 
-   4. Under `red: hosts:` add the hostname of the computer you are running the robot code on. 
+   4. Under `red: hosts:` add the hostname of the computer you are running the robot code on.
 
 4. Run the Webots simulator:
 
@@ -247,15 +247,15 @@ If you're running more than one robot, you will need to set up a Docker containe
 
    2. On each computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step.
 
-   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one). 
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one).
 
-   4. Under `red: hosts:` add the hostnames of the computers you are running robot code on. 
+   4. Under `red: hosts:` add the hostnames of the computers you are running robot code on.
 
 4. On each computer running robot code, run `./b webots build webotsrobocup` once to build the container with the `webotsrobocup` role.
 
 5. Start up Webots.
 
-6. Run `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup` 
+6. Run `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup`
 
    Specifying `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` depending on which robot you want to run.
 
