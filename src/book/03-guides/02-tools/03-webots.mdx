@@ -94,18 +94,18 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    source ~/.bashrc
    ```
 
-3. Move into the webots directory and install the Webots build dependencies:
+3. Update the submodules for the Webots subtree
+
+    ```bash
+    git submodule update --init
+    ```
+
+4. Move into the webots directory and install the Webots build dependencies:
 
    ```bash
    cd webots
    sudo ./scripts/install/linux_compilation_dependencies.sh
    ```
-
-4. Update the submodules for the Webots subtree
-
-    ```bash
-    git submodule update --init
-    ```
 
 5. Build Webots:
 
