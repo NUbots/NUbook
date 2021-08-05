@@ -221,30 +221,59 @@ If you want to test the behaviour of one robot in the Webots RoboCup scenario, y
 
    2. On the computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step.
 
-   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one). 
 
-Should say something about making sure you have the right stuff in `webots.yaml` for IP and port, and in GameController for team id and robot id. Also that on the webots side, the referee or whatever it is has the address of the robot computer if they are different.
+   4. Under `red: hosts:` add the hostname of the computer you are running the robot code on. 
 
-4. Run `./b run webotsrobocup`.
+4. Run the Webots simulator:
+
+   ```bash
+   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
+   ```
+
+5. Run `./b run webotsrobocup` on the computer you want to run the robot code on.
 
 ### Running Multiple Robots
 
-If you're running more than one robot, you will need to set up a Docker container for each robot. There can be any combination of different or same computers for each robot container and webots itself. E.g. you can run webots itself and a robot on one computer, three robots on another computer, and three on another computer. Just the more computers you have, the more complicated the IP set up will be for the config files.
+If you're running more than one robot, you will need to set up a Docker container for each robot. There can be any combination of different or same computers for each robot container and webots itself. E.g. you can run webots itself and a robot on one computer, three robots on another computer, and three on another computer. The more computers you have, the more complicated the IP set up will be for the config files.
 
 1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
 
 2. Set your UDP filter on the NUbots side to prevent it receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
 
-3. Something about right ips on the webots side.
+3. Ensure the IP and ports are set up correctly. If you are running everything locally on the one computer, the default settings should work. If Webots and the robot codes are run on separate computers, do the following
 
-4. Run `./b webots build webotsrobocup` to build the container with the `webotsrobocup` role.
+   1. As done previously, get the hostname of each computer by running `hostname -I` in the terminal.
 
-5. Run `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup>`
+   2. On each computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step.
 
-   E.g. if you are running everything locally on one computer, and you want to connect to robot number 1 on the red team, run
-   `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.0.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup>`
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one). 
 
-6. Open a new terminal and run the above command with different `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` combinations for each robot.
+   4. Under `red: hosts:` add the hostnames of the computers you are running robot code on. 
+
+4. On each computer running robot code, run `./b webots build webotsrobocup` once to build the container with the `webotsrobocup` role.
+
+5. Start up Webots.
+
+6. Run `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup` 
+
+   Specifying `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` depending on which robot you want to run.
+
+   For example, if you are running everything locally on one computer, and you want to connect to robot number 1 on the red team, run
+   `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup`
+
+   Open a new terminal for each robot you want to run.
+
+   If you want to run two teams of three NUgus robots all locally on the one computer with Webots, run each of the following lines in different terminals once Webots is running.
+
+   ```bash
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=2 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10002 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=3 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10003 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10021 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=2 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10022 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=3 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10023 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   ```
 
 ## Running a NUbots Environment
 
