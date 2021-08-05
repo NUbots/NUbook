@@ -10,7 +10,7 @@ This page details how to maintain various subsystems within the main codebase.
 
 ## Vision
 
-Before vision can work on the robot, odometry and kinematics must work on the robot. The position of the mesh and green horizon are reliant on odometry and kinematics - large inaccuracies can cause problems with vision detecting objects.
+The accuracy of the vision system is reliant on the accuracy of odometry and kinematics because they affect the placement of the mesh and green horizon. It is important that these systems work reasonable well otherwise the robot may have issues detecting objects.
 
 ### Dataset Generation
 
