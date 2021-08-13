@@ -1,5 +1,7 @@
 /*eslint-env node*/
 
+const path = require('path')
+
 module.exports = {
   // Deployment path on Github Pages (matches repo name)
   pathPrefix: '/NUbook',
@@ -35,6 +37,7 @@ module.exports = {
         path: `${__dirname}/src/pages`,
       },
     },
+    'gatsby-plugin-image',
     // Exposes helper functions for processing images with the
     // sharp package from npm. Used by other plugins.
     'gatsby-plugin-sharp',
@@ -51,6 +54,12 @@ module.exports = {
         },
         remarkPlugins: [require('remark-unwrap-images')],
         gatsbyRemarkPlugins: [
+          {
+            resolve: path.join(
+              __dirname,
+              './remark-plugin-absolute-image-src.js'
+            ),
+          },
           {
             resolve: '@josephuspaye/gatsby-remark-graphviz',
             options: {

@@ -1,7 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StaticQuery, graphql } from 'gatsby'
-import GatsbyImg from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
+
+/*
+  TODO: Find a way to make this work with the new GatsbyImage component
+  i.e. find a way to not stretch images that are below the container width (960px), and vertically center them
 
 // Ensures that images smaller than the viewport are not stretched to 100%
 const NonStretchedImage = props => {
@@ -18,7 +22,7 @@ const NonStretchedImage = props => {
     }
   }
 
-  return <GatsbyImg {...normalizedProps} />
+  return <GatsbyImage {...normalizedProps} />
 }
 
 NonStretchedImage.propTypes = {
@@ -32,17 +36,24 @@ NonStretchedImage.propTypes = {
   alt: PropTypes.string,
 }
 
+*/
+
 const Image = props => (
   <StaticQuery
     query={graphql`
       query {
-        allImageSharp {
-          edges {
-            node {
-              fluid(maxWidth: 960, quality: 90) {
-                ...GatsbyImageSharpFluid
-                presentationWidth
-              }
+        allFile(
+          filter: { extension: { regex: "/jpg|jpeg|png|webp|tif|tiff$/" } }
+        ) {
+          nodes {
+            absolutePath
+            childImageSharp {
+              gatsbyImageData(
+                layout: CONSTRAINED
+                width: 960
+                quality: 90
+                placeholder: BLURRED
+              )
             }
           }
         }
@@ -69,16 +80,20 @@ const Image = props => (
           />
         )
       } else {
-        const image = data.allImageSharp.edges.find(edge => {
-          const path = src.split('/').pop()
-          return edge.node.fluid.src.endsWith(`/${path}`)
+        const imageNode = data.allFile.nodes.find(node => {
+          return node.absolutePath === src
         })
 
-        if (!image) {
+        if (!imageNode) {
           throw new Error(`Image not found: ${src}.`)
         }
 
-        Img = <NonStretchedImage fluid={image.node.fluid} alt={props.alt} />
+        Img = (
+          <GatsbyImage
+            image={imageNode.childImageSharp.gatsbyImageData}
+            alt={props.alt}
+          />
+        )
       }
 
       return (
