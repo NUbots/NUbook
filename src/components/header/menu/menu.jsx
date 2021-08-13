@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { CSSTransition } from 'react-transition-group'
 import { Link } from 'gatsby'
 
-import style from './menu.module.css'
+import * as style from './menu.module.css'
 
 const getLinkProps = ({ isCurrent }) => {
   return {

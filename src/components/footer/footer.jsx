@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import Links from '../header/links/links'
 import ColorSchemeToggle from '../header/color-scheme-toggle/color-scheme-toggle'
 
-import style from './footer.module.css'
+import * as style from './footer.module.css'
 import NUbotsIcon from './nubots-icon.svg'
 
 const Footer = () => (

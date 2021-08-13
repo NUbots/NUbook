@@ -7,7 +7,7 @@ import IconTeam from './icons/icon-team.svg'
 import IconSystem from './icons/icon-system.svg'
 import IconGuides from './icons/icon-guides.svg'
 import IconTools from './icons/icon-tools.svg'
-import style from './sidebar.module.css'
+import * as style from './sidebar.module.css'
 
 const iconMap = {
   Team: IconTeam,
