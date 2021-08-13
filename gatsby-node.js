@@ -127,6 +127,40 @@ exports.onCreatePage = ({ page, actions }) => {
 }
 
 /**
+ * Customise the webpack config.
+ */
+exports.onCreateWebpackConfig = ({ stage, actions, getConfig, plugins }) => {
+  const config = getConfig()
+
+  const miniCssExtractPluginIndex = config.plugins.findIndex(
+    plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
+  )
+
+  if (miniCssExtractPluginIndex > -1) {
+    // Replace MiniCssExtractPlugin with a new instance that has the `ignoreOrder`
+    // option set. With Tailwind and CSS modules, we have non-colliding and
+    // namespaced class names across files respectively. That means we can
+    // safely ignore the order warnings from MiniCssExtractPlugin.
+    // See https://webpack.js.org/plugins/mini-css-extract-plugin/#remove-order-warnings
+    if (stage === 'build-javascript') {
+      config.plugins[miniCssExtractPluginIndex] = plugins.extractText({
+        filename: `[name].[contenthash].css`,
+        chunkFilename: `[name].[contenthash].css`,
+        ignoreOrder: true,
+      })
+    } else {
+      config.plugins[miniCssExtractPluginIndex] = plugins.extractText({
+        filename: `[name].css`,
+        chunkFilename: `[id].css`,
+        ignoreOrder: true,
+      })
+    }
+  }
+
+  actions.replaceWebpackConfig(config)
+}
+
+/**
  * Get the section in the given menu that the given node belongs to,
  * or create a new section if not found.
  */
