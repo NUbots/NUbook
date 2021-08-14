@@ -20,7 +20,7 @@ int add(int a, int b) {
 }
 ```
 
-To test it, we'll need pairs of inputs and their associated outputs. Usually, if there's a lot of data, we'll want to keep the it separate from the test logic, but for this example we'll keep it local. Also note that for utilities like this one, we would want a much more comprehensive set of test cases.
+To test it, we'll need pairs of inputs and their expected outputs. Usually, if there's a lot of data, we'll want to keep it separate from the test logic, but for this example we'll keep it local. Also note that for utilities like this one, we would want a much more comprehensive set of test cases.
 
 ```cpp
 using utility::math::add;
@@ -48,7 +48,7 @@ TEST_CASE("Testing integer add utility", "[utility][math][add]") {
 
 ### Dissecting the Example
 
-As we can see in this example, inside the scope of the `TEST_CASE` is where it all happens. We use `INFO` macros to commentate exactly what is happening for each assertion. You shouldn't worry too much about creating huge, unwieldy logs with `INFO` macros, because Catch only prints the `INFO` for test cases which fail by default.
+As we can see in this example, inside the scope of the `TEST_CASE` is where it all happens. We use `INFO` macros to commentate exactly what is happening for each assertion. You shouldn't worry too much about creating huge, unwieldy logs with `INFO` macros, because by default Catch only prints the `INFO` for test cases which fail.
 
 The first argument for `TEST_CASE` is a string which is a name for the test. You can use the names to run the specific test. They should be specific. The second argument is a set of tags, which you can use to divide the tests into groups easily. We usually use each sub-namespace the function is located in as the tags. The Catch `TEST_CASE` has much more functionality than demonstrated here and you can find the documentation with the details [here](https://github.com/catchorg/Catch2/blob/devel/docs/test-cases-and-sections.md).
 
