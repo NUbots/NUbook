@@ -1,0 +1,78 @@
+---
+section: Guides
+chapter: General
+title: How to Write Tests
+description: Information About Making Tests
+slug: /guides/general/writing-tests
+---
+
+This guide presents some general information about unit testing and tests in general.
+
+## What is a Unit Test?
+
+A unit test is a test of a small piece of a codebase - a unit. Unit tests should test a single piece of code to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+## Anatomy of a Unit Test
+
+The basic pieces you will need to create a unit test for a function are the following:
+
+1. A set of inputs for the function. These should match the input parameters. In our case, we'll need a set of pairs of integers.
+2. The expected outputs which you want for each input. These are often referred to as the "ground truth", because they are the true values your function should output. For our `add` example with the pair of inputs (2, 2), we want the output 4, because `add(2, 2) == 4`.
+
+The process of running the tests is as simple as calling the function with your inputs and verifying that the function's output was as expected. In our example, one of the test cases could be running `add(2, 2)` and checking that the result is 4.
+
+### Obtaining Expected Outputs
+
+For our C++ code, we can divide the things we want to test into two categories. The first category is the set of functions which do a mathematical transformation on the data and return the result. The second is everything else. Functions which just do maths - which includes things like filters - often require large sets of generated data or randomised inputs across their domain. When we generate data like this, we must document how we generated it and how we verified its correctness. To verify its correctness, you can simply use an implementation for a different platform or language that you're sure is correct. For example, if we were testing our `add` function, we could randomly generate a list of inputs, making sure that each corner case is covered, then use `numpy.add` on each input to verify the expected outputs. We can be quite sure that the `numpy` implementation is correct, so all we would have to do is make it clear that that was the process we used.
+
+Functions which aren't just maths will have more "categorical" corner cases and input domains. For such functions, data generation or randomised inputs are rarely appropriate. We should identify and cover each of those cases with tests manually. Note that the simple cases should have tests too. Don't just test edge cases.
+
+In general, for data generation we want to use languages and libraries that we already use regularly. Python is most often preferred for this, but Matlab is acceptable if it has an implementation of something python lacks. Other languages should be avoided where possible.
+
+## Testing Approach and Philosophy
+
+There are many guidelines you can find online to help you to write good tests. Here are a few:
+
+- Tests should be simple and readable enough to be correct on inspection. You don't want to think about whether a test is correct or not. Ideally you'll be able to read it and know that it's legitimate.
+- Make test cases independent. The outcome of one test case shouldn't affect the outcome of others.
+- Demonstrate how a piece of code should be used with its tests. We can't google for examples of people using our software, so create examples with your tests.
+- Tests should be deterministic - [seed your randomness](https://en.wikipedia.org/wiki/Random_seed). If you're testing something particularly reliant on randomness or which generates randomness, compensate by using a variety of seeds with many cases each.
+- Follow the **AAA** structure: Arrange, Act, Assert. Each test should follow the general design of first setting up your input variables (Arrange), calling your unit with those variables (Act), then finally checking your outputs match what they should (Assert).
+
+### General Approach
+
+Write the easy tests first, then think about edge cases and code coverage. For `add`, you might make the `(2, 2) == 4` case first, then `(123000, 456) == 123456`. After you have some simple cases, you could consider throwing in some zeros and negative numbers - cases where the observed behaviour is different somehow.
+
+Later, you might consider what should happen on integer overflow/wraparound, making sure that errors are handled correctly. At that stage you could also try to make a test case covering every possible branch of your code. The amount of code you execute in a set of tests is referred to as the "code coverage" of the tests.
+
+### Regression Tests
+
+When we find bugs in the codebase and fix them, we should add a test case which makes sure that that code doesn't _regress_ into the buggy behaviour. This test case is called a regression test. Regression tests should be labelled with comments to indicate the behaviour they're watching for. If there is a GitHub issue related to the bug, the comment with the test should reference it. The test should be written such that it would fail before the fix, and pass after the fix.
+
+For a concrete example, imagine that a bug was found with `add` where if both inputs were negative, it always returned 0. Good practice would be to add a test case or small set of test cases where both inputs were negative - such as `(-1, -1) == -2` and `(-123, -456) == -579` - labelling them as regression tests for that bug. These would clearly fail if the bug came back (although this example is quite contrived, because there should have already been tests with both inputs negative).
+
+### Black Box vs White Box Testing
+
+When we write tests, we can make them completely ignorant to the internals of the code. Such a test worries only about the inputs and outputs, considering the parts in the middle as a black box which we can't see inside - black box testing.
+
+White box testing looks at the internals and makes tests which depend on them. This means that any significant change to the implementation of a function which doesn't change its interface is likely to break white box tests which depended on the old function. The fragility of white box tests to change is the chief reason that black box tests are preferred.
+
+Grey box testing is somewhere between black box and white box testing. It isn't completely ignorant of the implementation, but grey box tests should be easily adaptable if the implementation changes. It will usually be necessary to have some sort of insight into the implementation of the unit in order to get full code coverage, but a rule of thumb is the blacker the box, the better.
+
+## TDD and BDD
+
+Ideally, you're able to write tests as you design your software interfaces, writing the code afterwards such that it fulfills the needs of the tests. This is the basis of [**Test-Driven Development**](https://en.wikipedia.org/wiki/Test-driven_development) (TDD), which is a powerful means of creating high quality software. Tests written as part of a TDD process should inherently be black box tests, because the implementations they're testing don't exist yet.
+
+Another conception of TDD prescribes writing the tests in parallel with the code. With this process, you write a basic test in conjunction with starting a new module or feature. As you write the code, you increase the number and depth of the tests, developing them in tandem. This incremental style is more in keeping with the [_agile_ philosophy](https://www.atlassian.com/agile). The code works at each step of development and the tests can prove it. We aren't agile die-hards though, so we don't have a particular preference between these two realisations of TDD.
+
+[Behaviour-driven development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD) is a more modern take on TDD. BDD tests can be thought of as self-documenting scripts which should be able to be understood by all stakeholders. It formally redefines the _Arrange, Act, Assert_ structure as _Given, When, Then_. Each BDD test should be of the form _Given_ some situation, _When_ a specific thing happens, _Then_ the system responds in the correct way. Following this language structure predisposes the developer to writing tests which everyone can understand. The Catch docs have [a great example](https://github.com/catchorg/Catch2/blob/devel/docs/test-cases-and-sections.md#bdd-style-test-cases) demonstrating the structure of a BDD test.
+
+In terms of the ideal development cycle and testing style, it doesn't matter all too much whether you use TDD, "agile style" TDD (not a real name), or BDD. Having a mix of BDD style tests, which are by their nature designed for everyone to be able to understand, and more fine-grained, standard unit tests is good. The most important thing is writing readable, verifiable tests. Everything else is secondary.
+
+So what are you waiting for? Go write some tests!

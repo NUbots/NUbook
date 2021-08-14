@@ -1,0 +1,65 @@
+---
+section: Guides
+chapter: Tools
+title: Catch Getting Started
+description: How to write your first test with catch.
+slug: /guides/tools/catch-guide
+---
+
+[Catch](https://github.com/catchorg/Catch2) is the C++ testing framework which we use for our unit tests. In this guide we will go over the basics of Catch by completing a concrete example. This guide assumes familiarity with C++ and testing concepts. To brush-up on testing, see the [Guide for Writing Tests](/guides/general/writing-tests).
+
+Note that the [Catch docs](https://github.com/catchorg/Catch2/tree/devel/docs) should be the first thing to look at if you're wondering about a specific Catch-ism.
+
+## A Basic Example
+
+Catch test cases have a few components. The most important is the `TEST_CASE(..)` macro, which wraps around groups of associated tests. Inside each `TEST_CASE` scope, you should follow the **AAA** structure, _Arranging_ the data first - both inputs and expected outputs - then _Acting_ by calling the function you're testing, then _Asserting_ that the results match the expected outputs. We'll make an example for the following toy utility function:
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+To test it, we'll need pairs of inputs and their expected outputs. Usually, if there's a lot of data, we'll want to keep it separate from the test logic, but for this example we'll keep it local. Also note that for utilities like this one, we would want a much more comprehensive set of test cases.
+
+```cpp
+using utility::math::add;
+
+TEST_CASE("Testing integer add utility", "[utility][math][add]") {
+    // Arrange
+    static constexpr int NUM_TESTS = 5;
+    std::array<std::pair<int, int>, NUM_TESTS> inputs = {{0, 0}, {1, 1}, {-1, -1}, {123000, 456}, {-1000, 1000}};
+    std::array<int, NUM_TESTS> expected_outputs = {0, 2, -2, 123456, 0};
+    std::array<int, NUM_TESTS> actual_outputs{};
+    // Act
+    for (int i = 0; i < NUM_TESTS; ++i) {
+        actual_outputs[i] = add(inputs[i].first, inputs[i].second);
+    }
+    // Assert
+    for (int i = 0; i < NUM_TESTS; ++i) {
+        INFO("In test case number " << i);
+        INFO("Inputs are (" << inputs[i].first << ", " << inputs[i].second << ")");
+        INFO("Expected output is " << expected_outputs[i]);
+        INFO("Actual output is " << actual_outputs[i]);
+        REQUIRE(actual_outputs[i] == expected_outputs[i]);
+    }
+}
+```
+
+### Dissecting the Example
+
+As we can see in this example, inside the scope of the `TEST_CASE` is where it all happens. We use `INFO` macros to commentate exactly what is happening for each assertion. You shouldn't worry too much about creating huge, unwieldy logs with `INFO` macros, because by default Catch only prints the `INFO` for test cases which fail.
+
+The first argument for `TEST_CASE` is a string which is a name for the test. You can use the names to run the specific test. They should be specific. The second argument is a set of tags, which you can use to divide the tests into groups easily. We usually use each sub-namespace the function is located in as the tags. The Catch `TEST_CASE` has much more functionality than demonstrated here and you can find the documentation with the details [here](https://github.com/catchorg/Catch2/blob/devel/docs/test-cases-and-sections.md).
+
+The rest of the example is just going through the **AAA** process (the comments are for illustrative purposes).
+
+## Floating Point Considerations
+
+Floating point arithmetic is imprecise by nature. Equality comparisons between distinct non-zero floating point numbers are assumed to be false because of this imprecision. Catch has features to deal with the error from floating point operations. We recommended that if you're testing functions which compute floating point numbers that you [read about those features](https://github.com/catchorg/Catch2/blob/devel/docs/assertions.md#floating-point-comparisons).
+
+Basically, you'll need to define a margin of error - either relative or absolute - that you can tolerate and use that to define your `Approx` for each floating point `REQUIRE` assertion.
+
+## Conclusions
+
+Catch is concise and powerful. It has many more features than the basic example presented here - this is just enough to make you dangerous. Now go and write some tests!
