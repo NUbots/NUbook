@@ -10,7 +10,7 @@ The NUbots codebase uses specific mathematical concepts and notation that are re
 
 ## Linear Algebra
 
-We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase.
+We currently use the [Eigen](https://eigen.tuxfamily.org/) C++ template library for linear algebra in the NUbots codebase. Be aware that Eigen has some common pitfalls that are listed on the [Eigen pitfalls page](https://eigen.tuxfamily.org/dox/TopicPitfalls.html).
 
 ### Bases
 
@@ -278,6 +278,8 @@ For measurements on the field we use field space. For field coordinates the **x-
 
 - [Eigen Documentation](http://eigen.tuxfamily.org/dox/)
 
+  - [Eigen Pitfalls](https://eigen.tuxfamily.org/dox/TopicPitfalls.html)
+
 ## Spherical Coordinates
 
 Spherical coordinates are a system of representing points in 3D space. Rather than representing points as $\left(x, y, z\right)$ cartesian coordinates, points are represented as $\left(r, \varphi, \theta\right)$, where `r` is radial distance, $\varphi$ is the polar angle, and $\theta$ is the azimuthal angle.
@@ -351,4 +353,4 @@ These conditions result in smooth joints between each polynomial, meaning the po
 
 ## Units
 
-See the [glossary](../../03-guides/04-general/03-glossary.mdx).
+See the [glossary](/guides/general/glossary).

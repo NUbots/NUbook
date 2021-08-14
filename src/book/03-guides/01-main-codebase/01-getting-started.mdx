@@ -118,11 +118,11 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
    - Open Windows Powershell in administrator mode.
    - Run the following to install WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
      ```
    - Run the following to enable the Virtual Machine Platform feature needed for WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
      ```
    - Restart your computer.
@@ -275,7 +275,7 @@ If you are following the example, run `./b run keyboardwalkfake`. If you are on 
 
 Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
 
-```
+```bash
 ./b run keyboardwalkfake --network nuclearnet
 ```
 
@@ -334,10 +334,10 @@ NUsight is a visual debugging web application used at NUbots that visually repre
 
 You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
 
-Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
+Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
 
 ```bash
-./b edit config/NUsight.yaml
+./b edit config/NetworkForwarder.yaml
 ```
 
 This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
@@ -350,16 +350,17 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. NUsight is within the NUbots repository. Move into the NUsight directory by running
+1. Install Node.js by running
 
    ```bash
-   cd nusight2
+   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+   sudo apt-get install -y nodejs
    ```
 
-2. Install Node.js by running
+2. Install npm by running
 
    ```bash
-   sudo apt install node
+   sudo apt install npm
    ```
 
 3. Configure the package repository and install yarn by running
@@ -373,13 +374,13 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 4. Get the dependencies for NUsight by running
 
    ```bash
-   yarn
+   ./b yarn
    ```
 
 5. Build NUsight by running
 
    ```bash
-   yarn build
+   ./b yarn build
    ```
 
 6. Find the IP address of the Docker container. Run
@@ -393,7 +394,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 7. Run the following command to run NUsight
 
    ```bash
-   yarn prod --address <ADDRESS>
+   ./b yarn prod --address <ADDRESS>
    ```
 
    <Alert type='info'>

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { MDXProvider } from '@mdx-js/react'
 
-import Code from './code'
+import PreCode from './pre-code'
 import Image from './image'
 import Link from './link'
 import TabbedImages from './tabbed-images'
@@ -48,7 +48,7 @@ Table.propTypes = {
 const MDXComponents = {
   img: Img,
   a: A,
-  code: Code,
+  pre: PreCode,
   table: Table,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
