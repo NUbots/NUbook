@@ -12,7 +12,7 @@ Note that the [Catch docs](https://github.com/catchorg/Catch2/tree/devel/docs) s
 
 ## A Basic Example
 
-Catch test cases have a few components. The most important is the `TEST_CASE(..)` macro, which wraps around groups of associated tests. Inside each `TEST_CASE` scope, you should follow the **AAA** structure, _Arranging_ the data first - both inputs and expected outputs - then _Acting_ by calling the function you're testing, then _Asserting_ that the results match the ground truth. We'll make an example for the following toy utility function:
+Catch test cases have a few components. The most important is the `TEST_CASE(..)` macro, which wraps around groups of associated tests. Inside each `TEST_CASE` scope, you should follow the **AAA** structure, _Arranging_ the data first - both inputs and expected outputs - then _Acting_ by calling the function you're testing, then _Asserting_ that the results match the expected outputs. We'll make an example for the following toy utility function:
 
 ```cpp
 int add(int a, int b) {
@@ -27,21 +27,21 @@ using utility::math::add;
 
 TEST_CASE("Testing integer add utility", "[utility][math][add]") {
     // Arrange
-    static constexpr ssize_t NUM_TESTS = 5;
+    static constexpr int NUM_TESTS = 5;
     std::array<std::pair<int, int>, NUM_TESTS> inputs = {{0, 0}, {1, 1}, {-1, -1}, {123000, 456}, {-1000, 1000}};
-    std::array<int, NUM_TESTS> ground_truth = {0, 2, -2, 123456, 0};
-    std::array<int, NUM_TESTS> outputs{};
+    std::array<int, NUM_TESTS> expected_outputs = {0, 2, -2, 123456, 0};
+    std::array<int, NUM_TESTS> actual_outputs{};
     // Act
-    for (ssize_t i = 0; i < NUM_TESTS; ++i) {
-        outputs[i] = add(inputs[i].first, inputs[i].second);
+    for (int i = 0; i < NUM_TESTS; ++i) {
+        actual_outputs[i] = add(inputs[i].first, inputs[i].second);
     }
     // Assert
-    for (ssize_t i = 0; i < NUM_TESTS; ++i) {
+    for (int i = 0; i < NUM_TESTS; ++i) {
         INFO("In test case number " << i);
         INFO("Inputs are (" << inputs[i].first << ", " << inputs[i].second << ")");
-        INFO("Ground truth is " << ground_truth[i]);
-        INFO("Function output is " << outputs[i]);
-        REQUIRE(outputs[i] == ground_truth[i]);
+        INFO("Expected output is " << expected_outputs[i]);
+        INFO("Actual output is " << actual_outputs[i]);
+        REQUIRE(actual_outputs[i] == expected_outputs[i]);
     }
 }
 ```
