@@ -13,7 +13,7 @@ This guide presents some general information about unit testing and tests in gen
 A unit test is a test of a small piece of a codebase - a unit. Unit tests should test a single piece of code to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function
 
 ```cpp
-[[nodiscard]] inline int add(const int a, const int b) noexcept {
+int add(int a, int b) {
     return a + b;
 }
 ```
