@@ -10,7 +10,7 @@ This guide presents some general information about unit testing and tests in gen
 
 ## What is a Unit Test?
 
-A unit test is a test of a small piece of a codebase - a unit. Unit tests are meant to test only that piece of code and they serve to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function
+A unit test is a test of a small piece of a codebase - a unit. Unit tests should test a single piece of code to validate its correctness. This contrasts with integration tests, which tests the interactions of pieces of code and their behaviour together. For the rest of this guide, we'll work with the following toy utility function
 
 ```cpp
 [[nodiscard]] inline int add(const int a, const int b) noexcept {
@@ -55,6 +55,6 @@ When we write tests, we can make them completely ignorant to the internals of th
 
 White box testing looks at the internals and makes tests which depend on them. This means that any significant change to the implementation of a function which doesn't change its interface is likely to break white box tests which depended on the old function. The fragility of white box tests to change is the chief reason that black box tests are preferred.
 
-Ideally, you're able to write tests as you design your software interfaces, writing the code afterwards such that it fulfills the needs of the tests. This is the basis of [**Test-Driven Development**](https://en.wikipedia.org/wiki/Test-driven_development)(TDD), which is a powerful means of creating high quality software. Tests written as part of a TDD process should inherently be black box tests, because the implementations they're testing don't exist yet.
+Ideally, you're able to write tests as you design your software interfaces, writing the code afterwards such that it fulfills the needs of the tests. This is the basis of [**Test-Driven Development**](https://en.wikipedia.org/wiki/Test-driven_development) (TDD), which is a powerful means of creating high quality software. Tests written as part of a TDD process should inherently be black box tests, because the implementations they're testing don't exist yet.
 
 Grey box testing is somewhere between black box and white box testing. It isn't completely ignorant of the implementation, but grey box tests should be easily adaptable if the implementation changes. It will usually be necessary to have some sort of insight into the implementation of the unit in order to get full code coverage, but a rule of thumb is the blacker the box, the better.
