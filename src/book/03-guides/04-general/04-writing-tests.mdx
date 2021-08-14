@@ -27,6 +27,14 @@ The basic pieces you will need to create a unit test for a function are the foll
 
 The process of running the tests is as simple as calling the function with your inputs and verifying that the function's output was as expected. In our example, one of the test cases could be running `add(2, 2)` and checking that the result is 4.
 
+### Obtaining Expected Outputs
+
+For our C++ code, we can divide the things we want to test into two categories. The first category is the set of functions which do a mathematical transformation on the data and return the result. The second is everything else. Functions which just do maths - which includes things like filters - often require large sets of generated data or randomised inputs across their domain. When we generate data like this, we must document how we generated it and how we verified its correctness. To verify its correctness, you can simply use an implementation for a different platform or language that you're sure is correct. For example, if we were testing our `add` function, we could randomly generate a list of inputs, making sure that each corner case is covered, then use `numpy.add` on each input to verify the expected outputs. We can be quite sure that the `numpy` implementation is correct, so all we would have to do is make it clear that that was the process we used.
+
+Functions which aren't just maths will have more "categorical" corner cases and input domains. For such functions, data generation or randomised inputs are rarely appropriate. We should identify and cover each of those cases with tests manually. Note that the simple cases should have tests too. Don't just test edge cases.
+
+In general, for data generation we want to use languages and libraries that we already use regularly. Python is most often preferred for this, but Matlab is acceptable if it has an implementation of something python lacks. Other languages should be avoided where possible.
+
 ## Testing Approach and Philosophy
 
 There are many guidelines you can find online to help you to write good tests. Here are a few:
