@@ -15,7 +15,7 @@ Note that the [Catch docs](https://github.com/catchorg/Catch2/tree/devel/docs) s
 Catch test cases have a few components. The most important is the `TEST_CASE(..)` macro, which wraps around groups of associated tests. Inside each `TEST_CASE` scope, you should follow the **AAA** structure, _Arranging_ the data first - both inputs and expected outputs - then _Acting_ by calling the function you're testing, then _Asserting_ that the results match the ground truth. We'll make an example for the following toy utility function:
 
 ```cpp
-[[nodiscard]] inline int add(const int a, const int b) noexcept {
+int add(int a, int b) {
     return a + b;
 }
 ```
