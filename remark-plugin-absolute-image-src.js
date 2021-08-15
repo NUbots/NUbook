@@ -4,6 +4,7 @@ const path = require('path')
 const visit = require('unist-util-visit')
 
 const isAbsoluteUrl = /^https?:\/\//i
+const isSvgImage = /\.svg$/i
 
 /**
  * This is a gatsby-remark plugin that rewrites the src attribute on every relative Markdown image to be absolute.
@@ -21,16 +22,23 @@ module.exports = function mdxAbsoluteImageSrc({
       return
     }
 
+    const urlTrimmed = image.url?.trim()
+
     // Don't rewrite image URLs that are absolute
-    if (isAbsoluteUrl.test(image.url?.trim())) {
+    if (isAbsoluteUrl.test(urlTrimmed)) {
       return
     }
 
-    image.originalUrl = image.url
+    // Don't rewrite SVG image URLs
+    if (isSvgImage.test(urlTrimmed)) {
+      return
+    }
+
+    image.originalUrl = urlTrimmed
 
     const absoluteImagePath = path.posix.join(
       getNode(markdownNode.parent).dir,
-      image.url
+      urlTrimmed
     )
 
     image.url = absoluteImagePath

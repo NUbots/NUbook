@@ -3,41 +3,12 @@ import PropTypes from 'prop-types'
 import { StaticQuery, graphql } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
 
-/*
-  TODO: Find a way to make this work with the new GatsbyImage component
-  i.e. find a way to not stretch images that are below the container width (960px), and vertically center them
-
-// Ensures that images smaller than the viewport are not stretched to 100%
-const NonStretchedImage = props => {
-  let normalizedProps = props
-
-  if (props.fluid && props.fluid.presentationWidth) {
-    normalizedProps = {
-      ...props,
-      style: {
-        ...(props.style || {}),
-        maxWidth: props.fluid.presentationWidth,
-        margin: '0 auto', // center the image
-      },
-    }
-  }
-
-  return <GatsbyImage {...normalizedProps} />
-}
-
-NonStretchedImage.propTypes = {
-  fluid: PropTypes.shape({
-    presentationWidth: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-  }),
-  style: PropTypes.object,
-  alt: PropTypes.string,
-}
-
-*/
-
+/**
+ * This components works by keeping a list of all images in NUbook (using a GraphQL static query)
+ * and matching it's src prop (from Markdown) to one of those images. It then uses the data from
+ * the matched image to render the image using the GatsbyImage component. All of this matching
+ * is only applied for local, non-SVG images.
+ */
 const Image = props => (
   <StaticQuery
     query={graphql`
@@ -48,11 +19,14 @@ const Image = props => (
           nodes {
             absolutePath
             childImageSharp {
+              fluid {
+                presentationWidth
+              }
               gatsbyImageData(
                 layout: CONSTRAINED
                 width: 960
                 quality: 90
-                placeholder: BLURRED
+                placeholder: NONE
               )
             }
           }
@@ -63,6 +37,7 @@ const Image = props => (
       const src = props.src
       let Img
 
+      // Render all remote images with a plain <img> tag
       if (/^https?:\/\//i.test(src)) {
         Img = (
           <img
@@ -71,7 +46,9 @@ const Image = props => (
             alt={props.alt}
           />
         )
-      } else if (/\.svg$/i.test(src)) {
+      }
+      // Render SVGs with a plain <img> tag
+      else if (/\.svg$/i.test(src)) {
         Img = (
           <img
             src={src}
@@ -79,7 +56,11 @@ const Image = props => (
             alt={props.alt}
           />
         )
-      } else {
+      }
+      // Otherwise match the image src against the list of all other images (JPG, PNG, WebP)
+      // in NUbook and render with GatsbyImage, which will handle resizing and responsiveness,
+      // picking the correct resolution appropriate for the client browser.
+      else {
         const imageNode = data.allFile.nodes.find(node => {
           return node.absolutePath === src
         })
@@ -92,6 +73,12 @@ const Image = props => (
           <GatsbyImage
             image={imageNode.childImageSharp.gatsbyImageData}
             alt={props.alt}
+            objectFit='contain'
+            style={{
+              display: 'block',
+              maxWidth: `${imageNode.childImageSharp.fluid.presentationWidth}px`, // Don't stretch beyond the source image size
+              margin: '0 auto', // Center horizontally
+            }}
           />
         )
       }
