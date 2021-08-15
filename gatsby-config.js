@@ -132,7 +132,7 @@ module.exports = {
           return site.siteMetadata.siteUrl
         },
         serialize: ({ site, allSitePage }) => {
-          return allSitePage.nodes.map(node => {
+          return allSitePage.nodes.map((node) => {
             return {
               url: `${site.siteMetadata.siteUrl}${node.path}`,
               changefreq: `weekly`,

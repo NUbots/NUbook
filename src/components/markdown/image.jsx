@@ -9,7 +9,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
  * the matched image to render the image using the GatsbyImage component. All of this matching
  * is only applied for local, non-SVG images.
  */
-const Image = props => (
+const Image = (props) => (
   <StaticQuery
     query={graphql`
       query {
@@ -33,7 +33,7 @@ const Image = props => (
         }
       }
     `}
-    render={data => {
+    render={(data) => {
       const src = props.src
       let Img
 
@@ -61,7 +61,7 @@ const Image = props => (
       // in NUbook and render with GatsbyImage, which will handle resizing and responsiveness,
       // picking the correct resolution appropriate for the client browser.
       else {
-        const imageNode = data.allFile.nodes.find(node => {
+        const imageNode = data.allFile.nodes.find((node) => {
           return node.absolutePath === src
         })
 

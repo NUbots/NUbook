@@ -74,12 +74,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
 
   // Hide sections and chapters in the menu if all their content is hidden
-  menu.forEach(section => {
-    section.chapters.forEach(chapter => {
-      chapter.hidden = chapter.pages.every(page => page.hidden)
+  menu.forEach((section) => {
+    section.chapters.forEach((chapter) => {
+      chapter.hidden = chapter.pages.every((page) => page.hidden)
     })
 
-    section.hidden = section.chapters.every(chapter => chapter.hidden)
+    section.hidden = section.chapters.every((chapter) => chapter.hidden)
   })
 
   const templatePath = path.resolve('./src/components/page-template.jsx')
@@ -133,7 +133,7 @@ exports.onCreateWebpackConfig = ({ stage, actions, getConfig, plugins }) => {
   const config = getConfig()
 
   const miniCssExtractPluginIndex = config.plugins.findIndex(
-    plugin => plugin.constructor.name === 'MiniCssExtractPlugin'
+    (plugin) => plugin.constructor.name === 'MiniCssExtractPlugin'
   )
 
   if (miniCssExtractPluginIndex > -1) {
@@ -166,7 +166,7 @@ exports.onCreateWebpackConfig = ({ stage, actions, getConfig, plugins }) => {
  */
 function findOrCreateSection(menu, node) {
   const section = menu.find(
-    section => section.title === node.frontmatter.section
+    (section) => section.title === node.frontmatter.section
   )
 
   if (section) {
@@ -190,7 +190,7 @@ function findOrCreateSection(menu, node) {
  */
 function findOrCreateChapter(section, node) {
   const chapter = section.chapters.find(
-    chapter => chapter.title === node.frontmatter.chapter
+    (chapter) => chapter.title === node.frontmatter.chapter
   )
 
   if (chapter) {
