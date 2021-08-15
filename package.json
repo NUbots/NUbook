@@ -47,8 +47,8 @@
     "remark-unwrap-images": "^2.1.0",
     "rimraf": "^3.0.2",
     "stylelint": "^13.6.1",
-    "stylelint-config-standard": "^20.0.0",
     "tailwindcss": "^2.2.7"
+    "stylelint-config-standard": "^22.0.0",
   },
   "license": "MIT",
   "scripts": {
