@@ -5,6 +5,7 @@
   "author": "NUbots",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.15.0",
     "@josephuspaye/gatsby-remark-graphviz": "^0.3.0",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
@@ -47,8 +48,9 @@
     "remark-unwrap-images": "^2.1.0",
     "rimraf": "^3.0.2",
     "stylelint": "^13.6.1",
-    "tailwindcss": "^2.2.7"
     "stylelint-config-standard": "^22.0.0",
+    "tailwindcss": "^2.2.7",
+    "webpack": "^5.50.0"
   },
   "license": "MIT",
   "scripts": {
