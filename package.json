@@ -32,7 +32,7 @@
     "gatsby-remark-images": "^5.8.0",
     "gatsby-source-filesystem": "^3.11.0",
     "gatsby-transformer-sharp": "^3.11.0",
-    "husky": "^3.0.4",
+    "husky": "^7.0.0",
     "katex": "^0.13.13",
     "postcss": "^8.3.6",
     "postcss-nested": "^5.0.6",
@@ -59,7 +59,8 @@
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
     "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\""
+    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -81,11 +82,6 @@
         }
       }
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run lint && npm run format:check"
-    }
   },
   "browserslist": [
     ">0.25%",
