@@ -57,7 +57,7 @@ module.exports = {
           {
             resolve: path.join(
               __dirname,
-              './remark-plugin-absolute-image-src.js'
+              './build-plugins/remark-absolute-image-src.js'
             ),
           },
           {

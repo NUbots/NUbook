@@ -16,7 +16,7 @@ module.exports = function mdxAbsoluteImageSrc({
   markdownNode,
   getNode,
 }) {
-  visit(markdownAST, `image`, image => {
+  visit(markdownAST, 'image', image => {
     // Make sure the parent node has dir (e.g. the image is a top-level node so its parent is the file)
     if (!markdownNode.parent || !getNode(markdownNode.parent).dir) {
       return
