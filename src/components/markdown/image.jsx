@@ -19,8 +19,8 @@ const Image = props => (
           nodes {
             absolutePath
             childImageSharp {
-              fluid {
-                presentationWidth
+              original {
+                width
               }
               gatsbyImageData(
                 layout: CONSTRAINED
@@ -76,7 +76,7 @@ const Image = props => (
             objectFit='contain'
             style={{
               display: 'block',
-              maxWidth: `${imageNode.childImageSharp.fluid.presentationWidth}px`, // Don't stretch beyond the source image size
+              maxWidth: `${imageNode.childImageSharp.original.width}px`, // Don't stretch beyond the source image size
               margin: '0 auto', // Center horizontally
             }}
           />
