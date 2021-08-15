@@ -52,7 +52,11 @@ module.exports = {
         defaultLayouts: {
           default: `${__dirname}/src/components/layout/layout.jsx`,
         },
-        remarkPlugins: [require('remark-unwrap-images')],
+        remarkPlugins: [
+          require('remark-unwrap-images'),
+          require('remark-math'),
+        ],
+        rehypePlugins: [[require('rehype-katex'), { strict: false }]],
         gatsbyRemarkPlugins: [
           {
             resolve: path.join(
@@ -78,12 +82,6 @@ module.exports = {
             options: {
               maintainCase: false,
               removeAccents: true,
-            },
-          },
-          {
-            resolve: 'gatsby-remark-katex',
-            options: {
-              strict: 'ignore',
             },
           },
         ],
