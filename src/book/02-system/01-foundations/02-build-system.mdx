@@ -382,6 +382,24 @@ The `run` subcommand also accepts the following flags:
 | `-j NUM_JOBS` or `--parallel NUM_JOBS` | Run the tests in parallel using the given number of jobs |
 | `--debug`                              | Displaying more verbose internals of CTest               |
 
+#### Autocomplete
+
+To use autocomplete with `b` on bash run `eval "$(register-python-argcomplete b)"` in the NUbots folder. Now when you press tab it will finish the command you were typing.
+To have not need to run this each time you can add it to your `.bashrc`, but you need to provide the full path to the NUbots folder. e.g. `eval "$(register-python-argcomplete $HOME/code/NUbots/b)"`.
+
+<details>
+<summary>zsh</summary>
+
+You need to use `bashcompinit` to use the bash completions.
+
+```
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete b)"
+```
+
+</details>
+
 ## Docker Images
 
 The NUbots codebase uses Docker images to containerise the build process.
