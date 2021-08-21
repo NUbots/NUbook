@@ -119,6 +119,11 @@ module.exports = {
                 siteUrl
               }
             }
+            allFile(filter: {extension: {eq: "mdx"}}) {
+              nodes {
+                modifiedTime
+              }
+            }
             allSitePage(filter: {context: {hidden: {ne: true}}}) {
               nodes {
                 path
@@ -129,15 +134,24 @@ module.exports = {
         resolveSiteUrl: ({ site }) => {
           return site.siteMetadata.siteUrl
         },
-        serialize: ({ site, allSitePage }) => {
+        resolvePages: ({ site, allFile, allSitePage }) => {
+          const lastModified = {}
+          for (const file of allFile.nodes) {
+            lastModified[file.absolutePath] = file.modifiedTime
+          }
           return allSitePage.nodes.map((node) => {
             return {
+              ...node,
               url: `${site.siteMetadata.siteUrl}${node.path}`,
-              changefreq: `weekly`,
-              priority: 0.7,
+              lastModified: lastModified[node.fileAbsolutePath],
             }
           })
         },
+        filterPages: () => true,
+        serialize: (page) => ({
+          url: page.url,
+          mod: page.lastModified,
+        }),
       },
     },
   ],
