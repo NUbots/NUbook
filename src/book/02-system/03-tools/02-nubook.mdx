@@ -347,3 +347,12 @@ You can get this URL from the **Details** link of the `netlify/nubook/deploy-pre
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
 
 When a pull request is merged into main, it is automatically deployed to the main site.
+
+## Building for production
+
+The `yarn build` command is used to build the site into a set of static HTML, CSS, and JS files that can be deployed to any webserver. This command is run automatically by Netlify when a change is merged into `main`.
+
+Running `yarn build` locally can be useful to preview the site exactly as it will be in production, or to debug an issue that occurs only in production. To use it:
+
+- Run `yarn build` to build the site and optimise assets. The resulting output will be placed in `public/`.
+- Run `npx http-server public/` to start a simple webserver in the public folder. This will print a URL you can open in your browser to preview the built site.
