@@ -3,19 +3,22 @@
 }
 
 .citeLink {
-  @apply inline-block align-top leading-none bg-gray-400 py-px;
-  @apply text-white no-underline !important;
+  @apply inline-block align-top leading-none py-px;
+  @apply no-underline !important;
+  font-size: 0.9em;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  padding-top: 2px;
+  padding-bottom: 2px;
 
   &:first-child {
     @apply rounded-l-full;
-    padding-left: 0.7rem;
+    padding-left: 0.6rem;
   }
 
   &:last-child {
     @apply rounded-r-full;
-    padding-right: 0.7rem;
+    padding-right: 0.6rem;
   }
 
   & + .citeLink {
@@ -27,7 +30,24 @@
   }
 }
 
-.citeLink:not(.citeUnknown):hover,
-.citeLink:not(.citeUnknown):focus {
-  @apply bg-gray-700;
+:global(.light) {
+  .citeLink:not(.citeUnknown) {
+    @apply bg-gray-500 text-white;
+  }
+
+  .citeLink:not(.citeUnknown):hover,
+  .citeLink:not(.citeUnknown):focus {
+    @apply bg-gray-700;
+  }
+}
+
+:global(.dark) {
+  .citeLink:not(.citeUnknown) {
+    @apply bg-gray-800 text-white;
+  }
+
+  .citeLink:not(.citeUnknown):hover,
+  .citeLink:not(.citeUnknown):focus {
+    @apply bg-gray-700;
+  }
 }

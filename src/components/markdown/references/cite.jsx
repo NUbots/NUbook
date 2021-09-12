@@ -1,12 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { BibReferencesContext } from './context'
+import { highlightElement } from './highlight-element'
+
+import * as style from './cite.module.css'
 
 const CiteSingle = ({ children }) => {
-  const { references, usedReferences, addUsedReference } = useContext(
-    BibReferencesContext
-  )
+  const { references, usedReferences, addUsedReference } =
+    useContext(BibReferencesContext)
+
+  if (!references) {
+    throw new Error(
+      'Cannot use <cite>: no Bibtex references found for this page.'
+    )
+  }
 
   const referenceId = String(children)
   const referenceEntry = references[referenceId]
@@ -26,7 +34,7 @@ const CiteSingle = ({ children }) => {
     referenceNumber = referenceIndex + 1
   } else {
     useEffect(() => {
-    addUsedReference(referenceId)
+      addUsedReference(referenceId)
     })
   }
 
@@ -37,6 +45,9 @@ const CiteSingle = ({ children }) => {
       href={`#reference-${referenceId}`}
       title={`${title} (${author} ${year})`}
       className={style.citeLink}
+      onClick={() =>
+        highlightElement(document.querySelector('#reference-' + referenceId))
+      }
     >
       {referenceNumber}
     </a>
@@ -50,7 +61,7 @@ CiteSingle.propTypes = {
 const Cite = ({ children }) => {
   const referenceIds = String(children)
     .split(',')
-    .map(id => id.trim())
+    .map((id) => id.trim())
 
   return (
     <span className={style.citeWrapper}>
