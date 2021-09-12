@@ -12,7 +12,7 @@ function bibToJson(bib) {
       if (fieldKey == 'author') {
         fieldsJson.author = {
           normalized: normalizeFieldValue(fieldValue),
-          authors: fieldValue.authors$.map(author => {
+          authors: fieldValue.authors$.map((author) => {
             return {
               initials: author.initials,
               firstNames: author.firstNames,
