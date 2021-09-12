@@ -7,7 +7,7 @@ import Layout from './layout'
 
 export const BibReferencesContext = React.createContext('bibReferences')
 
-const PageTemplate = props => {
+const PageTemplate = (props) => {
   const [usedReferences, setUsedReferences] = useState(new Set())
 
   function addUsedReference(referenceId) {
@@ -54,7 +54,7 @@ PageTemplate.propTypes = {
 export default PageTemplate
 
 export const query = graphql`
-  query($id: String!) {
+  query ($id: String!) {
     mdx(id: { eq: $id }) {
       id
       body

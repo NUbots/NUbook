@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { MDXProvider } from '@mdx-js/react'
 
-import Code from './code'
+import PreCode from './pre-code'
 import Image from './image'
 import Link from './link'
 import TabbedImages from './tabbed-images'
@@ -11,8 +11,9 @@ import Alert from './alert/alert'
 import Grid from './grid/grid'
 import Cite from './references/cite'
 import References from './references/references'
-import style from './markdown.module.css'
 import { createHeading } from './heading/heading'
+
+import * as style from './markdown.module.css'
 
 const Img = ({ src, alt, title }) => (
   <Image src={src} alt={alt}>
@@ -50,7 +51,7 @@ Table.propTypes = {
 const MDXComponents = {
   img: Img,
   a: A,
-  code: Code,
+  pre: PreCode,
   table: Table,
   cite: Cite,
   References: References,

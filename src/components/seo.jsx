@@ -7,7 +7,7 @@ function SEO({ description, lang, meta, keywords, title }) {
   return (
     <StaticQuery
       query={detailsQuery}
-      render={data => {
+      render={(data) => {
         const metaDescription =
           description || data.site.siteMetadata.description
         const pageKeywords =
@@ -22,16 +22,10 @@ function SEO({ description, lang, meta, keywords, title }) {
             link={[
               {
                 rel: 'stylesheet',
-                href:
-                  'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css',
+                href: 'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css',
               },
             ]}
             script={[
-              {
-                defer: true,
-                src:
-                  'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js',
-              },
               {
                 defer: true,
                 src: withPrefix('algolia-search.js'),

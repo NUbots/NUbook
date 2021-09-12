@@ -16,10 +16,30 @@
  */
 @tailwind utilities;
 
+html {
+  &.light {
+    color-scheme: light;
+  }
+
+  &.dark {
+    color-scheme: dark;
+  }
+}
+
 /* Reset the body text color */
 body {
-  color: rgba(0, 0, 0, 0.87);
+  .light & {
+    color: theme('colors.primary');
+    background-color: theme('colors.white');
+  }
+
+  .dark & {
+    color: theme('colors.primary-inverted');
+    background-color: theme('colors.gray.950');
+  }
 }
+
+/* purgecss start ignore */
 
 /*
   This will hide the focus indicator if an element receives focus via the mouse,
@@ -29,11 +49,58 @@ body {
   outline: none;
 }
 
+/**
+ * Remark Graphviz
+ */
+.remark-graphviz-figure {
+  @apply p-3 rounded bg-gray-100 dark:bg-gray-900 leading-none;
+
+  /* Allow the graph to overflow and scroll on small screens */
+  .remark-graphviz-graph {
+    overflow: auto;
+  }
+
+  svg {
+    /* Center the graph in the figure */
+    display: block;
+    margin: 0 auto;
+    fill: currentColor;
+
+    /* Make the graph background transparent */
+    g.graph > path:first-child {
+      fill: transparent;
+    }
+
+    text {
+      font-family: inherit;
+    }
+
+    *[stroke='#000'],
+    *[stroke='#000000'] {
+      stroke: currentColor;
+    }
+
+    *[fill='#000'],
+    *[fill='#000000'] {
+      fill: currentColor;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  /* Scale the graph to fit the figure on larger screens */
+  svg {
+    max-width: 100%;
+  }
+}
+
+.remark-graphviz-figcaption {
+  @apply pt-3 italic text-base;
+}
+
 /*
   Algolia search dropdown styling
 */
-
-/* purgecss start ignore */
 
 .algolia-autocomplete {
   width: 100%;
@@ -79,6 +146,46 @@ body {
     .algolia-docsearch-suggestion--subcategory-column::after {
     content: '|';
     margin-right: 4px;
+  }
+}
+
+.dark .algolia-autocomplete {
+  .ds-dropdown-menu::before {
+    background-color: #333;
+    border-color: #333;
+  }
+
+  .ds-dropdown-menu [class^='ds-dataset-'] {
+    background-color: #333;
+    border-color: #333;
+  }
+
+  .algolia-docsearch-suggestion {
+    background-color: #333;
+    color: theme('colors.primary-inverted');
+  }
+
+  .algolia-docsearch-suggestion--category-header {
+    border-color: theme('colors.gray.700');
+    color: theme('colors.primary-inverted');
+  }
+
+  .algolia-docsearch-suggestion--title {
+    color: theme('colors.primary-inverted');
+  }
+
+  .algolia-docsearch-suggestion--highlight {
+    @apply text-nubots-500 !important;
+  }
+
+  .ds-dropdown-menu
+    .ds-suggestion.ds-cursor
+    .algolia-docsearch-suggestion.suggestion-layout-simple,
+  .ds-dropdown-menu
+    .ds-suggestion.ds-cursor
+    .algolia-docsearch-suggestion:not(.suggestion-layout-simple)
+    .algolia-docsearch-suggestion--content {
+    background-color: rgba(69, 142, 225, 0.15);
   }
 }
 

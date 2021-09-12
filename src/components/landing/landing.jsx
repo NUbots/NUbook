@@ -14,7 +14,7 @@ import PromoCard from './promo-card/promo-card'
 
 import Book from './book/book'
 
-const LandingPage = props => {
+const LandingPage = (props) => {
   const { menu } = props.pageContext
   return (
     <>
@@ -25,7 +25,7 @@ const LandingPage = props => {
 
       <Header
         menu={menu}
-        currentSection={menu.filter(section => !section.hidden)[0]}
+        currentSection={menu.filter((section) => !section.hidden)[0]}
         background='transparent'
         height='h-20'
       />
@@ -36,13 +36,13 @@ const LandingPage = props => {
         international RoboCup competition.
       </Cover>
 
-      <div className='bg-gray-100'>
+      <div className='bg-gray-100 dark:bg-gray-900'>
         <div className='max-w-screen-xl mx-auto px-6 py-12'>
           <div className='grid lg:grid-cols-3 lg:grid-rows-1 gap-6'>
             <PromoCard Icon={IconBrain} title='AI &amp; Robotics Research'>
               Our research focuses on applying intelligent techniques in the{' '}
               <a
-                className='text-nubots-700 hover:underline focus:underline'
+                className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
                 href='https://humanoid.robocup.org/'
               >
                 Humanoid Soccer
@@ -54,7 +54,7 @@ const LandingPage = props => {
             <PromoCard Icon={IconBall} title='RoboCup'>
               NUbots competes yearly in the{' '}
               <a
-                className='text-nubots-700 hover:underline focus:underline'
+                className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
                 href='https://www.robocup.org/objective'
               >
                 RoboCup competition
@@ -67,7 +67,7 @@ const LandingPage = props => {
             <PromoCard Icon={IconHandshake} title='Community Engagement'>
               NUbots engages with the community through events including{' '}
               <a
-                className='text-nubots-700 hover:underline focus:underline'
+                className='text-nubots-700 dark:text-nubots-500 hover:underline focus:underline'
                 href='https://www.robocupjunior.org.au/'
               >
                 RoboCup Junior
@@ -81,8 +81,10 @@ const LandingPage = props => {
 
       <div className='max-w-screen-xl mx-auto px-6 py-24 relative'>
         <div className='relative text-center mb-20'>
-          <h2 className='text-4xl mb-8'>Welcome to NUbook</h2>
-          <div className='text-secondary text-lg max-w-3xl mx-auto'>
+          <h2 className='text-4xl mb-8 text-primary dark:text-primary-inverted'>
+            Welcome to NUbook
+          </h2>
+          <div className='text-secondary dark:text-secondary-inverted text-lg max-w-3xl mx-auto'>
             NUbook is the NUbots team documentation and handbook. It contains
             information about the team, our areas of research, publications, and
             team history; a description of our hardware, software systems and

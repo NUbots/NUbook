@@ -47,7 +47,7 @@ Commands in the next section can be run from the Git Bash terminal, which was do
 1. Install Homebrew by following the instructions at <https://brew.sh/>
 2. Install Git, Node.js and Yarn
 
-   ```sh
+   ```bash
    brew upgrade
    brew install git node && brew install yarn
    ```
@@ -58,26 +58,26 @@ Commands in the next section can be run from the Git Bash terminal, which was do
 
 1. Navigate to the directory where you want to install NUbook
 
-   ```sh
+   ```bash
    cd <path>
    ```
 
 2. Clone the NUbook repository and `cd` into the cloned directory
 
-   ```sh
+   ```bash
    git clone https://github.com/NUbots/NUbook.git
    cd NUbook
    ```
 
 3. Install dependencies
 
-   ```sh
+   ```bash
    yarn
    ```
 
 4. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
-   ```sh
+   ```bash
    yarn dev
    ```
 
@@ -90,7 +90,7 @@ All additions and edits are done through GitHub pull requests. To add or edit co
 1. Clone the repo, install dependencies, and run the development server as shown in the [Getting Started](#getting-started) section above.
 2. Create a new branch for your changes, in the format `your_surname/short_description_of_change`. An example is below for someone with the surname 'paye'.
 
-   ```sh
+   ```bash
    git checkout -b paye/add_2019_debrief
    ```
 
@@ -160,6 +160,77 @@ int main() {
   ```
 
 NUbook uses [KaTeX](https://katex.org/) to render math. See [the KaTeX support table](https://katex.org/docs/support_table.html) for supported symbols and functions.
+
+### Graphviz graphs
+
+NUbook includes [Graphviz](https://graphviz.org/), which you can use to draw graphs by writing specially-formatted code blocks in Markdown.
+
+To create a graph, use triple backticks ` ``` ` on separate lines to open and close the graph, then specify the Graphviz layout algorithm after the opening backticks, followed by the source code for the graph.
+
+For example, the following code block in Markdown creates a directed graph with three connected nodes using the `dot` layout algorithm.
+
+````
+```dot
+digraph {
+  A -> B -> C
+}
+```
+````
+
+When rendered in NUbook, it produces the following graph:
+
+```dot
+digraph {
+  A -> B -> C
+}
+```
+
+The available layouts you can use are:
+
+- `circo`
+- `dot`
+- `fdp`
+- `neato`
+- `osage`
+- `patchwork`
+- `twopi`
+
+You can view examples of each of these layouts in the [kitchen sink](/kitchen-sink/graphviz-diagrams).
+
+#### Graph Captions and Alternative Text
+
+Just like with [images](#images), you can add captions and alternative text to describe graphs. You do so by using comments in the graph source. The first line of comment at the start of the graph will be used as the caption, and subsequent lines of comment will be used as alternative text.
+
+For example, the following source:
+
+````
+```circo
+# The connections between modules A, B, and C
+# A directed graph showing node A connected to node B, which is connected to node C
+digraph {
+  A -> B -> C
+}
+```
+````
+
+Produces the following graph with the appropriate caption and alternative text:
+
+```circo
+# The connections between modules A, B, and C
+# A directed graph showing node A connected to node B, which is connected to node C
+digraph {
+  A -> B -> C
+}
+```
+
+#### Learning Graphviz
+
+Here are some resources for learning how to draw graphs with Graphviz:
+
+- [Graphviz Pocket Reference](https://graphs.grevian.org/)
+- [Drawing Graphs using Dot and Graphviz](https://www.tonyballantyne.com/graphs.html)
+- [Graphviz Tutorial](https://github.com/caseywatts/graphviz-tutorial)
+- [Drawing graphs with dot](https://www.graphviz.org/pdf/dotguide.pdf)
 
 ### Content in Grids
 
@@ -271,8 +342,8 @@ The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netli
 
 You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
 
-![Screenshot of deploy previews link](./deploy-previews.png)
+![Screenshot of deploy previews link](./images/deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
 
-When a pull request is merged into master, it is automatically deployed to the main site.
+When a pull request is merged into main, it is automatically deployed to the main site.

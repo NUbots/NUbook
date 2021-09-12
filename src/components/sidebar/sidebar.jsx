@@ -2,7 +2,19 @@ import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
-import style from './sidebar.module.css'
+import SectionButton from './section-button'
+import IconTeam from './icons/icon-team.svg'
+import IconSystem from './icons/icon-system.svg'
+import IconGuides from './icons/icon-guides.svg'
+import IconTools from './icons/icon-tools.svg'
+import * as style from './sidebar.module.css'
+
+const iconMap = {
+  Team: IconTeam,
+  System: IconSystem,
+  Guides: IconGuides,
+  ['Kitchen Sink']: IconTools,
+}
 
 function elementInView(element, container) {
   const top = element.offsetTop
@@ -15,7 +27,11 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${style.link} ${isCurrent ? `${style.linkActive}` : ''}`,
+    className: `${
+      style.link
+    } text-primary-muted dark:text-primary-muted-inverted ${
+      isCurrent ? style.linkActive : ''
+    }`,
   }
 }
 
@@ -36,28 +52,32 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
       <div className='mb-8'>
         {menu
           // Only show a section if it's currently selected or it's not hidden
-          .filter(section => {
+          .filter((section) => {
             return section.title === currentSection.title || !section.hidden
           })
-          .map(section => {
-            const className = `${style.sectionLink} ${
-              section.title === currentSection.title
-                ? `${style.sectionLinkActive}`
-                : ''
-            }`
+          .map((section) => {
             return (
-              <Link to={section.slug} key={section.slug} className={className}>
+              <SectionButton
+                Icon={iconMap[section.title]}
+                active={section.title === currentSection.title}
+                key={section.slug}
+                to={section.slug}
+              >
                 {section.title}
-              </Link>
+              </SectionButton>
             )
           })}
       </div>
 
-      {currentSection.chapters.map(chapter => {
+      {currentSection.chapters.map((chapter) => {
         return (
           <div className='mb-8' key={chapter.title}>
-            <div className={style.chapterTitle}>{chapter.title}</div>
-            {chapter.pages.map(page => (
+            <div
+              className={`${style.chapterTitle} text-hint dark:text-hint-inverted`}
+            >
+              {chapter.title}
+            </div>
+            {chapter.pages.map((page) => (
               <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}
               </Link>

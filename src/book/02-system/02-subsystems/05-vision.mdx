@@ -8,9 +8,9 @@ slug: /system/subsystems/vision
 
 The vision system aims to convert images from a camera in the robot into useful information, such as the position of balls, goal posts, field lines and obstacles. This information is used to determine behaviour and localisation. The vision subsystem includes object detection and post-processing.
 
-# Visual Mesh
+## Visual Mesh
 
-## Algorithm
+### Algorithm
 
 The [Visual Mesh](https://doi.org/10.1007/978-3-030-27544-0_4) underpins the vision system and is used for sparse **detection** of balls, points on the field, field lines, goal posts and other robots. It is an **input transformation** that uses knowledge of a camera's orientation and position relative to an observation plane to increase the performance and accuracy of a **convolutional neural network**. It utilises the **geometry of objects** to create a **mesh structure** that gives high accuracy of detection regardless of the distance to the object.
 
@@ -24,23 +24,23 @@ The mesh constructed is **one possible mesh**. Various meshes can be created wit
 
 ![A soccer field with a segmentation overlay of different colours based on features and objects in the scene.](./images/vision-green-horizon-balls-detections.png 'The classifications from the Visual Mesh neural network.')
 
-## Implementation
+### Implementation
 
 The Visual Mesh implementation can be [found on GitHub](https://github.com/Fastcode/VisualMesh). It has implementations for using **circle, spherical or cylinder geometry** for the mesh. The Visual Mesh implementation uses **TensorFlow** for training. The Visual Mesh can be used with the **CPU engine** with C++ code or it can be used with the **OpenCL engine** on CPUs and many GPUs.
 
-In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh). **Network biases and weights** are found in the **configuration file** in the module, along with other Visual Mesh parameters such as geometry type. The module receives an **Image message** from the Camera module, detailed above, and inputs it into the Visual Mesh. The resulting **mesh and classifications** are output as a [VisualMesh message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/VisualMesh.proto). This message can then be used in [post-processing](#post-processing).
+In the NUbots codebase, the Visual Mesh is used in the [Visual Mesh module](https://github.com/NUbots/NUbots/tree/main/module/vision/VisualMesh). **Network biases and weights** are found in the **configuration file** in the module, along with other Visual Mesh parameters such as geometry type. The module receives an **Image message** from the Camera module, detailed above, and inputs it into the Visual Mesh. The resulting **mesh and classifications** are output as a [VisualMesh message](https://github.com/NUbots/NUbots/blob/main/shared/message/vision/VisualMesh.proto). This message can then be used in [post-processing](#post-processing).
 
-# Post-Processing
+## Post-Processing
 
-From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The **green horizon** detector uses information from the Visual Mesh message as detailed above. The **goal** and **ball detectors** use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/GreenHorizon.proto).
+From the Visual Mesh a series of specialised detectors are employed to detect field edges, balls, and goal posts. The **green horizon** detector uses information from the Visual Mesh message as detailed above. The **goal** and **ball detectors** use the information given by the green horizon detector in the [GreenHorizon message](https://github.com/NUbots/NUbots/blob/main/shared/message/vision/GreenHorizon.proto).
 
 All calculations in the detectors are done in **3D world coordinates**. To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/foundations/mathematics).
 
 ![A soccer field with an overlay of lines representing object detections.](./images/vision-balls-goals.png 'The full output of the vision system showing the green horizon, ball and goal detections.')
 
-## Green Horizon Detector
+### Green Horizon Detector
 
-When the [green horizon detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large **cluster** of points that is determined to be the field.
+When the [green horizon detector](https://github.com/NUbots/NUbots/blob/main/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large **cluster** of points that is determined to be the field.
 
 The points are first filtered to give only potential field points. The first field point is added to a cluster with all its **field point neighbours**. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
 
@@ -48,9 +48,9 @@ Clustering is repeated until all field points are part of a cluster. Clusters th
 
 After clustering has finished, one cluster will remain which should represent **the field**. An **upper convex hull algorithm** is applied to the final cluster to determine the edge of the field. The detector will emit a **GreenHorizon message** that specifies the location of the edge of the field.
 
-## Ball Detector
+### Ball Detector
 
-The [ball detector](https://github.com/NUbots/NUbots/blob/master/module/vision/BallDetector/) receives a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/master/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/master/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field as well as the radius of the ball being used.
+The [ball detector](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/) receives a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/main/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/main/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field as well as the radius of the ball being used.
 
 The ball detector forms **clusters** out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points. Clusters are discarded if they fail to meet any of the following criteria
 
@@ -99,11 +99,11 @@ Remaining clusters are fitted with a **circular cone**. The **cone axis** is det
 
 - The cluster must have a distance less than the length of the field, as given by the FieldDescription message.
 
-Any remaining clusters are assumed to be balls and so are emitted together as a [Balls message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Ball.proto).
+Any remaining clusters are assumed to be balls and so are emitted together as a [Balls message](https://github.com/NUbots/NUbots/blob/main/shared/message/vision/Ball.proto).
 
-## Goal Detector
+### Goal Detector
 
-The [goal detector](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
+The [goal detector](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
 All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if they fail to meet any of the following criteria
 
@@ -113,9 +113,9 @@ All goal post edge points (points that are goal points that have at least one ne
 
 The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure the distance from. If there is more than one cluster, i.e. more than one goal post, an attempt is made to pair up the goal posts. This is done by calculating the distances between the posts and pairing up goal posts which are close together. **Leftness** and **rightness** is assigned to each post in a pair based on their positions.
 
-The goal detector then emits any goals as a [Goals message](https://github.com/NUbots/NUbots/blob/master/shared/message/vision/Goal.proto).
+The goal detector then emits any goals as a [Goals message](https://github.com/NUbots/NUbots/blob/main/shared/message/vision/Goal.proto).
 
-# References
+## References
 
 - E. Shelhamer, J. Long, and T. Darrell. Fully convolutional networks for semantic segmentation. _IEEE Transactions on Pattern Analysis and Machine Intelligence_, 39(4):640–651, April 2017.
 

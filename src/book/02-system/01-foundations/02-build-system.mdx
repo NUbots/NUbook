@@ -122,6 +122,7 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | run       | Run a role locally                                             |
 | shell     | Exposes a shell in the Docker image                            |
 | target    | Select a target to work on                                     |
+| tests     | Run built unit tests                                           |
 
 ##### Build
 
@@ -344,6 +345,43 @@ The `nuc7i7bnh` target should be used for building and running code on the robot
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
 
+##### Tests
+
+The `tests` command allows you to run built unit tests. It will automatically run tests in parallel, and dump a timestamped log file to the project directory. Currently, we use [CTest](https://cmake.org/cmake/help/latest/manual/ctest.1.html) which is included as part of CMake.
+
+In order to run unit tests, they must first be built. This can be done with:
+
+```bash
+./b configure -- -DBUILD_TESTS=ON
+./b build
+```
+
+The `tests` command provides the following subcommands:
+
+| Subcommand | Description                                        |
+| ---------- | -------------------------------------------------- |
+| list       | List all built tests                               |
+| run        | Run all tests (default), or named individual tests |
+
+If you would like to run an individual test (or group of tests), you can pass the `run` subcommand a string and it will only run tests that match the given string.
+Alternatively, `run` will run all built tests if no string is passed.
+
+For example, if you would like to run all tests with the string 'vision' in their name, you would do:
+
+```bash
+./b tests run vision
+```
+
+The `run` subcommand also accepts the following flags:
+
+| Flag                                   | Description                                              |
+| -------------------------------------- | -------------------------------------------------------- |
+| `-V` or `--verbose`                    | Enable verbose output from tests                         |
+| `-VV` or `--extra-verbose`             | Enable more verbose output from tests                    |
+| `-Q` or `--quiet`                      | Make CTest not print to stdout                           |
+| `-j NUM_JOBS` or `--parallel NUM_JOBS` | Run the tests in parallel using the given number of jobs |
+| `--debug`                              | Displaying more verbose internals of CTest               |
+
 ## Docker Images
 
 The NUbots codebase uses Docker images to containerise the build process.
@@ -356,11 +394,11 @@ Apart from flags provided to the build tools and the compiler both images are id
 
 </Alert>
 
-The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the master branch is updated.
+The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the main branch is updated.
 
 The Docker images use [Arch Linux](https://www.archlinux.org/) as their operating system as it is lightweight, flexible, and up-to-date.
 
-The [docker folder](https://github.com/NUbots/NUbots/tree/master/docker) contains the Dockerfile as well as some utility scripts to ease the burden of compiling multiple different libraries. Other files in this folder end up inside of the image and control either the behaviour of the compiler or build system, or the runtime behaviour of the libraries that are built.
+The [docker folder](https://github.com/NUbots/NUbots/tree/main/docker) contains the Dockerfile as well as some utility scripts to ease the burden of compiling multiple different libraries. Other files in this folder end up inside of the image and control either the behaviour of the compiler or build system, or the runtime behaviour of the libraries that are built.
 
 If you need to add a new library or program to the Docker image you should add it to the end of the Dockerfile to minimise the amount of rebuilding that needs to happen. Look for the following marker
 
@@ -431,10 +469,10 @@ The toolchain is a collection of libraries that are used by the NUbots codebase.
 
 In order to ensure that everyone is using the same versions of every library and that everyone has compiled the libraries in the same way (enabling the correct features, etc), we use Docker to automate the build process.
 Docker also ensures that all of the dependencies for the built libraries are either installed or are also built and that they are also built in the correct order.
-To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile).
+To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile).
 
 In order to improve runtime performance on the robots, all libraries that are built as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
-A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/master/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
+A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/main/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
 
 If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
 

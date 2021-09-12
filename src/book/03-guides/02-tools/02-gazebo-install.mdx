@@ -1,0 +1,74 @@
+---
+section: Guides
+chapter: Tools
+title: Installing Gazebo
+description: Installation instructions for Gazebo.
+slug: /guides/tools/gazebo-install
+---
+
+Gazebo is an open-source 3D robotics simulator. This guide we will outline the steps for installing and running Gazebo.
+
+<Alert type='info'>
+The following instructions are for running Gazebo on Windows only.
+</Alert>
+
+## Prerequisites
+
+### Ubuntu
+
+Follow the instructions to setup Ubuntu with WSL [here](/guides/main/getting-started#docker) under 'docker'.
+
+### Gazebo 9
+
+1. Install [Gazebo](http://gazebosim.org/tutorials?cat=install&tut=install_ubuntu&ver=9.0) (version 9 last tested) using Ubuntu.
+
+2. Install Gazebo dev libaries.
+   ```bash
+   sudo apt-get install libgazebo9-dev
+   ```
+
+### VcXsrv Windows X Server
+
+VcXsrv allows you to run a graphical GUI from Ubuntu WSL.
+
+Download and install VcXsrv [here](https://sourceforge.net/projects/vcxsrv/).
+
+## Running NUbots simulation
+
+1. Clone this repo.
+   ```bash
+   git clone https://github.com/NUbots/Gazebo.git
+   ```
+2. Install the plugin.
+
+   ```bash
+   cd gazebo
+   sudo bash ./install_plugin.sh
+   ```
+
+   <Alert type='info'>
+   Ensure your firewall is disabled for Ubuntu before continuing.
+   </Alert>
+
+3. Setup WSL to connect with VcXsrv server.
+
+   ```bash
+   export GAZEBO_IP=127.0.0.1
+   export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+   export LIBGL_ALWAYS_INDIRECT=0
+   ```
+
+4. Run XLaunch (VcXsrv server).
+
+5. Change the Display number to 0.
+   ![Display number settings](./images/display-number.png 'Display number')
+
+6. Leave all settings default except for 'Native opengl' and 'Disable access control'
+   ![Xlaunch settings](./images/extra-settings.png 'Extra settings')
+
+7. Run the plugin.
+   ```bash
+   sudo bash ./run_plugin.sh
+   ```
+
+You are now ready to simulate!
