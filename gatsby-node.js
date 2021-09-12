@@ -78,40 +78,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
   }
 
-  // Get all the bib reference files: these are created in the
-  // `bib-transformer.js` file registered with Gatsby in the
-  // `gatsby-node.js` file
-  const bibResults = await graphql(`
-    query {
-      allBibtex {
-        nodes {
-          bib
-          dir
-          base
-          relativeDirectory
-        }
-      }
-    }
-  `)
-
-  // Panic and abort on query error
-  if (bibResults.errors) {
-    reporter.panicOnBuild(
-      '🚨  ERROR: Loading "createPages" query for all Bib files'
-    )
-  }
-
-  // Create the map of references: each key is the path to the bib file,
-  // relative to the `src/book` directory, and each value is the file's
-  // bib content, parsed into a JS object
-  const bibReferences = {}
-  for (const bibNode of bibResults.data.allBibtex.nodes) {
-    const bibRelativePath = path.posix.join(
-      bibNode.relativeDirectory,
-      bibNode.base
-    )
-    bibReferences[bibRelativePath] = JSON.parse(bibNode.bib)
-  }
+  // Get the Bibtex references, a map where the keys are MDX file paths
+  // (relative to src/book), and the values are the references for the file
+  const bibReferences = await getAllBibtexReferences(graphql, reporter)
 
   // Get all MDX files
   const posts = mdxResults.data.allMdx.edges
@@ -148,16 +117,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const nextPage = getNext(next, posts, index)
     const previousPage = getPrevious(previous, posts, index)
 
-    // Compute the path to this page's bib references file
-    // (relative to the `src/book` directory)
-    const directory = path.dirname(node.fileAbsolutePath)
-    const bibFilePath = path.posix.resolve(
-      directory,
-      node.frontmatter.references || 'references.bib'
-    )
-    const [, bibFileRelative] = bibFilePath.split('src/book/')
-
-    const references = bibReferences[bibFileRelative] || null
+    const references = getBibReferencesForPage(bibReferences, node)
 
     actions.createPage({
       path: node.frontmatter.slug,
@@ -195,6 +155,71 @@ exports.onCreatePage = ({ page, actions }) => {
       },
     })
   }
+}
+
+/**
+ *
+ * Get the Bibtex references for all pages in NUbook. Returns a map where the
+ * keys are MDX file paths (relative to src/book), and the values are the
+ * references for the file, created in `bib-transformer.js`
+ */
+async function getAllBibtexReferences(graphql, reporter) {
+  // Get all the Bibtex nodes via GraphQL: these are created in
+  // `bib-transformer.js` and registered with Gatsby in `gatsby-node.js`
+  const bibResults = await graphql(`
+    query {
+      allBibtex {
+        nodes {
+          bib
+          dir
+          base
+          relativeDirectory
+        }
+      }
+    }
+  `)
+
+  // Panic and abort on query error
+  if (bibResults.errors) {
+    reporter.panicOnBuild(
+      '🚨  ERROR: Loading "createPages" query for all Bib files'
+    )
+  }
+
+  // Create the map of references: each key is the path to the bib file,
+  // relative to the `src/book` directory, and each value is the file's
+  // bib content, parsed into a JS object
+  const bibReferences = {}
+  for (const bibNode of bibResults.data.allBibtex.nodes) {
+    const bibRelativePath = path.posix.join(
+      bibNode.relativeDirectory,
+      bibNode.base
+    )
+    bibReferences[bibRelativePath] = JSON.parse(bibNode.bib)
+  }
+
+  return bibReferences
+}
+
+/**
+ * Get the Bibtext references for the given MDX page node from the given map
+ * containing the references of all pages in NUbook.
+ */
+function getBibReferencesForPage(bibReferences, pageNode) {
+  // Compute the path to this page's bib references file
+  // (relative to the `src/book` directory)
+  const basename = path
+    .basename(pageNode.fileAbsolutePath)
+    .replace(path.extname(pageNode.fileAbsolutePath), '')
+
+  const bibFilePath = path.posix.resolve(
+    path.dirname(pageNode.fileAbsolutePath),
+    pageNode.frontmatter.references ?? `${basename}.bib`
+  )
+
+  const [, bibFileRelative] = bibFilePath.split('src/book/')
+
+  return bibReferences[bibFileRelative] ?? null
 }
 
 /**
