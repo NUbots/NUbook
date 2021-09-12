@@ -1,5 +1,7 @@
 /*eslint-env node*/
 
+const path = require('path')
+
 module.exports = {
   // Deployment path on Github Pages (matches repo name)
   pathPrefix: '/NUbook',
@@ -35,6 +37,7 @@ module.exports = {
         path: `${__dirname}/src/pages`,
       },
     },
+    'gatsby-plugin-image',
     // Exposes helper functions for processing images with the
     // sharp package from npm. Used by other plugins.
     'gatsby-plugin-sharp',
@@ -49,8 +52,18 @@ module.exports = {
         defaultLayouts: {
           default: `${__dirname}/src/components/layout/layout.jsx`,
         },
-        remarkPlugins: [require('remark-unwrap-images')],
+        remarkPlugins: [
+          require('remark-unwrap-images'),
+          require('remark-math'),
+        ],
+        rehypePlugins: [[require('rehype-katex'), { strict: false }]],
         gatsbyRemarkPlugins: [
+          {
+            resolve: path.join(
+              __dirname,
+              './build-plugins/remark-absolute-image-src.js'
+            ),
+          },
           {
             resolve: '@josephuspaye/gatsby-remark-graphviz',
             options: {
@@ -69,12 +82,6 @@ module.exports = {
             options: {
               maintainCase: false,
               removeAccents: true,
-            },
-          },
-          {
-            resolve: 'gatsby-remark-katex',
-            options: {
-              strict: 'ignore',
             },
           },
         ],
@@ -112,6 +119,11 @@ module.exports = {
                 siteUrl
               }
             }
+            allFile(filter: {extension: {eq: "mdx"}}) {
+              nodes {
+                modifiedTime
+              }
+            }
             allSitePage(filter: {context: {hidden: {ne: true}}}) {
               nodes {
                 path
@@ -122,28 +134,92 @@ module.exports = {
         resolveSiteUrl: ({ site }) => {
           return site.siteMetadata.siteUrl
         },
-        serialize: ({ site, allSitePage }) => {
-          return allSitePage.nodes.map(node => {
+        resolvePages: ({ site, allFile, allSitePage }) => {
+          const lastModified = {}
+          for (const file of allFile.nodes) {
+            lastModified[file.absolutePath] = file.modifiedTime
+          }
+          return allSitePage.nodes.map((node) => {
             return {
+              ...node,
               url: `${site.siteMetadata.siteUrl}${node.path}`,
-              changefreq: `weekly`,
-              priority: 0.7,
+              lastModified: lastModified[node.fileAbsolutePath],
             }
           })
         },
-      },
-    },
-    {
-      resolve: 'gatsby-plugin-eslint',
-      options: {
-        test: /\.js$|\.jsx|\.mdx$/,
-        exclude: /(node_modules|.cache|public)/,
-        stages: ['develop'],
-        options: {
-          emitWarning: true,
-          failOnError: false,
-        },
+        filterPages: () => true,
+        serialize: (page) => ({
+          url: page.url,
+          lastmod: toW3CString(page.lastModified),
+        }),
       },
     },
   ],
+}
+
+// Convert the given date string to a string in the W3C datetime format (yyyy-mm-ddThh:ii:ss+zz:zz).
+// Adapted from https://gist.github.com/tristanlins/6585391
+function toW3CString(dateString) {
+  const date = new Date(dateString)
+
+  const year = date.getFullYear()
+  let month = date.getMonth()
+  month++
+  if (month < 10) {
+    month = '0' + month
+  }
+  let day = date.getDate()
+  if (day < 10) {
+    day = '0' + day
+  }
+
+  let hours = date.getHours()
+  if (hours < 10) {
+    hours = '0' + hours
+  }
+
+  let minutes = date.getMinutes()
+  if (minutes < 10) {
+    minutes = '0' + minutes
+  }
+
+  let seconds = date.getSeconds()
+  if (seconds < 10) {
+    seconds = '0' + seconds
+  }
+
+  const offset = -date.getTimezoneOffset()
+  let offsetHours = Math.abs(Math.floor(offset / 60))
+  let offsetMinutes = Math.abs(offset) - offsetHours * 60
+
+  if (offsetHours < 10) {
+    offsetHours = '0' + offsetHours
+  }
+
+  if (offsetMinutes < 10) {
+    offsetMinutes = '0' + offsetMinutes
+  }
+
+  let offsetSign = '+'
+  if (offset < 0) {
+    offsetSign = '-'
+  }
+
+  return (
+    year +
+    '-' +
+    month +
+    '-' +
+    day +
+    'T' +
+    hours +
+    ':' +
+    minutes +
+    ':' +
+    seconds +
+    offsetSign +
+    offsetHours +
+    ':' +
+    offsetMinutes
+  )
 }

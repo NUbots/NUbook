@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
-import style from './section-button.module.css'
+import * as style from './section-button.module.css'
 
 const getLinkProps = () => {
   return {
