@@ -21,9 +21,9 @@ const Layout = ({ children, data, pageContext }) => {
   } = data.mdx.frontmatter
   const { next, previous, menu } = pageContext
   const currentSection =
-    menu.find(section => section.title === sectionTitle) || menu[0]
+    menu.find((section) => section.title === sectionTitle) || menu[0]
   const currentChapter = currentSection.chapters.find(
-    chapter => chapter.title === chapterTitle
+    (chapter) => chapter.title === chapterTitle
   )
   const sidebarWrapperRef = useRef(null)
   return (

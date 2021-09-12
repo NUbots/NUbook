@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import SearchIcon from './search-icon.svg'
-import style from './search.module.css'
+import * as style from './search.module.css'
 
 const Search = ({ background }) => (
   <div

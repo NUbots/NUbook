@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import style from './grid.module.css'
+import * as style from './grid.module.css'
 
 let currentId = 0
 function nextId() {
