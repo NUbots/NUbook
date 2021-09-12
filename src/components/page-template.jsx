@@ -3,16 +3,16 @@ import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
-import Layout from './layout'
+import { BibReferencesContext } from './markdown/references/context'
 
-export const BibReferencesContext = React.createContext('bibReferences')
+import Layout from './layout'
 
 const PageTemplate = (props) => {
   const [usedReferences, setUsedReferences] = useState(new Set())
 
   function addUsedReference(referenceId) {
     setUsedReferences(
-      previousReferences => new Set([...previousReferences, referenceId])
+      (previousReferences) => new Set([...previousReferences, referenceId])
     )
   }
 
