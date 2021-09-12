@@ -25,7 +25,9 @@ const CiteSingle = ({ children }) => {
   if (usedReferences.has(referenceId)) {
     referenceNumber = referenceIndex + 1
   } else {
+    useEffect(() => {
     addUsedReference(referenceId)
+    })
   }
 
   const { author, year, title } = referenceEntry.fields
