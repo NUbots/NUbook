@@ -36,7 +36,7 @@ Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) t
 
 The resulting network should be exported to a [yaml](https://yaml.org/) file and added to the NUbots codebase, by completing the following steps.
 
-1. Create a base configuration file. Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/master/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/master/module/vision/VisualMesh/data/config/VisualMesh.yaml).
+1. Create a base configuration file. Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/main/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/main/module/vision/VisualMesh/data/config/VisualMesh.yaml).
 
 2. Export the weights of your trained Mesh to this configuration file using the following command, where `<output_dir>` is the directory of the configuration file:
 
@@ -44,7 +44,7 @@ The resulting network should be exported to a [yaml](https://yaml.org/) file and
    ./mesh.py export <output_dir>
    ```
 
-3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/master/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
+3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/main/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
 
 ### Camera Calibration
 
@@ -82,15 +82,15 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 
 If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
 
-- In step 1 of Recording Data, use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/master/roles/visualmesh.role) role to record the data.
-- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/master/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
-- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/master/roles/playback.role) role to playback the data, without changes.
+- In step 1 of Recording Data, use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/visualmesh.role) role to record the data.
+- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
+- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/playback.role) role to playback the data, without changes.
 
 ### Tuning Detectors
 
 Potentially, the Visual Mesh had positive results after training, but when used on a robot it performed poorly. In this case, the detectors may need tuning.
 
-[BallDetector.yaml](https://github.com/NUbots/NUbots/blob/master/module/vision/BallDetector/data/config/BallDetector.yaml) and [GoalDetector.yaml](https://github.com/NUbots/NUbots/blob/master/module/vision/GoalDetector/data/config/GoalDetector.yaml) contain the values for tuning the ball and goal detectors respectively.
+[BallDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/data/config/BallDetector.yaml) and [GoalDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/data/config/GoalDetector.yaml) contain the values for tuning the ball and goal detectors respectively.
 
 1. Build and install the `visualmesh` role to a robot.
 2. SSH onto the robot.
