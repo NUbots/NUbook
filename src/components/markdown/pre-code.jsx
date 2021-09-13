@@ -1,7 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Highlight, { defaultProps } from 'prism-react-renderer'
+import Prism from 'prism-react-renderer/prism'
 import theme from 'prism-react-renderer/themes/oceanicNext'
+
+// eslint-disable-next-line no-undef
+;(typeof global !== 'undefined' ? global : window).Prism = Prism
+
+// eslint-disable-next-line no-undef
+require('prismjs/components/prism-docker')
+// eslint-disable-next-line no-undef
+require('prismjs/components/prism-cmake')
 
 const PreCode = ({ children }) => {
   // Assuming children is one child, the nested <code> element

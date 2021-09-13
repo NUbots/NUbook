@@ -6,7 +6,7 @@ import Logo from './logo/logo'
 import Menu from './menu/menu'
 import MenuToggle from './menu-toggle/menu-toggle'
 import Search from './search/search'
-import style from './header.module.css'
+import * as style from './header.module.css'
 
 const Header = ({ menu, currentSection, background, height }) => {
   const [menuOpen, setMenuOpen] = useState(false)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import style from './section.module.css'
+import * as style from './section.module.css'
 
 const Section = ({ Icon, children, active, onClick }) => {
   return (
