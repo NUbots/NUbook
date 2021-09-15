@@ -7,7 +7,7 @@ import IconTeam from './icons/icon-team.svg'
 import IconSystem from './icons/icon-system.svg'
 import IconGuides from './icons/icon-guides.svg'
 import IconTools from './icons/icon-tools.svg'
-import style from './sidebar.module.css'
+import * as style from './sidebar.module.css'
 
 const iconMap = {
   Team: IconTeam,
@@ -52,10 +52,10 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
       <div className='mb-8'>
         {menu
           // Only show a section if it's currently selected or it's not hidden
-          .filter(section => {
+          .filter((section) => {
             return section.title === currentSection.title || !section.hidden
           })
-          .map(section => {
+          .map((section) => {
             return (
               <SectionButton
                 Icon={iconMap[section.title]}
@@ -69,7 +69,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
           })}
       </div>
 
-      {currentSection.chapters.map(chapter => {
+      {currentSection.chapters.map((chapter) => {
         return (
           <div className='mb-8' key={chapter.title}>
             <div
@@ -77,7 +77,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
             >
               {chapter.title}
             </div>
-            {chapter.pages.map(page => (
+            {chapter.pages.map((page) => (
               <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}
               </Link>

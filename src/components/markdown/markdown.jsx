@@ -9,7 +9,7 @@ import TabbedImages from './tabbed-images'
 
 import Alert from './alert/alert'
 import Grid from './grid/grid'
-import style from './markdown.module.css'
+import * as style from './markdown.module.css'
 import { createHeading } from './heading/heading'
 
 const Img = ({ src, alt, title }) => (

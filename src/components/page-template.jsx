@@ -5,7 +5,7 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 import Layout from './layout'
 
-const PageTemplate = props => {
+const PageTemplate = (props) => {
   return (
     <Layout pageContext={props.pageContext} data={props.data}>
       <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
@@ -36,7 +36,7 @@ PageTemplate.propTypes = {
 export default PageTemplate
 
 export const query = graphql`
-  query($id: String!) {
+  query ($id: String!) {
     mdx(id: { eq: $id }) {
       id
       body

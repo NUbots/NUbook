@@ -25,9 +25,9 @@ All these modules are connected using NUClear which is a message passing softwar
 
 ## Roles
 
-The robot codebase contains roles, which are recipes for creating a binary to run on a robot. A role file lists all the modules to be used in that binary. Only modules included in the role file will run, provided the code is [triggered](/system/foundations/nuclear#nuclear-dsl). All roles can be found in the [roles folder](https://github.com/NUbots/NUbots/tree/master/roles) in the first level of the repository and have the extension `.role`. For specifics about the NUClear roles system, see the [NUClear page](/system/foundations/nuclear#nuclear-roles).
+The robot codebase contains roles, which are recipes for creating a binary to run on a robot. A role file lists all the modules to be used in that binary. Only modules included in the role file will run, provided the code is [triggered](/system/foundations/nuclear#nuclear-dsl). All roles can be found in the [roles folder](https://github.com/NUbots/NUbots/tree/main/roles) in the first level of the repository and have the extension `.role`. For specifics about the NUClear roles system, see the [NUClear page](/system/foundations/nuclear#nuclear-roles).
 
-When adding modules to the list in a role, use the syntax `path::to::module`. For example, if you want to include the [`DataLogging` module](https://github.com/NUbots/NUbots/tree/master/module/support/logging/DataLogging), check the path to that module relative to the `module` folder. The path is `support/logging/DataLogging`, so we include the line `support::logging::DataLogging`.
+When adding modules to the list in a role, use the syntax `path::to::module`. For example, if you want to include the [`DataLogging` module](https://github.com/NUbots/NUbots/tree/main/module/support/logging/DataLogging), check the path to that module relative to the `module` folder. The path is `support/logging/DataLogging`, so we include the line `support::logging::DataLogging`.
 
 The following is a table of roles that exist in the NUbots codebase and possible use cases for them.
 

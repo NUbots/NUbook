@@ -19,7 +19,7 @@ You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [
 
 1. Install Git by running the following commands:
 
-   ```
+   ```bash
    sudo apt update
    sudo apt install git
    ```
@@ -238,7 +238,7 @@ You can show content such as images, code, and math equations side-by-side in a 
 
 The following example shows four images in a 2x2 grid with a caption:
 
-```mdx
+```md
 <Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
@@ -257,7 +257,7 @@ You can show multiple images in the same place by putting them in tabs. The capt
 
 The following example shows four images in tabs:
 
-```mdx
+```md
 <TabbedImages>
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
@@ -272,7 +272,7 @@ The following example shows four images in tabs:
 
 You can show an informational alert using:
 
-```mdx
+```md
 <Alert>
 
 Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -284,7 +284,7 @@ qui?
 
 You can also show a warning using:
 
-```mdx
+```md
 <Alert type='warning'>
 
 Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -342,8 +342,17 @@ The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netli
 
 You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
 
-![Screenshot of deploy previews link](./deploy-previews.png)
+![Screenshot of deploy previews link](./images/deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
 
-When a pull request is merged into master, it is automatically deployed to the main site.
+When a pull request is merged into main, it is automatically deployed to the main site.
+
+## Building for production
+
+The `yarn build` command is used to build the site into a set of static HTML, CSS, and JS files that can be deployed to any webserver. This command is run automatically by Netlify when a change is merged into `main`.
+
+Running `yarn build` locally can be useful to preview the site exactly as it will be in production, or to debug an issue that occurs only in production. To use it:
+
+- Run `yarn build` to build the site and optimise assets. The resulting output will be placed in `public/`.
+- Run `npx http-server public/` to start a simple webserver in the public folder. This will print a URL you can open in your browser to preview the built site.

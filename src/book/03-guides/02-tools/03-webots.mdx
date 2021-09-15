@@ -80,7 +80,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
    ```bash
    cd ~
-   git clone --recurse-submodules -j$(nproc) https://github.com/NUbots/NUWebots.git
+   git clone https://github.com/NUbots/NUWebots.git
    cd NUWebots
    ```
 
@@ -219,7 +219,7 @@ Running the RoboCup scenario requires two things: [the Webots simulator](https:/
 
 1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build on all computers that will be running robot code, if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
 
-2. Set your UDP filter on all computers that will be running robot code to prevent them from receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/master/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
+2. Set your UDP filter on all computers that will be running robot code to prevent them from receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/main/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
 
 3. Ensure the IP and ports are set up correctly. If you are running everything locally on the one computer, the default settings should work as is. If Webots and the robot code are run on separate computers, do the following:
 
