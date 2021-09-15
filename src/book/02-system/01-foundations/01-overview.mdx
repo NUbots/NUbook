@@ -75,9 +75,11 @@ Any code should run with `platform::darwin::HardwareSimulator`, but this is a ve
 ```dot
 # A graph of the system
 digraph {
-    Cameras;
-    Servos;
-    Acc/Gyro;
-
+    "Camera" -> "Visual Mesh" -> "Green Horizon" -> {"Ball Detector", "Goal Detector"}
+    {"Servo State", "Acc/Gyro State"} -> "Hardware Input Module" -> "Odometry" -> {"Visual Mesh", "Walk Engine", "Localisation"}
+    "Goal Detector" -> "Localisation" -> "Soccer Strategy"
+    "Soccer Strategy" -> "Walk Path Planner" -> "Walk Engine" -> "Servo Command"
+    {"Ball Detector", "Localisation"} -> "Ball Localisation"
+    {"Ball Detector", "Goal Detector", "Ball Localisation"} -> "Head Behaviour Soccer" -> "Head Controller" -> "Servo Command"
 }
 ```
