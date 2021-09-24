@@ -27,3 +27,69 @@ These parameters are set for each camera as **configuration values** in the [Cam
 The parameters are used in the **Camera module** to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/main/shared/message/input/Image.proto).
 
 The [projection tool](https://github.com/NUbots/NUbots/tree/main/shared/utility/vision/projection.h), based on [panotools' fisheye projection calculations](https://wiki.panotools.org/Fisheye_Projection), maps a portion of the surface of a sphere to a flat image. The type of projection is specified by the above parameter `lens.projection`.
+
+## Speech and Intention Recognition
+
+The NUbots codebase includes intention recognition functionality, which is used for the RoboCup@Home league.
+Speech recognition is the task of converting a spoken sentence into a string of text.
+Intention is the task of converting a string of text into a meaningful format for computer.
+[voice2json](https://voice2json.org) is used for both the speech and recognition tasks. The system
+is offline and does not use any cloud resources to perform speech or intention recognition.
+
+The way the system works can be broken down as follows:
+0. `/home/nubots/.local/share/...` specifies the path to the voice2json [profile](https://voice2json.org/profiles.html).
+   The important files are `sentences.ini` and the files located in `slots`.
+1. voice2json program provides two commands `transcribe-stream` and `recognize-intent`.
+2. The [SpeechIntent](https://github.com/NUbots/module/behaviour/input/SpeechIntent/readme.md) module starts two subprocesses,
+    `transcribe-stream` and `recognize-intent`, and emits a NUclear message representing the recognized intention.
+3. `transcribe-stream` calls `arecord` under the hood to capture audio from the microphone.
+    This does not work in a virtualised environment and therefore `transcribe-wav` is used for testing wav file recordings.
+
+The output of `transcribe-stream` is a json object among other things containing the recognized text.
+The output of `recognize-intent` is a json object containing both the recognized text and the recognized intention.
+
+### Usage
+
+See the SpeechIntent module for details on how to respond to speech recognition events and run the
+voice2json commands manually.
+
+The sentences accepted by vocie2json are located in `docker/voice2json/sentences.ini` and are
+copied into `/home/nubots/.local/.../sentences.ini` during the build.
+The template language used for the file is [described here](http://voice2json.org/sentences.html).
+Files located in `slots/*` are referenced inside of the `sentences.ini`.
+If for example, the type of objects in a room changes you can modify `slots/objects` and retrain to accept the new objects.
+
+A typical workflow for iterating on the sentences.ini file is to:
+1. Edit the file, and possibly copy it into the docker container in the right spot.
+2. Run `voice2json train-profile --profile en`
+3. Run the speech and intention recognition commands.
+
+Note: `\` seems to be a line continuation, but this isn't documented.
+If you have hard to read expressions, you can try breaking them up over new lines the same as in a shell.
+
+### Dependencies
+
+Under the hood, voice2json has a few major dependencies:
+1. OpenFST
+2. Kaldi
+3. NGram
+4. Phonetisaurus
+
+Kaldi is the speech recognition module that has been installed. Voice2json can work with different
+speech recognition modules such as:
+[PocketSphinx](https://github.com/cmusphinx/pocketsphinx),
+[DeepSpeech](https://github.com/mozilla/DeepSpeech),
+or [Julius](https://github.com/julius-speech/julius).
+
+The PKGBUILD files for OpenFST, Kaldi, NGram, and Phonetisaurus have been copied from their AUR
+packages to prevent any changes from breaking the docker build. There was also additional
+modifications that needed to be made to these scripts in order to get them to build correctly.
+
+Kaldi in particular has no semantic versioning and is actively maintained on the `master` branch.
+The build script for Kaldi checks out a particular version to prevent the builds from randomly breaking.
+
+### Future Directions
+
+1. Voice2json supports wake words using [Precise](https://github.com/MycroftAI/mycroft-precise).
+   This could be used instead of putting the robot into always listening modes.
+2. Voice2json supports multiple languages. You could try adding multi-lingual support.
