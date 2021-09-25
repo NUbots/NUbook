@@ -80,11 +80,11 @@ To update the servo parameters, perform the following instructions:
      | Head Pitch           | 20  |
 
      Note that roll is about the x-axis, pitch is about the y-axis, and yaw is about the z-axis. The below diagram specifies the position of each servo within the robot when it is in its default (zombie) position.
-   <details>
-      <summary>Detailed diagram of NUgus servo axes</summary>
+     <details>
+        <summary>Detailed diagram of NUgus servo axes</summary>
 
-      ![Diagram of NUgus robot with roll, pitch and yaw axes defined for each servo.](./images/servo_calibration/nugus_servo_axis.svg)
-   </details>
+     ![Diagram of NUgus robot with roll, pitch and yaw axes defined for each servo.](./images/servo_calibration/nugus_servo_axis.svg)
+     </details>
 
    - Baud Rate (Bus): 1M bps = 2M/(1 + 1)
 
@@ -97,8 +97,8 @@ To test the servo, perform the following instructions:
 1. Set the Goal Position in Dynamixel Wizard to 0, +90 and -90 and observe the position of the arrow on the horn. It should match the picture.
 
 2. Set the Goal Position in Dynamixel Wizard to some position either side of +180 to test if the servo is in joint mode. If it is, it should take the long route around to the second position. If it does not, it is not in joint mode.
-   * To convert into joint mode, select "**Joint**" from the dropdown menu for the servo.
-      ![Screenshot of Dynamixel Wizard with mode type highlighted using a red box](./images/servo_calibration/to_joint.png)
+   - To convert into joint mode, select "**Joint**" from the dropdown menu for the servo.
+     ![Screenshot of Dynamixel Wizard with mode type highlighted using a red box](./images/servo_calibration/to_joint.png)
 
 If the servo is performing correctly, we can disconnect the servo and use it in a robot.
 
