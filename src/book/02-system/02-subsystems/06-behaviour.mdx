@@ -81,10 +81,9 @@ ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When 
 
 To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
-
 ## Path planning
 
-[SimpleWalkPathPlanner](https://github.com/NUbots/NUbots/tree/main/module/behaviour/planning/SimpleWalkPathPlanner) is the current implemenation of path-planning for the robot and currently (as of ___09/2021___) uses a combination of messages from vision and localisation in order to determine messages to emit which motion can then interpret to control the positions the robot moves to on the field during play.
+[SimpleWalkPathPlanner](https://github.com/NUbots/NUbots/tree/main/module/behaviour/planning/SimpleWalkPathPlanner) is the current implemenation of path-planning for the robot and currently (as of **_09/2021_**) uses a combination of messages from vision and localisation in order to determine messages to emit which motion can then interpret to control the positions the robot moves to on the field during play.
 
 [A state-machine](https://www.freecodecamp.org/news/state-machines-basics-of-computer-science-d42855debc66/) is currently being implemented to use a switch case so that depending on the latest motion command the path planner will call a function to perform a specific 'style' of path. For example, this may be following a [Bezier curve](https://javascript.info/bezier-curve#maths) to reach the required orientation and position to perform a kick toward the goal if the robot is in an offensive position or role which will be decided within Soccer Stratergy, or if the robot is a goalie or similar defensive role it moves to the required position in a straight linear path to get there more quickly.
 
