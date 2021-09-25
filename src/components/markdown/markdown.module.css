@@ -374,7 +374,7 @@
   :not(pre) > code {
     @apply text-red-600;
     background-color: rgba(0, 0, 0, 0.04);
-    word-break: break-al;
+    word-break: break-all;
   }
 
   /* ============================
