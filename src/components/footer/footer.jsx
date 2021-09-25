@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import Links from '../header/links/links'
 import ColorSchemeToggle from '../header/color-scheme-toggle/color-scheme-toggle'
 
-import style from './footer.module.css'
+import * as style from './footer.module.css'
 import NUbotsIcon from './nubots-icon.svg'
 
 const Footer = () => (
@@ -46,12 +46,14 @@ const Footer = () => (
       </div>
     </div>
     <div className='flex items-center justify-center pb-16'>
+      {/* eslint-disable react/jsx-no-target-blank */}
       <a
         href='https://www.netlify.com'
         className='opacity-50 dark:opacity-40 hover:opacity-100 focus:opacity-100 dark:hover:opacity-80 dark:focus:opacity-80'
-        target='_blank' // eslint-disable-line react/jsx-no-target-blank
+        target='_blank'
         rel='noopener'
       >
+        {/* eslint-enable */}
         <img
           className='dark:hidden'
           src='https://www.netlify.com/img/global/badges/netlify-light.svg'

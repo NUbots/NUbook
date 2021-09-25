@@ -6,7 +6,7 @@ description: Setup instructions for Webots.
 slug: /guides/tools/webots-setup
 ---
 
-[Webots](https://cyberbotics.com/) is a physics environment created by Cyberbotics. This guide details how to set up Webots. It gives instructions on setting up Ubuntu (WSL) inside Windows for Windows users, and the rest of the guide is aimed at Ubuntu users (including Windows WSL Ubuntu users).
+[Webots](https://cyberbotics.com/) is a physics environment created by Cyberbotics. This guide details how to set up Webots. It gives instructions on setting up Ubuntu (WSL) inside Windows for Windows users, and the rest of the guide is aimed at Ubuntu users (including Windows WSL Ubuntu users). If you would like to learn more about Webots itself, refer to [the Webots User Guide](https://cyberbotics.com/doc/guide/index).
 
 ## Prerequisites
 
@@ -76,51 +76,80 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ## Install Webots
 
-1. Open a terminal and swap to your home directory (note that Webots should be cloned in your home directory). Then clone the repository and change into the cloned directory:
+1. Open a terminal, clone the NUWebots repository and change into the cloned directory:
 
    ```bash
    cd ~
-   git clone --branch nubots-changes --single-branch --recurse-submodules -j$(nproc) https://github.com/NUbots/webots.git
-   cd webots
+   git clone https://github.com/NUbots/NUWebots.git
+   cd NUWebots
    ```
 
-   By using these commands, you'll be on the correct branch (`nubots-changes`) and you'll have the required submodules.
+   The NUWebots repo contains both NUbots-specific Webots files and the files needed to install Webots itself.
+   The first command can be changed to any directory you would like. If you're not sure, just follow what is in this guide.
 
-2. Install Webots build dependencies:
+2. This step assumes you have done the previous step and are now in the NUWebots directory. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+
+   ```
+   echo export WEBOTS_HOME=$(pwd)/webots >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+3. Update the submodules for the Webots subtree
 
    ```bash
+   git submodule update --init
+   ```
+
+4. Move into the webots directory and install the Webots build dependencies:
+
+   ```bash
+   cd webots
    sudo ./scripts/install/linux_compilation_dependencies.sh
    ```
 
-3. Build Webots:
+5. Build Webots:
 
    ```bash
    make -j$(nproc)
    ```
 
-4. Add the `WEBOTS_HOME` env variable to your `.bashrc` file:
+## Running the Official RoboCup Simulation in Webots
 
-   ```
-   echo WEBOTS_HOME=$HOME/webots >> ~/.bashrc
-   ```
+<Alert>
 
-5. Install dependencies for the referee:
+This section assumes you have completed the previous section, including adding the `WEBOTS_HOME` env variable to your `.bashrc` file (see step 2 above). Make sure this step is completed or adjust the following commands to your set up.
+
+</Alert>
+
+### Set Up the Protos
+
+1. Set up the symlink for the NUgus proto:
 
    ```bash
-   cd ~/webots/projects/samples/contests/robocup/controllers/referee
+   ln -s $WEBOTS_HOME/../protos/robot/NUgus $WEBOTS_HOME/projects/samples/contests/robocup/protos
+   ```
+
+   This allows us to use our NUgus robot with the official RoboCup simulation.
+
+### Set Up the Controllers
+
+1. Install dependencies for the referee:
+
+   ```bash
+   cd $WEBOTS_HOME/projects/samples/contests/robocup/controllers/referee
    pip3 install -r requirements.txt
    ```
 
-6. Build the Robocup controllers:
+2. Build the Robocup controllers:
 
    ```bash
-   cd ~/webots/projects/samples/contests/robocup
-   WEBOTS_HOME=$HOME/webots make -j$(nproc)
+   cd $WEBOTS_HOME/projects/samples/contests/robocup
+   make -j$(nproc)
    ```
 
-## Install Game Controller
+### Install Game Controller
 
-1. Install the ant build tool:
+1. Install the ant build tool and Java Development Kit:
 
    ```bash
    sudo apt-get install ant default-jdk
@@ -133,6 +162,8 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    git clone https://github.com/RoboCup-Humanoid-TC/GameController.git
    ```
 
+   The first command can be changed to any directory you would like. If you're not sure, just follow what is in this guide.
+
 3. Change into the cloned directory and build the GameController:
 
    ```bash
@@ -140,14 +171,112 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    ant
    ```
 
-## Get and Build the NUbots Environment
-
-1. Open a terminal. Clone the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository and move into it by running
+4. Add the `JAVA_HOME` and `GAME_CONTROLLER_HOME` env variable to your `.bashrc` file:
 
    ```bash
-   cd ~
-   git clone https://github.com/NUbots/NUWebots.git
-   cd NUWebots
+   echo export JAVA_HOME=/usr/lib/jvm/default-java >> ~/.bashrc
+   echo export GAME_CONTROLLER_HOME=$(pwd) >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+   The second command assumes you are still in the GameController directory from the previous step.
+
+### Run Webots with GameController
+
+1. Find your primary local IP address by running the following.
+
+   ```bash
+   hostname -I
+   ```
+
+   Your primary IP address is often the first of the addresses in the output returned. For example, if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
+
+2. Set the `GAME_CONTROLLER_UDP_FILTER` env variable to your local IP address from step 1 to ensure your instance of GameController is not affected by other instances of GameController on the network.
+
+   ```bash
+   export GAME_CONTROLLER_UDP_FILTER=<IP_ADDRESS> # replace <IP_ADDRESS> with your IP address from step 1
+   ```
+
+3. Run the following to open Webots with the Robocup world and the GameController:
+
+   ```bash
+   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
+   ```
+
+   <Alert>
+
+   Sometimes closing Webots doesn't properly close the GameController subprocess. If this happens you'll get an error about GameController when you next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
+
+   ```bash
+   kill -9 $(pgrep -fi GameControllerSimulator.jar)
+   ```
+
+   </Alert>
+
+### Set Up with the NUbots Robot Code
+
+Running the RoboCup scenario requires two things: [the Webots simulator](https://github.com/NUbots/NUWebots/webots), of which there is one instance; and [the robot code](https://github.com/NUbots/NUbots), of which there can be any number of instances equal to the number of robots you would like to run. These programs can be run on any combination of computers. All robots and the Webots simulator can be run locally on one computer, or a separate computer for the Webots simulator and each robot, or any combination inbetween.
+
+1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build on all computers that will be running robot code, if not done so already. When configuring, ensure that `ROLE_webotsrobocup` is `ON`.
+
+2. Set your UDP filter on all computers that will be running robot code to prevent them from receiving conflicting GameController packets. Go to the [GameController configuration file](https://github.com/NUbots/NUbots/blob/main/module/input/GameController/data/config/GameController.yaml) and set `udp_filter_address` to the `<IP_ADDRESS>` from the previous section in step 2.
+
+3. Ensure the IP and ports are set up correctly. If you are running everything locally on the one computer, the default settings should work as is. If Webots and the robot code are run on separate computers, do the following:
+
+   1. As done previously, get the hostname of each computer by running `hostname -I` in a terminal on each computer.
+
+   2. On each computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step. For any robots running on the same computer as the Webots simulator, do not change the IP.
+
+   3. On the computer you will be running the Webots simulator on, open the `NUWebots` repo in a text editor. Open the file `webots/projects/samples/contests/robocup/controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one).
+
+   4. Under `red: hosts:` add the hostname of any computers you are running the robot code on. For any robots running on the same computer as the Webots simulator, do not add its own hostname.
+
+4. Run the Webots simulator:
+
+   ```bash
+   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
+   ```
+
+#### Running One Robot
+
+If you want to test the behaviour of one robot in the Webots RoboCup scenario, you can run the binary from the usual NUbots docker container. The robot can be run on the same computer or on a different computer to the Webots simulator.
+
+1. Run `./b run webotsrobocup` on the computer you want to run the robot code on.
+
+#### Running Multiple Robots
+
+If you're running more than one robot, you will need to set up a Docker container for each robot. There can be any combination of different or same computers for each robot container and webots itself. E.g. you can run webots itself and a robot on one computer, three robots on another computer, and three on another computer. The more computers you have, the more complicated the IP set up will be for the config files.
+
+1. On all computers that will be running robot code, run `./b webots build webotsrobocup` once to build the container with the `webotsrobocup` role. Even if you are running multiple robots on that computer, you only need to run this once.
+
+2. Run the container with the command `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=<ROBOT_ID> -e ROBOCUP_TEAM_COLOR=<TEAM_COLOUR> -e ROBOCUP_SIMULATOR_ADDR=<WEBOTS_IP>:<ROBOT_PORT> robocup-vhsc-nubots:robocup2021 webotsrobocup`
+
+   Specifying `<ROBOT_ID>`, `<TEAM_COLOUR>` and `<ROBOT_PORT>` depending on which robot you want to run.
+
+   For example, if you are running everything locally on one computer, and you want to connect to robot number 1 on the red team, run
+   `docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup`
+
+   Open a new terminal for each robot you want to run.
+
+   If you want to run two teams of three NUgus robots all locally on the one computer with Webots, run each of the following lines in different terminals once Webots is running.
+
+   ```bash
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10001 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=2 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10002 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=3 -e ROBOCUP_TEAM_COLOR=red -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10003 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=1 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10021 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=2 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10022 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=3 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10023 robocup-vhsc-nubots:robocup2021 webotsrobocup
+   ```
+
+## Running a NUbots Environment
+
+Follow these steps to set up a NUbots developed environment rather than the RoboCup environment.
+
+1. Move to the `NUWebots` folder:
+
+   ```bash
+   cd $WEBOTS_HOME/..
    ```
 
 2. Install the python dependencies:
@@ -156,7 +285,7 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    pip3 install -r requirements.txt
    ```
 
-3. Configure the codebase by running
+3. Configure the codebase by running:
 
    ```bash
    ./b configure
@@ -189,57 +318,23 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    ./b build
    ```
 
-## Running Webots
-
-1. Navigate to the Webots folder
+5. Navigate to the Webots folder
 
    ```bash
-   cd ~/webots
+   cd webots
    ```
 
-2. Launch Webots by running
+6. Launch Webots by running
 
    ```bash
    ./webots
    ```
 
-3. Open the NUbots world file inside Webots.
+7. Open a NUbots world file inside Webots.
 
    1. Click on `File->Open World...`.
 
-   2. In the pop-up, navigate to the [NUbots/NUWebots](https://github.com/NUbots/NUWebots/) repository on your computer and open the `worlds/kid.wbt` world file.
-
-## Running Webots with GameController
-
-1. Find your primary local IP address by running the following.
-
-   ```bash
-   hostname -I
-   ```
-
-   Your primary IP address will usually be the first of the addresses in the output returned. For example, if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
-
-2. Set the `GAME_CONTROLLER_UDP_FILTER` env variable to your local IP address from step 1, to ensure your instance of GameController is not affected by other instances of GameController on the network.
-
-   ```bash
-   export GAME_CONTROLLER_UDP_FILTER=<IP_ADDRESS> # replace <IP_ADDRESS> with your IP address from step 1
-   ```
-
-3. Run the following to open Webots with the Robocup world and the GameController:
-
-   ```bash
-   JAVA_HOME=/usr/lib/jvm/default-java WEBOTS_HOME=$HOME/webots GAME_CONTROLLER_HOME=$HOME/GameController ~/webots/webots ~/webots/projects/samples/contests/robocup/worlds/robocup.wbt
-   ```
-
-   <Alert>
-
-   Sometimes closing Webots doesn't properly close the GameController subprocess. If this happens you'll get an error about GameController when you next launch Webots. To fix, run the following command which terminates the GameController process, then start Webots again:
-
-   ```bash
-   kill -9 $(pgrep -fi GameControllerSimulator.jar)
-   ```
-
-   </Alert>
+   2. In the pop-up, navigate to the [NUbots/NUWebots/worlds](https://github.com/NUbots/NUWebots/tree/main/worlds) folder on your computer and open the world you would like to run.
 
 ## Creating a New Controller
 

@@ -221,7 +221,7 @@ message WalkCommand {
 
 ### On Statements
 
-Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
+Looking at [`SensorFilter.cpp`](https://github.com/NUbots/NUbots/blob/main/module/platform/darwin/SensorFilter/src/SensorFilter.cpp) we can see some examples of NUClear on statements.
 
 The first on statement is located at [line 94](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L94) of `SensorFilter.cpp`.
 
@@ -236,7 +236,7 @@ The first on statement is located at [line 94](https://github.com/NUbots/NUbots/
 
 This spans lines 94 to 192, but has been shortened here.
 
-The DSL request is `on<Configuration>`. This means the runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
+The DSL request is `on<Configuration>`. This means the runtime argument here is `("SensorFilter.yaml")`. This is the [configuration file](https://github.com/NUbots/NUbots/blob/main/module/platform/darwin/SensorFilter/data/config/SensorFilter.yaml). The callback is
 
 ```cpp
 then([this](const Configuration& config) {
@@ -251,7 +251,7 @@ The `const Configuration& config` is a parameter of type `Configuration`. We can
 
 This value is then stored in the [member variable](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.h#L52) `debug` in the struct `config`.
 
-This reaction is used at startup to set many variables from a configuration file. The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L194) does this as well, but with the [`FootDownNetwork.yaml`](https://github.com/NUbots/NUbots/blob/master/module/platform/darwin/SensorFilter/data/config/FootDownNetwork.yaml) configuration file.
+This reaction is used at startup to set many variables from a configuration file. The [next on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L194) does this as well, but with the [`FootDownNetwork.yaml`](https://github.com/NUbots/NUbots/blob/main/module/platform/darwin/SensorFilter/data/config/FootDownNetwork.yaml) configuration file.
 
 The [third on statement](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L199) uses the DSL words `Last`, `Trigger` and `Single`.
 
@@ -262,7 +262,7 @@ on<Last<20, Trigger<DarwinSensors>>, Single>().then(
 });
 ```
 
-The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a `std::list`. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
+The DSL request is `on<Last<20, Trigger<DarwinSensors>>, Single>`. This says that we will create a task for this reaction when we receive a [`DarwinSensors`](https://github.com/NUbots/NUbots/blob/main/shared/message/platform/darwin/DarwinSensors.proto) message. The last 20 received `DarwinSensors` messages will be stored in a `std::list`. Finally, we used the `Single` word so we only run one task for this reaction at any given time. If a `DarwinSensors` message is received while a task is already running, a new task will **not** be created.
 
 None of the words used require runtime arguments, so we do not have any here. The callback is
 
@@ -287,11 +287,11 @@ on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Singl
 });
 ```
 
-The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
+The DSL request is `on<Trigger<DarwinSensors>, Optional<With<Sensors>>, With<KinematicsModel>, Single, Priority::HIGH>`. This will create a task when `DarwinSensors` and [`KinematicsModel`](https://github.com/NUbots/NUbots/blob/main/shared/message/motion/KinematicsModel.proto) messages are received. We do not need to have received a `Sensors` message since it is `Optional`. If a task is already running, a new task will not be created since the `Single` word is present. `Priority::HIGH` specifies that the PowerPlant should give this a `HIGH` priority when scheduling.
 
 As expected, our callback has `const DarwinSensors& input` and `const KinematicsModel& kinematicsModel` since we asked for the `DarwinSensors` and the `KinematicsModel` messages. The interesting part of this is the `std::shared_ptr<const Sensors> previousSensors`. This will either be a `nullptr` or a valid Sensors message. We [check in the function if the pointer is null](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/module/platform/darwin/SensorFilter/src/SensorFilter.cpp#L314) and this determines what we do.
 
-Looking at line 133 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/master/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L133) we can see an example of an `on<IO>` reaction.
+Looking at line 133 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/main/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L133) we can see an example of an `on<IO>` reaction.
 
 ```cpp
 on<IO>(STDIN_FILENO, IO::READ).then([this] {
@@ -327,17 +327,17 @@ An example of local emission can be seen on line 590 of [`SensorFilter.cpp`](htt
 emit(std::move(sensors));
 ```
 
-This emits a [`Sensors`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/Sensors.proto) message. This can then be received by reactors waiting for a `Sensors` message to trigger the reaction.
+This emits a [`Sensors`](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto) message. This can then be received by reactors waiting for a `Sensors` message to trigger the reaction.
 
-Looking at line 236 of [`GameController.cpp`](https://github.com/NUbots/NUbots/blob/master/module/support/NUsight/src/GameController.cpp#L236), we can see an example of NUClear network emission.
+Looking at line 236 of [`GameController.cpp`](https://github.com/NUbots/NUbots/blob/main/module/support/NUsight/src/GameController.cpp#L236), we can see an example of NUClear network emission.
 
 ```cpp
 powerplant.emit_shared<Scope::NETWORK>(std::move(gameState), "nusight", true);
 ```
 
-This tells the PowerPlant to emit something across the network. In this case, we are emitting `gameState`, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/master/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
+This tells the PowerPlant to emit something across the network. In this case, we are emitting `gameState`, which is a [`GameState`](https://github.com/NUbots/NUbots/blob/main/shared/message/input/GameState.proto) message. The target is `nusight`, signifying that it will be received by NUsight. `true` signifies that it is reliable.
 
-Looking at line 112 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/master/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L112), we can see an example of an `INITIALIZE` scoped emit statement.
+Looking at line 112 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/main/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L112), we can see an example of an `INITIALIZE` scoped emit statement.
 
 You will notice that this lambda accepts no parameters, instead it uses the `getch()` function to read a character from keyboard.
 
@@ -352,4 +352,4 @@ emit<Scope::INITIALIZE>(std::make_unique<RegisterAction>(RegisterAction{
     [this](const std::set<ServoID>&) {}}));
 ```
 
-This tells the PowerPlant to emit something at system initialization. In this case, we are emitting a [`RegisterAction`](https://github.com/NUbots/NUbots/blob/master/shared/utility/behaviour/Action.h#L34) which registers the `ScriptTuner` module with the subsumption system.
+This tells the PowerPlant to emit something at system initialization. In this case, we are emitting a [`RegisterAction`](https://github.com/NUbots/NUbots/blob/main/shared/utility/behaviour/Action.h#L34) which registers the `ScriptTuner` module with the subsumption system.

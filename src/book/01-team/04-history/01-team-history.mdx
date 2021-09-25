@@ -31,7 +31,7 @@ Because the competition was run virtually in simulation, there were no hardware 
 
 **Performance and Results**
 
-NUbots made it to the quarter-finals of the competition. Overall we played 5 games, won 1, drew 3 and lost 2.
+NUbots made it to the quarter-finals of the competition. Overall we played 5 games, won 1, drew 2 and lost 2.
 
 | Round          | Points | Played | Won | Drew | Lost |
 | -------------- | ------ | ------ | --- | ---- | ---- |
@@ -66,3 +66,70 @@ NUbots made it to the quarter-finals of the competition. Overall we played 13 ga
 | Eliminations for Quarter-Finals (Penalty Shootout) | 3      | 1      | 1   | 0    | 0    |
 | Quarter-Finals                                     | 0      | 1      | 0   | 0    | 1    |
 | Drop-Ins                                           | -5     | 8      | 4   | 1    | 3    |
+
+## 2010: Singapore
+
+**Major hardware changes**
+
+- Upgraded to NAOv3: Intel ATOM 1.6GHz, 1GB Ram
+
+** Performance and Results**
+
+NUbots were unfortunately knocked out during second round robins by rUNSWift.
+
+| Round              | Points | Played | Won | Drew | Lost |
+| ------------------ | ------ | ------ | --- | ---- | ---- |
+| First Round Robin  | 6      | 2      | 2   | 0    | 0    |
+| Second Round Robin | 2      | 3      | 0   | 2    | 1    |
+
+## 2009: Graz, Austria
+
+**Major hardware changes**
+
+- Aldebaran NAOs get an upgrade (NAOv2), dual non-overlapping cameras, so they can see their feet without having to bend over.
+
+**Major software changes**
+
+- Code purge, removed redundant AIBO Code realised by NUPlatform
+- New Git repository, moved away from CVS
+- Introduction of threading for NAOs, (SeeThinkThread: 30Hz, SenseMoveThread: 100Hz)
+- Blackboard based architecture
+- Soft colour classifications: starting using a transition colour, that can belong in different categories of objects, that is assigned an object with context at a later stage in the processing pipeline.
+- Advances in Line Detection, with the introduction of corner point (L and T shapes), penalty spot, and center circle detection (ellipse fitting).
+- Improvements in Localisation as a direct result of the additional field objects seen.
+- Multiple model extended Kalman Filter
+- Implemented Goal Keeper behaviour: right dive, left dive, and center
+
+** Performance and Results**
+
+NUBots were quarter-finalists in 2009.
+
+| Round          | Points | Played | Won | Drew | Lost |
+| -------------- | ------ | ------ | --- | ---- | ---- |
+| Round Robins   | 13     | 5      | 4   | 1    | 0    |
+| Quarter-Finals | 0:1    | 1      | 0   | 0    | 1    |
+
+## 2008: Suzhou, China
+
+**Major hardware changes**
+
+- First year with the Aldebaran NAOs (x86 AMD GEODE 500MHz CPU, 256 MB SDRAM / 2 GB flash memory)
+- Low-powered walk optimisation
+
+**Major Software changes**
+
+- Updated AIBO 2007 code base to interface with NAOQI (using Aldebarans middleware for communicating with NAOs low-level hardware).
+
+** Performance and Results**
+
+NUManoids (The University of Newcastle (NUbots) partnered with National University of Maynooth from Ireland) - **First place, Standard Platform League**.
+
+| Round                            | Points | Played | Won | Drew | Lost |
+| -------------------------------- | ------ | ------ | --- | ---- | ---- |
+| Round Robins                     | 12     | 4      | 1\* | 3    | 0    |
+| Quarter-Finals                   | 2:0    | 1      | 1   | 0    | 0    |
+| Semi-Finals                      | 1:0    | 1      | 1   | 0    | 0    |
+| Grand-Final (Time to Score Goal) | 1:0    | 1      | 1   | 0    | 0    |
+
+- The penalty shootout was judged based on the distance of the ball to the goal after three minutes.
+- Reference: https://spl.robocup.org/history/nao-results-2008/
