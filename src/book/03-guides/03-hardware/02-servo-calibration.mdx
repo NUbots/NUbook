@@ -18,7 +18,7 @@ To start testing, calibrating or updating the parameters of a servo do the follo
    ![Photo of the USB2Dynamixel attachment for Dynamixel Wizard connected to a computer](./images/servo_calibration/usb.jpg)
 
 2. Connect the power supply and the servo to the attached component of the USB2Dynamixel.
-   ![Photo of the servo cable connected to the power attachment of the USB2Dynamixel](./images/servo_calibration/power_supply.jpg)
+   ![Photo of the servo cable connected to the power attachment of the USB2Dynamixel](./images/servo_calibration/power_supply_and_comms.jpg)
 
 3. Open Dynamixel Wizard.
 
@@ -28,7 +28,7 @@ To calibrate a servo perform the following instructions:
 
 1. Select "**Tools -> Calibration**". A window will pop up with instructions on how to calibrate the servo.
 
-2. Select the correct servo model. The model will be written on the servo (either MX-64 for head and arm servos or MX-106 for leg servos). Do not select the 2.0 versions.
+2. Select the correct servo model. The model will be written on the servo (either MX-64 for head and arm servos or MX-106 for leg servos). Do **NOT** select the 2.0 versions.
 
 3. Select the correct communication port from the dropdown menu.
 
@@ -36,7 +36,7 @@ To calibrate a servo perform the following instructions:
 
 5. Rotate the servo so that the dot is in the 6-o'clock position (as seen in the instructions). Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
 
-![Photo of the servo rotating tool](./images/servo_calibration/servo_tool.jpg)
+   ![Photo of the servo rotating tool](./images/servo_calibration/servo_tool.jpg)
 
 6. Continue to rotate to each of the 3-o'clock, 12-o'clock and 9-o'clock positions when told by the software.
 
@@ -79,7 +79,12 @@ To update the servo parameters, perform the following instructions:
      | Head Yaw             | 19  |
      | Head Pitch           | 20  |
 
-     Note that roll is about the x-axis, pitch is about the y-axis, and yaw is about the z-axis.
+     Note that roll is about the x-axis, pitch is about the y-axis, and yaw is about the z-axis. The below diagram specifies the position of each servo within the robot when it is in its default (zombie) position.
+   <details>
+      <summary>Detailed diagram of NUgus servo axes</summary>
+
+      ![Diagram of NUgus robot with roll, pitch and yaw axes defined for each servo.](./images/servo_calibration/nugus_servo_axis.svg)
+   </details>
 
    - Baud Rate (Bus): 1M bps = 2M/(1 + 1)
 
@@ -91,7 +96,9 @@ To test the servo, perform the following instructions:
 
 1. Set the Goal Position in Dynamixel Wizard to 0, +90 and -90 and observe the position of the arrow on the horn. It should match the picture.
 
-2. Set the Goal Position in Dynamixel Wizard to some position either side of +180 to test if the servo is in joint mode. If it is it should take the long route around to the second position. If it does not, it is not in joint mode. _instructions on how to fix_
+2. Set the Goal Position in Dynamixel Wizard to some position either side of +180 to test if the servo is in joint mode. If it is it should take the long route around to the second position. If it does not, it is not in joint mode.
+a. To convert into joint mode, select "**Joint**" from the dropdown menu for the servo.
+![Screenshot of Dynamixel Wizard with mode type highlighted using a red box](./images/servo_calibration/to_joint.png)
 
 If the servo is performing correctly, we can disconnect the servo and use it in a robot.
 
