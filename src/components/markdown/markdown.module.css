@@ -51,6 +51,7 @@
     code {
       @apply p-1;
       @apply font-semibold;
+      @apply break-words;
     }
   }
 
