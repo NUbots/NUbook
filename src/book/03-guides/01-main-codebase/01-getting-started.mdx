@@ -279,7 +279,7 @@ Windows and MacOS users who want to connect to NUsight will need to set up the d
 ./b run keyboardwalkfake --network nuclearnet
 ```
 
-See the [NUsight](#nusight) section below for details.
+See the [NUsight](#get-build-and-run-nusight) section below for details.
 
 </Alert>
 
@@ -445,7 +445,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 6. Inspect the network to find the NUbots container's IP address
 
    ```bash
-   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
    ```
 
    The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
