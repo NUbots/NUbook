@@ -118,11 +118,11 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
    - Open Windows Powershell in administrator mode.
    - Run the following to install WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
      ```
    - Run the following to enable the Virtual Machine Platform feature needed for WSL:
-     ```
+     ```bash
      dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
      ```
    - Restart your computer.
@@ -275,11 +275,11 @@ If you are following the example, run `./b run keyboardwalkfake`. If you are on 
 
 Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
 
-```
+```bash
 ./b run keyboardwalkfake --network nuclearnet
 ```
 
-See the [NUsight](#nusight) section below for details.
+See the [NUsight](#get-build-and-run-nusight) section below for details.
 
 </Alert>
 
@@ -334,31 +334,33 @@ NUsight is a visual debugging web application used at NUbots that visually repre
 
 You will need this for our example to see the robot walking when we run `keyboardwalkfake`.
 
-Before setting up NUsight you'll need to configure what messages you will use. Open up the Nusight configuration file by running
+Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
 
 ```bash
-./b edit config/NUsight.yaml
+./b edit config/NetworkForwarder.yaml
 ```
 
 This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
 
-Set the messages you would like NUsight to receive to 'true'. For our example, you need `sensor_data` set to true.
+Set the messages you would like NUsight to receive to 'true'. For our example, you need `message.input.Sensors` set to true.
+
+Open up a new terminal to run NUsight and NUbots code side by side.
 
 <details>
 
 <summary>Ubuntu/Linux Mint</summary>
 
-1. Get NUsight and move into the new directory by running
+1. Install Node.js by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+   sudo apt-get install -y nodejs
    ```
 
-2. Install Node.js by running
+2. Install npm by running
 
    ```bash
-   sudo apt install node
+   sudo apt install npm
    ```
 
 3. Configure the package repository and install yarn by running
@@ -372,13 +374,13 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 4. Get the dependencies for NUsight by running
 
    ```bash
-   yarn
+   ./b yarn
    ```
 
 5. Build NUsight by running
 
    ```bash
-   yarn build
+   ./b yarn build
    ```
 
 6. Find the IP address of the Docker container. Run
@@ -392,7 +394,7 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 7. Run the following command to run NUsight
 
    ```bash
-   yarn prod --address <ADDRESS>
+   ./b yarn prod --address <ADDRESS>
    ```
 
    <Alert type='info'>
@@ -409,11 +411,10 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 
 <summary> Windows/MacOS </summary>
 
-1. Get NUsight and cd into the directory by running
+1. NUsight is within the NUbots repository. Move into the NUsight directory by running
 
    ```bash
-   git clone https://github.com/NUbots/NUsight2.git NUsight
-   cd NUsight
+   cd nusight2
    ```
 
 2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
@@ -444,7 +445,7 @@ Set the messages you would like NUsight to receive to 'true'. For our example, y
 6. Inspect the network to find the NUbots container's IP address
 
    ```bash
-   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nubots_generic
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
    ```
 
    The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
@@ -475,7 +476,7 @@ By now you will have gone through this page and have everything set up to make t
 
 - Running the Code: Running with a Simulated Robot
 
-- Get, Build and Run NUsight
+- Build and Run NUsight
 
 With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
 
@@ -483,4 +484,4 @@ With the `keyboardwalkfake` binary running (with `--network nuclearnet` if using
 
 - You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
 
-- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move.
+- To make the robot walk, go into the terminal that is running `keyboardwalkfake` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.

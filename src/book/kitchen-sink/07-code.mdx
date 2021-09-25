@@ -10,7 +10,7 @@ slug: /kitchen-sink/code
 hidden: true
 ---
 
-# Code blocks
+## Code blocks
 
 ```jsx
 import React from 'react'
@@ -37,18 +37,9 @@ export default ({ children, className }) => {
 }
 ```
 
-## Code in a grid
+### Code in a grid
 
-<Grid columns='1fr 1fr' caption="Hello world in different languages" seamless>
-
-```java
-// Java
-public class HelloWorld {
-  public static void main(String[] args) {
-    System.out.println("Hello world!");
-  }
-}
-```
+<Grid columns='1fr 1fr' caption="Hello world in languages used in NUbook" seamless>
 
 ```cpp
 // C++
@@ -68,21 +59,30 @@ print('Hello world!')
 console.log('Hello world!')
 ```
 
-```php
-// PHP
-<?php
-
-echo 'Hello world!';
-
-?>
+```bash
+# Bash
+echo "hello world"
 ```
 
-```c
-// C
-int main(void) {
-  printf("Hello world!");
-  return 0;
-}
+```yaml
+# YAML
+- msg: 'hello world'
+```
+
+```md
+<!-- Markdown -->
+
+# Hello world
+```
+
+```docker
+# Docker
+RUN echo "Hello world"
+```
+
+```cmake
+# CMake
+message(STATUS "Hello world")
 ```
 
 </Grid>

@@ -1,0 +1,174 @@
+---
+section: Guides
+chapter: Main Codebase
+title: Data Recording and Playback
+description: How to record data from a running system and play it back.
+slug: /guides/main/data-recording-playback
+---
+
+The NUbots system is based on [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
+
+## Recording Data
+
+The following steps detail how to record data. An example will be given throughout showing how to record sensors messages on a real robot.
+
+1. Set up the [role](/system/foundations/nuclear#nuclear-roles) for recording. Most of the time this involves making minor changes to an existing role.
+
+   - The role must contain the module/s which emit the message/s you want to record.
+   - The role must contain the module `support::logging::DataLogging`.
+
+   For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto) messages. You could use the existing [sensortest](https://github.com/NUbots/NUbots/blob/main/roles/sensortest.role) role and add `support::logging::DataLogging` to it.
+
+2. Set up the data logging configuration file. This involves making changes to [`DataLogging.yaml`](https://github.com/NUbots/NUbots/tree/main/module/support/logging/DataLogging/data/config).
+
+   - Add in the messages you want to log, and set their values to `true`.
+
+     In this example, the sensors message already exists in the file (`message.input.Sensors`). Set the boolean to `true` next to this message.
+
+     If you would like to log a different message, do the following:
+
+     1. Find the `.proto` file that defines that message, such as [`Sensors.proto`](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto).
+     2. Find what the `package` is. For `Sensor.proto`, it is `package message.input`.
+     3. Piece this together with the message name (`message Sensors` in the `.proto` file) to get `message.input.Sensors`
+     4. Add this to the configuration file with the other messages.
+
+     You can enable multiple messages at once, and they will all be recorded.
+
+   - **If** you are **not** running on a real robot, e.g. you are logging data from a simulator, change the output directory of the logs.
+
+     1. Find the line `directory: log` in the configuration file.
+     2. Change `log` to `recordings`.
+
+3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/nubots/getting-started) page.
+
+4. Run the binary for the role you want to record.
+
+   **Locally in Docker:** In the same location you built the code, run the binary using the command `./b run <role_name>`.
+
+   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./sensortest`.
+
+5. Stop the binary when you have finished recording by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
+
+6. Retrieve the log file.
+
+   **Locally in Docker:** The log file will be in your NUbots directory under `/recordings/<role_name>`.
+
+   **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else installs to the robot any recordings will be lost, so immediately copy them to another computer.
+
+   1. The NBS file will be located on the robot in the `log/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `log/sensortest/18072020T082100.nbs`.
+   2. Copy the file across. On the destination computer, run:
+
+      ```bash
+      scp nubots@<address>:log/role_name/file_name path/to/destination
+      ```
+
+      For our example, you could run:
+
+      ```bash
+      # Replace <address> with the robot's IP address
+      scp nubots@<address>:log/sensortest/18072020T082100.nbs .
+      ```
+
+      The file will be copied from the robot to the folder you ran the command in. The [`scp`](https://linux.die.net/man/1/scp) command is like the regular [`cp`](https://linux.die.net/man/1/cp) command, but it copies to or from another computer over SSH. The first path in the command points to the file we are copying and the second path points to where we want to copy that file to.
+
+## Extracting Data
+
+NBS files are binary and not easily human-readable. There are tools in the NUbots codebase to convert NBS files to alternative formats that are easier to understand.
+
+These tools are grouped under the [`./b nbs`](https://github.com/NUbots/NUbots/tree/main/tools/nbs) command in the NUbots codebase, and can be executed by running:
+
+```bash
+./b nbs <tool_name> <nbs_file_name> <arguments>
+```
+
+### Stats
+
+Generates statistics about the messages in an NBS file. This includes a count of each message type in the file, and how many messages there are in total.
+
+```bash
+# Example
+./b nbs stats path/to/file.nbs
+```
+
+| Argument              | Definition                                                        |
+| --------------------- | ----------------------------------------------------------------- |
+| `--message-timestamp` | Uses the message's `.timestamp` field as the time of the message. |
+
+### JSON
+
+Converts the data in an NBS file to JSON, and prints the output. To save the output to a file, append `> file.json` to the command.
+
+```bash
+# Example
+./b nbs json path/to/file.nbs > file.json
+```
+
+### Extract Images
+
+Extracts JPEG image files from `CompressedImage` messages in an NBS file. It will also write each image's metadata (`Hcw` and lens information) to a JSON file next to the extracted image.
+
+```bash
+# Example
+./b nbs extract_images path/to/file.nbs --output path/to/output-folder/
+```
+
+| Argument   | Definition                                  | Default                       |
+| ---------- | ------------------------------------------- | ----------------------------- |
+| `--output` | Specifies the folder to save the images to. | The current working directory |
+
+### Video
+
+Extracts images from `CompressedImage` messages in an NBS file, and combines them into an MP4 video.
+
+```bash
+# Example
+./b nbs video path/to/file.nbs --output path/to/output-folder/
+```
+
+| Argument    | Definition                                  | Default                       |
+| ----------- | ------------------------------------------- | ----------------------------- |
+| `--output`  | The folder to save the video to.            | The current working directory |
+| `--quality` | The quality to save the video in.           | 30M                           |
+| `--encoder` | The encoder to use when encoding the video. | h264_nvenc                    |
+
+### Calibrate Cameras
+
+Calculates camera intrinsics using an NBS recording of asymmetric circles grid patterns.
+
+| Argument          | Definition                                                           | Default  |
+| ----------------- | -------------------------------------------------------------------- | -------- |
+| `--config`        | The path to the directory containing the camera configuration files. | Required |
+| `--rows`          | The number of rows in the asymmetric circles grid.                   | 4        |
+| `--cols`          | The number of columns in the asymmetric circles grid.                | 11       |
+| `--grid_size`     | The distance between rows/cols in the grid in meters.                | 0.04     |
+| `--no-intrisics`  | Does not change the intrinsic configuration values.                  | -        |
+| `--no-extrinsics` | Does not change the extrinsic configuration values.                  | -        |
+
+### Foot Down
+
+Trains a foot down network using sensor data from the legs.
+
+```bash
+# Example
+./b nbs footdown path/to/data-folder/
+```
+
+## Playing Back Data
+
+Messages recorded to an NBS file can be played back to the system. When an NBS file is played back, the messages in it are emitted into the system at the same (relative) times they were recorded.
+
+Following on from the previous example, lets now run `sensortest.role` with recorded sensor data to analyse the results more closely without using the robot.
+
+1. Remove any modules that emit the message/s you recorded. In this example, remove the SensorFilter module, since it emits `Sensors`. To do so, remove `platform::darwin::SensorFilter` from the role.
+2. Add `support::logging::DataPlayback` to the role.
+3. Add in the path to the NBS file in `DataPlayback.yaml`. If the file is in the `recordings` directory, then just add in the file name.
+4. Add in the messages you are playing back in `DataPlayback.yaml`, in the same way it was done in `DataLogging.yaml`. In the example, change `message.input.Sensors` to `true`.
+5. Recompile and run the role you are playing back the data with. In the example, rerun `./b configure` and `./b build`, then run `./b run sensortest` to locally run the role.
+6. For this example, it makes sense to view the robot in NUsight. Find out how to set up NUsight on the [NUbook Getting Started page](/guides/main/getting-started#get-build-and-run-nusight).
+
+Playing back recorded data is useful when:
+
+- Working remotely, where the data is previously recorded or recorded by another team member
+- Testing a system with the same input data
+- Not wanting to run the real robot continuously, where it is possible to use the same data
+- Viewing the Visual Mesh in NUsight, due to bandwidth issues in sending it over the network

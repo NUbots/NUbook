@@ -8,7 +8,58 @@ slug: /system/subsystems/behaviour
 
 The behaviour subsystem includes walk planning, soccer strategies, get up detection, head behaviour, script running and tuning, and kick behaviour.
 
-# Script Runner
+## Walk Behaviour
+
+The [Direct Walk Controller](https://github.com/NUbots/NUbots/tree/main/module/behaviour/skills/DirectWalkController) sends messages to the walk engine. It can send a message to enable or disable the walk engine, stop the walk engine, or send a `WalkCommand` message to the walk engine.
+
+### Keyboard Walk
+
+The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/KeyboardWalk) is used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase, and acts as an interface for any one of them.
+
+Keyboard walk uses **keyboard inputs** to control the robot. The inputs available are detailed in the following table.
+
+| Command      | Description                                                                      |
+| ------------ | -------------------------------------------------------------------------------- |
+| <kbd>e</kbd> | Toggles the walk on and off. Initially it is off.                                |
+| <kbd>w</kbd> | Adds 0.01 to the walk command x-value. This value is in meters/second.           |
+| <kbd>s</kbd> | Adds -0.01 to the walk command x-value. This value is in meters/second.          |
+| <kbd>a</kbd> | Adds 0.01 to the walk command y-value. This value is in meters/second.           |
+| <kbd>d</kbd> | Adds -0.01 to the walk command y-value. This value is in meters/second.          |
+| <kbd>z</kbd> | Adds 0.1 to the walk command rotational value. This value is in radians/second.  |
+| <kbd>x</kbd> | Adds -0.1 to the walk command rotational value. This value is in radians/second. |
+| <kbd>,</kbd> | Runs the kick with the left foot.                                                |
+| <kbd>.</kbd> | Runs the kick with the right foot.                                               |
+| <kbd>g</kbd> | Runs the get up.                                                                 |
+| <kbd>←</kbd> | Head turns to the left.                                                          |
+| <kbd>→</kbd> | Head turns to the right.                                                         |
+| <kbd>↑</kbd> | Head turns upwards.                                                              |
+| <kbd>↓</kbd> | Head turns downwards.                                                            |
+| <kbd>r</kbd> | Resets keyboardwalk. Head rotation is set to 0. Walk command is set to 0.        |
+| <kbd>q</kbd> | Quits keyboardwalk.                                                              |
+
+To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalk.role) and run the binary.
+
+The [**keyboardwalkfake** role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalkfake.role) uses HardwareSimulator, and is useful for when you don't want to run keyboard walk on the robot.
+
+### PS3 Walk
+
+The [PS3 walk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/PS3Walk) is an interface for **testing** and **demonstrating** the walk and other functionalities using a **PS3 controller**.
+
+The module connects to the PS3 controller using bluetooth (or USB) and reacts based on joystick or button input.
+
+| Command                   | Description                                |
+| ------------------------- | ------------------------------------------ |
+| Left Joystick Horizontal  | Adds rotational speed to the walk command. |
+| Left Joystick Vertical    | Adds x speed to the walk command.          |
+| Right Joystick Horizontal | Changes the head yaw.                      |
+| Right Joystick Vertical   | Changes the head pitch.                    |
+| TRIANGLE                  | Toggles walking on/off.                    |
+| SQUARE                    | Toggles locking of the head.               |
+| R2                        | Right kick.                                |
+
+To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. When the controller is connected to the robot, it will be paired, and you can remove the cable.
+
+## Script Runner
 
 [ScriptRunner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptRunner) is a module in the behaviour subsystem. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute. Any role with the ScriptRunner module must also contain the [ScriptEngine](/system/subsystems/motion#script-engine) module.
 
@@ -20,7 +71,7 @@ An example of using ScriptRunner to run a script called `Stand.yaml` is:
 ./scriptrunner Stand.yaml
 ```
 
-# Script Tuner
+## Script Tuner
 
 [ScriptTuner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptTuner) is a module in the behaviour subsystem. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](<https://en.wikipedia.org/wiki/Curses_(programming_library)>) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
 
