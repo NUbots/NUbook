@@ -87,6 +87,6 @@ To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/main/tunin
 
 [A state-machine](https://www.freecodecamp.org/news/state-machines-basics-of-computer-science-d42855debc66/) is currently being implemented to use a switch case so that depending on the latest motion command the path planner will call a function to perform a specific 'style' of path. For example, this may be following a [Bezier curve](https://javascript.info/bezier-curve#maths) to reach the required orientation and position to perform a kick toward the goal if the robot is in an offensive position or role which will be decided within Soccer Strategy, or if the robot is a goalie or similar defensive role it moves to the required position in a straight linear path to get there more quickly.
 
-### Implemenation of Bezier Curves
+### Implementation of Bezier Curves
 
 Bezier curves are functions that are defined by a limited series of control points. Based on emits from localisation and vision modules to determine the positions of the robot, ball, and goals, these control points, and as such the curve the robot would follow, is dynamically corrected in real-time.
