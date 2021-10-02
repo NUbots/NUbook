@@ -232,20 +232,20 @@ Running the RoboCup scenario requires two things: [the Webots simulator](https:/
    4. Under `red: hosts:` add the IP address given by the following command for any computers you are running the robot code on. For any robots running on the same computer as the Webots simulator, do not add its own hostname.
 
       <details>
-         <summary>Windows</summary>
+      <summary>Windows</summary>
 
-         ```bash
-         cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f2
-         ```
+      ```bash
+      cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f2
+      ```
          
       </details>
 
       <details>
-         <summary>Linux</summary>
+      <summary>Linux</summary>
 
-         ```bash
-         hostname -I
-         ```
+      ```bash
+      hostname -I
+      ```
 
       </details>
 
