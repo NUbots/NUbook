@@ -8,7 +8,7 @@ slug: /guides/hardware/servo-calibration
 
 Servos are electromechanical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it should be removed and replaced with a new servo.
 
-Before a servo is first used, its default parameters need to be updated to ensure correct operation. This is done using [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
+Before a servo is first used, its default parameters need to be updated to ensure correct operation. This is done using Dynamixel Wizard, which can be installed via a Windows .exe here: [Dynamixel Wizard](https://www.robotis.com/service/download.php?no=1670).
 
 ## Set Up
 
@@ -30,11 +30,11 @@ To calibrate a servo perform the following instructions:
 
 2. Select the correct servo model. The model will be written on the servo (either MX-64 for head and arm servos or MX-106 for leg servos). Do **NOT** select the 2.0 versions.
 
-3. Select the correct communication port from the dropdown menu.
+3. Select the correct communication port from the dropdown menu (if correctly connected, this port will autofill).
 
-4. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The software will then install the firmware to the servo.
+4. Disconnect the servo from the USB attachment for a few seconds and then reconnect. If the software does not detect the disconnection, retry. If it fails, redo the calibration from step one. The calibration wizard will then install the firmware to the servo.
 
-5. Rotate the servo so that the dot is in the 6-o'clock position (as seen in the instructions). Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
+5. Rotate the servo so that the dot is in the 6-o'clock position (will be shown visually in the calibration wizard). Use the tool pictured to move the horn and use the marks on the tool to line up the dot correctly.
 
    ![Photo of the servo rotating tool](./images/servo_calibration/servo_tool.jpg)
 
@@ -81,7 +81,7 @@ To update the servo parameters, perform the following instructions:
 
      Note that roll is about the x-axis, pitch is about the y-axis, and yaw is about the z-axis. The below diagram specifies the position of each servo within the robot when it is in its default (zombie) position.
      <details>
-        <summary>Detailed diagram of NUgus servo axes</summary>
+      <summary>Detailed diagram of NUgus servo axes</summary>
 
      ![Diagram of NUgus robot with roll, pitch and yaw axes defined for each servo.](./images/servo_calibration/nugus_servo_axis.svg)
      </details>
