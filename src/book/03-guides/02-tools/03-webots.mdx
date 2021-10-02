@@ -345,3 +345,46 @@ From the root of the NUWebots repository run
 ```
 
 Where `<name of controller>` is the name you want to use for the new controller. A folder and files will be created with this name, so they must be valid file names (don't use spaces in your controller name).
+
+## Recording a Game
+
+NUbots runs full Webots games to benchmark the current performance of the code. The following steps describe how to create a video of a full game.
+
+1. Ensure you have followed the previous steps [Install Webots](#install-webots) and [Running the Official RoboCup Simulation in Webots](#running-the-official-robocup-simulation-in-webots).
+
+2. Set up the game configuration. 
+   
+   1. Open the [game.json file](https://github.com/NUbots/NUWebots/blob/main/webots/projects/samples/contests/robocup/controllers/referee/game.json). 
+   2. Change the `"blue":` `"id"` to `12`. 
+   3. Change the `"blue":` `config:` field to `"team_1.json"`. 
+
+   At the moment, there is an issue due to the fact that both teams have the same team ID since they are both NUbots teams. A penalty to one robot will also penalise the corresponding robot on the other team. 
+
+3. Open a terminal and run the following to open Webots with the Robocup world and the GameController:
+
+   ```bash
+   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
+   ```
+
+   Pause the simulation when it opens. The world and robots will load in but the game will not start yet.
+
+4. Open a separate terminal and run the robot code.
+
+   ```bash
+   ./b webots game -r 6 webotsrobocup
+   ```
+
+   This will start all six robots, three for each team. 
+
+5. Adjust the view in Webots as that the whole field is visible.
+
+6. Click the HTML5 animation record button in Webots, as shown in the image below. This will record an interactive version of the game.
+
+   ![Screenshot of webots emphasising the HTML5 animation record button.]('Screenshot of webots emphasising the record button.' ./images/webots-record.png)
+
+
+7. Click the button directly to the left of the HTML5 animation button to simulatiously record a standard video of the game.
+
+8. Once the game has finished, press <kbd>Esc</kbd> to exit fullscreen mode and when prompted save the video. This video can be shared in the Google Drive or on our YouTube channel.
+
+9. Click the HTML5 animation record button again to stop the recording and when prompted save the recording. This can be uploaded to the Google Drive and can be used to review the game with more flexibility than a standard video. 
