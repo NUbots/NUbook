@@ -1,12 +1,26 @@
 ---
 section: Guides
 chapter: General
-title: Code Documentation
-description: How to use documentation tags
-slug: /guides/general/documentation
+title: Code Conventions
+description: Code conventions used in our code.
+slug: /guides/general/code-conventions
 ---
 
-## Conventions
+## Naming Conventions
+
+### Case
+
+This section details what case is to be used in NUbots code.
+
+| Scenerio      | Case Type            | Example                                       |
+| ------------- | -------------------- | --------------------------------------------- |
+| Class name    | PascalCase           | `class MyClass {};`                           |
+| Function name | snake_case           | `void my_function();`                         |
+| Variable name | snake_case           | `int my_variable;`                            |
+| Constants     | SCREAMING_SNAKE_CASE | `static const int MY_CONSTANT_VARIABLE = 10;` |
+| `yaml` fields | snake_case           | `my_field: 0.0`                               |
+
+## Documentation
 
 We use tokens called "directives" or "tags" to annotate different parts of a comment with rich metadata. These directives start with `@` or `\` (`@` is preferred) and are followed by the directive name, arguments (for some directives), and a single line of description.
 
@@ -83,6 +97,6 @@ class SimulationRobot {
 }
 ```
 
-## Future
+### Future
 
 In the future we are planning to use a combination of Doxygen and our NUClear mapper for automatic low level documentation of our code, which will be included in NUbook.
