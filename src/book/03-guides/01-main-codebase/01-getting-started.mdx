@@ -127,12 +127,18 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
      ```
    - Restart your computer.
 
-3. Go to the Microsoft Store. Search for Ubuntu and install it. Launch Ubuntu.
+3. Go to the Microsoft Store. Search for '**Ubuntu 20.04 LTS**' and install it. Launch Ubuntu.
 
 4. Ensure Ubuntu is using WSL 2.
 
-   - In Powershell, run `wsl --list --verbose`.
-   - If the version is not 2, run `wsl --set-version ubuntu 2`.
+   - In Powershell, run:
+     ```bash
+     wsl --list --verbose
+     ```
+   - If the version is not 2, run:
+     ```bash
+     wsl --set-version Ubuntu-20.04 2
+     ```
 
    <Alert type='info'> Note that 'ubuntu' in the last command may need to be capitalised. Check the exact spelling from the list output in the first command of this step. </Alert>
 
