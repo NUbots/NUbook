@@ -91,10 +91,4 @@ packages to prevent any changes from breaking the docker build. There were also 
 modifications that needed to be made to these scripts in order to get them to build correctly.
 
 Kaldi in particular has no semantic versioning and is actively maintained on the `master` branch.
-The build script for Kaldi checks out a particular version to prevent the builds from randomly breaking.
-
-### Future Directions
-
-1. Voice2json supports wake words using [Precise](https://github.com/MycroftAI/mycroft-precise).
-   This could be used instead of putting the robot into always listening modes.
-2. Voice2json supports multiple languages. You could try adding multi-lingual support.
+The build script for Kaldi checks out a particular version to prevent our builds from failing due to changes on Kaldi's `master`.
