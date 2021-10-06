@@ -384,7 +384,7 @@ NUbots runs full Webots games to benchmark the current performance of the code. 
 
    Pause the simulation when it opens. The world and robots will load in but the game will not start yet.
 
-4. Open a separate terminal and run the robot code.
+4. Open a separate terminal and build the robot code.
 
    ```bash
    ./b webots build webotsrobocup
@@ -398,14 +398,30 @@ NUbots runs full Webots games to benchmark the current performance of the code. 
 
    This will start all six robots, three for each team.
 
-5. Adjust the view in Webots so that the whole field is visible.
+6. Adjust the view in Webots so that the whole field is visible.
 
-6. Click the HTML5 animation record button in Webots, as shown in the image below. This will record an interactive version of the game.
+7. Click the HTML5 animation record button in Webots, as shown in the image below. This will record an interactive version of the game.
 
-   ![Screenshot of webots emphasising the HTML5 animation record button.](./images/webots-record.png 'screenshot of webots emphasising the HTML5 animation record button.')
+   ![Screenshot of webots emphasising the HTML5 animation record button.](./images/webots-record.png 'screenshot of Webots emphasising the HTML5 animation record button.')
 
-7. Click the button directly to the left of the HTML5 animation button to simultaneously record a standard video of the game.
+8. Click the button directly to the left of the HTML5 animation button to simultaneously record a standard video of the game.
 
-8. Once the game has finished, press <kbd>Esc</kbd> to exit fullscreen mode and when prompted save the video. This video can be shared in the Google Drive or on our YouTube channel.
+9. Once the game has finished, press <kbd>Esc</kbd> to exit fullscreen mode and when prompted save the video. This video can be shared in the Google Drive or on our YouTube channel.
 
-9. Click the HTML5 animation record button again to stop the recording and when prompted save the recording. This can be uploaded to the Google Drive and can be used to review the game with more flexibility than a standard video.
+10. Click the HTML5 animation record button again to stop the recording and when prompted save the recording. This can be uploaded to the Google Drive and can be used to review the game with more flexibility than a standard video.
+
+### Viewing a HTML5 Animation
+
+If you created or downloaded a HTML5 animation as above and would like to view it, follow these instructions.
+
+1. [Install Node.js](https://nodejs.org/en/download/).
+
+2. Open a terminal in the folder the animation is located in and run
+
+   ```bash
+   http-server
+   ```
+
+3. Open the URL in a browser. It is typically [http://127.0.0.1:8080](http://127.0.0.1:8080).
+
+4. Navigate to the `.html` document in the browser. The Webots world should load and you should be able to play the simulation as if it were a video, with the ability to move around the scene.
