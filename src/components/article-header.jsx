@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
+import Contributions from './contributions/contributions'
 
 const ArticleHeader = ({ section, chapter, title, description }) => (
   <div className='mb-8 article-header'>
@@ -40,6 +41,7 @@ const ArticleHeader = ({ section, chapter, title, description }) => (
     <div className='text-secondary dark:text-secondary-inverted text-base'>
       {description}
     </div>
+    <Contributions />
   </div>
 )
 
