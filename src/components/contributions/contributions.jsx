@@ -3,13 +3,14 @@ import EditIcon from './edit-icon.svg'
 
 const lastUpdated = '11th Oct 2021'
 
-const Contributions = ({ data }) => {
+const Contributions = () => {
   return (
     <div className='text-secondary dark:text-secondary-inverted text-base mt-6 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 py-3 flex'>
       <div className='flex-grow'></div>
-      <div className='pr-3'>
-        <a>
-          Last updated <span className='text-nubots-700'>{lastUpdated}</span>
+      <div className='pr-3 capitalize'>
+        <a className='lg:normal-case'>
+          <span className='hidden lg:inline'>Last</span> updated{' '}
+          <span className='text-nubots-700'>{lastUpdated}</span>
         </a>
       </div>
       <div className='border-l-2 dark:border-gray-800 pl-3'>
