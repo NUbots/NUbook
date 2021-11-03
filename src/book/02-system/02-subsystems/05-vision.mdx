@@ -111,7 +111,9 @@ All goal post edge points (points that are goal points that have at least one ne
 
 - The cluster is larger than a given threshold
 
-The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure the distance from. If there is more than one cluster, i.e. more than one goal post, an attempt is made to pair up the goal posts. This is done by calculating the distances between the posts and pairing up goal posts which are close together. **Leftness** and **rightness** is assigned to each post in a pair based on their positions.
+The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure the distance from. If this distance is too large, as defined in the configuration file, the goal post is discarded.
+
+If there is more than one cluster, i.e. more than one goal post, an attempt is made to pair up the goal posts. This is done by calculating the distances between the posts and pairing up goal posts which are close together. **Leftness** and **rightness** is assigned to each post in a pair based on their positions.
 
 The goal detector then emits any goals as a [Goals message](https://github.com/NUbots/NUbots/blob/main/shared/message/vision/Goal.proto).
 
