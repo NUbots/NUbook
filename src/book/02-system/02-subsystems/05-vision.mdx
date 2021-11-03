@@ -52,11 +52,11 @@ After clustering has finished, one cluster will remain which should represent **
 
 The [ball detector](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/) receives a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/main/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/main/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field as well as the radius of the ball being used.
 
-The ball detector forms **clusters** out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points. Clusters are discarded if they fail to meet any of the following criteria
+The ball detector forms **clusters** out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points. Clusters are discarded if
 
-- The cluster is below the green horizon.
+- The cluster is not below the green horizon.
 
-- The cluster is larger than a given threshold.
+- The cluster is smaller than a given threshold.
 
 Remaining clusters are fitted with a **circular cone**. The **cone axis** is determined from the line segment between the centre of the camera and the centre of the ball, determined by averaging all of the ball edge points. The **radius** of the cone is determined by the maximum distance between the ball edge points and the centre of the ball. Clusters are **discarded** if they fail to meet any of the following criteria
 
@@ -105,11 +105,11 @@ Any remaining clusters are assumed to be balls and so are emitted together as a 
 
 The [goal detector](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
-All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if they fail to meet any of the following criteria
+All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if
 
-- The cluster intersects the green horizon (we assume goals are higher than the field)
+- The cluster does not intersect the green horizon (we assume goals are higher than the field)
 
-- The cluster is larger than a given threshold
+- The cluster is smaller than a given threshold
 
 From the remaining clusters, clusters are merged if they lie on the same vertical vector. This is to prevent detection of the same post twice and to prevent detection of back posts. The bottom centre point of each cluster is then found by averaging the edge points. This is the point where we measure the distance from. If this distance is too large, as defined in the configuration file, the goal post is discarded.
 
