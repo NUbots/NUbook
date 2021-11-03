@@ -107,7 +107,7 @@ The [goal detector](https://github.com/NUbots/NUbots/blob/main/module/vision/Goa
 
 All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if
 
-- The cluster does not intersect the green horizon (we assume goals are higher than the field)
+- The cluster does not intersect the green horizon (goals are assumed to extend higher than the field, and therefore intersect the green horizon)
 
 - The cluster is smaller than a given threshold
 
