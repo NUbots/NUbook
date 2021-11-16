@@ -10,7 +10,7 @@ const Contributions = ({ data }) => {
   })
   const editLink = `https://github.com/NUbots/NUbook/edit/main/${file.path}`
   return (
-    <div className='text-secondary dark:text-secondary-inverted text-base mt-6 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 py-3 flex'>
+    <div className='text-sm text-secondary dark:text-secondary-inverted mb-6 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 py-3 flex'>
       <div className='flex-grow'></div>
       <div className='pr-3 capitalize'>
         <a
@@ -20,13 +20,17 @@ const Contributions = ({ data }) => {
           rel='noreferrer'
         >
           <span className='hidden lg:inline'>Last</span> updated{' '}
-          <span className='text-nubots-700'>{lastUpdated}</span>
+          <span className='text-nubots-700 dark:text-nubots-500'>
+            {lastUpdated}
+          </span>
         </a>
       </div>
       <div className='border-l-2 dark:border-gray-800 pl-3'>
         <a href={editLink} className='flex items-center w-full'>
           <EditIcon className='h-5' />
-          <span className='pl-1 hidden lg:block text-nubots-700'>Edit</span>
+          <span className='pl-1 hidden lg:block text-nubots-700 dark:text-nubots-500'>
+            Edit
+          </span>
         </a>
       </div>
     </div>
