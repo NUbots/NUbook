@@ -9,6 +9,7 @@ import SEO from './seo'
 import Sidebar from './sidebar/sidebar'
 import TableOfContents from './table-of-contents/table-of-contents'
 import Footer from './footer/footer'
+import Contributions from './contributions/contributions'
 
 const Layout = ({ children, data, pageContext }) => {
   const {
@@ -78,6 +79,7 @@ const Layout = ({ children, data, pageContext }) => {
                   title={title}
                   description={description}
                 />
+                <Contributions data={data} />
                 <Markdown>{children}</Markdown>
               </article>
               <ArticleNavigation next={next} previous={previous} />
@@ -96,6 +98,23 @@ const Layout = ({ children, data, pageContext }) => {
 Layout.propTypes = {
   children: PropTypes.node,
   data: PropTypes.shape({
+    github: PropTypes.shape({
+      repository: PropTypes.shape({
+        object: PropTypes.shape({
+          history: PropTypes.shape({
+            nodes: PropTypes.arrayOf({
+              author: PropTypes.shape({
+                date: PropTypes.string,
+              }),
+              url: PropTypes.string,
+            }),
+          }),
+          file: PropTypes.shape({
+            path: PropTypes.string,
+          }),
+        }),
+      }),
+    }),
     mdx: PropTypes.shape({
       frontmatter: PropTypes.shape({
         chapter: PropTypes.string,
