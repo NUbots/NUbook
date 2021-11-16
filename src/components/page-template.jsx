@@ -15,6 +15,23 @@ const PageTemplate = (props) => {
 
 PageTemplate.propTypes = {
   data: PropTypes.shape({
+    github: PropTypes.shape({
+      repository: PropTypes.shape({
+        object: PropTypes.shape({
+          history: PropTypes.shape({
+            nodes: PropTypes.arrayOf({
+              author: PropTypes.shape({
+                date: PropTypes.string,
+              }),
+              url: PropTypes.string,
+            }),
+          }),
+          file: PropTypes.shape({
+            path: PropTypes.string,
+          }),
+        }),
+      }),
+    }),
     mdx: PropTypes.shape({
       id: PropTypes.string.isRequired,
       body: PropTypes.string.isRequired,
@@ -36,7 +53,26 @@ PageTemplate.propTypes = {
 export default PageTemplate
 
 export const query = graphql`
-  query ($id: String!) {
+  query ($id: String!, $mdxPath: String!) {
+    github {
+      repository(name: "NUbook", owner: "NUbots") {
+        object(expression: "main") {
+          ... on GitHub_Commit {
+            history(path: $mdxPath) {
+              nodes {
+                author {
+                  date
+                }
+                url
+              }
+            }
+            file(path: $mdxPath) {
+              path
+            }
+          }
+        }
+      }
+    }
     mdx(id: { eq: $id }) {
       id
       body
