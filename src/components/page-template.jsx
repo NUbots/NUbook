@@ -6,8 +6,9 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import Layout from './layout'
 
 const PageTemplate = (props) => {
+  const commit = props.data.github.repository.object.history.nodes[0]
   return (
-    <Layout pageContext={props.pageContext} data={props.data}>
+    <Layout pageContext={props.pageContext} data={props.data} commit={commit}>
       <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
     </Layout>
   )
@@ -19,19 +20,11 @@ PageTemplate.propTypes = {
       repository: PropTypes.shape({
         object: PropTypes.shape({
           history: PropTypes.shape({
-            nodes: PropTypes.arrayOf({
-              author: PropTypes.shape({
-                date: PropTypes.string,
-              }),
-              url: PropTypes.string,
-            }),
-          }),
-          file: PropTypes.shape({
-            path: PropTypes.string,
-          }),
-        }),
-      }),
-    }),
+            nodes: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+          }).isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
     mdx: PropTypes.shape({
       id: PropTypes.string.isRequired,
       body: PropTypes.string.isRequired,
@@ -65,9 +58,6 @@ export const query = graphql`
                 }
                 url
               }
-            }
-            file(path: $mdxPath) {
-              path
             }
           }
         }

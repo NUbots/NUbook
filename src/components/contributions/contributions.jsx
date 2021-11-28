@@ -2,20 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import EditIcon from './edit-icon.svg'
 
-const Contributions = ({ data }) => {
-  const commit = data.github.repository.object.history.nodes[0]
-  const file = data.github.repository.object.file
-  const lastUpdated = new Date(commit.author.date).toLocaleString('en-AU', {
+const Contributions = ({ date, url, mdxPath }) => {
+  const lastUpdated = new Date(date).toLocaleString('en-AU', {
     dateStyle: 'long',
   })
-  const editLink = `https://github.com/NUbots/NUbook/edit/main/${file.path}`
+  const editLink = `https://github.com/NUbots/NUbook/edit/main/${mdxPath}`
   return (
     <div className='text-sm text-secondary dark:text-secondary-inverted mb-6 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 py-3 flex'>
       <div className='flex-grow'></div>
       <div className='pr-3 capitalize'>
         <span className='hidden lg:inline'>Last</span> updated{' '}
         <a
-          href={commit.url}
+          href={url}
           target='_blank'
           className='lg:normal-case'
           rel='noreferrer'
@@ -38,25 +36,9 @@ const Contributions = ({ data }) => {
 }
 
 Contributions.propTypes = {
-  data: PropTypes.shape({
-    github: PropTypes.shape({
-      repository: PropTypes.shape({
-        object: PropTypes.shape({
-          history: PropTypes.shape({
-            nodes: PropTypes.arrayOf({
-              author: PropTypes.shape({
-                date: PropTypes.string,
-              }),
-              url: PropTypes.string,
-            }),
-          }),
-          file: PropTypes.shape({
-            path: PropTypes.string,
-          }),
-        }),
-      }),
-    }),
-  }),
+  date: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  mdxPath: PropTypes.string.isRequired,
 }
 
 export default Contributions
