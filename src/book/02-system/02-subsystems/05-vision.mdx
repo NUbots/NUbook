@@ -52,7 +52,7 @@ After clustering has finished, one cluster will remain which should represent **
 
 The [ball detector](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/) receives a GreenHorizon message and a [FieldDescription message](https://github.com/NUbots/NUbots/blob/main/shared/message/support/FieldDescription.proto). The FieldDescription message is output by the [SoccerConfig module](https://github.com/NUbots/NUbots/tree/main/module/support/configuration/SoccerConfig) which creates the FieldDescription message from configuration values specifying the layout of the soccer field as well as the radius of the ball being used.
 
-The ball detector forms **clusters** out of all the points that the Visual Mesh has identified as ball points. Specifically, the clusters are formed from Visual Mesh points that are identified as being a ball point but have at least $1$ neighbour which is **not** a ball point. This allows us to form clusters of ball edge points. Clusters are discarded if
+The ball detector forms **clusters** out of all the points that the Visual Mesh has determined are *likely* to be ball points. The clusters are formed from Visual Mesh points that have a ball confidence **above** a certain threshold and have at least $1$ neighbour which has a ball confidence **below** this threshold. This allows the formation of clusters of ball edge points. Clusters are discarded if
 
 - The cluster is not below the green horizon.
 
