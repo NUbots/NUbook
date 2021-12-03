@@ -42,7 +42,7 @@ All calculations in the detectors are done in **3D world coordinates**. To find 
 
 When the [green horizon detector](https://github.com/NUbots/NUbots/blob/main/module/vision/GreenHorizonDetector/) receives a VisualMesh message, it uses the information in this message to create one large **cluster** of points that is determined to be the field.
 
-The points are first filtered to give only potential field points. The first field point is added to a cluster with all its **field point neighbours**. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
+The points are first filtered to give only potential field points, based on a confidence threshold. The first field point is added to a cluster with all its **field point neighbours**. Neighbouring field points are added to the cluster until all field points who are neighbours of the points in the cluster are added to the cluster.
 
 Clustering is repeated until all field points are part of a cluster. Clusters that are smaller than a given threshold are **discarded**. Clusters are **merged** unless they overlap. If the clusters overlap, we keep the larger cluster and discard the smaller cluster.
 
@@ -105,7 +105,7 @@ Any remaining clusters are assumed to be balls and so are emitted together as a 
 
 The [goal detector](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/src/GoalDetector.cpp) follows a similar structure to the ball detector. It receives a GreenHorizon and a FieldDescription message.
 
-All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. Clusters are **discarded** if
+All goal post edge points (points that are goal points that have at least one neighbour that is **not** a goal point) are found and partitioned into clusters. A point is a goal point if it has a goal confidence higher than a given threshold. Clusters are **discarded** if
 
 - The cluster does not intersect the green horizon (goals are assumed to extend higher than the field, and therefore intersect the green horizon)
 
