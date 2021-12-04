@@ -27,13 +27,14 @@ const Grid = ({ children, rows, columns, gap, caption, seamless }) => {
     }
   `
   return (
-    <figure
-      className={`${style.grid} ${gapStyles[gap] ?? style.gridGapSmall} ${
-        seamless ? style.gridSeamless : ''
-      } `}
-    >
+    <figure className={`${style.grid} ${seamless ? style.gridSeamless : ''} `}>
       <style dangerouslySetInnerHTML={{ __html: styleContent }}></style>
-      <div id={id} className={style.gridContent}>
+      <div
+        id={id}
+        className={`${style.gridContent}  ${
+          gapStyles[gap] ?? style.gridGapSmall
+        }`}
+      >
         {children}
       </div>
       {caption && (
