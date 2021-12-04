@@ -236,10 +236,10 @@ Here are some resources for learning how to draw graphs with Graphviz:
 
 You can show content such as images, code, and math equations side-by-side in a grid.
 
-The following example shows four images in a 2x2 grid with a caption:
+The following example shows four images in a 2x2 grid with large spacing between items and a caption:
 
 ```md
-<Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
+<Grid columns='1fr 1fr' rows="1fr 1fr" gap="large" caption="Some lovely pets">
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
 ![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
@@ -250,6 +250,8 @@ The following example shows four images in a 2x2 grid with a caption:
 ```
 
 The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+
+The `gap` property sets the spacing between items in the grid, and can be one of `none` (no gap), `small` (the default), `medium`, `large`, or `extra-large`.
 
 ### Images in Tabs
 
