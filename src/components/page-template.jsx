@@ -55,6 +55,12 @@ export const query = graphql`
               nodes {
                 author {
                   date
+                  name
+                  avatarUrl
+                  user {
+                    url
+                    id
+                  }
                 }
                 url
               }
