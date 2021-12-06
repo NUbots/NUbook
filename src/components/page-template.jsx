@@ -9,9 +9,18 @@ const PageTemplate = (props) => {
   const commits = props.data.github.repository.object.history.nodes
   const commit = commits[0]
 
-  const contributors = commits.filter(
+  const unique = commits.filter(
     (v, i, a) => a.findIndex((t) => t.author.user.id === v.author.user.id) === i
   )
+
+  const contributors = []
+  unique.forEach((commit) => {
+    contributors.push({
+      avatar: commit.author.avatarUrl,
+      url: commit.author.user.url,
+      name: commit.author.name,
+    })
+  })
 
   return (
     <Layout

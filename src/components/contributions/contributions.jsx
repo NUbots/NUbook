@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import EditIcon from './edit-icon.svg'
 
-const Contributions = ({ date, url, mdxPath }) => {
+const Contributions = ({ date, url, mdxPath, contributors }) => {
   const lastUpdated = new Date(date).toLocaleString('en-AU', {
     dateStyle: 'long',
   })
@@ -39,6 +39,13 @@ Contributions.propTypes = {
   date: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   mdxPath: PropTypes.string.isRequired,
+  contributors: PropTypes.arrayOf(
+    PropTypes.shape({
+      avatar: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 }
 
 export default Contributions
