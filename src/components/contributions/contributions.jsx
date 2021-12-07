@@ -4,7 +4,7 @@ import EditIcon from './edit-icon.svg'
 
 const Contributions = ({ date, url, mdxPath, contributors }) => {
   const lastUpdated = new Date(date).toLocaleString('en-AU', {
-    dateStyle: 'long',
+    dateStyle: 'medium',
   })
 
   const editLink = `https://github.com/NUbots/NUbook/edit/main/${mdxPath}`
