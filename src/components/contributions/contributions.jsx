@@ -10,12 +10,12 @@ const Contributions = ({ date, url, mdxPath, contributors }) => {
   const editLink = `https://github.com/NUbots/NUbook/edit/main/${mdxPath}`
   return (
     <div className='text-sm text-secondary dark:text-secondary-inverted mb-6 border-t-2 border-b-2 border-gray-200 dark:border-gray-800 py-2 flex items-center'>
-      <div className='flex-grow flex gap-x-2'>
+      <div className='flex-grow flex gap-x-1 flex-wrap h-7 overflow-hidden'>
         {contributors.map((contributor, i) => {
           return (
-            <a className='w-7 h-auto' key={i} href={contributor.url}>
+            <a key={i} href={contributor.url}>
               <img
-                className='rounded-full'
+                className='h-7 rounded-full'
                 title={contributor.name}
                 src={contributor.avatar}
               />
@@ -23,7 +23,7 @@ const Contributions = ({ date, url, mdxPath, contributors }) => {
           )
         })}
       </div>
-      <div className='pr-3 capitalize inline-block'>
+      <div className='pr-3 capitalize inline-block whitespace-nowrap ml-1'>
         <span className='hidden lg:inline'>Last</span> updated{' '}
         <a
           href={url}
