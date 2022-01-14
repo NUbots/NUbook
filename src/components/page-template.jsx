@@ -5,9 +5,10 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 
 import Layout from './layout'
 
-const PageTemplate = props => {
+const PageTemplate = (props) => {
+  const commit = props.data.github.repository.object.history.nodes[0]
   return (
-    <Layout pageContext={props.pageContext} data={props.data}>
+    <Layout pageContext={props.pageContext} data={props.data} commit={commit}>
       <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
     </Layout>
   )
@@ -15,6 +16,15 @@ const PageTemplate = props => {
 
 PageTemplate.propTypes = {
   data: PropTypes.shape({
+    github: PropTypes.shape({
+      repository: PropTypes.shape({
+        object: PropTypes.shape({
+          history: PropTypes.shape({
+            nodes: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
+          }).isRequired,
+        }).isRequired,
+      }).isRequired,
+    }).isRequired,
     mdx: PropTypes.shape({
       id: PropTypes.string.isRequired,
       body: PropTypes.string.isRequired,
@@ -36,7 +46,23 @@ PageTemplate.propTypes = {
 export default PageTemplate
 
 export const query = graphql`
-  query($id: String!) {
+  query ($id: String!, $mdxPath: String!) {
+    github {
+      repository(name: "NUbook", owner: "NUbots") {
+        object(expression: "main") {
+          ... on GitHub_Commit {
+            history(path: $mdxPath) {
+              nodes {
+                author {
+                  date
+                }
+                url
+              }
+            }
+          }
+        }
+      }
+    }
     mdx(id: { eq: $id }) {
       id
       body

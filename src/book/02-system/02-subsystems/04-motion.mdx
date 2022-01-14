@@ -12,7 +12,7 @@ This page details motion modules within the NUbots main codebase, such as the wa
 
 NUbots use an **open loop walk** based on **quintic splines**. This walk engine takes care of the mathematics and control involved in taking steps without falling over. The walk engine does not plan where to walk, only how to walk.
 
-The walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/master/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements). The walk command gives a vector `[x, y, z]` which represents:
+The walk engine will trigger when a [**walkcommand**](https://github.com/NUbots/NUbots/blob/main/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements). The walk command gives a vector `[x, y, z]` which represents:
 
 | Variable | Description                                                                                |
 | -------- | ------------------------------------------------------------------------------------------ |
@@ -59,7 +59,7 @@ The `TrajectoryUtils` file uses the `SplineContainer` for walking and kicking. I
 | `FOOT_AXIS_Y`          | The orientation of the robot's flying foot in the y-axis.                                |
 | `FOOT_AXIS_Z`          | The orientation of the robot's flying foot in the z-axis.                                |
 
-The points that make up all these splines are in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/889d5ec2e91b2dc0ab7be59429e3c21b786b7b65/module/motion/QuinticWalk/src/WalkEngine.cpp#L271). The [configuration parameters](https://github.com/NUbots/NUbots/blob/master/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
+The points that make up all these splines are in the [WalkEngine.cpp file](https://github.com/NUbots/NUbots/blob/889d5ec2e91b2dc0ab7be59429e3c21b786b7b65/module/motion/QuinticWalk/src/WalkEngine.cpp#L271). The [configuration parameters](https://github.com/NUbots/NUbots/blob/main/module/motion/QuinticWalk/data/config/QuinticWalk.yaml) affect some of these points. Values are all in [SI units](https://en.wikipedia.org/wiki/International_System_of_Units).
 
 ## Script Engine
 
