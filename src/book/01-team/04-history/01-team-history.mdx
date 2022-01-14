@@ -8,15 +8,43 @@ slug: /team/history
 
 NUbots have competed in RoboCup every year since 2002.
 
-NUbots have competed in the Four Legged League (2002-2007), the Standard Platform League (2008-2011) and the Humanoid KidSize League (2012-2017). As of 2018, NUbots competes in the Humanoid TeenSize League.
+NUbots have competed in the Four Legged League (2002-2007), the Standard Platform League (2008-2011), the Humanoid KidSize League (2012-2017) and the Humanoid TeenSize League (2018-2019).
 
 NUbots became the Four Legged League world champions in 2006 in Germany. NUbots, in collaboration with the National University of Maynooth from Ireland, won the first Standard Platform League in 2008, as team NUManoid in Suzhou, China.
 
-## 2020: Bordeaux, France (postponed)
+## 2021: Online
 
-The 2020 RoboCup competition was scheduled to occur in the city of Bordeaux in France in June. This was postponed to 2021 due to the COVID-19 global pandemic.
+RoboCup went online in 2021 for all leagues, due to the COVID-19 global pandemic. NUbots participated in the Humanoid KidSize League, which was held using the [Webots simulator by Cyberbotics](https://cyberbotics.com/).
+
+**Major hardware changes**
+
+Because the competition was run virtually in simulation, there were no hardware changes. A robot model with touch sensors on the feet was created for use in the competition.
+
+**Major software changes**
+
+- Support for Webots
+- Major fix/improvement of the Unscented Kalman Filter used for odometry
+- Creation of new particle filter for localisation
+- Implementation of new walk engine, the Quintic Walk from team Bit-Bots.
+- Visual Mesh v2
+- NUsight odometry view
+
+**Performance and Results**
+
+NUbots made it to the quarter-finals of the competition. Overall we played 5 games, won 1, drew 2 and lost 2.
+
+| Round          | Points | Played | Won | Drew | Lost |
+| -------------- | ------ | ------ | --- | ---- | ---- |
+| Round Robins   | 5      | 4      | 1   | 2    | 1    |
+| Quarter-Finals | 0      | 1      | 0   | 0    | 1    |
+
+## 2020: Bordeaux, France (cancelled)
+
+The 2020 RoboCup competition was scheduled to occur in the city of Bordeaux in France in June. This was postponed to 2021 due to the COVID-19 global pandemic, but then cancelled early 2021 due to the ongoing pandemic.
 
 ## 2019: Sydney, Australia
+
+RoboCup 2019 was held in Sydney, Australia.
 
 **Major hardware changes**
 
@@ -38,3 +66,70 @@ NUbots made it to the quarter-finals of the competition. Overall we played 13 ga
 | Eliminations for Quarter-Finals (Penalty Shootout) | 3      | 1      | 1   | 0    | 0    |
 | Quarter-Finals                                     | 0      | 1      | 0   | 0    | 1    |
 | Drop-Ins                                           | -5     | 8      | 4   | 1    | 3    |
+
+## 2010: Singapore
+
+**Major hardware changes**
+
+- Upgraded to NAOv3: Intel ATOM 1.6GHz, 1GB Ram
+
+** Performance and Results**
+
+NUbots were unfortunately knocked out during second round robins by rUNSWift.
+
+| Round              | Points | Played | Won | Drew | Lost |
+| ------------------ | ------ | ------ | --- | ---- | ---- |
+| First Round Robin  | 6      | 2      | 2   | 0    | 0    |
+| Second Round Robin | 2      | 3      | 0   | 2    | 1    |
+
+## 2009: Graz, Austria
+
+**Major hardware changes**
+
+- Aldebaran NAOs get an upgrade (NAOv2), dual non-overlapping cameras, so they can see their feet without having to bend over.
+
+**Major software changes**
+
+- Code purge, removed redundant AIBO Code realised by NUPlatform
+- New Git repository, moved away from CVS
+- Introduction of threading for NAOs, (SeeThinkThread: 30Hz, SenseMoveThread: 100Hz)
+- Blackboard based architecture
+- Soft colour classifications: starting using a transition colour, that can belong in different categories of objects, that is assigned an object with context at a later stage in the processing pipeline.
+- Advances in Line Detection, with the introduction of corner point (L and T shapes), penalty spot, and center circle detection (ellipse fitting).
+- Improvements in Localisation as a direct result of the additional field objects seen.
+- Multiple model extended Kalman Filter
+- Implemented Goal Keeper behaviour: right dive, left dive, and center
+
+** Performance and Results**
+
+NUBots were quarter-finalists in 2009.
+
+| Round          | Points | Played | Won | Drew | Lost |
+| -------------- | ------ | ------ | --- | ---- | ---- |
+| Round Robins   | 13     | 5      | 4   | 1    | 0    |
+| Quarter-Finals | 0:1    | 1      | 0   | 0    | 1    |
+
+## 2008: Suzhou, China
+
+**Major hardware changes**
+
+- First year with the Aldebaran NAOs (x86 AMD GEODE 500MHz CPU, 256 MB SDRAM / 2 GB flash memory)
+- Low-powered walk optimisation
+
+**Major Software changes**
+
+- Updated AIBO 2007 code base to interface with NAOQI (using Aldebarans middleware for communicating with NAOs low-level hardware).
+
+** Performance and Results**
+
+NUManoids (The University of Newcastle (NUbots) partnered with National University of Maynooth from Ireland) - **First place, Standard Platform League**.
+
+| Round                            | Points | Played | Won | Drew | Lost |
+| -------------------------------- | ------ | ------ | --- | ---- | ---- |
+| Round Robins                     | 12     | 4      | 1\* | 3    | 0    |
+| Quarter-Finals                   | 2:0    | 1      | 1   | 0    | 0    |
+| Semi-Finals                      | 1:0    | 1      | 1   | 0    | 0    |
+| Grand-Final (Time to Score Goal) | 1:0    | 1      | 1   | 0    | 0    |
+
+- The penalty shootout was judged based on the distance of the ball to the goal after three minutes.
+- Reference: https://spl.robocup.org/history/nao-results-2008/

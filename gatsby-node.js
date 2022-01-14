@@ -74,12 +74,12 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     })
 
   // Hide sections and chapters in the menu if all their content is hidden
-  menu.forEach(section => {
-    section.chapters.forEach(chapter => {
-      chapter.hidden = chapter.pages.every(page => page.hidden)
+  menu.forEach((section) => {
+    section.chapters.forEach((chapter) => {
+      chapter.hidden = chapter.pages.every((page) => page.hidden)
     })
 
-    section.hidden = section.chapters.every(chapter => chapter.hidden)
+    section.hidden = section.chapters.every((chapter) => chapter.hidden)
   })
 
   const templatePath = path.resolve('./src/components/page-template.jsx')
@@ -93,6 +93,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       path: node.frontmatter.slug,
       component: templatePath,
       context: {
+        mdxPath: path
+          .relative(__dirname, node.fileAbsolutePath)
+          .split(path.sep)
+          .join(path.posix.sep),
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
@@ -132,7 +136,7 @@ exports.onCreatePage = ({ page, actions }) => {
  */
 function findOrCreateSection(menu, node) {
   const section = menu.find(
-    section => section.title === node.frontmatter.section
+    (section) => section.title === node.frontmatter.section
   )
 
   if (section) {
@@ -156,7 +160,7 @@ function findOrCreateSection(menu, node) {
  */
 function findOrCreateChapter(section, node) {
   const chapter = section.chapters.find(
-    chapter => chapter.title === node.frontmatter.chapter
+    (chapter) => chapter.title === node.frontmatter.chapter
   )
 
   if (chapter) {
@@ -214,4 +218,49 @@ function getPrevious(previousNode, posts, index) {
   }
 
   return getPrevious(previous.node, posts, index - 1)
+}
+
+/**
+ * Customise the webpack config.
+ */
+exports.onCreateWebpackConfig = ({ stage, actions, getConfig, plugins }) => {
+  disableMiniCssExtractPluginOrder({ stage, actions, getConfig, plugins })
+}
+
+/**
+ * Replace MiniCssExtractPlugin with a new instance that has the `ignoreOrder`
+ * option set. With Tailwind and CSS modules, we have non-colliding and
+ * namespaced class names across files respectively. That means we can
+ * safely ignore the order warnings from MiniCssExtractPlugin.
+ * See https://webpack.js.org/plugins/mini-css-extract-plugin/#remove-order-warnings
+ */
+function disableMiniCssExtractPluginOrder({
+  stage,
+  actions,
+  getConfig,
+  plugins,
+}) {
+  const config = getConfig()
+
+  const miniCssExtractPluginIndex = config.plugins.findIndex(
+    (plugin) => plugin.constructor.name === 'MiniCssExtractPlugin'
+  )
+
+  if (miniCssExtractPluginIndex > -1) {
+    if (stage === 'build-javascript') {
+      config.plugins[miniCssExtractPluginIndex] = plugins.extractText({
+        filename: `[name].[contenthash].css`,
+        chunkFilename: `[name].[contenthash].css`,
+        ignoreOrder: true,
+      })
+    } else {
+      config.plugins[miniCssExtractPluginIndex] = plugins.extractText({
+        filename: `[name].css`,
+        chunkFilename: `[id].css`,
+        ignoreOrder: true,
+      })
+    }
+  }
+
+  actions.replaceWebpackConfig(config)
 }

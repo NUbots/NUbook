@@ -30,7 +30,7 @@ slug: /guides/general/glossary
 
 [**Buildkite**](https://buildkite.com/): A platform for running fast, secure, and scalable continuous integration pipelines, which NUbots runs on machines in the NUbots lab.
 
-[**Calibration Tool**](https://github.com/NUbots/NUbots/blob/master/tools/nbs/calibrate_cameras.py): NUbots automatic tool for calibrating the cameras in the head which are used for the robot's vision.
+[**Calibration Tool**](https://github.com/NUbots/NUbots/blob/main/tools/nbs/calibrate_cameras.py): NUbots automatic tool for calibrating the cameras in the head which are used for the robot's vision.
 
 [**Clang**](https://clang.llvm.org/): A compiler, frontend, and tooling infrastructure used for C and C++ which is part of the LLVM infrastructure.
 
@@ -50,7 +50,7 @@ slug: /guides/general/glossary
 
 [**Convolution**](https://en.wikipedia.org/wiki/Convolution): A function which transforms two functions into another. [Convolutional Neural Networks](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNNs) are very commonly used for image processing and computer vision, working by passing filters across the image and combining those outputs in further layers.
 
-[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before mak[ing the NUgus.
+[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before making the NUgus.
 
 [**Deep Learning**](https://en.wikipedia.org/wiki/Deep_learning): Machine learning techniques which utilise artificial neural networks with many layers.
 
@@ -62,7 +62,7 @@ slug: /guides/general/glossary
 
 [**Dynamixel**](https://www.robotis.us/dynamixel/): The _Robotis_ servo models which NUgus uses.
 
-[**Eigen**](https://eigen.tuxfamily.org/): The C++ linear algebra library NUbots uses. Documentation can be found [here](https://eigen.tuxfamily.org/dox/index.html).
+[**Eigen**](https://eigen.tuxfamily.org/): The C++ linear algebra library NUbots uses. Documentation can be found [here](https://eigen.tuxfamily.org/dox/index.html). List of common pitfalls can be found [here](https://eigen.tuxfamily.org/dox/TopicPitfalls.html).
 
 [**Euler Angles**](https://en.wikipedia.org/wiki/Euler_angles): Roll, Pitch, and Yaw - they describe rotation for three orthogonal axes.
 
@@ -103,6 +103,10 @@ slug: /guides/general/glossary
 [**Mahony Filter**](https://nitinjsanket.github.io/tutorials/attitudeest/mahony): A complementary filter which estimates attitude, angle, and orientation using IMU data.
 
 [**Motion Capture (mocap)**](https://en.wikipedia.org/wiki/Motion_capture): The recording of movements of moving objects, which keeps track of specific points on the object as it moves.
+
+[**Motive**](https://optitrack.com/software/motive/): The particular Motion Capture software used in the NUbots laboratory.
+
+[**NatNet**](https://optitrack.com/software/natnet-sdk/): The networking library that facilitates communication of Motive Motion Capture data across a network.
 
 [**NimbRo**](http://www.nimbro.net/): A RoboCup team from the University of Bonn, Germany.
 
@@ -174,9 +178,18 @@ slug: /guides/general/glossary
 
 **Subsumption**: The priority system that determines if a neutron gets access to the servos it wants to control.
 
+[**Tensorboard**](https://www.tensorflow.org/tensorboard): Visualisation toolkit used to inspect the training performance of the visual mesh.
+
+[**Tensorflow**](https://www.tensorflow.org): Machine Learning library used by the Visual Mesh, which powers most of NUbots vision.
+
 [**Transform**](https://en.wikipedia.org/wiki/Transformation_matrix): Short for transformation. Sometimes, a matrix representation of a transformation.
 
 [**Transformation**](<https://en.wikipedia.org/wiki/Transformation_(function)>): A function which maps a set to itself (sometimes called an operator on that set). Often, it is used in the context of a spatial manipulation - regularly representated as a translation and a rotation.
+
+**Units**: [S.I. units](https://en.wikipedia.org/wiki/International_System_of_Units) are used for everything but time. Storage of values may have a different unit, e.g. [nbs and nbs index files](/system/foundations/nuclear#nbs-files).
+In c++ units are a templated parameter to [NUClear::clock::duration](https://en.cppreference.com/w/cpp/chrono/duration) and [NUClear::clock::time_point](https://en.cppreference.com/w/cpp/chrono/time_point) is unit agnostic.
+
+[**TFRecord**](https://www.tensorflow.org/tutorials/load_data/tfrecord): Binary format used by the Visual Mesh to store input data - contains image, mask, and lens metadata records.
 
 [**Undefined Behaviour Sanitizer/UBSAN**](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html): A package which you can build into your program to detect C++ undefined behaviour when you run your program.
 

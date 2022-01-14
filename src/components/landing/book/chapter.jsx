@@ -13,7 +13,7 @@ const Chapter = ({ title, pages }) => {
         {title}
       </h3>
       <div>
-        {pages.map(page => (
+        {pages.map((page) => (
           <a
             href={page.slug}
             key={page.slug}

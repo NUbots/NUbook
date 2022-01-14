@@ -91,9 +91,6 @@
     }
 
     code {
-      @apply p-4;
-      overflow-x: auto;
-
       &::-webkit-scrollbar {
         width: 0.7rem;
         height: 0.7rem;
@@ -310,8 +307,8 @@
   /* ============================
    * Math
    * ============================ */
-  :global(.katex-display) {
-    @apply mb-0;
+  :global(.math .katex-display) {
+    @apply m-0;
   }
 
   /* ============================
@@ -377,6 +374,7 @@
   :not(pre) > code {
     @apply text-red-600;
     background-color: rgba(0, 0, 0, 0.04);
+    word-break: break-all;
   }
 
   /* ============================

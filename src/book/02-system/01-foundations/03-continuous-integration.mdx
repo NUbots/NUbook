@@ -12,18 +12,18 @@ NUbots uses [Buildkite](https://buildkite.com) for its continuous integration pi
 
 This CI process works in combination with the [Git Feature Branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) we use for development:
 
-1. Developers branch off `master`, creating a new branch with a name of the form `<lastname>/<purpose-of-branch>`. For example:
+1. Developers branch off `main`, creating a new branch with a name of the form `<lastname>/<purpose-of-branch>`. For example:
 
-   ```sh
+   ```bash
    git checkout -b biddulph/ball-detector
    ```
 
 2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. This triggers a webhook to Buildkite to build and test the PR.
 3. Buildkite receives the webhook and creates separate build jobs for different parts of the PR (build, check code format, test, etc) and sends different jobs to different agents based on their availability.
-4. Agents receive a job, clone the code, pull the existing `master` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
+4. Agents receive a job, clone the code, pull the existing `main` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
 5. Buildkite receives the results and updates the build status in the Buildkite UI as well as on the PR page on GitHub.
-6. When the build passes, the PR is reviewed by another member of the team. If approved, the PR can be merged into `master`.
-7. Merging into `master` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the master image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
+6. When the build passes, the PR is reviewed by another member of the team. If approved, the PR can be merged into `main`.
+7. Merging into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
 
 <TabbedImages>
 
@@ -35,7 +35,7 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 ## The Build Pipeline
 
-The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/master/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting".
+The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/main/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting".
 
 To add, remove, or change build jobs, we edit the pipeline file. The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
 
@@ -145,7 +145,7 @@ sudo systemctl enable docker
 
 ### Add DockerHub Credentials to Buildkite
 
-For agents to push built `master` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
+For agents to push built `main` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
 
 Credentials are provided to the agent via env variables using [agent hooks](https://buildkite.com/docs/agent/v3/hooks#agent-hooks). Specifically using the environment hook. The default path for this hook is `/etc/buildkite-agent/hooks/environment`.
 
@@ -160,7 +160,7 @@ For more information about agent configuration and hooks, see the following page
 
 <Alert type="info">
 
-Whenever we update our base Arch Linux image [in the Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile), both [the mirror in the Dockerfile](https://github.com/NUbots/NUbots/blob/master/docker/Dockerfile) **_and_** [the mirror in the cache config](https://github.com/NUbots/NUbots/blob/master/doc/PacmanCache/docker-compose.yml) need to be updated.
+Whenever we update our base Arch Linux image [in the Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile), both [the mirror in the Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile) **_and_** [the mirror in the cache config](https://github.com/NUbots/NUbots/blob/main/doc/PacmanCache/docker-compose.yml) need to be updated.
 
 </Alert>
 
@@ -173,7 +173,7 @@ Whenever we update our base Arch Linux image [in the Dockerfile](https://github.
 2. Download the install script
 
    ```
-   wget https://raw.githubusercontent.com/NUbots/NUbots/master/doc/PacmanCache/install.sh
+   wget https://raw.githubusercontent.com/NUbots/NUbots/main/doc/PacmanCache/install.sh
    ```
 
 3. Make the install script executable

@@ -22,7 +22,7 @@ In the terminal, change directory to the location where the repository is cloned
 
 If you are working within an existing project, then you need to find out which branch the work is on. To list the branches, use the command `git branch -r`. When you have found the branch you want to push to, swap to it using the following command:
 
-```sh
+```bash
 git checkout <branch name>
 ```
 
@@ -32,19 +32,19 @@ If you are not working on an existing project, you need to make a branch to comm
 
 ### Making a Pull Request
 
-Once you have a set of commits on your branch which you think should be added to the main codebase, you can make a Pull Request (PR). PRs are where users ask the repository to pull their branch into the `master` branch.
+Once you have a set of commits on your branch which you think should be added to the main codebase, you can make a Pull Request (PR). PRs are where users ask the repository to pull their branch into the `main` branch.
 
 GitHub has [documentation about PRs here](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 Title your PR with a description of the changes that it will make. For this example we could use `Add stand-up script`. If you need to give more detail about what the code does, put that as a comment.
 
-To be approved, you should add reviewers to the pull request. Each reviewer will receive a notification. If you have a project mentor, they should be a reviewer, and at least one other person who knows about that part of the codebase or the problem you are trying to solve. Once the reviewers have approved the changes, the changes can be merged into the master branch.
+To be approved, you should add reviewers to the pull request. Each reviewer will receive a notification. If you have a project mentor, they should be a reviewer, and at least one other person who knows about that part of the codebase or the problem you are trying to solve. Once the reviewers have approved the changes, the changes can be merged into the main branch.
 
 ### Code Review
 
 The reviewers will give constructive feedback about your code, by making comments on code snippets from your changes. You can respond to these on GitHub. They can also directly suggest changes to specific sections. Additional commits you make to the branch will update the PR and will reset reviews of the changed sections.
 
-Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and Buildkite Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `master` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
+Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and Buildkite Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `main` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
 
 ## Commit Etiquette
 
