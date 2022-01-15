@@ -79,12 +79,14 @@ const Layout = ({ children, data, pageContext, commit, contributors }) => {
                   title={title}
                   description={description}
                 />
-                <Contributions
-                  contributors={contributors}
-                  date={commit.author.date}
-                  url={commit.url}
-                  mdxPath={mdxPath}
-                />
+                {commit && (
+                  <Contributions
+                    contributors={contributors}
+                    date={commit.author.date}
+                    url={commit.url}
+                    mdxPath={mdxPath}
+                  />
+                )}
                 <Markdown>{children}</Markdown>
               </article>
               <ArticleNavigation next={next} previous={previous} />
