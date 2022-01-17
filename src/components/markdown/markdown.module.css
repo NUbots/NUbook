@@ -270,6 +270,14 @@
         @apply mt-0;
       }
     }
+
+    :global(.math-display) {
+      @apply mt-6;
+
+      &:first-child {
+        @apply mt-0;
+      }
+    }
   }
 
   :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
