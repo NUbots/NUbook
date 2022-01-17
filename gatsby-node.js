@@ -93,6 +93,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       path: node.frontmatter.slug,
       component: templatePath,
       context: {
+        mdxPath: path
+          .relative(__dirname, node.fileAbsolutePath)
+          .split(path.sep)
+          .join(path.posix.sep),
         id: node.id,
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
