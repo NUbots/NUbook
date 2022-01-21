@@ -11,7 +11,7 @@ import TableOfContents from './table-of-contents/table-of-contents'
 import Footer from './footer/footer'
 import Contributions from './contributions/contributions'
 
-const Layout = ({ children, data, pageContext, commit }) => {
+const Layout = ({ children, data, pageContext, commit, contributors }) => {
   const {
     section: sectionTitle,
     chapter: chapterTitle,
@@ -79,11 +79,14 @@ const Layout = ({ children, data, pageContext, commit }) => {
                   title={title}
                   description={description}
                 />
-                <Contributions
-                  date={commit.author.date}
-                  url={commit.url}
-                  mdxPath={mdxPath}
-                />
+                {commit && (
+                  <Contributions
+                    contributors={contributors}
+                    date={commit.author.date}
+                    url={commit.url}
+                    mdxPath={mdxPath}
+                  />
+                )}
                 <Markdown>{children}</Markdown>
               </article>
               <ArticleNavigation next={next} previous={previous} />
@@ -126,6 +129,7 @@ Layout.propTypes = {
     }).isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
+  contributors: PropTypes.array.isRequired,
 }
 
 export default Layout

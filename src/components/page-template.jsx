@@ -6,9 +6,29 @@ import { MDXRenderer } from 'gatsby-plugin-mdx'
 import Layout from './layout'
 
 const PageTemplate = (props) => {
-  const commit = props.data.github.repository.object.history.nodes[0]
+  const commits = props.data.github.repository.object.history.nodes
+  const commit = commits[0]
+
+  const unique = commits.filter(
+    (v, i, a) => a.findIndex((t) => t.author.user.id === v.author.user.id) === i
+  )
+
+  const contributors = []
+  unique.forEach((commit) => {
+    contributors.push({
+      avatar: commit.author.avatarUrl,
+      url: commit.author.user.url,
+      name: commit.author.name,
+    })
+  })
+
   return (
-    <Layout pageContext={props.pageContext} data={props.data} commit={commit}>
+    <Layout
+      pageContext={props.pageContext}
+      data={props.data}
+      commit={commit}
+      contributors={contributors}
+    >
       <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
     </Layout>
   )
@@ -55,6 +75,12 @@ export const query = graphql`
               nodes {
                 author {
                   date
+                  name
+                  avatarUrl
+                  user {
+                    url
+                    id
+                  }
                 }
                 url
               }
