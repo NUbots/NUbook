@@ -3183,6 +3183,11 @@ better-queue@^3.8.10:
     node-eta "^0.9.0"
     uuid "^3.0.0"
 
+bibtex@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/bibtex/-/bibtex-0.9.0.tgz#62126692c8cc897e6d3824dc5948b0bce13b050e"
+  integrity sha512-2YsG89+ZtFD04Dd+KDDUxjtEdiQMW4lbGsXzs5sa+nCpmOrauyChkOAdbLegVSAH2JKEfgu7SFESIVRKQCfD9Q==
+
 big.js@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
