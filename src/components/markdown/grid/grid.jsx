@@ -8,7 +8,15 @@ function nextId() {
   return currentId++
 }
 
-const Grid = ({ children, rows, columns, caption, seamless }) => {
+const gapStyles = {
+  'none': style.gridGapNone,
+  'small': style.gridGapSmall,
+  'medium': style.gridGapMedium,
+  'large': style.gridGapLarge,
+  'extra-large': style.gridGapExtraLarge,
+}
+
+const Grid = ({ children, rows, columns, gap, caption, seamless }) => {
   const id = 'grid-' + nextId()
   const styleContent = `
     @media (min-width: 768px) {
@@ -21,7 +29,12 @@ const Grid = ({ children, rows, columns, caption, seamless }) => {
   return (
     <figure className={`${style.grid} ${seamless ? style.gridSeamless : ''} `}>
       <style dangerouslySetInnerHTML={{ __html: styleContent }}></style>
-      <div id={id} className={style.gridContent}>
+      <div
+        id={id}
+        className={`${style.gridContent}  ${
+          gapStyles[gap] ?? style.gridGapSmall
+        }`}
+      >
         {children}
       </div>
       {caption && (
@@ -34,9 +47,14 @@ const Grid = ({ children, rows, columns, caption, seamless }) => {
 Grid.propTypes = {
   rows: PropTypes.string,
   columns: PropTypes.string,
+  gap: PropTypes.string,
   caption: PropTypes.string,
   seamless: PropTypes.bool,
   children: PropTypes.node,
+}
+
+Grid.defaultProps = {
+  gap: 'small',
 }
 
 export default Grid
