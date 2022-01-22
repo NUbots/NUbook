@@ -8,7 +8,7 @@ const Contributions = ({ mdxPath, contributions }) => {
   const { authors, lastCommit } = contributions
 
   return (
-    <div className='text-xs text-secondary dark:text-secondary-inverted mb-6 border-t border-b border-gray-200 dark:border-gray-800 py-2 flex items-center'>
+    <div className='text-xs text-secondary dark:text-secondary-inverted mb-8 border-t border-b border-gray-200 dark:border-gray-800 py-2 flex items-center'>
       <div className='flex-grow flex gap-x-1 flex-wrap'>
         {authors.map((author) => {
           return author.username ? (
