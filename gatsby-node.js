@@ -2,9 +2,26 @@
 /*eslint-env es6 */
 
 const path = require('path')
+const nubookContributionsPlugin = require('./build-plugins/gatsby-transformer-nubook-contributions')
 
 const menu = []
 const createdPages = new Set()
+
+/**
+ * Use the custom gatsby-transformer-nubook-contributions plugin to add
+ * NUbook contribution data (authors and last commit) to MDX page nodes
+ */
+exports.onCreateNode = async (
+  { node, ...otherFirstParams },
+  ...otherParams
+) => {
+  if (node.internal.type === `Mdx`) {
+    nubookContributionsPlugin.onCreateNode(
+      { node, ...otherFirstParams },
+      ...otherParams
+    )
+  }
+}
 
 /**
  * Create the site pages from MDX files in /src/book
