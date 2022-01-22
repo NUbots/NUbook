@@ -308,20 +308,25 @@ Pages are written in MDX files and stored in section and chapter folders in the 
   title: Introduction to NUbots
   description: Learn about what we do, key people, and where to find the lab.
   slug: /team/introduction
+  authors:
+    - Josephus Paye II (@JosephusPaye)
+    - Ysobel Sims (@ysims)
+    - Lachlan Court (@LachlanCourt)
   ---
   ```
 
 - The frontmatter is written in [YAML](https://gettaurus.org/docs/YAMLTutorial/), with the following supported fields:
 
-  | Field         | Type    | Presence | Description                                                                 |
-  | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
-  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
-  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
-  | `title`       | String  | Required | The page title                                                              |
-  | `description` | String  | Required | A short, one-sentence description of the page content                       |
-  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
-  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
-  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
+  | Field         | Type    | Presence | Description                                                                                |
+  | ------------- | ------- | -------- | ------------------------------------------------------------------------------------------ |
+  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive)                |
+  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive)                |
+  | `title`       | String  | Required | The page title                                                                             |
+  | `description` | String  | Required | A short, one-sentence description of the page content                                      |
+  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`                           |
+  | `authors`     | List    | Required | A list of contributors to the page, in the format `Name (@GitHubUsername)`, or just `Name` |
+  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                                |
+  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing                      |
 
 ## Formatting Code
 
