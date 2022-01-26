@@ -1,12 +1,48 @@
 ---
 section: Guides
 chapter: General
-title: Code Documentation
-description: How to use documentation tags
-slug: /guides/general/documentation
+title: Code Conventions
+description: Conventions used in NUbots code.
+slug: /guides/general/code-conventions
 ---
 
-## Conventions
+## Naming Conventions
+
+### Case
+
+NUbots code case conventions are in the below table. It does not include JavaScript, which is in the following table.
+
+| Scenario      | Case Type            | Example                |
+| ------------- | -------------------- | ---------------------- |
+| Class name    | PascalCase           | `MyClass`              |
+| Function name | snake_case           | `my_function()`        |
+| Variable name | snake_case           | `my_variable`          |
+| Constants     | SCREAMING_SNAKE_CASE | `MY_CONSTANT_VARIABLE` |
+| `yaml` fields | snake_case           | `my_field: 0.0`        |
+
+JavaScript conventions are in the below table.
+
+| Scenario      | Case Type            | Example                |
+| ------------- | -------------------- | ---------------------- |
+| Class name    | PascalCase           | `MyClass`              |
+| Function name | camelCase            | `myFunction()`         |
+| Variable name | camelCase            | `myVariable`           |
+| Constants     | SCREAMING_SNAKE_CASE | `MY_CONSTANT_VARIABLE` |
+
+### Mathematics
+
+Conventions for variables representing vectors and homogeneous transformations are explained in [the Linear Algebra section of the Mathematics page](/system/foundations/mathematics#linear-algebra).
+
+A summary is given in the table below.
+
+| Variable name | Description                                                                  |
+| ------------- | ---------------------------------------------------------------------------- |
+| `Hab`         | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
+| `Rab`         | Denotes a 3D rotation from space $b$ to space $a$.                           |
+| `rABb`        | Denotes a vector from point $B$ to point $A$ in space $b$.                   |
+| `vAb`         | The velocity of $A$ in space $b$.                                            |
+
+## Documentation
 
 We use tokens called "directives" or "tags" to annotate different parts of a comment with rich metadata. These directives start with `@` or `\` (`@` is preferred) and are followed by the directive name, arguments (for some directives), and a single line of description.
 
@@ -83,6 +119,6 @@ class SimulationRobot {
 }
 ```
 
-## Future
+### Future
 
 In the future we are planning to use a combination of Doxygen and our NUClear mapper for automatic low level documentation of our code, which will be included in NUbook.
