@@ -2,29 +2,32 @@
 /*eslint-env es6 */
 
 const path = require('path')
+
 const { createBibNode } = require('./bib-transformer')
+const nubookContributionsPlugin = require('./build-plugins/gatsby-transformer-nubook-contributions')
 
 const menu = []
 const createdPages = new Set()
 
-exports.onCreateNode = async ({
-  node,
-  actions,
-  loadNodeContent,
-  createNodeId,
-  createContentDigest,
-}) => {
-  if (node.ext !== `.bib`) {
-    return
+/**
+ * Entry point for NUbook-specific GraphQL data extension and customisation.
+ */
+exports.onCreateNode = async (
+  { node, ...otherFirstParams },
+  ...otherParams
+) => {
+  // Use the custom gatsby-transformer-nubook-contributions plugin to add
+  // NUbook contribution data (authors and last commit) to MDX page nodes
+  if (node.internal.type === `Mdx`) {
+    nubookContributionsPlugin.onCreateNode(
+      { node, ...otherFirstParams },
+      ...otherParams
+    )
   }
-
-  await createBibNode({
-    node,
-    actions,
-    loadNodeContent,
-    createNodeId,
-    createContentDigest,
-  })
+  // Create a Bibtex node for each .bib file
+  else if (node.ext === `.bib`) {
+    await createBibNode({ node, ...otherFirstParams }, ...otherParams)
+  }
 }
 
 /**
