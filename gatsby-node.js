@@ -3,7 +3,7 @@
 
 const path = require('path')
 
-const { createBibNode } = require('./bib-transformer')
+const nubookBibliography = require('./build-plugins/gatsby-transformer-nubook-bibliography/transformer.js')
 const nubookContributionsPlugin = require('./build-plugins/gatsby-transformer-nubook-contributions')
 
 const menu = []
@@ -19,14 +19,17 @@ exports.onCreateNode = async (
   // Use the custom gatsby-transformer-nubook-contributions plugin to add
   // NUbook contribution data (authors and last commit) to MDX page nodes
   if (node.internal.type === `Mdx`) {
-    nubookContributionsPlugin.onCreateNode(
+    await nubookContributionsPlugin.onCreateNode(
       { node, ...otherFirstParams },
       ...otherParams
     )
   }
-  // Create a Bibtex node for each .bib file
+  // Create a bibliography node for each .bib file
   else if (node.ext === `.bib`) {
-    await createBibNode({ node, ...otherFirstParams }, ...otherParams)
+    await nubookBibliography.createBibNode(
+      { node, ...otherFirstParams },
+      ...otherParams
+    )
   }
 }
 
@@ -81,9 +84,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     )
   }
 
-  // Get the Bibtex references, a map where the keys are MDX file paths
-  // (relative to src/book), and the values are the references for the file
-  const bibReferences = await getAllBibtexReferences(graphql, reporter)
+  // Get the Bibtex bibliographies, a map where the keys are MDX file paths
+  // (relative to src/book), and the values are the bibliography content
+  const allBibliographies = await getAllBibliographies(graphql, reporter)
 
   // Get all MDX files
   const posts = mdxResults.data.allMdx.edges
@@ -120,7 +123,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     const nextPage = getNext(next, posts, index)
     const previousPage = getPrevious(previous, posts, index)
 
-    const references = getBibReferencesForPage(bibReferences, node)
+    const bibliography = getBibliographyForPage(allBibliographies, node)
 
     actions.createPage({
       path: node.frontmatter.slug,
@@ -134,7 +137,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         next: nextPage ? nextPage.frontmatter : null,
         previous: previousPage ? previousPage.frontmatter : null,
         menu,
-        references,
+        references: bibliography,
         hidden: node.frontmatter.hidden,
       },
     })
@@ -166,21 +169,26 @@ exports.onCreatePage = ({ page, actions }) => {
 
 /**
  *
- * Get the Bibtex references for all pages in NUbook. Returns a map where the
+ * Get the Bibtex bibliography for all pages in NUbook. Returns a map where the
  * keys are MDX file paths (relative to src/book), and the values are the
- * references for the file, created in `bib-transformer.js`
+ * bibliographies for the file, created in the custom plugin
+ * `gatsby-transformer-nubook-bibliography`.
  */
-async function getAllBibtexReferences(graphql, reporter) {
-  // Get all the Bibtex nodes via GraphQL: these are created in
-  // `bib-transformer.js` and registered with Gatsby in `gatsby-node.js`
+async function getAllBibliographies(graphql, reporter) {
+  // Get all the NUbookBibliography nodes via GraphQL: these are created in
+  // `gatsby-transformer-nubook-bibliography` and registered with Gatsby
+  // in `gatsby-node.js`
   const bibResults = await graphql(`
     query {
-      allBibtex {
+      allNUbookBibliography {
         nodes {
-          bib
-          dir
-          base
-          relativeDirectory
+          bibFileRelativePath
+          bibliography {
+            id
+            title
+            citation
+            reference
+          }
         }
       }
     }
@@ -189,44 +197,48 @@ async function getAllBibtexReferences(graphql, reporter) {
   // Panic and abort on query error
   if (bibResults.errors) {
     reporter.panicOnBuild(
-      '🚨  ERROR: Loading "createPages" query for all Bib files'
+      '🚨  ERROR: Loading query for all NUbookBibliography nodes'
     )
+    return {}
   }
 
-  // Create the map of references: each key is the path to the bib file,
-  // relative to the `src/book` directory, and each value is the file's
-  // bib content, parsed into a JS object
-  const bibReferences = {}
-  for (const bibNode of bibResults.data.allBibtex.nodes) {
-    const bibRelativePath = path.posix.join(
-      bibNode.relativeDirectory,
-      bibNode.base
-    )
-    bibReferences[bibRelativePath] = JSON.parse(bibNode.bib)
+  // Create the map of bibliography files in Nubook: each key is the path
+  // to the bib file, and each value is the parsed bibliography content
+  const allBibliographies = {}
+
+  for (const bibNode of bibResults.data.allNUbookBibliography.nodes) {
+    // Convert the list of bibliography entries into a map where the keys are
+    // the reference ids, and the values are the bibliography content
+    const bibliographyMap = {}
+    for (const bibliography of bibNode.bibliography) {
+      bibliographyMap[bibliography.id] = bibliography
+    }
+
+    allBibliographies[bibNode.bibFileRelativePath] = bibliographyMap
   }
 
-  return bibReferences
+  return allBibliographies
 }
 
 /**
- * Get the Bibtext references for the given MDX page node from the given map
- * containing the references of all pages in NUbook.
+ * Get the bibliography data for the given MDX page node from the
+ * given map containing the bibliographies of all pages in NUbook.
  */
-function getBibReferencesForPage(bibReferences, pageNode) {
-  // Compute the path to this page's bib references file
+function getBibliographyForPage(allBibliographies, pageNode) {
+  // Compute the path to this page's bibliography.bib file
   // (relative to the `src/book` directory)
   const basename = path
     .basename(pageNode.fileAbsolutePath)
     .replace(path.extname(pageNode.fileAbsolutePath), '')
 
-  const bibFilePath = path.posix.resolve(
+  const bibFilePath = path.posix.join(
     path.dirname(pageNode.fileAbsolutePath),
     pageNode.frontmatter.references ?? `${basename}.bib`
   )
 
   const [, bibFileRelative] = bibFilePath.split('src/book/')
 
-  return bibReferences[bibFileRelative] ?? null
+  return allBibliographies[bibFileRelative] ?? null
 }
 
 /**
