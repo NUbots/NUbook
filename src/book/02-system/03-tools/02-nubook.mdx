@@ -376,7 +376,7 @@ Pages are written in MDX files and stored in section and chapter folders in the 
   | `description` | String  | Required | A short, one-sentence description of the page content                                                                                                                                      |
   | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`                                                                                                                           |
   | `authors`     | List    | Required | A list of authors of the page, in the format `Name (@GitHubUsername)`, or just `Name`. Authors without a username will have the NUbots icon as a default avatar, without a link to GitHub. |
-  | `references`  | String  | Optional | Relative path to a `.bib` file with references for use on the page. Defaults to `[mdx-file-name].bib` if available.                                                                        |
+  | `references`  | String  | Optional | Relative path to a `.bib` file with references for use on the page. Defaults to `[mdx-file-name].bib` if a matching Bibtex file with the same name as the MDX file is available.           |
   | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                                                                                                                                |
   | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing                                                                                                                      |
 
