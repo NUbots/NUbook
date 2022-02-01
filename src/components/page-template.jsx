@@ -8,17 +8,17 @@ import { BibReferencesContext } from './markdown/references/context'
 import Layout from './layout'
 
 const PageTemplate = (props) => {
-  const [usedReferences, setUsedReferences] = useState(new Set())
+  const [usedReferenceIds, setUsedReferenceIds] = useState(new Set())
 
   function addUsedReference(referenceId) {
-    setUsedReferences(
+    setUsedReferenceIds(
       (previousReferences) => new Set([...previousReferences, referenceId])
     )
   }
 
   const referencesContext = {
     references: props.pageContext.references,
-    usedReferences,
+    usedReferenceIds,
     addUsedReference,
   }
 

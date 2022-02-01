@@ -5,20 +5,21 @@
 .citeLink {
   @apply inline-block align-top leading-none py-px;
   @apply no-underline !important;
-  font-size: 0.9em;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  font-size: 0.85em;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+  font-weight: 600;
 
   &:first-child {
     @apply rounded-l-full;
-    padding-left: 0.6rem;
+    padding-left: 0.5rem;
   }
 
   &:last-child {
     @apply rounded-r-full;
-    padding-right: 0.6rem;
+    padding-right: 0.5rem;
   }
 
   & + .citeLink {

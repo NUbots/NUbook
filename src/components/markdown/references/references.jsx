@@ -2,38 +2,31 @@ import React, { useContext } from 'react'
 
 import { BibReferencesContext } from './context'
 
-// Uses IEEE referencing style (https://ieeeauthorcenter.ieee.org/wp-content/uploads/IEEE-Reference-Guide.pdf)
+import * as style from './references.module.css'
+
 const References = () => {
-  const { references, usedReferences } = useContext(BibReferencesContext)
+  const { references, usedReferenceIds } = useContext(BibReferencesContext)
 
-  const referenceOptions = Array.from(usedReferences).map((referenceId) => {
-    const fields = references[referenceId].fields // fields has author, title, year, etc
-    const type = references[referenceId].type // types is the type of Bibtex reference entry
+  const referenceListItems = Array.from(usedReferenceIds).map((referenceId) => {
+    const referenceEntry = references[referenceId]
 
-    const authorName = fields.author.normalized.split(' ')
-
-    if (type === 'book') {
-      return (
-        <li id={`reference-${referenceId}`} key={referenceId}>
-          {authorName[0].charAt(0)}. {authorName[1]}, <i>{fields.title}</i>.{' '}
-          {fields.address}: {fields.publisher}, {fields.year}.
-        </li>
-      )
-    } else if (type === 'article') {
-      return (
-        <li id={`reference-${referenceId}`} key={referenceId}>
-          {authorName[0].charAt(0)}. {authorName[1]}, &quot;
-          {fields.title}&quot;, {fields.year}. [Online]. Available:{' '}
-          <a href={fields.url} target='_blank' rel='noopener noreferrer'>
-            {fields.url}
-          </a>
-          .
-        </li>
-      )
-    }
+    return (
+      <li key={referenceId}>
+        <div className={style.anchor} id={`reference-${referenceId}`}></div>
+        <div
+          dangerouslySetInnerHTML={{ __html: referenceEntry.reference }}
+        ></div>
+      </li>
+    )
   })
 
-  return <ol>{referenceOptions}</ol>
+  return referenceListItems.length > 0 ? (
+    <ol>{referenceListItems}</ol>
+  ) : (
+    <p>
+      <i>No references have been cited on this page yet.</i>
+    </p>
+  )
 }
 
 export default References

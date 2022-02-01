@@ -7,7 +7,7 @@ import { highlightElement } from './highlight-element'
 import * as style from './cite.module.css'
 
 const CiteSingle = ({ children }) => {
-  const { references, usedReferences, addUsedReference } =
+  const { references, usedReferenceIds, addUsedReference } =
     useContext(BibReferencesContext)
 
   if (!references) {
@@ -27,26 +27,25 @@ const CiteSingle = ({ children }) => {
     )
   }
 
-  const referenceIndex = Array.from(usedReferences).indexOf(referenceId)
-  let referenceNumber = 0
+  const referenceIndex = Array.from(usedReferenceIds).indexOf(referenceId)
+  let referenceNumber = referenceIndex + 1
 
-  if (usedReferences.has(referenceId)) {
-    referenceNumber = referenceIndex + 1
-  } else {
+  // Add the reference if it is not yet in the list of used references
+  if (referenceIndex === -1) {
     useEffect(() => {
       addUsedReference(referenceId)
     })
   }
 
-  const { author, year, title } = referenceEntry.fields
-
   return (
     <a
       href={`#reference-${referenceId}`}
-      title={`${title} (${author} ${year})`}
+      title={`${referenceEntry.title} (${referenceEntry.citation})`}
       className={style.citeLink}
       onClick={() =>
-        highlightElement(document.querySelector('#reference-' + referenceId))
+        highlightElement(
+          document.querySelector('#reference-' + referenceId).parentElement
+        )
       }
     >
       {referenceNumber}
