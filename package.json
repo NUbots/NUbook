@@ -60,8 +60,8 @@
     "dev": "gatsby develop",
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
-    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\""
+    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\"",
+    "format:check": "prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\""
   },
   "repository": {
     "type": "git",
