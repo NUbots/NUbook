@@ -20,10 +20,8 @@ const CiteSingle = ({ children }) => {
   const referenceEntry = references[referenceId]
 
   if (referenceEntry === undefined) {
-    return (
-      <span className={style.citeLink + ' ' + style.citeUnknown}>
-        unknown reference: {referenceId}
-      </span>
+    throw new Error(
+      `Cannot cite "${referenceId}": no such reference found in the Bibtex file`
     )
   }
 

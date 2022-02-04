@@ -25,30 +25,28 @@
   & + .citeLink {
     margin-left: 1px;
   }
-
-  &.citeUnknown {
-    @apply text-white bg-red-600 cursor-default;
-  }
 }
 
 :global(.light) {
-  .citeLink:not(.citeUnknown) {
-    @apply bg-gray-500 text-white;
+  .citeLink {
+    @apply text-primary !important;
+    background-color: rgba(0, 0, 0, 0.07);
   }
 
-  .citeLink:not(.citeUnknown):hover,
-  .citeLink:not(.citeUnknown):focus {
-    @apply bg-gray-700;
+  .citeLink:hover,
+  .citeLink:focus {
+    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
 :global(.dark) {
-  .citeLink:not(.citeUnknown) {
-    @apply bg-gray-800 text-white;
+  .citeLink {
+    @apply text-white !important;
+    @apply bg-gray-800
   }
 
-  .citeLink:not(.citeUnknown):hover,
-  .citeLink:not(.citeUnknown):focus {
+  .citeLink:hover,
+  .citeLink:focus {
     @apply bg-gray-700;
   }
 }
