@@ -42,7 +42,7 @@
 :global(.dark) {
   .citeLink {
     @apply text-white !important;
-    @apply bg-gray-800
+    @apply bg-gray-800;
   }
 
   .citeLink:hover,
