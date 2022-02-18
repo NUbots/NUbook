@@ -57,7 +57,98 @@ The module connects to the PS3 controller using bluetooth (or USB) and reacts ba
 | SQUARE                    | Toggles locking of the head.               |
 | R2                        | Right kick.                                |
 
-To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. When the controller is connected to the robot, it will be paired, and you can remove the cable.
+To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and install it on the robot. Ensure the PS3 controller is paired and connected to the right robot. Then run the `./ps3walk` on the robot to begin controlling it.
+
+#### Setup
+
+1. Install `bluez`, `bluez-utils`, and `bluez-plugins` if they have not already been installed:
+   ```
+   pacman -S --needed bluez bluez-utils bluez-plugins
+   ```
+2. Restart the system:
+   ```
+   reboot now
+   ```
+   This is only necessary if the packages were not previously installed.
+3. Start the bluetooth service:
+   ```
+   systemctl start bluetooth.service
+   ```
+
+<details>
+<summary> Start bluetooth automatically </summary>
+
+Bluetooth can be powered on automatically when the system starts. This enables the controllers to
+connect without having to run `systemctl start bluetooth.service` and `bluetoothctl power on`. This
+is not enable by default because we're currently unsure whether wifi and bluetooth are interferring
+with each other.
+
+1. Run
+   ```
+   systemctl enable bluetooth.service
+   ```
+2. Set `AutoEnable=true` in `/etc/bluetooth/main.conf`:
+   ```
+   [Policy]
+   AutoEnable=true
+   ```
+
+Now, after restarting the robot, and having previously paired the PS3 controller, the PS3 controller
+will connect to the robot automatically.
+
+<Alert type='info'>
+<code>ps3walk</code> still needs to be started in order to control the robot.
+</Alert>
+
+</details>
+
+#### Pairing the PS3 Controller via Bluetooth
+
+1. Unplug and power off the PS3 controller.
+2. The interactive program `bluetoothctl`, and type the following commands:
+   ```
+   power on
+   scan on
+   discoverable on
+   ```
+   If bluetooth is working correrctly, you might see other devices appear and disappear.
+3. Turn on the PS3 controller by pressing the middle PS button. The four LEDS should start flashing quickly.
+4. Plug the PS3 controller into the computer.
+5. Type `yes` when the following prompt appears:
+   ```
+   Authorize service 00001124-0000-1000-8000-00805f9b34fb (yes/no)
+   ```
+
+The PS3 controller is now paired. You can unplug it and it will remain connected.
+
+<Alert type='warning'>
+The controllers are extremely finicky. Placing them on the table can trigger multiple buttons to be pressed!
+</Alert>
+
+<Alert type='info'>
+The steps are based on the Arch Linux <a href="https://wiki.archlinux.org/title/Gamepad#Pairing_via_Bluetooth">guide</a>. If you are having trouble or are connecting a different controller try using their guide as a starting point.
+</Alert>
+
+#### Verifying the PS3 Controller is functioning correctly.
+
+Verifying the PS3 controller is connected and sending messages is useful for debugging the range, interferance, event codes, and making sure the controller is connect to the right robot.
+
+1. Install `joyutils`:
+   ```
+   pacman -S --needed joyutils
+   ```
+2. If you are connected via ssh run:
+   ```
+   jstest --event /dev/input/js0
+   ```
+   Otherwise, if you're connected to a virtual console:
+   ```
+   jstest /dev/input/js0
+   ```
+3. Move controller inputs, and press `Cntl-C` to exit.
+
+Connecting multiple PS3 controllers is possible. The first PS3 controller that connects is located at `/dev/input/js0`. The second controller that connects is then located at `/dev/input/js1`.
+Additionally, the LEDs on the controllers show which number they are. This holds true regardless of whether the controller is connected over Bluetooth or USB.
 
 ## Script Runner
 
