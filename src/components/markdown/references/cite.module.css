@@ -1,0 +1,52 @@
+.citeWrapper {
+  display: inline-flex;
+}
+
+.citeLink {
+  @apply inline-block align-top leading-none py-px;
+  @apply no-underline !important;
+  font-size: 0.85em;
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+  font-weight: 600;
+
+  &:first-child {
+    @apply rounded-l-full;
+    padding-left: 0.5rem;
+  }
+
+  &:last-child {
+    @apply rounded-r-full;
+    padding-right: 0.5rem;
+  }
+
+  & + .citeLink {
+    margin-left: 1px;
+  }
+}
+
+:global(.light) {
+  .citeLink {
+    @apply text-primary !important;
+    background-color: rgba(0, 0, 0, 0.07);
+  }
+
+  .citeLink:hover,
+  .citeLink:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+:global(.dark) {
+  .citeLink {
+    @apply text-white !important;
+    @apply bg-gray-800;
+  }
+
+  .citeLink:hover,
+  .citeLink:focus {
+    @apply bg-gray-700;
+  }
+}

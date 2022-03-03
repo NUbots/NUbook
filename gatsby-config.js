@@ -37,18 +37,6 @@ module.exports = {
         path: `${__dirname}/src/pages`,
       },
     },
-    {
-      // Adds configuration for querying GitHub GraphQl API
-      resolve: 'gatsby-source-graphql',
-      options: {
-        typeName: 'GitHub',
-        fieldName: 'github',
-        url: 'https://api.github.com/graphql',
-        headers: {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-        },
-      },
-    },
     'gatsby-plugin-image',
     // Exposes helper functions for processing images with the
     // sharp package from npm. Used by other plugins.

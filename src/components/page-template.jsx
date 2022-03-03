@@ -1,30 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
 
+import { BibReferencesContext } from './markdown/references/context'
+
 import Layout from './layout'
 
 const PageTemplate = (props) => {
-  const commit = props.data.github.repository.object.history.nodes[0]
+  const [usedReferenceIds, setUsedReferenceIds] = useState(new Set())
+
+  function addUsedReference(referenceId) {
+    setUsedReferenceIds(
+      (previousReferences) => new Set([...previousReferences, referenceId])
+    )
+  }
+
+  const referencesContext = {
+    references: props.pageContext.references,
+    usedReferenceIds,
+    addUsedReference,
+  }
+
   return (
-    <Layout pageContext={props.pageContext} data={props.data} commit={commit}>
-      <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
-    </Layout>
+    <BibReferencesContext.Provider value={referencesContext}>
+      <Layout
+        pageContext={props.pageContext}
+        data={props.data}
+        contributions={props.data.mdx.childNUbookContributions || {}}
+      >
+        <MDXRenderer>{props.data.mdx.body}</MDXRenderer>
+      </Layout>
+    </BibReferencesContext.Provider>
   )
 }
 
 PageTemplate.propTypes = {
   data: PropTypes.shape({
-    github: PropTypes.shape({
-      repository: PropTypes.shape({
-        object: PropTypes.shape({
-          history: PropTypes.shape({
-            nodes: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-          }).isRequired,
-        }).isRequired,
-      }).isRequired,
-    }).isRequired,
     mdx: PropTypes.shape({
       id: PropTypes.string.isRequired,
       body: PropTypes.string.isRequired,
@@ -38,6 +50,18 @@ PageTemplate.propTypes = {
         slug: PropTypes.string,
         hidden: PropTypes.bool,
       }).isRequired,
+      childNUbookContributions: PropTypes.shape({
+        authors: PropTypes.arrayOf(
+          PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            username: PropTypes.string,
+          })
+        ).isRequired,
+        lastCommit: PropTypes.shape({
+          date: PropTypes.string.isRequired,
+          hash: PropTypes.string.isRequired,
+        }),
+      }),
     }).isRequired,
   }).isRequired,
   pageContext: PropTypes.object.isRequired,
@@ -46,23 +70,7 @@ PageTemplate.propTypes = {
 export default PageTemplate
 
 export const query = graphql`
-  query ($id: String!, $mdxPath: String!) {
-    github {
-      repository(name: "NUbook", owner: "NUbots") {
-        object(expression: "main") {
-          ... on GitHub_Commit {
-            history(path: $mdxPath) {
-              nodes {
-                author {
-                  date
-                }
-                url
-              }
-            }
-          }
-        }
-      }
-    }
+  query ($id: String!) {
     mdx(id: { eq: $id }) {
       id
       body
@@ -75,6 +83,16 @@ export const query = graphql`
         keywords
         slug
         hidden
+      }
+      childNUbookContributions {
+        authors {
+          name
+          username
+        }
+        lastCommit {
+          date
+          hash
+        }
       }
     }
   }
