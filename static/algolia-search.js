@@ -25,8 +25,8 @@ loadAlgoliaScript().then(() => {
     // Update the URL on hits to have the current origin,
     // to support local development and deploy previews
     // (they point to the production site otherwise)
-    transformData: function(hits) {
-      hits.forEach(hit => {
+    transformData: function (hits) {
+      hits.forEach((hit) => {
         const { origin } = new URL(hit.url)
         hit.url = hit.url.replace(origin, window.location.origin)
       })
@@ -35,7 +35,7 @@ loadAlgoliaScript().then(() => {
 })
 
 // Add support for the / keyboard shortcut
-window.addEventListener('keydown', event => {
+window.addEventListener('keydown', (event) => {
   // Don't do anything if an input is focused
   if (
     document.activeElement instanceof HTMLInputElement ||

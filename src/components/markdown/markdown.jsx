@@ -9,8 +9,11 @@ import TabbedImages from './tabbed-images'
 
 import Alert from './alert/alert'
 import Grid from './grid/grid'
-import * as style from './markdown.module.css'
+import Cite from './references/cite'
+import References from './references/references'
 import { createHeading } from './heading/heading'
+
+import * as style from './markdown.module.css'
 
 const Img = ({ src, alt, title }) => (
   <Image src={src} alt={alt}>
@@ -50,6 +53,8 @@ const MDXComponents = {
   a: A,
   pre: PreCode,
   table: Table,
+  cite: Cite,
+  References: References,
   h1: createHeading('h1'),
   h2: createHeading('h2'),
   h3: createHeading('h3'),
