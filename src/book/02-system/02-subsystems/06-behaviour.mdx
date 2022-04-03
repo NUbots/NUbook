@@ -80,8 +80,7 @@ To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/bl
 
 Bluetooth can be powered on automatically when the system starts. This enables the controllers to
 connect without having to run `systemctl start bluetooth.service` and `bluetoothctl power on`. This
-is not enable by default because we're currently unsure whether wifi and bluetooth are interferring
-with each other.
+is not currently enable by default in the existing installation. Some robots might have this enabled.
 
 1. Run
    ```
@@ -97,7 +96,7 @@ Now, after restarting the robot, and having previously paired the PS3 controller
 will connect to the robot automatically.
 
 <Alert type='info'>
-<code>ps3walk</code> still needs to be started in order to control the robot.
+`ps3walk` still needs to be started in order to control the robot.
 </Alert>
 
 </details>
@@ -111,7 +110,7 @@ will connect to the robot automatically.
    scan on
    discoverable on
    ```
-   If bluetooth is working correrctly, you might see other devices appear and disappear.
+   If bluetooth is working correctly, you might see other devices appear and disappear.
 3. Turn on the PS3 controller by pressing the middle PS button. The four LEDS should start flashing quickly.
 4. Plug the PS3 controller into the computer.
 5. Type `yes` when the following prompt appears:
@@ -122,11 +121,11 @@ will connect to the robot automatically.
 The PS3 controller is now paired. You can unplug it and it will remain connected.
 
 <Alert type='warning'>
-The controllers are extremely finicky. Placing them on the table can trigger multiple buttons to be pressed!
+The controllers are extremely finicky. Placing them on a table or shaking them can trigger multiple buttons to be pressed!
 </Alert>
 
 <Alert type='info'>
-The steps are based on the Arch Linux <a href="https://wiki.archlinux.org/title/Gamepad#Pairing_via_Bluetooth">guide</a>. If you are having trouble or are connecting a different controller try using their guide as a starting point.
+The steps are based on the <a href="https://wiki.archlinux.org/title/Gamepad#Pairing_via_Bluetooth">Arch Linux controller pairing guide</a>. If you are having trouble or are connecting a different controller try using their guide as a starting point.
 </Alert>
 
 #### Verifying the PS3 Controller is functioning correctly.
@@ -145,7 +144,7 @@ Verifying the PS3 controller is connected and sending messages is useful for deb
    ```
    jstest /dev/input/js0
    ```
-3. Move controller inputs, and press `Cntl-C` to exit.
+3. Move controller inputs, and press <kbd>Cntl</kbd> + <kbd>C</kbd> to exit.
 
 Connecting multiple PS3 controllers is possible. The first PS3 controller that connects is located at `/dev/input/js0`. The second controller that connects is then located at `/dev/input/js1`.
 Additionally, the LEDs on the controllers show which number they are. This holds true regardless of whether the controller is connected over Bluetooth or USB.
