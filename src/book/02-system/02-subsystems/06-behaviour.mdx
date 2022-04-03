@@ -104,7 +104,7 @@ will connect to the robot automatically.
 #### Pairing the PS3 Controller via Bluetooth
 
 1. Unplug and power off the PS3 controller.
-2. The interactive program `bluetoothctl`, and type the following commands:
+2. Run the interactive program `bluetoothctl`, and type the following commands:
    ```
    power on
    scan on
@@ -112,7 +112,7 @@ will connect to the robot automatically.
    ```
    If bluetooth is working correctly, you might see other devices appear and disappear.
 3. Turn on the PS3 controller by pressing the middle PS button. The four LEDS should start flashing quickly.
-4. Plug the PS3 controller into the computer.
+4. Plug the PS3 controller into the computer with a USB cable.
 5. Type `yes` when the following prompt appears:
    ```
    Authorize service 00001124-0000-1000-8000-00805f9b34fb (yes/no)
@@ -130,7 +130,7 @@ The steps are based on the <a href="https://wiki.archlinux.org/title/Gamepad#Pai
 
 #### Verifying the PS3 Controller is functioning correctly.
 
-Verifying the PS3 controller is connected and sending messages is useful for debugging the range, interferance, event codes, and making sure the controller is connect to the right robot.
+Verifying the PS3 controller is connected and sending messages is useful for debugging the range, interference, event codes, and making sure the controller is connect to the right robot.
 
 1. Install `joyutils`:
    ```
