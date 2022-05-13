@@ -9,8 +9,9 @@ import SEO from './seo'
 import Sidebar from './sidebar/sidebar'
 import TableOfContents from './table-of-contents/table-of-contents'
 import Footer from './footer/footer'
+import Contributions from './contributions/contributions'
 
-const Layout = ({ children, data, pageContext }) => {
+const Layout = ({ children, data, pageContext, contributions }) => {
   const {
     section: sectionTitle,
     chapter: chapterTitle,
@@ -19,7 +20,7 @@ const Layout = ({ children, data, pageContext }) => {
     keywords,
     hidden,
   } = data.mdx.frontmatter
-  const { next, previous, menu } = pageContext
+  const { next, previous, menu, mdxPath } = pageContext
   const currentSection =
     menu.find((section) => section.title === sectionTitle) || menu[0]
   const currentChapter = currentSection.chapters.find(
@@ -78,6 +79,12 @@ const Layout = ({ children, data, pageContext }) => {
                   title={title}
                   description={description}
                 />
+                {contributions && (
+                  <Contributions
+                    contributions={contributions}
+                    mdxPath={mdxPath}
+                  />
+                )}
                 <Markdown>{children}</Markdown>
               </article>
               <ArticleNavigation next={next} previous={previous} />
@@ -112,7 +119,20 @@ Layout.propTypes = {
     next: PropTypes.object,
     previous: PropTypes.object,
     menu: PropTypes.array,
+    mdxPath: PropTypes.string.isRequired,
   }).isRequired,
+  contributions: PropTypes.shape({
+    authors: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        username: PropTypes.string,
+      })
+    ).isRequired,
+    lastCommit: PropTypes.shape({
+      date: PropTypes.string.isRequired,
+      hash: PropTypes.string.isRequired,
+    }),
+  }),
 }
 
 export default Layout
