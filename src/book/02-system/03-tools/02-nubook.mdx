@@ -4,6 +4,8 @@ chapter: Tools
 title: NUbook
 description: The NUbots team handbook and documentation.
 slug: /system/tools/nubook
+authors:
+  - Josephus Paye II (@JosephusPaye)
 ---
 
 NUbook is the handbook and high-level documentation for the NUbots team. What you are looking at right now is NUbook! This page has information on how NUbook works.
@@ -236,10 +238,10 @@ Here are some resources for learning how to draw graphs with Graphviz:
 
 You can show content such as images, code, and math equations side-by-side in a grid.
 
-The following example shows four images in a 2x2 grid with a caption:
+The following example shows four images in a 2x2 grid with large spacing between items and a caption:
 
 ```md
-<Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
+<Grid columns='1fr 1fr' rows="1fr 1fr" gap="large" caption="Some lovely pets">
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
 ![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
@@ -250,6 +252,8 @@ The following example shows four images in a 2x2 grid with a caption:
 ```
 
 The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+
+The `gap` property sets the spacing between items in the grid, and can be one of `none` (no gap), `small` (the default), `medium`, `large`, or `extra-large`.
 
 ### Images in Tabs
 
@@ -294,6 +298,51 @@ qui.
 </Alert>
 ```
 
+## Bibtex Referencing
+
+NUbook supports Bibtex referencing in Markdown. You can use it as follows.
+
+1. First, add the Bibtex file containing your references to the same folder that contains the MDX file you're editing. Give the Bibtex file the same name as the MDX file, but with a `.bib` extension. For example, if you're editing `01-introduction.mdx`, the Bibtex file should be `01-introduction.bib`.
+
+  <details>
+  <summary>If you need to reference a Bibtex file from multiple MDX files</summary>
+
+    You can use the `references` key at the top of the MDX file to override the default Bibtex file path.
+
+    ```yaml
+    ---
+    title: My page
+    # ... other data
+    references: ./shared-references.bib # Relative path to the shared references file
+    ---
+    ```
+
+  </details>
+
+2. In the Markdown file, add in-text citations using `<cite>` tags. For example, if there's a citation in the Bibtex file with id `smith2018`, you can reference it in the Markdown file like so:
+
+   ```md
+   Fuga ullam cumque accusamus doloremque rem <cite>smith2019</cite>.
+   ```
+
+   This will add an inline citation with an auto generated citation number, linked to the full citation reference in the list of references.
+
+   You can add multiple in-text citations in the same place by including multiple comma-separated ids in the `<cite>` tag. For example, if there's a citation in the Bibtex file with id `smith2018` and a citation with id `brown2005`, you can reference both as follows:
+
+   ```md
+   Fuga ullam cumque accusamus doloremque rem <cite>smith2019,brown2005</cite>.
+   ```
+
+3. After adding your in-text citations, create a new section at the bottom of the MDX page to show the list of references:
+
+   ```md
+   ## References
+
+   <References />
+   ```
+
+See the [Referencing kitchen sink](/kitchen-sink/referencing) for an example of referencing.
+
 ## Organising Pages
 
 Pages are written in MDX files and stored in section and chapter folders in the `src/book/` directory, and organised as follows:
@@ -308,20 +357,26 @@ Pages are written in MDX files and stored in section and chapter folders in the 
   title: Introduction to NUbots
   description: Learn about what we do, key people, and where to find the lab.
   slug: /team/introduction
+  authors:
+    - Josephus Paye II (@JosephusPaye)
+    - Ysobel Sims (@ysims)
+    - Lachlan Court (@LachlanCourt)
   ---
   ```
 
 - The frontmatter is written in [YAML](https://gettaurus.org/docs/YAMLTutorial/), with the following supported fields:
 
-  | Field         | Type    | Presence | Description                                                                 |
-  | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
-  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
-  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
-  | `title`       | String  | Required | The page title                                                              |
-  | `description` | String  | Required | A short, one-sentence description of the page content                       |
-  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
-  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
-  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
+  | Field         | Type    | Presence | Description                                                                                                                                                                                |
+  | ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive)                                                                                                                |
+  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive)                                                                                                                |
+  | `title`       | String  | Required | The page title                                                                                                                                                                             |
+  | `description` | String  | Required | A short, one-sentence description of the page content                                                                                                                                      |
+  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`                                                                                                                           |
+  | `authors`     | List    | Required | A list of authors of the page, in the format `Name (@GitHubUsername)`, or just `Name`. Authors without a username will have the NUbots icon as a default avatar, without a link to GitHub. |
+  | `references`  | String  | Optional | Relative path to a `.bib` file with references for use on the page. Defaults to `[mdx-file-name].bib` if a matching Bibtex file with the same name as the MDX file is available.           |
+  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                                                                                                                                |
+  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing                                                                                                                      |
 
 ## Formatting Code
 
