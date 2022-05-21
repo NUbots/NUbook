@@ -124,11 +124,13 @@ In general, it might be useful to adjust the `confidence_threshold` on both dete
 
 ## Benchmarks
 
-Benchmark results for various aspects of the vision system. These benchmarks tell us how well the system performs and if a new method improves the system.
+Benchmark results for various aspects of the vision system. These benchmarks tell us how well the system performs and if a new method improves the system. In general, benchmarks should be recalculated when there may be a change in the results. The benchmarks should be verified every six months if no changes have been made, to ensure unrelated changes did not cause issues.
 
 ### Visual Mesh
 
 Test results from the Visual Mesh, broken down for each class with precision and recall values. The complete output from the Visual Mesh test can be found on the Google Drive, in the [Benchmarks folder](https://drive.google.com/drive/folders/1OKdhV-dKLGJXYNLWaIw9lQ_8xBJf0cfT) with a date. As well as the information provided on this page, the output contains graphs for each class for [F1](https://towardsdatascience.com/the-f1-score-bec2bbc38aa6), [Informedness, Markedness](https://rvprasad.medium.com/informedness-and-markedness-20e3f54d63bc), [MCC](https://en.wikipedia.org/wiki/Phi_coefficient), [MI](https://en.wikipedia.org/wiki/Mutual_information), [PR](https://medium.com/@douglaspsteen/precision-recall-curves-d32e5b290248), [Precision, Recall](https://en.wikipedia.org/wiki/Precision_and_recall), [ROC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc).
+
+Visual Mesh benchmarks should be updated when a network is trained and added to the NUbots codebase, or if the Visual Mesh code updates in a way that would effect these values.
 
 #### Real World
 
@@ -136,7 +138,7 @@ Coming soon...
 
 #### Webots
 
-Full metrics can be found in the Benchmarks folder on the NUbots Google Drive. Test dataset can be found on the NAS device.
+Full metrics can be found in the Benchmarks folder on the NUbots Google Drive. Test dataset can be found on the NAS device. Should be updated if a new Webots Visual Mesh network replaces the old network, or if the RoboCup environment in Webots changes (a new network should be trained in this case).
 
 <details>
 
@@ -308,7 +310,7 @@ Real Environment samples are predicted as:
 
 ### Object Positions
 
-Post-processing heuristics use Visual Mesh results to find the position of likely objects in the image. These benchmarks are the error between the real position and the calculated position in the three-dimensional world.
+Post-processing heuristics use Visual Mesh results to find the position of likely objects in the image. These benchmarks are the error between the real position and the calculated position in the three-dimensional world. This should be updated if the post-processing heuristics are updated, or if the Visual Mesh output changes.
 
 #### Real World
 
