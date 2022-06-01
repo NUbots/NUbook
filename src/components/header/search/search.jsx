@@ -1,10 +1,18 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 
 import SearchIcon from './search-icon.svg'
 import * as style from './search.module.css'
 
-const Search = ({ background }) => (
+import { initialiseAlgolia } from './algolia-search'
+
+const Search = ({ background }) => {
+
+  useEffect(()=>{
+    initialiseAlgolia();
+  }, [])
+  
+  return (
   <div
     className={`${style.search} ${
       background === 'solid'
@@ -23,7 +31,7 @@ const Search = ({ background }) => (
       className={`${style.searchIcon} absolute top-0 left-0 w-5 md:w-6 h-6 ml-3 md:ml-4 mt-2 pointer-events-none`}
     />
   </div>
-)
+)}
 
 Search.propTypes = {
   background: PropTypes.string,

@@ -16,6 +16,7 @@ function loadAlgoliaScript() {
   })
 }
 
+export const initialiseAlgolia = () => {
 loadAlgoliaScript().then(() => {
   docsearch({
     apiKey: 'be16e460d9d03fa711df82d525dec3c1',
@@ -33,7 +34,7 @@ loadAlgoliaScript().then(() => {
     },
   })
 })
-
+}
 // Add support for the / keyboard shortcut
 window.addEventListener('keydown', (event) => {
   // Don't do anything if an input is focused
