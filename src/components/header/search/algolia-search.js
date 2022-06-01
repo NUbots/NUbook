@@ -17,23 +17,23 @@ function loadAlgoliaScript() {
 }
 
 export const initialiseAlgolia = () => {
-loadAlgoliaScript().then(() => {
-  docsearch({
-    apiKey: 'be16e460d9d03fa711df82d525dec3c1',
-    indexName: 'nubots',
-    inputSelector: '#search',
-    debug: false,
-    // Update the URL on hits to have the current origin,
-    // to support local development and deploy previews
-    // (they point to the production site otherwise)
-    transformData: function (hits) {
-      hits.forEach((hit) => {
-        const { origin } = new URL(hit.url)
-        hit.url = hit.url.replace(origin, window.location.origin)
-      })
-    },
+  loadAlgoliaScript().then(() => {
+    docsearch({
+      apiKey: 'be16e460d9d03fa711df82d525dec3c1',
+      indexName: 'nubots',
+      inputSelector: '#search',
+      debug: false,
+      // Update the URL on hits to have the current origin,
+      // to support local development and deploy previews
+      // (they point to the production site otherwise)
+      transformData: function (hits) {
+        hits.forEach((hit) => {
+          const { origin } = new URL(hit.url)
+          hit.url = hit.url.replace(origin, window.location.origin)
+        })
+      },
+    })
   })
-})
 }
 // Add support for the / keyboard shortcut
 window.addEventListener('keydown', (event) => {
