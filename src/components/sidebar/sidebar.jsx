@@ -81,12 +81,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
               {chapter.title}
             </div>
             {chapter.pages.map((page) => (
-              <Link
-                to={page.slug}
-                key={page.slug}
-                getProps={getLinkProps}
-                activeClassName='testingclassname'
-              >
+              <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}
               </Link>
             ))}
