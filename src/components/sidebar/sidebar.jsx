@@ -16,6 +16,8 @@ const iconMap = {
   ['Kitchen Sink']: IconTools,
 }
 
+const ACTIVE_LINK_SELECTOR = 'active-sidebar-link'
+
 function elementInView(element, container) {
   const top = element.offsetTop
   const parentTop = container.scrollTop
@@ -29,9 +31,8 @@ const getLinkProps = ({ isCurrent }) => {
   return {
     className: `${
       style.link
-    } text-primary-muted dark:text-primary-muted-inverted ${
-      isCurrent ? style.linkActive : ''
-    }`,
+    } text-primary-muted dark:text-primary-muted-inverted 
+    ${isCurrent ? `${style.linkActive} ${ACTIVE_LINK_SELECTOR}` : ''}`,
   }
 }
 
@@ -41,7 +42,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
   // Scroll to reveal the active link on mount
   useEffect(() => {
     const activeLink = sidebarRef.current.querySelector(
-      `.${style.linkActive.replace('+', '\\+')}`
+      `.${ACTIVE_LINK_SELECTOR}`
     )
 
     if (activeLink && !elementInView(activeLink, wrapperRef.current)) {
@@ -80,7 +81,12 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
               {chapter.title}
             </div>
             {chapter.pages.map((page) => (
-              <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
+              <Link
+                to={page.slug}
+                key={page.slug}
+                getProps={getLinkProps}
+                activeClassName='testingclassname'
+              >
                 {page.title}
               </Link>
             ))}
