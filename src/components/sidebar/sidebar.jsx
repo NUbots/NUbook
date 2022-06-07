@@ -40,7 +40,9 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
 
   // Scroll to reveal the active link on mount
   useEffect(() => {
-    const activeLink = sidebarRef.current.querySelector(`.${style.linkActive.replace("+", "\\+")}`)
+    const activeLink = sidebarRef.current.querySelector(
+      `.${style.linkActive.replace('+', '\\+')}`
+    )
 
     if (activeLink && !elementInView(activeLink, wrapperRef.current)) {
       activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
