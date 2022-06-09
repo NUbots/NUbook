@@ -165,27 +165,35 @@ The rest of these instructions assume a network using WPA2 (like the network use
    - Wait a handful of seconds and run `ip addr` to check that the WiFi interface has an IP address
 
 
-## General Network Tips
+## Switching Wifi Networks
 
-Suppose you need to switch wifi networks on the robot. There are two options: 
-1. Modifying a local file (not so good)
-2. Changing which network the robot is associated with (better)
-The second option is better because it does not persist after reboot, which means that any changes are not permenant.
+Switching wifi networks can be accomplished with the following two commands:
 
-The tool you need to use is wpa_cli:
-
-```bash
-nubots@nugus3 ~ ❯❯❯ wpa_cli list_networks
+```
+$ wpa_cli list_networks
 Selected interface 'wlp58s0'
 network id / ssid / bssid / flags
 0	epsilon-z	any	[CURRENT]
 1	epsilon-x	any	[DISABLED]
 2	NETGEAR89	any	[DISABLED]
-nubots@nugus3 ~ ❯❯❯ wpa_cli select_network 2; wpa_cli status
+
+$ wpa_cli select_network 2
 Selected interface 'wlp58s0'
 client_loop: send disconnect: Broken pipe
-# ... different connection.
-nubots@nugus3 ~ ❯❯❯ wpa_cli status
+```
+
+The number `N` provided to `wpa_cli select_network <N>` is the network id given by `wpa_cli list_networks`. To switch to `epsilon-z` one would execute `wpa_cli select_network 0`.
+The example above was executed through a connection over the wifi interface, hence why the pipe broke.
+
+This approach is better than modifying the files because:
+1. Modifying files is permenent where as selecting a different network is not.
+2. Root permissions are not required to change networks.
+3. There's no need to reload the wpa_supplicant configuration.
+
+
+Finally, to check which network the robot is associated with, run:
+```bash
+$ wpa_cli status
 Selected interface 'wlp58s0'
 bssid=14:59:c0:d2:07:29
 freq=2472
@@ -207,6 +215,5 @@ In summary, the three commands that you need to know are:
 2. `wpa_cli select_network <N>`
 3. `wpa_cli status`
 
-No file modifications or root access required.
-
-It's recommended to not have the robot connected to the ethernet network. This code assumes that the IP address of the robot, and in general, the network topology is similar enough between the two networks.
+This technique assumes that the network has been configured in `/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`. See above for associating with different wifi networks.
+The bond network configuration on the robot means that a connected ethernet connection will take priority. This would mean packets received over the wifi would be responded to over the ethernet. Given that the ip addresses, gateway and subnets are the same between networks, it probably won't be obvious that packets are being routed incorrectly. (Or it might just work, who knows?).
