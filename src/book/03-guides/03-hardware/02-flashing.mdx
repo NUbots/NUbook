@@ -163,3 +163,48 @@ The rest of these instructions assume a network using WPA2 (like the network use
      ```
    - Be sure to replace `<WiFi Interface>` with the name of the interface found earlier.
    - Wait a handful of seconds and run `ip addr` to check that the WiFi interface has an IP address
+
+
+## General Network Tips
+
+Suppose you need to switch wifi networks on the robot. There are two options: 
+1. Modifying a local file (not so good)
+2. Changing which network the robot is associated with (better)
+The second option is better because it does not persist after reboot, which means that any changes are not permenant.
+
+The tool you need to use is wpa_cli:
+
+```bash
+nubots@nugus3 ~ ❯❯❯ wpa_cli list_networks
+Selected interface 'wlp58s0'
+network id / ssid / bssid / flags
+0	epsilon-z	any	[CURRENT]
+1	epsilon-x	any	[DISABLED]
+2	NETGEAR89	any	[DISABLED]
+nubots@nugus3 ~ ❯❯❯ wpa_cli select_network 2; wpa_cli status
+Selected interface 'wlp58s0'
+client_loop: send disconnect: Broken pipe
+# ... different connection.
+nubots@nugus3 ~ ❯❯❯ wpa_cli status
+Selected interface 'wlp58s0'
+bssid=14:59:c0:d2:07:29
+freq=2472
+ssid=NETGEAR89
+id=2
+mode=station
+wifi_generation=4
+pairwise_cipher=CCMP
+group_cipher=CCMP
+key_mgmt=WPA2-PSK
+wpa_state=COMPLETED
+p2p_device_address=00:24:d6:d1:f6:41
+address=76:0f:5d:3d:ce:db
+uuid=f96d74c5-bf3a-5aa7-ab11-9f3892fb8d25
+```
+
+In summary, the three commands that you need to know are:
+1. `wpa_cli list_networks`
+2. `wpa_cli select_network <N>`
+3. `wpa_cli status`
+
+No file modifications or root access required.
