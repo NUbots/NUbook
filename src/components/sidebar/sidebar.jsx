@@ -16,8 +16,6 @@ const iconMap = {
   ['Kitchen Sink']: IconTools,
 }
 
-const ACTIVE_LINK_SELECTOR = 'active-sidebar-link'
-
 function elementInView(element, container) {
   const top = element.offsetTop
   const parentTop = container.scrollTop
@@ -29,10 +27,8 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${
-      style.link
-    } text-primary-muted dark:text-primary-muted-inverted 
-    ${isCurrent ? `${style.linkActive} ${ACTIVE_LINK_SELECTOR}` : ''}`,
+    'className': `${style.link} text-primary-muted dark:text-primary-muted-inverted  ${isCurrent ? style.linkActive : ''}`,
+    'data-active-link': isCurrent ? true : null,
   }
 }
 
@@ -41,9 +37,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
 
   // Scroll to reveal the active link on mount
   useEffect(() => {
-    const activeLink = sidebarRef.current.querySelector(
-      `.${ACTIVE_LINK_SELECTOR}`
-    )
+    const activeLink = sidebarRef.current.querySelector('[data-active-link]')
 
     if (activeLink && !elementInView(activeLink, wrapperRef.current)) {
       activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
