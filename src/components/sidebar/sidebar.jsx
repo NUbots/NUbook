@@ -27,7 +27,11 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    'className': `${style.link} text-primary-muted dark:text-primary-muted-inverted  ${isCurrent ? style.linkActive : ''}`,
+    'className': `${
+      style.link
+    } text-primary-muted dark:text-primary-muted-inverted  ${
+      isCurrent ? style.linkActive : ''
+    }`,
     'data-active-link': isCurrent ? true : null,
   }
 }
