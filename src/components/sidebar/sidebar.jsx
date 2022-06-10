@@ -27,11 +27,12 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${
+    'className': `${
       style.link
     } text-primary-muted dark:text-primary-muted-inverted ${
       isCurrent ? style.linkActive : ''
     }`,
+    'data-active-link': isCurrent ? true : null,
   }
 }
 
@@ -40,7 +41,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
 
   // Scroll to reveal the active link on mount
   useEffect(() => {
-    const activeLink = sidebarRef.current.querySelector(`.${style.linkActive}`)
+    const activeLink = sidebarRef.current.querySelector('[data-active-link]')
 
     if (activeLink && !elementInView(activeLink, wrapperRef.current)) {
       activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
