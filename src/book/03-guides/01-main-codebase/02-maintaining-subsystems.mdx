@@ -4,6 +4,8 @@ chapter: Main Codebase
 title: Maintaining Subsystems
 description: How to maintain subsystems within the main codebase.
 slug: /guides/main/maintaining-subsystems
+authors:
+  - Ysobel Sims (@ysims)
 ---
 
 This page details how to maintain various subsystems within the main codebase.
@@ -50,7 +52,7 @@ The resulting network should be exported to a [yaml](https://yaml.org/) file and
 
 The vision system cannot work optimally if the cameras are not calibrated correctly. [The input page](/system/subsystems/input) describes the camera parameters that can be calibrated.
 
-An automatic camera calibration tool is available in the NUbots repository. See the [camera calibration guide](guides/main/camera-calibration#page-content) to find out how to use this tool.
+An automatic camera calibration tool is available in the NUbots repository. See the [camera calibration guide](/guides/main/camera-calibration) to find out how to use this tool.
 
 ### Testing
 
@@ -119,3 +121,201 @@ Potentially, the Visual Mesh had positive results after training, but when used 
    ```
 
 In general, it might be useful to adjust the `confidence_threshold` on both detectors to improve the results. Other variables may give better results with different values, except for `log_level` and the covariances (`goal_projection_covariance` and `ball_angular_cov`).
+
+## Benchmarks
+
+Benchmark results for various aspects of the vision system. These benchmarks tell us how well the system performs and if a new method improves the system. In general, benchmarks should be recalculated when there may be a change in the results. The benchmarks should be verified every six months if no changes have been made, to ensure unrelated changes did not cause issues.
+
+### Visual Mesh
+
+Test results from the Visual Mesh, broken down for each class with precision and recall values. The complete output from the Visual Mesh test can be found on the Google Drive, in the [Benchmarks folder](https://drive.google.com/drive/folders/1OKdhV-dKLGJXYNLWaIw9lQ_8xBJf0cfT) with a date. As well as the information provided on this page, the output contains graphs for each class for [F1](https://towardsdatascience.com/the-f1-score-bec2bbc38aa6), [Informedness, Markedness](https://rvprasad.medium.com/informedness-and-markedness-20e3f54d63bc), [MCC](https://en.wikipedia.org/wiki/Phi_coefficient), [MI](https://en.wikipedia.org/wiki/Mutual_information), [PR](https://medium.com/@douglaspsteen/precision-recall-curves-d32e5b290248), [Precision, Recall](https://en.wikipedia.org/wiki/Precision_and_recall), [ROC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc).
+
+Visual Mesh benchmarks should be updated when a network is trained and added to the NUbots codebase, or if the Visual Mesh code updates in a way that would effect these values.
+
+#### Real World
+
+Coming soon...
+
+#### Webots
+
+Full metrics can be found in the Benchmarks folder on the NUbots Google Drive. Test dataset can be found on the NAS device. Should be updated if a new Webots Visual Mesh network replaces the old network, or if the RoboCup environment in Webots changes (a new network should be trained in this case).
+
+<details>
+
+<summary>Ball</summary>
+
+Precision: 0.9552730904880183
+
+Recall: 0.9474011799668628
+
+Predicted Ball samples are really:
+
+- Ball: 95.527%
+- Goal: 0.198%
+- Line: 1.132%
+- Field: 2.163%
+- Robot: 0.902%
+- Environment: 0.078%
+
+Real Ball samples are predicted as:
+
+- Ball: 94.740%
+- Goal: 0.506%
+- Line: 1.528%
+- Field: 1.077%
+- Robot: 2.031%
+- Environment: 0.117%
+
+</details>
+
+<details>
+
+<summary>Goal</summary>
+
+Precision: 0.9744150403727407
+
+Recall: 0.9818396740798292
+
+Predicted Goal samples are really:
+
+- Ball: 0.006%
+- Goal: 97.442%
+- Line: 0.176%
+- Field: 0.462%
+- Robot: 0.100%
+- Environment: 1.814%
+
+Real Goal samples are predicted as:
+
+- Ball: 0.002%
+- Goal: 98.184%
+- Line: 0.146%
+- Field: 0.210%
+- Robot: 0.056%
+- Environment: 1.402%
+
+</details>
+
+<details>
+
+<summary>Line</summary>
+
+Precision: 0.9639229445906177
+
+Recall: 0.9643768381560178
+
+Predicted Line samples are really:
+
+- Ball: 0.036%
+- Goal: 0.280%
+- Line: 96.392%
+- Field: 2.885%
+- Robot: 0.365%
+- Environment: 0.042%
+
+Real Line samples are predicted as:
+
+- Ball: 0.026%
+- Goal: 0.341%
+- Line: 96.438%
+- Field: 2.910%
+- Robot: 0.283%
+- Environment: 0.002%
+
+</details>
+
+<details>
+
+<summary>Field</summary>
+
+Precision: 0.9970544868367878
+
+Recall: 0.9969097621584649
+
+Predicted Field samples are really:
+
+- Ball: 0.001%
+- Goal: 0.017%
+- Line: 0.120%
+- Field: 99.705%
+- Robot: 0.074%
+- Environment: 0.082%
+
+Real Field samples are predicted as:
+
+- Ball: 0.002%
+- Goal: 0.037%
+- Line: 0.119%
+- Field: 99.691%
+- Robot: 0.087%
+- Environment: 0.064%
+
+</details>
+
+<details>
+
+<summary>Robot</summary>
+
+Precision: 0.9772128370131125
+
+Recall: 0.9823020939044803
+
+Predicted Robot samples are really:
+
+- Ball: 0.006%
+- Goal: 0.015%
+- Line: 0.038%
+- Field: 0.283%
+- Robot: 97.721%
+- Environment: 1.936%
+
+Real Robot samples are predicted as:
+
+- Ball: 0.003%
+- Goal: 0.026%
+- Line: 0.050%
+- Field: 0.244%
+- Robot: 98.230%
+- Environment: 1.447%
+
+</details>
+
+<details>
+
+<summary>Environment</summary>
+
+Precision: 0.9977592789558581
+
+Recall: 0.9970136589036935
+
+Predicted Environment samples are really:
+
+- Ball: 0.000%
+- Goal: 0.040%
+- Line: 0.000%
+- Field: 0.023%
+- Robot: 0.160%
+- Environment: 99.776%
+
+Real Environment samples are predicted as:
+
+- Ball: 0.000%
+- Goal: 0.053%
+- Line: 0.001%
+- Field: 0.030%
+- Robot: 0.215%
+- Environment: 99.701%
+
+</details>
+
+### Object Positions
+
+Post-processing heuristics use Visual Mesh results to find the position of likely objects in the image. These benchmarks are the error between the real position and the calculated position in the three-dimensional world. This should be updated if the post-processing heuristics are updated, or if the Visual Mesh output changes.
+
+#### Real World
+
+Coming soon...
+
+#### Webots
+
+Coming soon...
