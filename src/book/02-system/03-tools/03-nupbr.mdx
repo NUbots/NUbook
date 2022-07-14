@@ -17,10 +17,6 @@ keywords:
   ]
 ---
 
-<Alert type='warning'>
-  NUpbr currently only supports Blender 2.79. Ensure this version is installed.
-</Alert>
-
 ## Motivation
 
 As the power of state-of-the-art deep learning methods increases, so does the requirement for large, fully annotated datasets. Particularly in terms of object recognition and classification computer vision tasks, annotation of this data requires considerable time and effort when performed manually by humans.
@@ -190,7 +186,7 @@ However, these colours can be configured as per user requirements in `scene_conf
 
 ## Usage
 
-The NUpbr repository can be found [within the NUbots organisation](https://github.com/NUbots/NUpbr). To run the data generation script, ensure [Blender 2.79](https://www.blender.org/download/previous-versions/) is installed. Ensure that the configuration properties are established as desired, as found in `pbr/config/output_config.py`
+The NUpbr repository can be found [within the NUbots organisation](https://github.com/NUbots/NUpbr). To run the data generation script, ensure [Blender 2.93 LTS](https://www.blender.org/download/lts/2-93/) is installed. Ensure that the configuration properties are established as desired, as found in `pbr/config/output_config.py`
 This includes:
 
 | Config Parameter | Type    | Example Value | Description                                                                                                                                |
@@ -225,5 +221,4 @@ blender --python pbr.py -b
 
 ## Future Work
 
-- Porting to Blender 2.8
 - Porting field UV map generation to OpenCV
