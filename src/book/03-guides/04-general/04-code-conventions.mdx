@@ -46,6 +46,8 @@ A summary is given in the table below.
 
 We use tokens called "directives" or "tags" to annotate different parts of a comment with rich metadata. These directives start with `@` or `\` (`@` is preferred) and are followed by the directive name, arguments (for some directives), and a single line of description.
 
+The directives are used by doxygen to create the [codedocs](https://codedocs.nubots.net/).
+
 When writing modules, the `.hpp` should include a documenting comment for each class, struct, function, method, global variable, member variable and anything extra that you think may need one.
 
 ### Directives
@@ -119,6 +121,3 @@ class SimulationRobot {
 }
 ```
 
-### Future
-
-In the future we are planning to use a combination of Doxygen and our NUClear mapper for automatic low level documentation of our code, which will be included in NUbook.
