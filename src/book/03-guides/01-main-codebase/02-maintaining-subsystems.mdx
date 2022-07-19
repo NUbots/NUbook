@@ -50,6 +50,8 @@ The resulting network should be exported to a [yaml](https://yaml.org/) file and
 
 #### Running OpenCL not on the robot
 
+The Visual Mesh works best running the OpenCL framework, however most operating systems are not set up to run this by default. Whilst running the Visual Mesh on CPU is possible, sometimes it is best to replicate an environment as close to what is running on the robot as possible. Follow the steps below to set up OpenCL on a device other than a robot.
+
 1. Install the OpenCL SDK for your device from the [Intel website](https://www.intel.com/content/www/us/en/developer/tools/opencl-sdk/choose-download.html)
 
 2. Create a temporary directory and install the pre-built OpenCL drivers
@@ -67,7 +69,7 @@ sudo apt install ./*deb
 
 3. Change the `VisualMesh.yaml` configuration "engine" node to `opencl`
 
-4. Build the binary and then run with the following command to bind the PC drivers to the docker image
+4. Build the binary and then run with the following command to bind the PC drivers to the docker container
 
 ```bash
 ./b build
@@ -80,16 +82,15 @@ The vision system cannot work optimally if the cameras are not calibrated correc
 
 An automatic camera calibration tool is available in the NUbots repository. See the [camera calibration guide](/guides/main/camera-calibration) to find out how to use this tool.
 
-
 ### Fake Camera
 
 To run the fake camera module, an images directory needs to exist inside the `data` directory of the module.
 
 1. Create an `images` directory and add several images with filenames matching `imageXXXXXX.jpg` where "XXXXXX" refers to any numerical digits
 
-2. Change the `image_folder` node to the location that the data is stored in the docker image: `/home/nubots/NUbots/module/input/FakeCamera/data/images`
+2. Change the `FakeCamera.yaml` configuration "image_folder" node to the location that the data is stored in the docker image, which should be something like this: `/home/nubots/NUbots/module/input/FakeCamera/data/images`
 
-3. Build and run a role with the fake camera in the position in the list that the regular camera module normally installs
+3. Build and run a role with the fake camera module in the heirarchical position in the list that the regular camera module would normally be
 
 ### Testing
 
@@ -127,7 +128,7 @@ If you would like to see the Visual Mesh output in NUsight, you will need to log
 
 ### Image Compressors
 
-In order to send data to NUsight via the network, images need to be compressed. Depending on the environment different compressors can be used. [TurboJPEG](https://github.com/libjpeg-turbo/libjpeg-turbo) is the compressor that can be used on all platforms, whilst [vaapi](https://01.org/linuxmedia/vaapi) is the preferred compressor for devices running on Intel CPUs
+In order to send data to NUsight via the network, images need to be compressed. Depending on the environment different compressors can be used. [TurboJPEG](https://github.com/libjpeg-turbo/libjpeg-turbo) is the compressor that can be used on all platforms and is used primarily when submitting docker images for virtual competitions as the processor type cannot be guaranteed. [VAAPI](https://01.org/linuxmedia/vaapi) is the preferred compressor for devices running on Intel CPUs, which support the framework.
 
 The configuration for either of these belongs in `ImageCompressor.yaml` and is as follows
 
@@ -142,7 +143,7 @@ compressor:
 
 #### Vaapi
 
-<Alert>Only computers with an Intel CPU will be able to use vaapi</Alert>
+<Alert>Only computers with an Intel CPU will be able to use VAAPI</Alert>
 
 ```bash
 compressor:
