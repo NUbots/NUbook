@@ -137,9 +137,9 @@ The configuration for either of these belongs in `ImageCompressor.yaml` and is a
 
 ```yaml
 compressor:
-   name: turbojpeg
-   concurrent: 2
-   quality: 90
+  - name: turbojpeg
+    concurrent: 2
+    quality: 90
 ```
 
 #### Vaapi
@@ -148,11 +148,11 @@ compressor:
 
 ```yaml
 compressor:
-   name: vaapi
-   concurrent: 2
-   quality: 90
-   device: /dev/dri/renderD128
-   driver: iHD
+  - name: vaapi
+    concurrent: 2
+    quality: 90
+    device: /dev/dri/renderD128
+    driver: iHD
 ```
 
 ### Tuning Detectors
