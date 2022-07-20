@@ -1,14 +1,14 @@
 //Gets the mdx files in NUbook and stores in an array 'files'
 require('events').EventEmitter.defaultMaxListeners = Infinity; 
-var fs = require('fs');
-var path = require('path');
+import { readdirSync, statSync, readFileSync } from 'fs';
+import { resolve } from 'path';
  
 var searchRecursive = function(dir, pattern) { //https://stackoverflow.com/a/47886550
   var results = [];
-  fs.readdirSync(dir).forEach(function (dirInner) {
+  readdirSync(dir).forEach(function (dirInner) {
    
-    dirInner = path.resolve(dir, dirInner);
-    var stat = fs.statSync(dirInner);
+    dirInner = resolve(dir, dirInner);
+    var stat = statSync(dirInner);
  
     if (stat.isDirectory()) {
       results = results.concat(searchRecursive(dirInner, pattern));
@@ -31,7 +31,7 @@ for (var j = 0; j < files.length; j++) {
 	//Search through a file and find URLs using regex -> add to list
  
 	var fs = require('fs');
-	var array = fs.readFileSync(files[j]).toString().split("\n");
+	var array = readFileSync(files[j]).toString().split("\n");
 	//array is a mdx file
  
 	//check file for URLs
@@ -67,10 +67,10 @@ for (var j = 0; j < files.length; j++) {
 		}
 	}
 }
-const request = require('request');
+import { head } from 'request';
   
 function sendHTTPRequest(linkURL) {
-  request.head(linkURL, {timeout: 15000}, (error, res) => {
+  head(linkURL, {timeout: 15000}, (error, res) => {
   const exists = !error && res.statusCode.toString().startsWith(2);
   
   if (!exists){
