@@ -41,7 +41,7 @@ for (var j = 0; j < files.length; j++) {
 	var found;
  
 	for(var i in array) { //for each file in the array
-		while(found = reBrackets.exec((array[i]))) { //gets text in brackets
+		while(found == reBrackets.exec((array[i]))) { //gets text in brackets
  
 			var t = found[1].split(" ", 1)[0];
 			if (t.includes("/")){ //check if stuff in brackets contains a link & whether external/internal
