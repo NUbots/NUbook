@@ -6,6 +6,126 @@ description: Debriefs and takeaways from our performances at RoboCup.
 slug: /team/robocup/debriefs
 ---
 
+## 2022: Bangkok, Thailand
+
+RoboCup Bangkok was the first in-person competition in three years due to COVID-19. All but one team member had never been to an in-person RoboCup competition, and none had been to an overseas RoboCup competition. The team faced further issues when the majority of the luggage did not arrive until the end of the second competition day. 
+
+### What went wrong 
+
+#### Hardware
+
+- Didn't pack enough cables for battery chargers
+- CM740s are no good, need to get something new. Cannot buy more, and we only have two working.
+- NUC died due to overheating
+- Needed more monitors: one was just not enough
+- Issues of wiring getting in the way – makes it hard to swap things out 
+- No soldering happened, but the setup could have been better if we did use it
+- Long ethernet cables became tedious to use and untangle
+- Heat dissipation is an issue
+
+#### Networking
+
+- Issues with connecting to GameController during games
+
+#### Vision
+
+- Red camera. Possible hardware issue? Swapping the cable fixed the issue, but this may have reset the automatic white balance
+- New mesh is too computationally expensive for the NUCs that we have. Potentially go down to one camera per robot and lower the number of images received from the camera
+- The bottom of the mesh, near the robot's feet, bends around, possibly causing issues with ball detection near the feet
+- Hoc was slightly off - odometry or camera calibration
+- NUsight was unreliable for testing vision
+- Theta was in check-in, not carry-on, so couldn’t collect data until later. Did get one image earlier using a theta from CIT Brains
+
+#### NUsight
+
+- Difficulty connecting to NUsight
+
+#### Localisation and Odometry
+
+- No localisation
+- Hoc was slightly off for vision
+
+#### Miscellanious
+
+- No robots until end of first competition day due to missing luggage
+
+### What went well
+
+#### Hardware
+
+- Didn’t replace a single servo at the competition
+- Padding was effective for keeping the robot protected and for colour requirement in inspection
+
+#### Motions
+
+- The robots were able to walk stabily!!
+- Getups basically worked flawlessly
+
+#### Networking
+
+- Able to connect to GameController for most of the games
+
+#### Odometry
+
+- Pitch and roll were good, better than the previous year
+
+#### Vision
+
+- Fine tuning for vision worked well despite not having our own Theta camera
+
+#### Teamwork and Moral
+
+- Got robot ready for qualification very quickly
+- We all came to the games - had three different robot handlers for four games
+- Got lots of promotional footage of the robot 
+- We made the quarter finals despite not having two whole set up days and the first competition day to test the system and networking
+- Within 30 minutes of getting our robots from the airport, the robots were walking and getting up
+- Good preparation before the competition was vital to the team being able to perform at all when the robots arrived at the end of the first competition day
+- Overall made good progress compared to RoboCup 2019 Sydney
+- On par or better than Team-KMUTT, UTRA, Hamburg Bit-Bots, Bold Hearts, ITAndroids, RoboFEI
+- Students at home were around to help with vision fine-tuning
+
+### What’s Next
+
+#### Networking
+
+- System configuration tool
+- Configurable headless mode, lightweight, if no system config tool due to it being tedious to set up networking
+- Team Robot communication – only one robot connects to GameController and then sends information to the other robots
+- Make GameController connection more robust
+- See how the small robots do team communication
+
+#### Hardware
+
+- Find a replacement for CM740’s quick so we can buy or make them before the end of the year.
+  - Redesign NUsense to only contain the core functionality – then additional functionality can be added with shields – modular system – modules that you can plug in
+- Get a decent battery powered soldering iron (TS100), a decent stand, sponge, and safety glasses with some back up wire and various connections
+- Better servos on the knees
+- Kneecaps to stop the knees overextending
+- Servo covers - couldn't get up from the back because of servos hitting each other
+- Improve cable management in the robot
+- Sort out a reel for longer ethernet cables
+- Look into purchasing small portable monitors for RoboCup
+- More out of the box / off the shelf solutions for hardware, such as a proper cooling system that we can buy off the shelf
+- Redesigning the back of the robot for easy access and able to give better padding protection
+
+#### Organisation
+
+- Target research / postgrad students - remove ‘maybe’ from do you plan on doing postgrad question
+- Attempt the git workshop again
+- Project management. Make a physical board
+- Create a culture of high performance
+- Keep momentum up, particularly post Robocup
+- Try and keep dev evenings early in the week (Monday, Tuesday) so people aren't busy with assignments
+- Make team desirable for academics
+- Come up with ideas on how to improve motivation
+- Keep dev evenings / time in the lab focused on development
+- Pack robots whole rather than disassembled - 2 in large case, one in square case, possibly carry-on
+
+#### NUsight
+
+- Sort out general connectivity to NUsight - had issues connecting at all, possibly use a different wifi solution
+
 ## 2021: Online Simulation
 
 Due to COVID-19, the 2021 competition was held online using the simulation software Webots.
