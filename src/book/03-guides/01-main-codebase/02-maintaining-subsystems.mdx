@@ -165,11 +165,11 @@ Potentially, the Visual Mesh had positive results after training, but when used 
 2. SSH onto the robot.
 3. Enable NUsight messages on the robot by running
 
-```bash
-nano config/NetworkForwarder.yaml
-```
+   ```bash
+   nano config/NetworkForwarder.yaml
+   ```
 
-and set `message.vision.Balls` and `message.vision.Goals` to `true`.
+   and set `message.vision.Balls` and `message.vision.Goals` to `true`.
 
 4. Run NUsight using `yarn prod` on a computer. Set up NUsight using the [Getting Started page](/guides/main/getting-started) if necessary.
 5. Run `./visualmesh` on the robot.
