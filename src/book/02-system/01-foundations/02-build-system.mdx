@@ -568,6 +568,7 @@ target = {
 ```
 
 ### Dependency Declaration
+
 CMake needs to know what dependencies we have and where to find them.
 In a module's folder the `CMakeLists.txt` file tells CMake what is needed to build a module.
 The `nuclear_modlue()` function tells CMake that this directory contains a module that may be added to a role.
@@ -578,7 +579,7 @@ This function may take named parameters.
 | LANGUAGE   | The Programming Language that this module is in (currently only c++)           |
 | LIBRARIES  | The libraries that this module depends on and must be linked with              |
 | SOURCES    | Extra code outside the `src` directory that must be built                      |
-| DATA_FILES | Extra data files outside the `data` directory that is necessary for the module | 
+| DATA_FILES | Extra data files outside the `data` directory that is necessary for the module |
 
 Now for libraries in particular CMake needs to know where the libraries are located,
 the function `find_package()` is used to tell CMake to find the library.
@@ -587,7 +588,8 @@ CMake then looks in the `cmake/Modules/` directory for files like `FindX.cmake` 
 CMake can also look for build instruction files in `lib/cmake/X/` like `XConfig.cmake` where `X` is the name of the
 library.
 An example file looks like
-``` cmake
+
+```cmake
 include(ToolchainLibraryFinder)
 
 find_package(glib2 REQUIRED)
