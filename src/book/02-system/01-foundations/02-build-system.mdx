@@ -584,6 +584,8 @@ Now for libraries in particular CMake needs to know where the libraries are loca
 the function `find_package()` is used to tell CMake to find the library.
 
 CMake then looks in the `cmake/Modules/` directory for files like `FindX.cmake` for the logic to find the files.
+CMake can also look for build instruction files in `lib/cmake/X/` like `XConfig.cmake` where `X` is the name of the
+library.
 An example file looks like
 ``` cmake
 include(ToolchainLibraryFinder)
