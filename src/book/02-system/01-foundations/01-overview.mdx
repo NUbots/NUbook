@@ -33,8 +33,8 @@ The following is a table of roles that exist in the NUbots codebase and possible
 
 | Role Name               | Usage                                                                                                                                                                                                  |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `fake_visualmesh`       | Test the vision system, such as detection of balls and goals, in a simulated environment.                                                                                                              |
-| `fake_keyboardwalk`     | Test parts of the code without a real robot. Demonstrate basic functionality of the robot. Part of the [Getting Started](/guides/main/getting-started) example since it does not require a real robot. |
+| `fake/visualmesh`       | Test the vision system, such as detection of balls and goals, in a simulated environment.                                                                                                              |
+| `fake/keyboardwalk`     | Test parts of the code without a real robot. Demonstrate basic functionality of the robot. Part of the [Getting Started](/guides/main/getting-started) example since it does not require a real robot. |
 | `firmwareinstaller`     | Install CM740 firmware to the robot.                                                                                                                                                                   |
 | `keyboardwalk`          | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                                                                                                             |
 | `natnet`                | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.                                                                                                 |
@@ -43,28 +43,26 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | `robocup`               | Play RoboCup games on the real robot.                                                                                                                                                                  |
 | `scriptrunner`          | Run scripts such as the `Stand.yaml` script, which is useful to run before doing anything with the robot.                                                                                              |
 | `scripttuner`           | Tune/modify/create [scripts](/system/subsystems/motion#script-engine).                                                                                                                                 |
-| `test_balllocalisation` | Test and tune how well the robot detects balls on a field.                                                                                                                                             |
-| `test_camera`           | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).                                                                                                          |
-| `test_gamecontroller`   | Test the connection between the robot and [GameController](https://github.com/RoboCup-Humanoid-TC/GameController).                                                                                     |
-| `test_headbeh`          | Test head behaviour, particularly with balls and goals.                                                                                                                                                |
-| `test_localisation`     | Test localisation in a simulated environment.                                                                                                                                                          |
-| `test_nusight`          | Test the connection with NUsight. This role doesn't run anything that can send data.                                                                                                                   |
-| `test_sensor`           | Test odometry (needs NUsight). Check for broken servos without the robot moving, because servo errors and warnings will be printed to the terminal.                                                    |
-| `test_visualmesh`       | Test the vision system on a real robot.                                                                                                                                                                |
-| `webots_keyboardwalk`   | Test motions in Webots with manual control.                                                                                                                                                            |
-| `webots_robocup`        | Play RoboCup games in the Webots simulator.                                                                                                                                                            |
-| `webots_scripttuner`    | Tune/modify/create [scripts](/system/subsystems/motion#script-engine) in the webots simulator.                                                                                                         |
-| `webots`                | Test the connection between the robot code and Webots.                                                                                                                                                 |
+| `test/balllocalisation` | Test and tune how well the robot detects balls on a field.                                                                                                                                             |
+| `test/camera`           | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).                                                                                                          |
+| `test/gamecontroller`   | Test the connection between the robot and [GameController](https://github.com/RoboCup-Humanoid-TC/GameController).                                                                                     |
+| `test/headbeh`          | Test head behaviour, particularly with balls and goals.                                                                                                                                                |
+| `test/localisation`     | Test localisation in a simulated environment.                                                                                                                                                          |
+| `test/nusight`          | Test the connection with NUsight. This role doesn't run anything that can send data.                                                                                                                   |
+| `test/sensor`           | Test odometry (needs NUsight). Check for broken servos without the robot moving, because servo errors and warnings will be printed to the terminal.                                                    |
+| `test/visualmesh`       | Test the vision system on a real robot.                                                                                                                                                                |
+| `webots/keyboardwalk`   | Test motions in Webots with manual control.                                                                                                                                                            |
+| `webots/robocup`        | Play RoboCup games in the Webots simulator.                                                                                                                                                            |
+| `webots/scripttuner`    | Tune/modify/create [scripts](/system/subsystems/motion#script-engine) in the webots simulator.                                                                                                         |
+| `webots/webots`         | Test the connection between the robot code and Webots.                                                                                                                                                 |
 
-In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator`, `platform::Webots` and `platform::Gazebo`.
+In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator` and `platform::Webots`.
 
 Any code should run with `platform::darwin::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
 
 `platform::darwin::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
 
 `platform::Webots` is used with the Webots simulator. The code will only run if an [appropriate Webots controller is running](/guides/tools/webots-setup).
-
-`platform::Gazebo` is used with the Gazebo simulator. It will only work with the [appropriate Gazebo plugin](/guides/tools/gazebo-install).
 
 ## Codedocs
 
