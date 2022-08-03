@@ -574,14 +574,14 @@ In a module's folder the `CMakeLists.txt` file tells CMake what is needed to bui
 The `nuclear_module()` function tells CMake that this directory contains a module that may be added to a role.
 This function may take named parameters.
 
-| Parameter  | Usage                                                                          |
-| ---------- | ------------------------------------------------------------------------------ |
-| LANGUAGE   | The programming language that this module is in (currently only C++)           |
-| LIBRARIES  | The libraries that this module depends on and must be linked with              |
-| SOURCES    | Extra code outside the `src` directory that must be built                      |
-| DATA_FILES | Extra data files outside the `data` directory that the module uses |
+| Parameter  | Usage                                                                |
+| ---------- | -------------------------------------------------------------------- |
+| LANGUAGE   | The programming language that this module is in (currently only C++) |
+| LIBRARIES  | The libraries that this module depends on and must be linked with    |
+| SOURCES    | Extra code outside the `src` directory that must be built            |
+| DATA_FILES | Extra data files outside the `data` directory that the module uses   |
 
-CMake needs to know where libraries are located. The `cmake/Modules/` directory contains files called `FindX.cmake`, where `X` is the name of a library. These files contain the logic for finding library files. The function  `find_package(X)` is used to tell CMake to look for one of these `.cmake` files and run it.
+CMake needs to know where libraries are located. The `cmake/Modules/` directory contains files called `FindX.cmake`, where `X` is the name of a library. These files contain the logic for finding library files. The function `find_package(X)` is used to tell CMake to look for one of these `.cmake` files and run it.
 
 CMake can also look for build instruction files in `/lib/cmake/X/XConfig.cmake` where `X` is the name of the library.
 An example of one of these files, `FindAravis.cmake` which finds the Aravis library, is shown below
