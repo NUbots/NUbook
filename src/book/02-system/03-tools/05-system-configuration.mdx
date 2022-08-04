@@ -42,7 +42,8 @@ Checks are made to ensure that the link target exists, and the link doesn't exis
 
 ### Packages
 
-After this the system will then attempt to update and upgrade the system using the package manager.
+After this the system will then attempt to "upgrade" the system using the package manager, up till the date docker uses.
+This "upgrade" will actually be a downgrade if the robot is ahead of the date docker uses.
 Once this is done it will go through the list of packages in configuration and ensure that they are installed.
 
 ### Systemd
