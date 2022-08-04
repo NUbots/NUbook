@@ -55,53 +55,56 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
    - The installation script is located in the NUbots repository at [doc/ArchInstall/arch_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch_install.sh)
 
 6. Execute the script and follow the instructions
+
    - ```bash
      ./arch_install.sh
      ```
 
 7. The installation script will end by downloading a secondary script and providing you with a command that you must run
 
-    ```bash
-    ROBOT_NUMBER=<N> arch-chroot /mnt ./arch-chroot_install.sh
-    ```
+   ```bash
+   ROBOT_NUMBER=<N> arch-chroot /mnt ./arch-chroot_install.sh
+   ```
 
-    Substitute `<N>` with the number of the robot that you are building. This will influence the IP address of the robot as well as the robots' hostname.
+   Substitute `<N>` with the number of the robot that you are building. This will influence the IP address of the robot as well as the robots' hostname.
 
-    <Alert type="warning">
+   <Alert type="warning">
 
-    The secondary script assumes that the network interfaces are named `eth0` for ethernet and `wlp58s0` for WiFi. If you _know_ this is not the case then execute the script as follows
+   The secondary script assumes that the network interfaces are named `eth0` for ethernet and `wlp58s0` for WiFi. If you _know_ this is not the case then execute the script as follows
 
-    ```bash
-    ROBOT_NUMBER=<N> \
-    ETHERNET_INTERFACE=IF_NAME \
-    WIFI_INTERFACE=IF_NAME \
-    arch-chroot /mnt ./arch-chroot_install.sh
-    ```
+   ```bash
+   ROBOT_NUMBER=<N> \
+   ETHERNET_INTERFACE=IF_NAME \
+   WIFI_INTERFACE=IF_NAME \
+   arch-chroot /mnt ./arch-chroot_install.sh
+   ```
 
-    </Alert>
+   </Alert>
 
 8. Once that script has finished, you must run one more command.
 
-    ```bash
-    /mnt/arch-post_install.sh
-    ```
+   ```bash
+   /mnt/arch-post_install.sh
+   ```
 
-    This command will end by rebooting the robot. When this happens be sure to remove the USB installation drive from robot so that you may boot into the new system.
+   This command will end by rebooting the robot. When this happens be sure to remove the USB installation drive from robot so that you may boot into the new system.
 
-    The other two scripts can be found at [doc/ArchInstall/arch-chroot_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-chroot_install.sh) and [doc/ArchInstall/arch-post_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-post_install.sh)
+   The other two scripts can be found at [doc/ArchInstall/arch-chroot_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-chroot_install.sh) and [doc/ArchInstall/arch-post_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-post_install.sh)
 
 9. Finally, we need to run the `SystemConfigurator`.
-    
-    - Make sure you have built the `system_configuration` role and run
-        ```bash
-        ./b install n<N>
-        ```
-        Where `<N>` is again replaced with the robot number.
 
-    - Now ssh into the robot and run
-        ```bash
-        ./system_configuration
-        ```
+   - Make sure you have built the `system_configuration` role and run
+
+     ```bash
+     ./b install n<N>
+     ```
+
+     Where `<N>` is again replaced with the robot number.
+
+   - Now ssh into the robot and run
+     ```bash
+     ./system_configuration
+     ```
 
 ## Testing the new robot
 
