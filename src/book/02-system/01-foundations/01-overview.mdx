@@ -78,7 +78,7 @@ This is a general system diagram for the `robocup` role. `Hardware Input` and `C
 # A graph of the system
 digraph {
     "Camera" -> "Visual Mesh" -> "Green Horizon" -> {"Ball Detector", "Goal Detector"}
-    {"Servo State", "IMU State"} -> "Hardware Input" -> "Forward Kinematics" -> "Odometry" -> {"Visual Mesh", "Localisation"}
+    {"Servo State", "IMU State"} -> "Hardware Input" -> "Forward Kinematics" -> "Odometry" -> "Visual Mesh"
     "Goal Detector" -> "Localisation" -> "Soccer Strategy"
     "Soccer Strategy" -> "Walk Path Planner" -> "Walk Engine" -> "Inverse Kinematics"
     "Soccer Strategy" -> "Script Engine (Kick, Getup)" -> "Servo Command"
