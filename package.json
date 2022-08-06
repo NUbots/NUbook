@@ -12,6 +12,7 @@
     "@mdx-js/react": "^1.6.22",
     "autoprefixer": "^10.2.4",
     "babel-preset-gatsby": "^1.12.0",
+    "citation-js": "^0.5.5",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.0",
@@ -32,7 +33,6 @@
     "gatsby-remark-copy-linked-files": "^4.8.0",
     "gatsby-remark-images": "^5.8.0",
     "gatsby-source-filesystem": "^3.11.0",
-    "gatsby-source-graphql": "^3.14.0",
     "gatsby-transformer-sharp": "^3.11.0",
     "husky": "^7.0.0",
     "katex": "^0.13.13",
@@ -42,8 +42,8 @@
     "prism-react-renderer": "^1.2.1",
     "prismjs": "^1.24.1",
     "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.1",
+    "react-dom": "^18.0.1",
     "react-helmet": "^6.1.0",
     "react-transition-group": "^4.4.2",
     "rehype-katex": "^5.0.0",
@@ -53,7 +53,7 @@
     "stylelint": "^13.6.1",
     "stylelint-config-standard": "^22.0.0",
     "tailwindcss": "^2.2.7",
-    "webpack": "^5.50.0"
+    "webpack": "^5.73.0"
   },
   "license": "MIT",
   "scripts": {
@@ -61,8 +61,8 @@
     "dev": "gatsby develop",
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
-    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"src/**/*.{css,jsx,js,mdx}\" \"*.js\"",
-    "format:check": "prettier --check \"src/**/*.{css,jsx,js,mdx}\" \"*.js\""
+    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\"",
+    "format:check": "prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\""
   },
   "repository": {
     "type": "git",

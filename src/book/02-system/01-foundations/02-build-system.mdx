@@ -126,10 +126,10 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 
 ##### Build
 
-As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `sensortest`) then use the command
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test_sensor`) then use the command
 
 ```bash
-./b build sensortest
+./b build test_sensor
 ```
 
 If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
