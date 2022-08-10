@@ -46,38 +46,16 @@ After this the system will then attempt to "upgrade" the system using the packag
 This "upgrade" will actually be a downgrade if the robot is ahead of the date docker uses.
 Once this is done it will go through the list of packages in configuration and ensure that they are installed.
 
-### Systemd
+The process is:
 
-The system will then go through the list of units and ensure that they are enabled.
-
-### Locale
-
-If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated.
-
-### Grub
-
-If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date.
-
-### Message Of The Day
-
-The message of the day file is regenerated to ensure it has the correct contents.
-
-### Hosts and Hostname
-
-Both the hostname and the hosts file are regenerated with the correct contents.
-
-### Groups
-
-The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them.
-
-### ZSH
-
-[Zprezto](https://github.com/sorin-ionescu/prezto) is now installed and the appropriate symlinks are made.
-The users' default shell is also changed to zsh.
-
-### Python
-
-Finally, python is updated to ensure that it will search for packages in `/usr/local`.
+- **Systemd:** The system will go through the list of units and ensure that they are enabled.
+- **Locale:** If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated.
+- **Grub:** If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date.
+- **Message Of The Day:** The message of the day file is regenerated to ensure it has the correct contents.
+- **Hosts and Hostname:** Both the hostname and the hosts file are regenerated with the correct contents.
+- **Groups:** The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them.
+- **ZSH:** [Zprezto](https://github.com/sorin-ionescu/prezto) is installed and the appropriate symlinks are made. The users' default shell is also changed to zsh.
+- **Python:** Python is updated to ensure that it will search for packages in `/usr/local`.
 
 ## Usage
 
