@@ -607,17 +607,15 @@ Then there is `ToolchainLibraryFinder` which is the function that finds the libr
 Finally there is `target_link_libraries` which tells CMake that we have a dependency of the library.
 `ToolchainLibraryFinder` parameters:
 
-| Parameter                | Usage                                                                                         |
-| ------------------------ | --------------------------------------------------------------------------------------------- |
-| NAME                     | The name we use for the package                                                               |
-| HEADER                   | Any header, e.g. `.h` or `.hpp`, files that define the api of the library                     |
-| LIBRARY                  | The name of the library on disk, e.g. if we have `/usr/lib/libaravis-0.8.so` it'd be `aravis` |
-| LIBRARIES                | A list instead of a single LIBRARY                                                            |
-| PATH_SUFFIX              | Add subdirectories to look for includes and libraries in the normal search directories        |
-| BINARY                   | A binary that can be used to extract the version number                                       |
-| VERSION_BINARY_ARGUMENTS | The arguments to pass to the binary that will result in a version number being printed        |
-| VERSION_FILE             | A file that contains information on the version number of the library                         |
-| VERSION_REGEX            | The regex used on the version file to extract the version number                              |
-| LINK_TYPE                | The type of linkage that the library will use: `UNKNOWN` is the default and will pick either, |
-|                          | `SHARED` will use dynamic linkage and look for a `.so` library file                           |
-|                          | `STATIC` will use static linkage and look for a `.a` library file                             |
+| Parameter                | Usage                                                                                                                                                                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NAME                     | The name we use for the package                                                                                                                                                                                                     |
+| HEADER                   | Any header, e.g. `.h` or `.hpp`, files that define the api of the library                                                                                                                                                           |
+| LIBRARY                  | The name of the library on disk, e.g. if we have `/usr/lib/libaravis-0.8.so` it'd be `aravis`                                                                                                                                       |
+| LIBRARIES                | A list instead of a single LIBRARY                                                                                                                                                                                                  |
+| PATH_SUFFIX              | Add subdirectories to look for includes and libraries in the normal search directories                                                                                                                                              |
+| BINARY                   | A binary that can be used to extract the version number                                                                                                                                                                             |
+| VERSION_BINARY_ARGUMENTS | The arguments to pass to the binary that will result in a version number being printed                                                                                                                                              |
+| VERSION_FILE             | A file that contains information on the version number of the library                                                                                                                                                               |
+| VERSION_REGEX            | The regex used on the version file to extract the version number                                                                                                                                                                    |
+| LINK_TYPE                | The type of linkage that the library will use: `UNKNOWN` is the default and will pick either, `SHARED` will use dynamic linkage and look for a `.so` library file `STATIC` will use static linkage and look for a `.a` library file |
