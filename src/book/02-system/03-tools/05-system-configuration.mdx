@@ -21,12 +21,14 @@ Using this file it will check that the same file in the root directory is identi
 This will ensure that all the system configuration files match the files that are in the repository.
 
 <Alert type='info'>
+
 The system will only look at files that exist in the `module/tools/SystemConfiguration/data/system/default` directory.
 If you have a file that will override for a specific system, you must provide a default file as well.
 After this, it will go through the list of permissions changes that are in the `SystemConfiguration.yaml` file and apply them.
 This configuration file must list the total permissions as an octal number.
 </Alert>
 <Alert type='info'>
+
 SystemConfiguration will not delete files that are not in `system/default`,
 even if they have been previously installed by SystemConfiguration.
 </Alert>
