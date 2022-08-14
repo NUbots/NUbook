@@ -6,6 +6,7 @@ description: How to maintain subsystems within the main codebase.
 slug: /guides/main/maintaining-subsystems
 authors:
   - Ysobel Sims (@ysims)
+  - Lachlan Court (@LachlanCourt)
 ---
 
 This page details how to maintain various subsystems within the main codebase.
@@ -48,11 +49,49 @@ The resulting network should be exported to a [yaml](https://yaml.org/) file and
 
 3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/main/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
 
+#### Running OpenCL not on the robot
+
+The Visual Mesh works best running the OpenCL framework, however most operating systems are not set up to run this by default. Whilst running the Visual Mesh on CPU is possible, sometimes it is best to replicate an environment as close to what is running on the robot as possible. Follow the steps below to set up OpenCL on a device other than a robot.
+
+1. Install the OpenCL SDK for your device from the [Intel website](https://www.intel.com/content/www/us/en/developer/tools/opencl-sdk/choose-download.html)
+
+2. Create a temporary directory and install the pre-built OpenCL drivers
+
+```bash
+mkdir temp
+cd temp
+wget https://github.com/intel/compute-runtime/releases/download/19.14.12751/intel-gmmlib_19.1.1_amd64.deb
+wget https://github.com/intel/compute-runtime/releases/download/19.14.12751/intel-igc-core_19.11.1622_amd64.deb
+wget https://github.com/intel/compute-runtime/releases/download/19.14.12751/intel-igc-opencl_19.11.1622_amd64.deb
+wget https://github.com/intel/compute-runtime/releases/download/19.14.12751/intel-opencl_19.14.12751_amd64.deb
+wget https://github.com/intel/compute-runtime/releases/download/19.14.12751/intel-ocloc_19.14.12751_amd64.deb
+sudo apt install ./*deb
+```
+
+3. Change the `VisualMesh.yaml` configuration "engine" node to `opencl`
+
+4. Build the binary and then run with the following command to bind the PC drivers to the docker container
+
+```bash
+./b build
+./b run --mount type=bind,source="/dev/dri",target="/dev/dri" <role_name>
+```
+
 ### Camera Calibration
 
 The vision system cannot work optimally if the cameras are not calibrated correctly. [The input page](/system/subsystems/input) describes the camera parameters that can be calibrated.
 
 An automatic camera calibration tool is available in the NUbots repository. See the [camera calibration guide](/guides/main/camera-calibration) to find out how to use this tool.
+
+### Fake Camera
+
+To run the fake camera module, an images directory needs to exist inside the `data` directory of the module.
+
+1. Create an `images` directory and add several images with filenames matching `imageXXXXXX.jpg` where "XXXXXX" refers to any numerical digits
+
+2. Change the `FakeCamera.yaml` configuration "image_folder" node to the location that the data is stored in the docker image, which should be something like this: `/home/nubots/NUbots/module/input/FakeCamera/data/images`
+
+3. Build and run a role with the fake camera module in the heirarchical position in the list that the regular camera module would normally be
 
 ### Testing
 
@@ -85,8 +124,36 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
 
 - In step 1 of Recording Data, use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/visualmesh.role) role to record the data.
-- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
+- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [`DataLogging.yaml`](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [`DataPlayback.yaml`](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
 - In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/playback.role) role to playback the data, without changes.
+
+### Image Compressors
+
+In order to send data to NUsight via the network, images need to be compressed. Depending on the environment different compressors can be used. [TurboJPEG](https://github.com/libjpeg-turbo/libjpeg-turbo) is the compressor that can be used on all platforms and is used primarily when submitting docker images for virtual competitions as the processor type cannot be guaranteed. [VAAPI](https://01.org/linuxmedia/vaapi) is the preferred compressor for devices running on Intel CPUs, which support the framework.
+
+The configuration for either of these belongs in `ImageCompressor.yaml` and is as follows
+
+#### TurboJPEG
+
+```yaml
+compressor:
+  - name: turbojpeg
+    concurrent: 2
+    quality: 90
+```
+
+#### Vaapi
+
+<Alert>Only computers with an Intel CPU will be able to use VAAPI</Alert>
+
+```yaml
+compressor:
+  - name: vaapi
+    concurrent: 2
+    quality: 90
+    device: /dev/dri/renderD128
+    driver: iHD
+```
 
 ### Tuning Detectors
 
