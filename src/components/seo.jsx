@@ -28,7 +28,7 @@ function SEO({ description, lang, meta, keywords, title }) {
             script={[
               {
                 defer: true,
-                src: withPrefix('algolia-search.js'),
+                src: withPrefix('algolia-search-event-listener.js'),
               },
             ]}
             meta={[
