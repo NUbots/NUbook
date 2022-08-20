@@ -21,11 +21,16 @@ Below planning is skills. Skills include kicking, walking, getting up, and looki
 
 Next is motions. Motions include how the robot moves its feet to walk, and what movements it does to kick or get up.
 
-After motions is hardware IO. The hardware will output the commands and input the information from the world. This will then go through a sensor filter so that the robot can interpret the information. This information then influences strategy.
+After motions is hardware input and output. The hardware will output the commands and input the information from the world. This will then go through a sensor filter so that the robot can interpret the information. This information then influences strategy.
 
-All these modules are connected using NUClear which is a message passing software architecture. More can be found on NUClear [here](https://nuclear.readthedocs.io/en/latest/).
+All these modules are connected using NUClear, a message passing software architecture. More can be found on NUClear [here](https://nuclear.readthedocs.io/en/latest/).
 
-![Flow of the NUbots codebase](./images/software-overview.svg)
+```dot
+# An overview of the system
+digraph {
+    "Strategy" -> "Planning" -> "Skills" -> "Motions" -> "Hardware IO" -> "Strategy"
+}
+```
 
 ## Roles
 
@@ -64,15 +69,13 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | `webots`              | Test the connection between the robot code and Webots.                                                                                                                                                 |
 | `webots_robocup`      | Play RoboCup games in the Webots simulator.                                                                                                                                                            |
 
-In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator`, `platform::Webots` and `platform::Gazebo`.
+In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator` and `platform::Webots`.
 
 Any code should run with `platform::darwin::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
 
 `platform::darwin::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
 
 `platform::Webots` is used with the Webots simulator. The code will only run if an [appropriate Webots controller is running](/guides/tools/webots-setup).
-
-`platform::Gazebo` is used with the Gazebo simulator. It will only work with the [appropriate Gazebo plugin](/guides/tools/gazebo-install).
 
 ## System Diagram
 
