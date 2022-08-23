@@ -8,26 +8,37 @@ authors:
   - Josephus Paye II (@JosephusPaye)
   - Joel Wong (@wongjoel)
   - Yosiah de Koeyer (@Y0sh1dk)
+  - Kip Hamiltons (@KipHamiltons)
 ---
 
 ## Overview
 
 NUbots uses [Buildkite](https://buildkite.com) for its continuous integration pipeline. The Buildkite server listens for code changes on GitHub and issues build jobs to our build agents (the iMacs in the lab), as they become available.
+NUbots uses [GitHub Actions](tk) for its continuous integration pipelines. The pipelines are triggered automatically when pull requests are made, updated, or merged. The pipelines build and test the code on GitHub's cloud, with logs and results available on the GitHub website, associated with the relevant pull request.
+
+## Branch Workflow
+
+**This section assumes basic knowledge of Git. If you need a git refresher, see the [Git guide](tk).**
 
 This CI process works in combination with the [Git Feature Branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) we use for development:
 
 1. Developers branch off `main`, creating a new branch with a name of the form `<lastname>/<purpose-of-branch>`. For example:
 
    ```bash
+   # Make sure main is up to date before creating your branch
+   git fetch
+   git checkout main
+   git pull
+
+   # Create and check out the branch off of main
    git checkout -b biddulph/ball-detector
    ```
 
-2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. This triggers a webhook to Buildkite to build and test the PR.
-3. Buildkite receives the webhook and creates separate build jobs for different parts of the PR (build, check code format, test, etc) and sends different jobs to different agents based on their availability.
-4. Agents receive a job, clone the code, pull the existing `main` image for DockerHub, and build any new Docker changes. They then mount the code and run the job in a container based on the image, reporting the results back to Buildkite.
-5. Buildkite receives the results and updates the build status in the Buildkite UI as well as on the PR page on GitHub.
-6. When the build passes, the PR is reviewed by another member of the team. If approved, the PR can be merged into `main`.
-7. Merging into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main image and push it to DockerHub. This job is handled by agents that have the [DockerHub login credentials](#add-dockerhub-credentials-to-buildkite), indicated by the `dockerhub=true` tag on the agent.
+2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers a GitHub action runners to check the code. GitHub automatically creates separate build runners for different parts of the PR (build, check code format, test, etc). 
+3. Each runner completes a set of tasks specific in a pipeline file, found inside the `.github/workflows` directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then doing checking some aspect of the code.
+4. GitHub logs the results of each job and displays the results on the webpage for the pull request. The logs are viewable in the 'actions' tab of the PR.
+5. Once the build passes, the PR is reviewed by another member of the team. Once the PR has been approved, it can be merged into `main`.
+6. Merging the PR into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main docker image and push it to DockerHub. This is the main way that our docker images are kept up to date.
 
 <TabbedImages>
 
