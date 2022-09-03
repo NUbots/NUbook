@@ -69,11 +69,11 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | `webots`              | Test the connection between the robot code and Webots.                                                                                                                                                 |
 | `webots_robocup`      | Play RoboCup games in the Webots simulator.                                                                                                                                                            |
 
-In a role, you should have only one platform. Possible platforms are `platform::darwin::HardwareIO`, `platform::darwin::HardwareSimulator` and `platform::Webots`.
+In a role, you should have only one platform. Possible platforms are `platform::cm740::HardwareIO`, `platform::cm740::HardwareSimulator` and `platform::Webots`.
 
-Any code should run with `platform::darwin::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
+Any code should run with `platform::cm740::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
 
-`platform::darwin::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
+`platform::cm740::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
 
 `platform::Webots` is used with the Webots simulator. The code will only run if an [appropriate Webots controller is running](/guides/tools/webots-setup).
 
