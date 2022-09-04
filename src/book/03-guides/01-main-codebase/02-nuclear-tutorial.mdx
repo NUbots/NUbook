@@ -1,0 +1,86 @@
+---
+section: Guides
+chapter: Main Codebase
+title: NUClear
+description: Creating a NUClear module.
+slug: /guides/main/nuclear-tutorial
+authors:
+  - Ysobel Sims (@ysims)
+---
+
+## Generating a Module!
+
+The first step on your NUClear journey is generating a module. This will give you a nice playground to try out NUClear functionality. Before you can generate a module, you will need to set up the codebase.
+
+### Setting up the Codebase
+
+Setting up the codebase is vital! Most new members will have done this during the recruitment tasks, but if you did not do this or a wizard has stolen your setup head over to [the Getting Started page](/guides/main/getting-started).
+
+Make sure you have
+
+- Git (command line, Github Desktop or GitKraken)
+- Docker set up
+- A text editor
+- Cloned the code
+- Run `./b target generic`
+- Run `./b configure`
+
+If the last two commands ran successfully, you are ready to go! 
+
+### The folder structure
+
+Before getting into it, let's look at what we are working with.
+
+If you open the NUbots repository in your text editor, you will see a whole lot of files and folders on the first level of the repository. Most of these you can ignore for now. Here are some of them which will be touched on in this tutorial
+
+- **module**: Contains all the NUClear modules, which are the main pieces of code that run on the robots. This is where our new module will live, and where you will likely spend most of your time programming if you're working on robot functionality.
+- **nusight2**: Contains all the code for NUsight, our web-based visual debugging tool.
+- **roles**: Contains all the role files, which define a complete program. The files contain a list of modules that are to be included in the compiled program.
+- **shared/message**: You'll need to look inside `shared` for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages! 
+- **shared/utility**: This folder contains many C++ files with functions and classes that are used in NUClear modules.
+- **shared/tests**: This folder contains automated tests, which use [the Catch framework](https://github.com/catchorg/Catch2).
+
+### Generate the Module
+
+There is a neat tool that you can run that will generate the boilerplate code for a module. Here's the command
+
+```cpp
+./b module generate TestModule
+```
+
+Ah-ha! If you look now in the `module` folder, you will see a new folder called `TestModule`. 
+
+This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there! 
+
+Ok, so lets see what we have in this folder.
+
+- **data/config**: There's a `TestModule.yaml` file, which is where you put any configuration values. Values that shouldn't be hardcoded should be put in here. This file is generated with one value, `log_level`. We will look into how this works later.
+- **src**: This folder contains the `.hpp` and `.cpp` files for the module. If you look in the `.hpp`, you'll see a TestModule class is declared that extends `NUClear::Reactor`. The `.cpp` file implements the constructor with one lambda statement that reads configuration values.
+- **tests**: This contains a file that can be used to test the reactors in the module. We will not look at this, but if you want an example go to `module/extension/FileWatcher/tests/`. 
+- **CMakeLists.txt**: This allows CMake to configure the module - we won't change this.
+- **README.md**: Documentation for the module. We will be filling this out as we go - it is very important to document your code.
+
+## Creating a Program
+
+Ok, so we have a module. It doesn't do much yet, but it should compile. But, it will only compile if it is included in a role file. Let's make a role file.
+
+Go to the `role` folder in the repository. Create a new file called `test.role`. Put the following in the file
+
+```
+nuclear_role(
+  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First   
+  extension::FileWatcher
+  support::SignalCatcher
+  support::logging::ConsoleLogHandler
+  TestModule
+)
+```
+
+Most of this is copied from other role files. The first three modules are necessary for many programs.
+
+- FileWatcher watches the configuration files (the `.yaml` files) for any changes. 
+- SignalCatcher allows the user to <kbd>CTRL</kbd> + <kbd>C</kbd> to terminate the program.
+- ConsoleLogHandler allows log statement to be output.
+
+The last module added is our new module, `TestModule`. 
+
