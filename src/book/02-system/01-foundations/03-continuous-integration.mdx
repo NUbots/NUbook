@@ -33,7 +33,7 @@ This CI process works in combination with the [Git Feature Branch workflow](http
    git checkout -b biddulph/ball-detector
    ```
 
-2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers a GitHub action runners to check the code. GitHub automatically creates separate build runners for different parts of the PR (build, check code format, test, etc). 
+2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers a GitHub action runners to check the code. GitHub automatically creates separate build runners for different parts of the PR (build, check code format, test, etc).
 3. Each runner completes a set of tasks specific in a pipeline file, found inside the [`.github/workflows`](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then doing checking some aspect of the code.
 4. GitHub logs the results of each job and displays the results on the webpage for the pull request. The logs are viewable in the 'actions' tab of the PR.
 5. Once the build passes, the PR is reviewed by another member of the team. Once the PR has been approved, it can be merged into `main`.
@@ -61,4 +61,3 @@ To view them, scroll to the build checks at the bottom of the PR page and click 
 Failed steps usually require changes to your pull request. Pushing your updated branch to GitHub automatically triggers a fresh build, with no extra steps required. The build status of your pull request will automatically update with the results.
 
 ![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
-
