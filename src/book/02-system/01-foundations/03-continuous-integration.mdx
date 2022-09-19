@@ -13,12 +13,11 @@ authors:
 
 ## Overview
 
-NUbots uses [Buildkite](https://buildkite.com) for its continuous integration pipeline. The Buildkite server listens for code changes on GitHub and issues build jobs to our build agents (the iMacs in the lab), as they become available.
-NUbots uses [GitHub Actions](tk) for its continuous integration pipelines. The pipelines are triggered automatically when pull requests are made, updated, or merged. The pipelines build and test the code on GitHub's cloud, with logs and results available on the GitHub website, associated with the relevant pull request.
+NUbots uses [GitHub Actions](https://github.com/features/actions) for its continuous integration pipelines. The pipelines are triggered automatically when pull requests are made, updated, or merged. The pipelines build and test the code on GitHub's cloud, with logs and results available on the GitHub website, associated with the relevant pull request.
 
 ## Branch Workflow
 
-**This section assumes basic knowledge of Git. If you need a git refresher, see the [Git guide](tk).**
+**This section assumes basic knowledge of Git. If you need a git refresher, see the [Git guide](/guides/general/git).**
 
 This CI process works in combination with the [Git Feature Branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow) we use for development:
 
@@ -35,10 +34,10 @@ This CI process works in combination with the [Git Feature Branch workflow](http
    ```
 
 2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers a GitHub action runners to check the code. GitHub automatically creates separate build runners for different parts of the PR (build, check code format, test, etc). 
-3. Each runner completes a set of tasks specific in a pipeline file, found inside the `.github/workflows` directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then doing checking some aspect of the code.
+3. Each runner completes a set of tasks specific in a pipeline file, found inside the [`.github/workflows`](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then doing checking some aspect of the code.
 4. GitHub logs the results of each job and displays the results on the webpage for the pull request. The logs are viewable in the 'actions' tab of the PR.
 5. Once the build passes, the PR is reviewed by another member of the team. Once the PR has been approved, it can be merged into `main`.
-6. Merging the PR into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main docker image and push it to DockerHub. This is the main way that our docker images are kept up to date.
+6. Merging the PR into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main docker images and push them to DockerHub. This is the main way that our docker images are kept up to date.
 
 <TabbedImages>
 
@@ -50,155 +49,16 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 ## The Build Pipeline
 
-The build pipeline is configured in the [`.buildkite/pipeline.yml`](https://github.com/NUbots/NUbots/blob/main/.buildkite/pipeline.yml) file in the NUbots repo. This file specifies a number of "build steps", which are separate jobs such as "Build for NUC" and "Validate C++ and Protobuf formatting".
-
-To add, remove, or change build jobs, we edit the pipeline file. The [Buildkite pipeline documentation](https://buildkite.com/docs/pipelines) has everything you need to know to make changes.
+The GitHub Actions are configured in [workflow files](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) in the NUbots repo. To add, remove, or change build jobs, we edit the relevant workflow file. The [GitHub Actions documentation](https://docs.github.com/en/actions) should be your first stop when you want to make changes.
 
 ## Monitoring and Troubleshooting Builds
 
-Buildkite has live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
+GitHub Actions have live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
 
-If for example your PR build fails due to formatting errors, you can check the logs to see which files are incorrectly formatted. To fix the build, you would reformat the offending files and push a new commit, which will trigger a rebuild.
+Failed builds and pipeline steps can be diagnosed by viewing their logs.
+To view them, scroll to the build checks at the bottom of the PR page and click the **Details** link on the `buildkite/nubots/pr` check.
 
-To view the logs for a build, scroll to the build checks at the bottom of the PR page and click the **Details** link on the `buildkite/nubots/pr` check.
+Failed steps usually require changes to your pull request. Pushing your updated branch to GitHub automatically triggers a fresh build, with no extra steps required. The build status of your pull request will automatically update with the results.
 
 ![Screenshot of the build checks section of the PR page, with arrow pointing to primary link](./images/ci-build-logs.png 'Link to the build details with logs')
 
-## Pacman Package Cache
-
-When Buildkite receives a webhook to build and test a PR, the Buildkite agents pull down the code and start building a Docker image based off the Dockerfile in that branch.
-
-In the process of building our Docker image, several [pacman](https://wiki.archlinux.org/index.php/pacman) packages are downloaded from public mirrors (if that specific [layer](https://docs.docker.com/storage/storagedriver/#images-and-layers) itself is not cached). Because these packages are downloaded numerous times, across multiple PRs, caching them locally can speed up build times and save network bandwidth.
-
-It is also possible that the [signature](https://wiki.archlinux.org/index.php/Pacman/Package_signing) on a package that is located on a public mirror changes. This change of signature can cause issues for us because we download date-locked packages and still expect an older signature. Caching such packages locally may alleviate these issues.
-
-To cache packages locally, a [pacman](https://wiki.archlinux.org/index.php/pacman) package cache is setup on each Buildkite agent. This cache uses the [nroi/flexo](https://hub.docker.com/r/nroi/flexo) Docker image, and exposes itself on:
-
-```
-http://localhost:7878/$repo/os/$arch
-```
-
-In order for [pacman](https://wiki.archlinux.org/index.php/pacman) to use this package cache, the cache must be added to `/etc/pacman.d/mirrorlist`. Because our build happens inside a [buildx](https://docs.docker.com/buildx/working-with-buildx/) container, we cannot use `localhost` as the address for the cache. Instead, we alias the IP address of the host machine as `host.docker.internal`. Therefore, the following is added to the mirrorlist [here in the Dockerfile](https://github.com/NUbots/NUbots/blob/5149f1c0cd1e4ff902d749269d1aa90f52adc075/docker/Dockerfile#L14):
-
-```
-Server = http://host.docker.internal:7878/$repo/os/$arch
-```
-
-## Setting Up a New Agent (Ubuntu)
-
-The following instructions show how to setup and configure a new Buildkite agent with Docker and Docker Compose. These steps have been collected into a [single script you can download here](assets/ci_setup.sh). Before running the script, ensure you have set the Buildkite agent token and DockerHub password correctly in the env variables at the top of the script. Also, make sure to run the script with `sudo`.
-
-### Install Docker
-
-Steps from <https://docs.docker.com/install/linux/docker-ce/ubuntu/>.
-
-```bash
-# Remove old Docker
-sudo apt-get remove docker docker-engine docker.io containerd runc
-
-# Install packages to allow apt to use a repository over HTTPS
-sudo apt-get update
-sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-
-# Add Docker's official GPG key
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-# Add Docker's stable repository
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-​
-# Install latest Docker CE
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-```
-
-### Install Docker Compose
-
-```bash
-# Install Python 3 and pip
-sudo apt-get update
-sudo apt-get install python3.6 python3-pip
-
-# Install Docker Compose
-sudo -H pip3 install docker-compose
-```
-
-### Install and Configure Buildkite
-
-Steps from <https://buildkite.com/docs/agent/v3/ubuntu>.
-
-```bash
-# Add the signed Buildkite apt repository
-echo "deb https://apt.buildkite.com/buildkite-agent stable main" | sudo tee /etc/apt/sources.list.d/buildkite-agent.list
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
-
-# Install the Buildkite agent
-sudo apt-get update
-sudo apt-get install -y buildkite-agent
-
-# Add the agent token to the configuration file.
-# Replace INSERT-YOUR-AGENT-TOKEN-HERE with the token from Buildkite.
-sudo sed -i "s/xxx/INSERT-YOUR-AGENT-TOKEN-HERE/g" /etc/buildkite-agent/buildkite-agent.cfg
-
-# Start the agent and configure it to run on system startup
-sudo systemctl enable buildkite-agent && sudo systemctl start buildkite-agent
-```
-
-### Configure Docker
-
-Steps from <https://docs.docker.com/install/linux/linux-postinstall/>.
-
-```bash
-# Create a 'docker' user group and add local users to allow for use without sudo
-sudo groupadd docker                     # Create user group
-sudo usermod -aG docker nubots           # Add nubots to the group
-sudo usermod -aG docker buildkite-agent  # Add buildkite-agent to the group
-newgrp docker                            # Activate group changes
-
-# Configure Docker to run on system startup
-sudo systemctl enable docker
-```
-
-### Add DockerHub Credentials to Buildkite
-
-For agents to push built `main` images to DockerHub, they need the service account login credentials. The username of this account is `nubotsdocker`, and is specified in the Buildkite [pipeline file](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/.buildkite/pipeline.yml#L11). The password needs to be made available to the agent when it runs, via the `DOCKER_LOGIN_PASSWORD` env variable.
-
-Credentials are provided to the agent via env variables using [agent hooks](https://buildkite.com/docs/agent/v3/hooks#agent-hooks). Specifically using the environment hook. The default path for this hook is `/etc/buildkite-agent/hooks/environment`.
-
-After the credentials are added, the agent needs to be marked as having the credentials by setting the `dockerhub=true` tag in the agent configuration file. The default path for this file is `/etc/buildkite-agent/buildkite-agent.cfg`.
-
-For more information about agent configuration and hooks, see the following pages in the Buildkite documentation:
-
-- <https://buildkite.com/docs/agent/v3/hooks>
-- <https://buildkite.com/docs/agent/v3/configuration>
-
-### Setup Pacman Package Cache
-
-<Alert type="info">
-
-Whenever we update our base Arch Linux image [in the Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile), both [the mirror in the Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile) **_and_** [the mirror in the cache config](https://github.com/NUbots/NUbots/blob/main/doc/PacmanCache/docker-compose.yml) need to be updated.
-
-</Alert>
-
-1. Create a directory to store the cache config
-
-   ```
-   mkdir ~/pacman-cache && cd ~/pacman-cache
-   ```
-
-2. Download the install script
-
-   ```
-   wget https://raw.githubusercontent.com/NUbots/NUbots/main/doc/PacmanCache/install.sh
-   ```
-
-3. Make the install script executable
-
-   ```
-   chmod +x ./install.sh
-   ```
-
-4. Run the install script
-
-   ```
-   ./install.sh
-   ```
