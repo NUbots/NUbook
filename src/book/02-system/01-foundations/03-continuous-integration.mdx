@@ -49,14 +49,14 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 ## The Build Pipeline
 
-The GitHub Actions are configured in [workflow files](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) in the NUbots repo. To add, remove, or change build jobs, we edit the relevant workflow file. The [GitHub Actions documentation](https://docs.github.com/en/actions) should be your first stop when you want to make changes.
+GitHub Actions are configured in [workflow files](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions), written in YAML. To add, remove, or change build jobs, we edit the relevant [workflow file in the NUbots repo](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows). The [GitHub Actions documentation](https://docs.github.com/en/actions) should be your first stop when you want to make changes.
 
 ## Monitoring and Troubleshooting Builds
 
 GitHub Actions have live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
 
 Failed builds and pipeline steps can be diagnosed by viewing their logs.
-To view them, scroll to the build checks at the bottom of the PR page and click the **Details** link on the `buildkite/nubots/pr` check.
+To view them, scroll to the build checks at the bottom of the PR page and click the **Details** link on the failed check.
 
 Failed steps usually require changes to your pull request. Pushing your updated branch to GitHub automatically triggers a fresh build, with no extra steps required. The build status of your pull request will automatically update with the results.
 
