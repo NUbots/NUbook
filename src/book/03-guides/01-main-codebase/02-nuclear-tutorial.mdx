@@ -8,18 +8,18 @@ authors:
   - Ysobel Sims (@ysims)
 ---
 
-## Generating a Module!
+## Generating a Module
 
 The first step on your NUClear journey is generating a module. This will give you a nice playground to try out NUClear functionality. Before you can generate a module, you will need to set up the codebase.
 
 ### Setting up the Codebase
 
-Setting up the codebase is vital! Most new members will have done this during the recruitment tasks, but if you did not do this or a wizard has stolen your setup head over to [the Getting Started page](/guides/main/getting-started).
+Setting up the codebase is vital! Most new members will have done this during the recruitment tasks, but if you did not do this or your setup has disappeared head over to [the Getting Started page](/guides/main/getting-started).
 
 Make sure you have
 
 - Git (command line, Github Desktop or GitKraken)
-- Docker set up
+- Docker
 - A text editor
 - Cloned the code
 - Run `./b target generic`
@@ -31,12 +31,15 @@ If the last two commands ran successfully, you are ready to go!
 
 Before getting into it, let's look at what we are working with.
 
-If you open the NUbots repository in your text editor, you will see a whole lot of files and folders on the first level of the repository. Most of these you can ignore for now. Here are some of them which will be touched on in this tutorial
+If you open the NUbots repository in your text editor, you will see a whole lot of files and folders on the first level of the repository. Most of these you can ignore for now. Here are some of them which will be touched on in this tutorial.
 
 - **module**: Contains all the NUClear modules, which are the main pieces of code that run on the robots. This is where our new module will live, and where you will likely spend most of your time programming if you're working on robot functionality.
 - **nusight2**: Contains all the code for NUsight, our web-based visual debugging tool.
-- **roles**: Contains all the role files, which define a complete program. The files contain a list of modules that are to be included in the compiled program.
-- **shared/message**: You'll need to look inside `shared` for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages! 
+- **roles**: Contains all the role files, which define a complete program. The files contain a list of modules that will be in the compiled program.
+- **shared/message**: You'll need to look inside the `shared` folder for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages! 
+
+Other folders that are important but won't be visited in this tutorial are the following.
+
 - **shared/utility**: This folder contains many C++ files with functions and classes that are used in NUClear modules.
 - **shared/tests**: This folder contains automated tests, which use [the Catch framework](https://github.com/catchorg/Catch2).
 
@@ -44,11 +47,11 @@ If you open the NUbots repository in your text editor, you will see a whole lot 
 
 There is a neat tool that you can run that will generate the boilerplate code for a module. Here's the command
 
-```cpp
+```bash
 ./b module generate TestModule
 ```
 
-Ah-ha! If you look now in the `module` folder, you will see a new folder called `TestModule`. 
+Ah-ha! If you look in the `module` folder, you will see a new folder called `TestModule`! 
 
 This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there! 
 
@@ -64,11 +67,11 @@ Ok, so lets see what we have in this folder.
 
 Ok, so we have a module. It doesn't do much yet, but it should compile. But, it will only compile if it is included in a role file. Let's make a role file.
 
-Go to the `role` folder in the repository. Create a new file called `test.role`. Put the following in the file
+Go to the `role` folder in the repository. Create a new file called `testprogram.role`. Put the following in the file
 
 ```
 nuclear_role(
-  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First   
+  # FileWatcher, Signal Catcher and ConsoleLogHandler Must Go First
   extension::FileWatcher
   support::SignalCatcher
   support::logging::ConsoleLogHandler
@@ -79,8 +82,231 @@ nuclear_role(
 Most of this is copied from other role files. The first three modules are necessary for many programs.
 
 - FileWatcher watches the configuration files (the `.yaml` files) for any changes. 
-- SignalCatcher allows the user to <kbd>CTRL</kbd> + <kbd>C</kbd> to terminate the program.
-- ConsoleLogHandler allows log statement to be output.
+- SignalCatcher allows the user to <kbd>CTRL</kbd> + <kbd>C</kbd> to terminate the program cleanly.
+- ConsoleLogHandler allows log statements to be output.
 
 The last module added is our new module, `TestModule`. 
 
+This should compile. Let's have a go. First we'll need to turn the role we just made `ON`. Run
+
+```bash
+./b configure
+./b configure -i
+```
+
+You'll see an interface appear. There will be a long list of entries starting with `ROLE` set to either `ON` or `OFF`. Arrow key down to those lines and press <kbd>Enter</kbd> to toggle the role on or off. Turn everything off except for `ROLE_testprogram`.
+
+Now run
+
+```bash
+./b build
+```
+
+This should have compiled. Let's run it. 
+
+```bash
+./b run testprogram
+```
+
+You should see the NUbots logo, and the name of the role, and statements telling you what modules have been installed. If you see that, great! But, this isn't very exciting. It doesn't really do anything yet! Let's implement something in our module. 
+
+But - one tip before moving on - hit <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the program!
+
+### Configuration
+
+Let's take a look at the configuration file in our module. Open `module/TestModule/data/config/TestModule.yaml`. 
+
+This file will store any of values for the program that might change. It is bad practice to hardcode values, and configuration files prevent you from having to do that. Another great thing about configuration files is that they can be changed while a program is running, and that change will be reflected in the program!
+
+Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run whenever the configuration file `TestModule.yaml` is changed and on startup. 
+
+Inside this statement, after line 13 where the log_level is set, add the following code
+
+```cpp
+log<NUClear::TRACE>("This is a TRACE log.");
+log<NUClear::DEBUG>("This is a DEBUG log.");
+log<NUClear::INFO>("This is a INFO log.");
+log<NUClear::WARN>("This is a WARN log.");
+log<NUClear::ERROR>("This is a ERROR log.");
+log<NUClear::FATAL>("This is a FATAL log.");
+```
+
+`log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `DEBUG`. Lets compile and run the program again.
+
+```cpp
+./b build
+./b run testprogram
+```
+
+You should see all of the logs print except for `TRACE`. This is because all logs with level `DEBUG` and higher will run. Lets change the configuration file without stopping the program! Open a new terminal and run `./b edit config/TestModule.yaml`. This will open the TestModule configuration file in `nano`. Change `DEBUG` to `TRACE`. Save with <kbd>CTRL</kbd> + <kbd>O</kbd> and then <kbd>Enter</kbd>. If you look at the program, you will see the logs print out again, but with `TRACE` included. Go back and change the config file to `WARN`. You will now see the logs print again, but with only `WARN`, `ERROR` and `FATAL`. 
+
+The log level system allows you to keep statements for debugging or tuning without the logs spamming the terminal when someone is running the module for other purposes.
+
+Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactors. The increment size will be a configuration value. Let's add that configuration value now. 
+
+In `TestModule.yaml` (in your text editor, not in the terminal since this is not persistent), add in the following lines
+
+```yaml
+# Each time the Ping Pong messages are sent, a count is incremented and the increment is of the following size
+increment: 2
+```
+
+Next we need to read it in the module. Go to `TestModule.hpp`. We will make a variable to store this in. Inside the config struct on line 11, add in
+
+```cpp
+int increment = 0;
+```
+
+Always initialise your variables. Save and go to `TestModule.cpp`. Add in the following lines to read the configuration value and print a message to let the user know the increment size.
+
+```cpp
+config.increment = cfg["increment"].as<int>();
+log<NUClear::INFO>("Increment is of size", config.increment);
+```
+
+Save, recompile and check that the program prints the message.
+
+```bash
+./b build
+./b run testprogram
+```
+
+Make sure you see your INFO log and then lets move onto making the messages that we need.
+
+### Protobuf Messages
+
+The idea of the program is that one reactor will send a `Ping` message when it receives a `Pong` message, and the other reactor will send a `Pong` message when it receives a `Ping` message.
+
+We will need to create these messages. In `shared/message` create a new file `PingPong.proto`. Put the follow code into the file.
+
+```proto
+syntax = "proto3";
+
+package message;
+
+message Ping {
+    uint32 count = 1;
+}
+
+message Pong {
+    uint32 count = 1;
+}
+```
+
+There is an integer in each of these messages. This is the count that will be incremented each time a new `Ping` or `Pong` message is sent. The number it is assigned, `1`, is not the value but its position in the Protobuf message. Save this file and head back over to `TestModule.cpp`.
+
+Up at the top of the file, include the protobuf message we just created. Note that these messages are compiled into C++ code, so include the compiled header.
+
+```cpp
+#include "message/PingPong.hpp"
+```
+
+Make sure it compiles and still runs successfully. Because we added files, we will need to configure again.
+
+```bash
+./b configure
+./b build
+./b run testprogram
+```
+
+If this works, you can move onto the next section where we make our reactors.
+
+### Reactors
+
+Reactors are chunks of code that will run given certain conditions are true. We will make two reactors, one that runs reactions whenever it gets a `Pong` message, and the other when it gets a `Ping` message.
+
+Head back to `TestModule.cpp`. Underneath the Configuration reactor, add in the following reactor
+
+```cpp
+on<Trigger<Ping>>().then([this](const Ping& ping) {
+    // Some code!
+});
+```
+
+`Trigger` means that it will run when it a `Ping` message is available. We get access to this message via the `ping` parameter. Let's add in the other reactor.
+
+```cpp
+on<Trigger<Pong>>().then([this](const Pong& pong) {
+    // Some code!
+});
+```
+
+Very similar, but it gets the `Pong` message instead.
+
+Next, we want to get the count from the `Ping` or `Pong` message, increment it, and send a new message with the incremented count. Here's the code for the first reactor.
+
+```cpp
+// Print the Ping message!
+log<NUClear::INFO>("Ping count", ping.count);
+
+// Make a Pong message to send
+auto pong = std::make_unique<Pong>();
+pong->count = ping.count + config.increment;
+
+// Send the message
+emit(pong);
+```
+
+And for the second reactor
+
+```cpp
+// Print the Pong message!
+log<NUClear::INFO>("Pong count", pong.count);
+
+// Make a Pong message to send
+auto ping = std::make_unique<Ping>();
+ping->count = pong.count + config.increment;
+
+// Send the message
+emit(ping);
+```
+
+Have a look through the comments and make sure you understand the code. `auto` is a keyword that automatically determines the type of the variable.
+
+Is everything ready now to see the messages ping-ponging between each other, printing out increasing count values? Compile the program and run it, and see what happens. 
+
+```cpp
+./b build
+./b run testprogram
+```
+
+Well... Nothing changed. If you're not sure why, have a think about it before moving onto the next section.
+
+### Starting the Chain
+
+The problem is, that there is no initial Ping or Pong message. No one ever sends the first message - the first reactor is forever waiting for a Ping message, and the second reactor is forever waiting for a Pong message!
+
+Ok, so how do we start the reaction? There are a few ways it could be done, but we will use the `Startup` NUClear DSL. This is another reactor that will run only when the program starts up.
+
+Here is the code for the reactor. 
+
+```cpp
+on<Startup>().then([this] {
+    // Make an initial Ping message to send
+    auto ping = std::make_unique<Ping>();
+    ping->count = 0;
+
+    // Send the message
+    emit(ping);
+});
+```
+
+Great! Compile and run!
+
+```bash
+./b build
+./b run testprogram
+```
+
+That was a bit too fast! Stop the program if you haven't already. Let's review our reactors. There's nothing stopping them from running as fast as they can, they will keep sending messages to each other as fast as possible!
+
+Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` with `Every<2, std::chrono::seconds>, With<Ping>`. This will prevent the reactor from running faster than once every two seconds. Compile and run again.
+
+```bash
+./b build
+./b run testprogram
+```
+
+You should see the Ping and Pong logs running at a reasonable speed. This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work. 
+
+If you had any problems setting up the program, you can find all [the code files here](https://drive.google.com/file/d/1VmOz7A_Tfom1NtPSsO319wZmYBCv_a_I/).
