@@ -25,7 +25,7 @@ Make sure you have
 - Run `./b target generic`
 - Run `./b configure`
 
-If the last two commands ran successfully, you are ready to go! 
+If the last two commands ran successfully, you are ready to go!
 
 ### The folder structure
 
@@ -36,7 +36,7 @@ If you open the NUbots repository in your text editor, you will see a whole lot 
 - **module**: Contains all the NUClear modules, which are the main pieces of code that run on the robots. This is where our new module will live, and where you will likely spend most of your time programming if you're working on robot functionality.
 - **nusight2**: Contains all the code for NUsight, our web-based visual debugging tool.
 - **roles**: Contains all the role files, which define a complete program. The files contain a list of modules that will be in the compiled program.
-- **shared/message**: You'll need to look inside the `shared` folder for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages! 
+- **shared/message**: You'll need to look inside the `shared` folder for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages!
 
 Other folders that are important but won't be visited in this tutorial are the following.
 
@@ -51,15 +51,15 @@ There is a neat tool that you can run that will generate the boilerplate code fo
 ./b module generate TestModule
 ```
 
-Ah-ha! If you look in the `module` folder, you will see a new folder called `TestModule`! 
+Ah-ha! If you look in the `module` folder, you will see a new folder called `TestModule`!
 
-This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there! 
+This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there!
 
 Ok, so lets see what we have in this folder.
 
 - **data/config**: There's a `TestModule.yaml` file, which is where you put any configuration values. Values that shouldn't be hardcoded should be put in here. This file is generated with one value, `log_level`. We will look into how this works later.
 - **src**: This folder contains the `.hpp` and `.cpp` files for the module. If you look in the `.hpp`, you'll see a TestModule class is declared that extends `NUClear::Reactor`. The `.cpp` file implements the constructor with one lambda statement that reads configuration values.
-- **tests**: This contains a file that can be used to test the reactors in the module. We will not look at this, but if you want an example go to `module/extension/FileWatcher/tests/`. 
+- **tests**: This contains a file that can be used to test the reactors in the module. We will not look at this, but if you want an example go to `module/extension/FileWatcher/tests/`.
 - **CMakeLists.txt**: This allows CMake to configure the module - we won't change this.
 - **README.md**: Documentation for the module. We will be filling this out as we go - it is very important to document your code.
 
@@ -81,11 +81,11 @@ nuclear_role(
 
 Most of this is copied from other role files. The first three modules are necessary for many programs.
 
-- FileWatcher watches the configuration files (the `.yaml` files) for any changes. 
+- FileWatcher watches the configuration files (the `.yaml` files) for any changes.
 - SignalCatcher allows the user to <kbd>CTRL</kbd> + <kbd>C</kbd> to terminate the program cleanly.
 - ConsoleLogHandler allows log statements to be output.
 
-The last module added is our new module, `TestModule`. 
+The last module added is our new module, `TestModule`.
 
 This should compile. Let's have a go. First we'll need to turn the role we just made `ON`. Run
 
@@ -102,23 +102,23 @@ Now run
 ./b build
 ```
 
-This should have compiled. Let's run it. 
+This should have compiled. Let's run it.
 
 ```bash
 ./b run testprogram
 ```
 
-You should see the NUbots logo, and the name of the role, and statements telling you what modules have been installed. If you see that, great! But, this isn't very exciting. It doesn't really do anything yet! Let's implement something in our module. 
+You should see the NUbots logo, and the name of the role, and statements telling you what modules have been installed. If you see that, great! But, this isn't very exciting. It doesn't really do anything yet! Let's implement something in our module.
 
 But - one tip before moving on - hit <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the program!
 
 ### Configuration
 
-Let's take a look at the configuration file in our module. Open `module/TestModule/data/config/TestModule.yaml`. 
+Let's take a look at the configuration file in our module. Open `module/TestModule/data/config/TestModule.yaml`.
 
 This file will store any of values for the program that might change. It is bad practice to hardcode values, and configuration files prevent you from having to do that. Another great thing about configuration files is that they can be changed while a program is running, and that change will be reflected in the program!
 
-Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run whenever the configuration file `TestModule.yaml` is changed and on startup. 
+Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run whenever the configuration file `TestModule.yaml` is changed and on startup.
 
 Inside this statement, after line 13 where the log_level is set, add the following code
 
@@ -138,11 +138,11 @@ log<NUClear::FATAL>("This is a FATAL log.");
 ./b run testprogram
 ```
 
-You should see all of the logs print except for `TRACE`. This is because all logs with level `DEBUG` and higher will run. Lets change the configuration file without stopping the program! Open a new terminal and run `./b edit config/TestModule.yaml`. This will open the TestModule configuration file in `nano`. Change `DEBUG` to `TRACE`. Save with <kbd>CTRL</kbd> + <kbd>O</kbd> and then <kbd>Enter</kbd>. If you look at the program, you will see the logs print out again, but with `TRACE` included. Go back and change the config file to `WARN`. You will now see the logs print again, but with only `WARN`, `ERROR` and `FATAL`. 
+You should see all of the logs print except for `TRACE`. This is because all logs with level `DEBUG` and higher will run. Lets change the configuration file without stopping the program! Open a new terminal and run `./b edit config/TestModule.yaml`. This will open the TestModule configuration file in `nano`. Change `DEBUG` to `TRACE`. Save with <kbd>CTRL</kbd> + <kbd>O</kbd> and then <kbd>Enter</kbd>. If you look at the program, you will see the logs print out again, but with `TRACE` included. Go back and change the config file to `WARN`. You will now see the logs print again, but with only `WARN`, `ERROR` and `FATAL`.
 
 The log level system allows you to keep statements for debugging or tuning without the logs spamming the terminal when someone is running the module for other purposes.
 
-Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactors. The increment size will be a configuration value. Let's add that configuration value now. 
+Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactors. The increment size will be a configuration value. Let's add that configuration value now.
 
 In `TestModule.yaml` (in your text editor, not in the terminal since this is not persistent), add in the following lines
 
@@ -263,7 +263,7 @@ emit(ping);
 
 Have a look through the comments and make sure you understand the code. `auto` is a keyword that automatically determines the type of the variable.
 
-Is everything ready now to see the messages ping-ponging between each other, printing out increasing count values? Compile the program and run it, and see what happens. 
+Is everything ready now to see the messages ping-ponging between each other, printing out increasing count values? Compile the program and run it, and see what happens.
 
 ```cpp
 ./b build
@@ -278,7 +278,7 @@ The problem is, that there is no initial Ping or Pong message. No one ever sends
 
 Ok, so how do we start the reaction? There are a few ways it could be done, but we will use the `Startup` NUClear DSL. This is another reactor that will run only when the program starts up.
 
-Here is the code for the reactor. 
+Here is the code for the reactor.
 
 ```cpp
 on<Startup>().then([this] {
@@ -307,6 +307,6 @@ Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` wi
 ./b run testprogram
 ```
 
-You should see the Ping and Pong logs running at a reasonable speed. This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work. 
+You should see the Ping and Pong logs running at a reasonable speed. This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work.
 
 If you had any problems setting up the program, you can find all [the code files here](https://drive.google.com/file/d/1VmOz7A_Tfom1NtPSsO319wZmYBCv_a_I/).
