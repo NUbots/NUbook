@@ -14,7 +14,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
 ## Get the Data
 
-1.  Change [`test_camera.role`](https://github.com/NUbots/NUbots/blob/main/roles/test_camera.role) to include `support::logging::DataLogging`
+1.  Change [`test/camera.role`](https://github.com/NUbots/NUbots/blob/main/roles/test/camera.role) to include `support::logging::DataLogging`
 
 2.  Build using `./b build` and then install onto a robot using `./b install n<number>`. More on building can be found on the [Getting Started page](/guides/main/getting-started) or the [Build System page](/system/foundations/build-system).
 
@@ -24,7 +24,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
     The serial numbers can be retrieved by first running `lsusb` and finding the bus and device numbers for the FLIR/Point Grey cameras. Then run `lsusb -s <bus number>:<device number> -v` to find the serial numbers.
 
-    Next you need to figure out which serial number is left and which is right. Change the serial number for one camera to an incorrect number (this ensures it's not found when running test_camera). Enable `message.output.CompressedImage` in `NetworkForwarder.yaml`. Run `./test_camera` and test which camera is working by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively, you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
+    Next you need to figure out which serial number is left and which is right. Change the serial number for one camera to an incorrect number (this ensures it's not found when running test/camera). Enable `message.output.CompressedImage` in `NetworkForwarder.yaml`. Run `./test/camera` and test which camera is working by covering one camera and seeing the resulting image in the NUsight vision tab. Alternatively, you could unplug one camera rather than change the serial number. If the serial number is on the wrong camera configuration file, switch them.
 
 5.  Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
@@ -58,7 +58,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
     1. To stop the program running, hit <kbd>Ctrl</kbd> + <kbd>c</kbd>.
 
-    2. Discover the name of the log file created. The file is in the `log/test_camera/` folder on the robot. The name corresponds to the date and time it was created, according to the robot. Run `ls log/test_camera/` to list all logs.
+    2. Discover the name of the log file created. The file is in the `log/test/camera/` folder on the robot. The name corresponds to the date and time it was created, according to the robot. Run `ls log/test/camera/` to list all logs.
 
     3. (optional) Rename the log file, making it easier to copy across to the computer. Change the name with the command `mv <old path> <new path>`.
 
@@ -92,7 +92,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
     1. Ensure `NetworkForwarder.yaml` has enabled compressed images (`message.output.CompressedImage`) and vision objects.
     2. Stand the robot up with `./scriptrunner Stand.yaml`
     3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
-    4. Run `visualmesh.role` and switch to the vision tab in NUsight
+    4. Run `./test/visualmesh` and switch to the vision tab in NUsight
 
     NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
 
