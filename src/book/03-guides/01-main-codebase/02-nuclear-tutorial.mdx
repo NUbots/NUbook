@@ -57,7 +57,7 @@ This module wasn't created in a folder, but if you are making a new module in a 
 
 Ok, so lets see what we have in this folder.
 
-- **data/config**: There's a `TestModule.yaml` file, which is where you put any configuration values. Values that shouldn't be hardcoded should be put in here. This file is generated with one value, `log_level`. We will look into how this works later.
+- **data/config**: Contains a `TestModule.yaml` file, which holds configuration values. Rather than hardcoding values in your implementation, put the values in this file so they can be easily seen and updated. This file is generated with one value, `log_level`. We will look into how this works later.
 - **src**: This folder contains the `.hpp` and `.cpp` files for the module. If you look in the `.hpp`, you'll see a TestModule class is declared that extends `NUClear::Reactor`. The `.cpp` file implements the constructor with one lambda statement that reads configuration values.
 - **tests**: This contains a file that can be used to test the reactors in the module. We will not look at this, but if you want an example go to `module/extension/FileWatcher/tests/`.
 - **CMakeLists.txt**: This allows CMake to configure the module - we won't change this.
@@ -94,7 +94,7 @@ This should compile. Let's have a go. First we'll need to turn the role we just 
 ./b configure -i
 ```
 
-You'll see an interface appear. There will be a long list of entries starting with `ROLE` set to either `ON` or `OFF`. Arrow key down to those lines and press <kbd>Enter</kbd> to toggle the role on or off. Turn everything off except for `ROLE_testprogram`.
+You'll see an interface appear. There will be a long list of entries starting with `ROLE` set to either `ON` or `OFF`. Arrow key down to those lines and press <kbd>Enter</kbd> to toggle the role on or off. Turn every role off except for `ROLE_testprogram`.
 
 Now run
 
@@ -110,13 +110,13 @@ This should have compiled. Let's run it.
 
 You should see the NUbots logo, and the name of the role, and statements telling you what modules have been installed. If you see that, great! But, this isn't very exciting. It doesn't really do anything yet! Let's implement something in our module.
 
-But - one tip before moving on - hit <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the program!
+Hit <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the program.
 
 ### Configuration
 
 Let's take a look at the configuration file in our module. Open `module/TestModule/data/config/TestModule.yaml`.
 
-This file will store any of values for the program that might change. It is bad practice to hardcode values, and configuration files prevent you from having to do that. Another great thing about configuration files is that they can be changed while a program is running, and that change will be reflected in the program!
+This file will store any of values for the program that might change. It is bad practice to hardcode values, and configuration files provide a way of avoiding that. Another thing about configuration files is that they can be changed while a program is running, and that change will be reflected in the program.
 
 Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run whenever the configuration file `TestModule.yaml` is changed and on startup.
 
@@ -171,7 +171,7 @@ Save, recompile and check that the program prints the message.
 ./b run testprogram
 ```
 
-Make sure you see your INFO log and then lets move onto making the messages that we need.
+Make sure you see your `INFO` log and then lets move onto making the messages that we need.
 
 ### Protobuf Messages
 
@@ -195,7 +195,7 @@ message Pong {
 
 There is an integer in each of these messages. This is the count that will be incremented each time a new `Ping` or `Pong` message is sent. The number it is assigned, `1`, is not the value but its position in the Protobuf message. Save this file and head back over to `TestModule.cpp`.
 
-Up at the top of the file, include the protobuf message we just created. Note that these messages are compiled into C++ code, so include the compiled header.
+Up at the top of the file, include the protobuf message we just created. Note that these messages are transcompile into C++ code, so include the generated header.
 
 ```cpp
 #include "message/PingPong.hpp"
@@ -209,13 +209,13 @@ Make sure it compiles and still runs successfully. Because we added files, we wi
 ./b run testprogram
 ```
 
-If this works, you can move onto the next section where we make our reactors.
+If this works, you can move onto the next section where we make our reactions.
 
 ### Reactors
 
-Reactors are chunks of code that will run given certain conditions are true. We will make two reactors, one that runs reactions whenever it gets a `Pong` message, and the other when it gets a `Ping` message.
+Reactions are chunks of code that will run given certain conditions are true. We will make two reactions, one that runs tasks whenever it gets a `Pong` message, and the other when it gets a `Ping` message.
 
-Head back to `TestModule.cpp`. Underneath the Configuration reactor, add in the following reactor
+Head back to `TestModule.cpp`. Underneath the Configuration reactor, add in the following reaction
 
 ```cpp
 on<Trigger<Ping>>().then([this](const Ping& ping) {
@@ -223,7 +223,7 @@ on<Trigger<Ping>>().then([this](const Ping& ping) {
 });
 ```
 
-`Trigger` means that it will run when it a `Ping` message is available. We get access to this message via the `ping` parameter. Let's add in the other reactor.
+`Trigger` means that it will run when it a `Ping` message is available. We get access to this message via the `ping` parameter. Let's add in the other reaction.
 
 ```cpp
 on<Trigger<Pong>>().then([this](const Pong& pong) {
@@ -233,7 +233,7 @@ on<Trigger<Pong>>().then([this](const Pong& pong) {
 
 Very similar, but it gets the `Pong` message instead.
 
-Next, we want to get the count from the `Ping` or `Pong` message, increment it, and send a new message with the incremented count. Here's the code for the first reactor.
+Next, we want to get the count from the `Ping` or `Pong` message, increment it, and send a new message with the incremented count. Here's the code for the first reaction.
 
 ```cpp
 // Print the Ping message!
@@ -247,7 +247,7 @@ pong->count = ping.count + config.increment;
 emit(pong);
 ```
 
-And for the second reactor
+And for the second reaction
 
 ```cpp
 // Print the Pong message!
@@ -276,9 +276,9 @@ Well... Nothing changed. If you're not sure why, have a think about it before mo
 
 The problem is, that there is no initial Ping or Pong message. No one ever sends the first message - the first reactor is forever waiting for a Ping message, and the second reactor is forever waiting for a Pong message!
 
-Ok, so how do we start the reaction? There are a few ways it could be done, but we will use the `Startup` NUClear DSL. This is another reactor that will run only when the program starts up.
+Ok, so how do we start the reaction tasks? There are a few ways it could be done, but we will use the `Startup` NUClear domain specific language (DSL) word. This is another reaction that will run only when the program starts up.
 
-Here is the code for the reactor.
+Here is the code for the reaction.
 
 ```cpp
 on<Startup>().then([this] {
@@ -298,9 +298,9 @@ Great! Compile and run!
 ./b run testprogram
 ```
 
-That was a bit too fast! Stop the program if you haven't already. Let's review our reactors. There's nothing stopping them from running as fast as they can, they will keep sending messages to each other as fast as possible!
+That was a bit too fast! Stop the program if you haven't already. Let's review our reactions. There's nothing stopping them from running as fast as they can, they will keep sending messages to each other as fast as possible!
 
-Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` with `Every<2, std::chrono::seconds>, With<Ping>`. This will prevent the reactor from running faster than once every two seconds. Compile and run again.
+Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` with `Every<2, std::chrono::seconds>, With<Ping>`. This will prevent the reaction from running tasks faster than once every two seconds. Compile and run again.
 
 ```bash
 ./b build
