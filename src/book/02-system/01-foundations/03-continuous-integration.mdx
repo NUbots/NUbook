@@ -51,6 +51,22 @@ This CI process works in combination with the [Git Feature Branch workflow](http
 
 GitHub Actions are configured in [workflow files](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions), written in YAML. To add, remove, or change build jobs, we edit the relevant [workflow file in the NUbots repo](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows). The [GitHub Actions documentation](https://docs.github.com/en/actions) should be your first stop when you want to make changes.
 
+## Workflow Outline
+
+**Note that the source of truth for what a workflow actually does is the given workflow file. It defines precisely what happens.**
+
+When a pull request is created or its branch is modified, checks are run on the code to make sure that it builds and maintains standards of correctness. First, an action checks which parts of the codebase have been modified, which informs which checks should be run. For instance, changes to C++ code require the C++ code to be built, and its formatting checked.
+
+Next, a docker image tag is built and pushed to DockerHub for the PR. This is cached from the PR image, if it already exists, and the `main` branch image. The caching means that only what needs to be rebuilt in the image is rebuilt, to the point that if the image hasn't changed, the PR image tag simply acts as an alias for the image it cached from.
+
+Finally, all other checks are run conditionally, based on whether the files which those checks apply to have changed. These checks are run inside the Docker container associated with the PR image.
+
+The results from each of these steps are displayed on the pull request page on GitHub (see below).
+
+Each of these steps happens when a pull request is merged into the `main` branch. The results are displayed on the main page of the repository though, rather than the pull request page.
+
+Additionally, when pull requests are merged into main, docker images are built, tagged, and pushed to be the new standard images we use - for example, the `generic` image used for most of our development. This actions workflow is the primary way that those standard images are updated. They can be updated manually by pushing a local image, but this should only be done in exceptional circumstances.
+
 ## Monitoring and Troubleshooting Builds
 
 GitHub Actions have live-updating logs of each build, which you can use to monitor the build progress or troubleshoot errors when a build fails.
