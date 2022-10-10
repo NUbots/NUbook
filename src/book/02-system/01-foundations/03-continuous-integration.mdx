@@ -33,10 +33,10 @@ This CI process works in combination with the [Git Feature Branch workflow](http
    git checkout -b biddulph/ball-detector
    ```
 
-2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers a GitHub action runners to check the code. GitHub automatically creates separate build runners for different parts of the PR (build, check code format, test, etc).
-3. Each runner completes a set of tasks specific in a pipeline file, found inside the [`.github/workflows`](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then doing checking some aspect of the code.
+2. Once development on the branch is complete, or reaches a point where it can be reviewed, the developer makes a pull request (PR) on GitHub. Creating the pull request triggers GitHub action agents to check the code. GitHub automatically creates separate build agents for different parts of the PR (build, check code format, test, etc).
+3. Each agent completes a set of tasks specific in a pipeline file, found inside the [`.github/workflows`](https://github.com/NUbots/NUbots/tree/7cc0677eda6629c2b445a35473748c163685aaad/.github/workflows) directory of the codebase. These steps usually involve cloning the codebase, checking out the relevant commit, pulling down the docker image (rebuilding it if it has changed), then checking some aspect of the code.
 4. GitHub logs the results of each job and displays the results on the webpage for the pull request. The logs are viewable in the 'actions' tab of the PR.
-5. Once the build passes, the PR is reviewed by another member of the team. Once the PR has been approved, it can be merged into `main`.
+5. Once the build passes, the PR is reviewed by other members of the team. Once the PR has been approved, it can be merged into `main`.
 6. Merging the PR into `main` then triggers another CI build. This time, in addition to building the code, a separate job is created to rebuild the main docker images and push them to DockerHub. This is the main way that our docker images are kept up to date.
 
 <TabbedImages>
@@ -57,13 +57,13 @@ GitHub Actions are configured in [workflow files](https://docs.github.com/en/act
 
 When a pull request is created or its branch is modified, checks are run on the code to make sure that it builds and maintains standards of correctness. First, an action checks which parts of the codebase have been modified, which informs which checks should be run. For instance, changes to C++ code require the C++ code to be built, and its formatting checked.
 
-Next, a docker image tag is built and pushed to DockerHub for the PR. This is cached from the PR image, if it already exists, and the `main` branch image. The caching means that only what needs to be rebuilt in the image is rebuilt, to the point that if the image hasn't changed, the PR image tag simply acts as an alias for the image it cached from.
+Next, a docker image tag is built and pushed to DockerHub for the PR. This is cached from the PR image, if it already exists, or the `main` branch image if it does not. The caching means that only what needs to be rebuilt in the image is rebuilt, to the point that if the image hasn't changed, the PR image tag simply acts as an alias for the image it cached from.
 
 Finally, all other checks are run conditionally, based on whether the files which those checks apply to have changed. These checks are run inside the Docker container associated with the PR image.
 
 The results from each of these steps are displayed on the pull request page on GitHub (see below).
 
-Each of these steps happens when a pull request is merged into the `main` branch. The results are displayed on the main page of the repository though, rather than the pull request page.
+Each of these steps happens when a pull request is merged into the `main` branch, however, in this case the results are displayed on the main page of the repository, rather than the pull request page.
 
 Additionally, when pull requests are merged into main, docker images are built, tagged, and pushed to be the new standard images we use - for example, the `generic` image used for most of our development. This actions workflow is the primary way that those standard images are updated. They can be updated manually by pushing a local image, but this should only be done in exceptional circumstances.
 
