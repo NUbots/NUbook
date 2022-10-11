@@ -14,11 +14,11 @@ The first step on your NUClear journey is generating a module. This will give yo
 
 ### Setting up the Codebase
 
-Setting up the codebase is vital! Most new members will have done this during the recruitment tasks, but if you did not do this or your setup has disappeared head over to [the Getting Started page](/guides/main/getting-started).
+Setting up the codebase is vital! Most new members will have done this during the recruitment tasks, but if you did not do this or you have lost your setup head over to [the Getting Started page](/guides/main/getting-started).
 
 Make sure you have
 
-- Git (command line, Github Desktop or GitKraken)
+- Git (command line, GitHub Desktop or GitKraken)
 - Docker
 - A text editor
 - Cloned the code
@@ -34,12 +34,12 @@ Before getting into it, let's look at what we are working with.
 If you open the NUbots repository in your text editor, you will see a whole lot of files and folders on the first level of the repository. Most of these you can ignore for now. Here are some of them which will be touched on in this tutorial.
 
 - **module**: Contains all the NUClear modules, which are the main pieces of code that run on the robots. This is where our new module will live, and where you will likely spend most of your time programming if you're working on robot functionality.
-- **nusight2**: Contains all the code for NUsight, our web-based visual debugging tool.
 - **roles**: Contains all the role files, which define a complete program. The files contain a list of modules that will be in the compiled program.
 - **shared/message**: You'll need to look inside the `shared` folder for this one. The message folder contains all the Protobuf messages that may be used in the system. NUClear is a message passing architecture, and these Protobuf files define those messages!
 
 Other folders that are important but won't be visited in this tutorial are the following.
 
+- **nusight2**: Contains all the code for NUsight, our web-based visual debugging tool.
 - **shared/utility**: This folder contains many C++ files with functions and classes that are used in NUClear modules.
 - **shared/tests**: This folder contains automated tests, which use [the Catch framework](https://github.com/catchorg/Catch2).
 
@@ -51,9 +51,9 @@ There is a neat tool that you can run that will generate the boilerplate code fo
 ./b module generate TestModule
 ```
 
-Ah-ha! If you look in the `module` folder, you will see a new folder called `TestModule`!
+Run it if you haven't already done so. If you look in the `module` folder, you will see a new folder called `TestModule`!
 
-This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there!
+This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there.
 
 Ok, so lets see what we have in this folder.
 
@@ -118,9 +118,9 @@ Let's take a look at the configuration file in our module. Open `module/TestModu
 
 This file will store any of values for the program that might change. It is bad practice to hardcode values, and configuration files provide a way of avoiding that. Another thing about configuration files is that they can be changed while a program is running, and that change will be reflected in the program.
 
-Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run whenever the configuration file `TestModule.yaml` is changed and on startup.
+Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run on startup and whenever the configuration file `TestModule.yaml` is changed.
 
-Inside this statement, after line 13 where the log_level is set, add the following code
+Inside this statement, after the log_level is set, add the following code
 
 ```cpp
 log<NUClear::TRACE>("This is a TRACE log.");
@@ -131,7 +131,7 @@ log<NUClear::ERROR>("This is a ERROR log.");
 log<NUClear::FATAL>("This is a FATAL log.");
 ```
 
-`log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `DEBUG`. Lets compile and run the program again.
+`log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `DEBUG`. Let's compile and run the program again.
 
 ```cpp
 ./b build
@@ -151,7 +151,7 @@ In `TestModule.yaml` (in your text editor, not in the terminal since this is not
 increment: 2
 ```
 
-Next we need to read it in the module. Go to `TestModule.hpp`. We will make a variable to store this in. Inside the config struct on line 11, add in
+Next we need to read it in the module. Go to `TestModule.hpp`. We will make a variable to store this in. Inside the config struct, add in
 
 ```cpp
 int increment = 0;
@@ -211,7 +211,7 @@ Make sure it compiles and still runs successfully. Because we added files, we wi
 
 If this works, you can move onto the next section where we make our reactions.
 
-### Reactors
+### Reactions
 
 Reactions are chunks of code that will run given certain conditions are true. We will make two reactions, one that runs tasks whenever it gets a `Pong` message, and the other when it gets a `Ping` message.
 
@@ -291,7 +291,7 @@ on<Startup>().then([this] {
 });
 ```
 
-Great! Compile and run!
+Let's compile and run it.
 
 ```bash
 ./b build
