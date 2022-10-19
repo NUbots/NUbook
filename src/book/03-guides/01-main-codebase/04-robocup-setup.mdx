@@ -13,15 +13,14 @@ authors:
 
 ## Networking
 
-1. `cd system/nugusX/etc/systemd/network/` to go to the config folder that system configuration will use for networkd.
-2. Rename `40-wlp58s0-robocup.network` to `30-wlp58s0-robocup.network`
-3. Rename `30-wlp58s0.network` to `40-wlp58s0.network`
-4. Double check that network, gateway and dns are correct.
+1. Rename `system/nugusX/etc/systemd/network/40-wlp58s0-robocup.network`
+   to `system/nugusX/etc/systemd/network/30-wlp58s0-robocup.network`
+2. Rename `system/defualt/etc/systemd/30-wlp58s0.network` to `system/default/etc/systemd/40-wlp58s0.network`
+3. Double check that network, gateway and dns are correct in these two files you moved.
    Usually the address is `192.168.0.X` or `10.1.0.X` and both gateway and dns end with `3.1`.
-5. `cd ~` to go back to home.
-5. Add the output of `wpa_passphrase SSID PASSWORD` to `system/default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
+4. Add the output of `wpa_passphrase SSID PASSWORD` to `system/default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
    and add `priority=3` inside the curly brackets on a new line.
    You can use 😎 `vim` or 🤮 `nano` to edit files on the robot.
-6. Run `sudo ./system_configuration`.
-7. Reboot the robot `reboot` or restart the services
+5. Run `sudo ./system_configuration`.
+6. Reboot the robot `reboot` or restart the services
    `sudo systemctl restart wpa_supplicant@wlp58s0` and `sudo systemctl restart wpa_supplicant@wlp58s0`.
