@@ -20,7 +20,7 @@ authors:
    Usually the address is `192.168.0.X` or `10.1.0.X` and both gateway and dns end with `3.1`.
 4. Add the output of `wpa_passphrase SSID PASSWORD` to `system/default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
    and add `priority=3` inside the curly brackets on a new line.
-   You can use 😎 `vim` or 🤮 `nano` to edit files on the robot.
+   You can use `vim` or `nano` to edit files on the robot.
 5. Run `sudo ./system_configuration`.
 6. Reboot the robot `reboot` or restart the services
    `sudo systemctl restart wpa_supplicant@wlp58s0` and `sudo systemctl restart wpa_supplicant@wlp58s0`.
