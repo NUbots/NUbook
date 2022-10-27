@@ -10,25 +10,35 @@ authors:
 
 ## Networking
 
-1. On the robot with a monitor and keyboard, not via `ssh`.
-2. Rename `system/nugusX/etc/systemd/network/40-wlp58s0-robocup.network`
-   to `system/nugusX/etc/systemd/network/30-wlp58s0.network`
-3. Rename `system/defualt/etc/systemd/30-wlp58s0.network` to `system/default/etc/systemd/40-wlp58s0-robocup.network`
-4. Double check that `Address`, in the file now called `30-wlp58s0.network`, is in the subnet you are connecting to,
-   this is the address of this robot.
-   Usually the subnet mask is `255.255.0.0` meaning that the first two numbers define the subnet.
-   Usually the address of the subnet is `192.168.X.X` or `10.1.X.X`.
-5. Also check that `Gateway` and the first `DNS` are correct in this file, both gateway and dns normally end with
-   `.3.1` and are in the subnet.
-6. Add the output of `wpa_passphrase SSID PASSWORD` to `system/default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
-   where `SSID` is the SSID and `PASSWORD` is the password of the Wi-Fi network you are connecting to.
-   Now add `priority=3` inside the curly brackets on a new line to the entry that you just added.
-   You can use `vim` or `nano` to edit files on the robot.
-7. Run `sudo ./system_configuration`.
-8. Reboot the robot `reboot` or restart the services
-   `sudo systemctl restart wpa_supplicant@wlp58s0` and `sudo systemctl restart wpa_supplicant@wlp58s0`.
+1.  Checkout the branch for robocup and change directory to `modules/tools/SystemConfiguration/data/system`.
+2.  Rename `default/etc/systemd/30-wlp58s0.network` to `default/etc/systemd/40-wlp58s0-robocup.network`
+3.  Add the output of `wpa_passphrase SSID PASSWORD` to `default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
+    where `SSID` is the SSID and `PASSWORD` is the password of the Wi-Fi network you are connecting to.
+    Now add `priority=3` inside the curly brackets on a new line to the entry that you just added.
+    The block should look like, where `HASHED_PASSWORD` is a long string of letters and numbers
+    ```
+    network={
+           ssid="SSID"
+           #psk="PASSWORD"
+           psk=HASHED_PASSWORD
+           priority=3
+    }
+    ```
+4.  For each robot `X` do steps 5 to 10.
+5.  Rename `nugusX/etc/systemd/network/40-wlp58s0-robocup.network`
+    to `nugusX/etc/systemd/network/30-wlp58s0.network`.
+6.  Double check that `Address`, in the file now called `30-wlp58s0.network`, is in the subnet you are connecting to,
+    this is the address of this robot.
+    Usually the subnet mask is `255.255.0.0` meaning that the first two numbers define the subnet.
+    Usually the address of the subnet is `192.168.x.x` or `10.1.x.x`.
+7.  Normally `Gateway` and `DNS` are not needed for robocup so remove them from the file.
+8.  Change directory back to the root of the NUbots repo and install the configs `./b install -co nX`.
+    <Alert type='info'>
 
-Note that steps before `7` will be overwritten when installing the codebase onto to robot,
-and when rerunning steps `7` and `8` it will set the network to what the files in steps `1-6` indicate.
-You can create a robocup branch, on your computer, with these files edited in the
-`modules/tools/SystemConfiguration/data/` folder, so it will not be overwritten when installing.
+    When running via `ssh` make sure that you have a monitor and keyboard handy to handle any mistakes.
+
+    </Alert>
+9.  Run `sudo ./system_configuration` on the robot.
+10. Reboot the robot `reboot` or restart the services `sudo systemctl daemon-reload`,
+    `sudo systemctl restart systemd-networkd` and `sudo systemctl restart wpa_supplicant@wlp58s0`.
+
