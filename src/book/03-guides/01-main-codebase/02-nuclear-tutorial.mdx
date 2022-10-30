@@ -154,10 +154,13 @@ increment: 2
 Next we need to read it in the module. Go to `TestModule.hpp`. We will make a variable to store this in. Inside the config struct, add in
 
 ```cpp
+/// @brief How much to increment the count by each time a new Ping or Pong message is emitted
 int increment = 0;
 ```
 
-Always initialise your variables. Save and go to `TestModule.cpp`. Add in the following lines to read the configuration value and print a message to let the user know the increment size.
+Always initialise your variables and add [documentation directives](/guides/general/code-conventions#documentation). The `@brief` is a documentation directive that indicates that the comment is a brief description of the following variable. These are used to [generate documentation](https://codedocs.nubots.net/).  
+
+Save and go to `TestModule.cpp`. Add in the following lines to read the configuration value and print a message to let the user know the increment size.
 
 ```cpp
 config.increment = cfg["increment"].as<int>();
@@ -319,4 +322,4 @@ Now that you understand the module, you can fill in the `README.md` file. This i
 
 This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work.
 
-If you had any problems setting up the program, you can find all [the code files here](https://drive.google.com/file/d/1VmOz7A_Tfom1NtPSsO319wZmYBCv_a_I/).
+If you had any problems setting up the program, you can find all [the code files here](https://drive.google.com/file/d/1AzfWoKbMe-XAzKYRuVjOO5veYLpLMUil/).
