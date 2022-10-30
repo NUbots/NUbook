@@ -61,7 +61,7 @@ Ok, so lets see what we have in this folder.
 - **src**: This folder contains the `.hpp` and `.cpp` files for the module. If you look in the `.hpp`, you'll see a TestModule class is declared that extends `NUClear::Reactor`. The `.cpp` file implements the constructor with one lambda statement that reads configuration values.
 - **tests**: This contains a file that can be used to test the reactors in the module. We will not look at this, but if you want an example go to `module/extension/FileWatcher/tests/`.
 - **CMakeLists.txt**: This allows CMake to configure the module - we won't change this.
-- **README.md**: Documentation for the module. We will be filling this out as we go - it is very important to document your code.
+- **README.md**: Documentation for the module. We will be filling this out - it is very important to document your code.
 
 ## Creating a Program
 
@@ -142,7 +142,7 @@ You should see all of the logs print except for `TRACE`. This is because all log
 
 The log level system allows you to keep statements for debugging or tuning without the logs spamming the terminal when someone is running the module for other purposes.
 
-Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactors. The increment size will be a configuration value. Let's add that configuration value now.
+Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactions. The increment size will be a configuration value. Let's add that configuration value now.
 
 In `TestModule.yaml` (in your text editor, not in the terminal since this is not persistent), add in the following lines
 
@@ -307,6 +307,16 @@ Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` wi
 ./b run testprogram
 ```
 
-You should see the Ping and Pong logs running at a reasonable speed. This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work.
+You should see the Ping and Pong logs running at a reasonable speed. 
+
+Now that you understand the module, you can fill in the `README.md` file. This is a short description of the module. The README is generated with headings to guide the content. Here are some hints for each section.
+
+- **Description:** Write in your own description of what the module does.
+- **Usage:** Since it is not dependent on other modules, the user only needs to include the module in their role to use it.
+- **Consumes:** The the `Ping` and `Pong` messages are consumed by the reactors.
+- **Emits:** The `Ping` and `Pong` messages are emitted by the reactors. 
+- **Dependencies:** This module doesn't have any dependencies of note.
+
+This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work.
 
 If you had any problems setting up the program, you can find all [the code files here](https://drive.google.com/file/d/1VmOz7A_Tfom1NtPSsO319wZmYBCv_a_I/).
