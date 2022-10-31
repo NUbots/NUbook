@@ -158,7 +158,7 @@ Next we need to read it in the module. Go to `TestModule.hpp`. We will make a va
 int increment = 0;
 ```
 
-Always initialise your variables and add [documentation directives](/guides/general/code-conventions#documentation). The `@brief` is a documentation directive that indicates that the comment is a brief description of the following variable. These are used to [generate documentation](https://codedocs.nubots.net/).  
+Always initialise your variables and add [documentation directives](/guides/general/code-conventions#documentation). The `@brief` is a documentation directive that indicates that the comment is a brief description of the following variable. These are used to [generate documentation](https://codedocs.nubots.net/).
 
 Save and go to `TestModule.cpp`. Add in the following lines to read the configuration value and print a message to let the user know the increment size.
 
@@ -310,14 +310,14 @@ Here's where the `Every` DSL word comes in. Let's replace the `Trigger<Ping>` wi
 ./b run testprogram
 ```
 
-You should see the Ping and Pong logs running at a reasonable speed. 
+You should see the Ping and Pong logs running at a reasonable speed.
 
 Now that you understand the module, you can fill in the `README.md` file. This is a short description of the module. The README is generated with headings to guide the content. Here are some hints for each section.
 
 - **Description:** Write in your own description of what the module does.
 - **Usage:** Since it is not dependent on other modules, the user only needs to include the module in their role to use it.
 - **Consumes:** The the `Ping` and `Pong` messages are consumed by the reactors.
-- **Emits:** The `Ping` and `Pong` messages are emitted by the reactors. 
+- **Emits:** The `Ping` and `Pong` messages are emitted by the reactors.
 - **Dependencies:** This module doesn't have any dependencies of note.
 
 This is the end of this tutorial. If you want to learn more, play around with some of the other NUClear DSL words and see how they work.
