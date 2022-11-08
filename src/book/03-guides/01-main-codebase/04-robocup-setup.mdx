@@ -13,7 +13,7 @@ authors:
 1.  Checkout the branch for robocup and change directory to `modules/tools/SystemConfiguration/data/system`.
 2.  Rename `default/etc/systemd/30-wlp58s0.network` to `default/etc/systemd/40-wlp58s0-robocup.network`
 3.  Add the output of `wpa_passphrase SSID PASSWORD` to `default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`
-    where `SSID` is the SSID and `PASSWORD` is the password of the Wi-Fi network you are connecting to.
+    where `SSID` and `PASSWORD` are the SSID and the password of the Wi-Fi network you are connecting to.
     Now add `priority=3` inside the curly brackets on a new line to the entry that you just added.
     The block should look like, where `HASHED_PASSWORD` is a long string of letters and numbers
     ```
