@@ -40,5 +40,7 @@ authors:
     </Alert>
 
 9.  Run `sudo ./system_configuration` on the robot.
-10. Reboot the robot `reboot` or restart the services `sudo systemctl daemon-reload`,
-    `sudo systemctl restart systemd-networkd` and `sudo systemctl restart wpa_supplicant@wlp58s0`.
+```sh
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart systemd-networkd 
+$ sudo systemctl restart wpa_supplicant@wlp58s0
