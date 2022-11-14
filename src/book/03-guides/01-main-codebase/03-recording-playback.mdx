@@ -4,6 +4,8 @@ chapter: Main Codebase
 title: Data Recording and Playback
 description: How to record data from a running system and play it back.
 slug: /guides/main/data-recording-playback
+authors:
+  - Ysobel Sims (@ysims)
 ---
 
 The NUbots system is based on [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
@@ -39,7 +41,7 @@ The following steps detail how to record data. An example will be given througho
      1. Find the line `directory: log` in the configuration file.
      2. Change `log` to `recordings`.
 
-3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/nubots/getting-started) page.
+3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/main/getting-started) page.
 
 4. Run the binary for the role you want to record.
 
