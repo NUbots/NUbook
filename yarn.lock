@@ -1766,12 +1766,12 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
-"@josephuspaye/gatsby-remark-graphviz@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.3.0.tgz#0677aa01ee83b03793d44484de0d3c5fb2aab1d2"
-  integrity sha512-2xyRsc9SH6k2GYG02rg46nynoFjFw/dBusJY0wcpH46jejFvSrquXMf/7JKFA7AFu8ybUiqn78VBKPTqKDTEkA==
+"@josephuspaye/gatsby-remark-graphviz@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.3.1.tgz#636e4a7ea5f63437bab246dff455f6336fcec9bd"
+  integrity sha512-5B6ahCxYkTJRXr3qNGJtXNXqMB4pxXKttGuJzy5yGNF9aUrxMnfDxFTqpaQWa46sL5rIdGTOf77djIms0usi5g==
   dependencies:
-    node-graphviz "^0.1.0"
+    node-graphviz "^0.1.1"
     svgo "^1.3.2"
     unist-util-visit "^2.0.3"
 
@@ -9446,10 +9446,10 @@ node-fetch@^2.5.0, node-fetch@^2.6.1:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-graphviz@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/node-graphviz/-/node-graphviz-0.1.0.tgz#540093aa91ce9b0de13fd6c99ae4d369d9fa28e5"
-  integrity sha512-RhRb+HXYp8ZVVlsxW1/I61taWuQSS6x3o9GanZOdiMyP4TFaBHwfcn221/dZtmI4wdBgu/q7/Zt4jMgi3XQiGA==
+node-graphviz@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/node-graphviz/-/node-graphviz-0.1.1.tgz#3360c8710dbe42b744997419a635d224ad5861a6"
+  integrity sha512-riY8/pFGSD1ipmyzqCwuN2M6W02ELfuLDjhJvTrQCUS/15tyU8ExkC96mlQrNLBK8Ws0z8PdH+ChBT6DuPFWWA==
 
 node-object-hash@^2.3.9:
   version "2.3.10"
