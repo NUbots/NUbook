@@ -88,5 +88,8 @@
   "browserslist": [
     ">0.25%",
     "not dead"
-  ]
+  ],
+  "resolutions": {
+    "probe-image-size": "^7.0.0"
+  }
 }
