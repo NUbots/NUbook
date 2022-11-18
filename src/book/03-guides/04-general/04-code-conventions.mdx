@@ -4,6 +4,9 @@ chapter: General
 title: Code Conventions
 description: Conventions used in NUbots code.
 slug: /guides/general/code-conventions
+authors:
+  - Cameron Murtagh (@CMurtagh-LGTM)
+  - Ysobel Sims (@ysims)
 ---
 
 ## Naming Conventions
@@ -45,6 +48,8 @@ A summary is given in the table below.
 ## Documentation
 
 We use tokens called "directives" or "tags" to annotate different parts of a comment with rich metadata. These directives start with `@` or `\` (`@` is preferred) and are followed by the directive name, arguments (for some directives), and a single line of description.
+
+The directives are used by doxygen to create the [codedocs](https://codedocs.nubots.net/).
 
 When writing modules, the `.hpp` should include a documenting comment for each class, struct, function, method, global variable, member variable and anything extra that you think may need one.
 
@@ -118,7 +123,3 @@ class SimulationRobot {
     [[nodiscard]] bool has_moved_since(const int& timestamp) const;
 }
 ```
-
-### Future
-
-In the future we are planning to use a combination of Doxygen and our NUClear mapper for automatic low level documentation of our code, which will be included in NUbook.
