@@ -89,7 +89,16 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 ## Install Webots
 
-[Install Webots 2022b from the GitHub release](https://github.com/cyberbotics/webots/releases/R2022b).
+1. [Install Webots 2022b from the GitHub release](https://github.com/cyberbotics/webots/releases/R2022b).
+
+2. Set your `WEBOTS_HOME` environment variable in `~/.bashrc`. Check that `webots` exists in `/usr/local/webots`
+
+   1. Run `nano ~/.bashrc` to view and edit your `bashrc` file.
+   2. Add in `export WEBOTS_HOME=/usr/local/webots` (or replace any existing lines with this new path).
+
+   Note that if webots is somewhere else, find it and use that path instead.
+
+   Alternatively you can run `echo export WEBOTS_HOME=/usr/local/webots >> ~/.bashrc` to append the line to the `bashrc` file.
 
 ## Running the Official RoboCup Simulation in Webots
 
@@ -104,7 +113,7 @@ cd ~
 2. Clone the RoboCup TC Virtual Season repository:
 
 ```bash
-git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots
+git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
 ```
 
 ### Set Up the Controllers
@@ -112,16 +121,17 @@ git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots
 1. Install dependencies for the referee:
 
    ```bash
-   cd hlvs_webots/controllers/referee
-   pip3 install -r requirements.txt
+   cd hlvs_webots
+   pip3 install -r controllers/referee/requirements.txt
    ```
 
 2. Build the Robocup controllers:
 
    ```bash
-   cd ../..
    make -j$(nproc)
    ```
+
+   [Note: you must have `WEBOTS_HOME` set or this will fail](guides/tools/webots-setup#install-webots).
 
 ### Install Game Controller
 
@@ -176,7 +186,7 @@ git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots
 3. Run the following to open Webots with the Robocup world and the GameController:
 
    ```bash
-   $WEBOTS_HOME/webots $WEBOTS_HOME/projects/samples/contests/robocup/worlds/robocup.wbt
+   webots ~/hlvs_webots/worlds/robocup.wbt
    ```
 
    <Alert>
@@ -271,7 +281,7 @@ Follow these steps to set up a NUbots developed environment rather than the Robo
 
    ```bash
    cd ~
-   git clone https://github.com/NUbots/NUWebots
+   git clone https://github.com/NUbots/NUWebots.git
    ```
 
 2. Move to the `NUWebots` folder:
@@ -349,7 +359,7 @@ NUbots runs full Webots games to benchmark the current performance of the code. 
 
 2. Set up the game configuration.
 
-   1. Open the [game.json file](https://github.com/RoboCup-Humanoid-TC/hlvs_webots/controllers/referee/game.json).
+   1. Open the [game.json file](https://github.com/RoboCup-Humanoid-TC/hlvs_webots/blob/main/controllers/referee/game.json).
    2. Change the `"blue":` `"id"` to `13`.
    3. Change the `"blue":` `"config"` field to `"team_1.json"`.
 
