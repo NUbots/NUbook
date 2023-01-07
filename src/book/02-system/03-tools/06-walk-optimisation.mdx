@@ -53,37 +53,27 @@ The optimisation involves the running of two separate programs: the webots simul
     -	The folder from which you run the make command also matters. projects/samples/contests/robocup is the folder
     - Having the correct environment variables also matters. You might have to manually set WEBOTS_HOME if you get error messages about /resources/Makefile.include
     -	There is now a standard way to make controllers for nubots which bypasses all the messing around with makefiles etc. (as you’ll see in the NUBook docs), but this controller hasn’t been switched over to that method yet (because it also enables stricter compiler flags that stop the existing code from compiling). 
-
-
 5.	Ensure the NUbots codebase is up to date
-a.	Normally this is just “./b build”
-b.	Sometimes you’ll need to clear the environment with “./b configure --clean”
-c.	To update the docker image “./b target generic”
-
-
+    -	Normally this is just “./b build”
+    -	Sometimes you’ll need to clear the environment with “./b configure --clean”
+    -	To update the docker image “./b target generic”
 6.	Run webots from the NUWebots dir with the command: “./webots/webots ./webots/projects/samples/contests/robocup/worlds/robocup_nuoptim.wbt”
-a.	Webots will start up, and you’ll see the console messages on start up when the controller is ready
-
-
+    -	Webots will start up, and you’ll see the console messages on start up when the controller is ready
 7.	Run NUbots with the command “./b run webotswalkoptimisation”
-a.	You’ll see the logging messages in the console
-b.	NUClear will start the system by sending startup messages to the active modules
-c.	Webots module will attempt to connect to the simulation on the IP address specified in the config
-d.	NSGA2Evaluator module will enter into the WAITING_FOR_REQUEST state, and busy wait until the NSGA2Optimiser is ready to send an individual to evaluate
-e.	NSGA2Optimiser module will read the config file, set up the NSGA2 algorithm, then start sending individuals to NSGA2Evaluator for evaluation.
-f.	NSGA2 Optimiser and NSGA2 Evaluator pass messages back and forth via NUClear. They also receive messages from the simulator via NUClear. (These messages reflect the TCP socket managed by the Webots module)
-
-
+    -	You’ll see the logging messages in the console
+    -	NUClear will start the system by sending startup messages to the active modules
+    -	Webots module will attempt to connect to the simulation on the IP address specified in the config
+    -	NSGA2Evaluator module will enter into the WAITING_FOR_REQUEST state, and busy wait until the NSGA2Optimiser is ready to send an individual to evaluate
+    -	NSGA2Optimiser module will read the config file, set up the NSGA2 algorithm, then start sending individuals to NSGA2Evaluator for evaluation.
+    -	NSGA2 Optimiser and NSGA2 Evaluator pass messages back and forth via NUClear. They also receive messages from the simulator via NUClear. (These messages reflect the TCP socket managed by the Webots module)
 8.	When finished, the output files will be inside the Docker container, move them out manually
-a.	./b shell (start a shell inside docker)
-b.	cd .. (go up one level)
-c.	cd build (move into the build dir)
-d.	ls (list the files)
-e.	the files you want are the nsga2_*.csv files – these have the results
-f.	the genXXX-indXXX*.yaml files contain the exact parameters that was given to the engine (this may be easier to read than the format in the CSV file and can be dropped right on top of the existing yaml files in the codebase to rerun an individual directly).
-g.	Move the files out of the build dir into the nubots dir (the one you started in) to make them available on the host computer. (You can write a quick script for this, I just haven’t gotten around to it yet)
-
-
+    -	./b shell (start a shell inside docker)
+    -	cd .. (go up one level)
+    -	cd build (move into the build dir)
+    -	ls (list the files)
+    -	the files you want are the nsga2_*.csv files – these have the results
+    -	the genXXX-indXXX*.yaml files contain the exact parameters that was given to the engine (this may be easier to read than the format in the CSV file and can be dropped right on top of the existing yaml files in the codebase to rerun an individual directly).
+    -	Move the files out of the build dir into the nubots dir (the one you started in) to make them available on the host computer. (You can write a quick script for this, I just haven’t gotten around to it yet)
 9.	Process the CSV files to generate a visualisation
-a.	We have basic tools to do this, but they are probably not enough to fully visualise the results.
-b.	Note that it’s possible to record videos (both static viewpoint and dynamic viewpoint) in webots, though watch out for reproducibility – a single video of a set of parameters working doesn’t mean it will work like that every time.
+    -	We have basic tools to do this, but they are probably not enough to fully visualise the results.
+    -	Note that it’s possible to record videos (both static viewpoint and dynamic viewpoint) in webots, though watch out for reproducibility – a single video of a set of parameters working doesn’t mean it will work like that every time.
