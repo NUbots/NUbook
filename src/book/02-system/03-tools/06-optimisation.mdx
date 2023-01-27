@@ -1,17 +1,18 @@
 ---
 section: System
 chapter: Tools
-title: NUoptimiser
-description: Walk engine optimiser documentation.
-slug: /system/tools/walk_optimisation
+title: NUOptimiser
+description: NSGA2 documentation.
+slug: /system/tools/optimiser
 authors:
   - Jason Disher (@PiiDish)
 ---
 
 ## Description
 
-This module is used for optimisation of a chosen set of walk engine paramters for the NUgus robots. These parameters are evluated using the Webot simulation environment.
-This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser.
+This module is used for optimisation of a chosen set paramters on the NUgus robots, for the task you wish to optimise. These parameters are evaluated using the Webot simulation environment.
+This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser, with an example of the optimiser use on the NUgus
+quintic walk engine.
 
 
 ### Background
@@ -21,7 +22,13 @@ The NUbots optimiser uses the Non-dominating Sorting Genetic Algorithm (NSGA-II)
 The NSGA-II optimisation algorithm generates a set of individuals to evaluate, then evaluates them based on a fitness function for the selected walk pattern, 
 and then generates a new generation of individuals based on the performance of the current generation. The individuals in this case are sets of parameters for the walk engine.
 
-Originally, the optimizer evaluated the individuals in the Gazebo simulator. In 2021, the simulator was switched to Webots for the Robocup competition, which required a rewrite of the code to integrate with the Webots system. This change led to some limitations and quirks in the system, such as the ability to teleport in the simulation to reset the optimization state, which is not allowed in a normal game. There is also ongoing work to implement a separate channel of communication for optimization, similar to a referee managing a match, but with an optimization supervisor managing the objects in an optimization.
+This module was orignally used for optimisation of a chosen set of walk engine paramters for the NUgus robots. These parameters are evluated using the Webot simulation environment.
+This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser, with an example of the optimiser use on the NUgus
+quintic walk engine.
+
+More so, this module originally evaluated the individuals in the Gazebo simulator. In 2021, the simulator was switched to Webots for the Robocup competition, which required a rewrite of the code to integrate with the Webots system. 
+This change led to some limitations and quirks in the system, such as the ability to teleport in the simulation to reset the optimisation state, which is not allowed in a normal game. 
+There is also ongoing work to implement a separate channel of communication for optimization, similar to a referee managing a match, but with an optimisation supervisor managing the objects in an optimisation.
 
 ### Initial setup
 
