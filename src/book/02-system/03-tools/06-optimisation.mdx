@@ -2,29 +2,27 @@
 section: System
 chapter: Tools
 title: NUOptimiser
-description: NSGA2 documentation.
-slug: /system/tools/optimiser
+description: NSGA2 optimiser documentation.
+slug: /system/tools/optimisation
 authors:
   - Jason Disher (@PiiDish)
 ---
 
 ## Description
 
-This module is used for optimisation of a chosen set paramters on the NUgus robots, for the task you wish to optimise. These parameters are evaluated using the Webot simulation environment.
-This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser, with an example of the optimiser use on the NUgus
+This module is used for optimisation of a chosen set paramters for a task you wish to optimise on the NUgus robots. These parameters are evaluated using the Webot simulation environment.
+This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser, with an example of the optimiser used on the NUgus
 quintic walk engine.
 
 
 ### Background
 
-The NUbots optimiser uses the Non-dominating Sorting Genetic Algorithm (NSGA-II) written in C++ to optimise the chosen set of parameters for the NUgus walk engine.
+The NUbots optimiser uses the Non-dominating Sorting Genetic Algorithm (NSGA-II) written in C++ to optimise a chosen set of parameters originally for the NUgus walk engine,
+which can be used to optimise any set of parameters desired.
 
-The NSGA-II optimisation algorithm generates a set of individuals to evaluate, then evaluates them based on a fitness function for the selected walk pattern, 
-and then generates a new generation of individuals based on the performance of the current generation. The individuals in this case are sets of parameters for the walk engine.
+The NSGA-II optimisation algorithm generates a set of individuals to evaluate, then evaluates them based on a fitness function for the selected walk patterna particular task, are sets of parameters for the walk engine.
 
-This module was orignally used for optimisation of a chosen set of walk engine paramters for the NUgus robots. These parameters are evluated using the Webot simulation environment.
-This document first provides some background information on the NUBots optimisation system, then describes how to setup and work with the NUoptimiser, with an example of the optimiser use on the NUgus
-quintic walk engine.
+This module was orignally used for optimisation of a chosen set comnsisting of 12 walk engine paramters for the NUgus robots. These parameters are evluated using the Webot simulation environment
 
 More so, this module originally evaluated the individuals in the Gazebo simulator. In 2021, the simulator was switched to Webots for the Robocup competition, which required a rewrite of the code to integrate with the Webots system. 
 This change led to some limitations and quirks in the system, such as the ability to teleport in the simulation to reset the optimisation state, which is not allowed in a normal game. 
@@ -32,55 +30,62 @@ There is also ongoing work to implement a separate channel of communication for 
 
 ### Initial setup
 
-1.	Run through NUBook’s Getting Started and Setting Up Webots guides, make sure the main branches work for both
-2.	For NUBots, Checkout hall/webotswalkoptimisation and ./b configure --clean and ./b build
-3.	For NUWebots, Checkout
-4.	Make your own branches/fork for changes during the WIL project?
+1.	Run through NUBook's Getting Started and Setting Up Webots guides, make sure the main branches work for both NUbots and Webots
+2.	For NUBots, Checkout a branch following NUbot naming convention within the NUbot repo and then ./b configure --clean and ./b build
+3.	For NUWebots, Checkout with branch of your choosing within the Webots repo folowing the same NUbot naming conventions
 
 
 ### Operation Overview
 
 The optimisation involves the running of two separate programs: the webots simulator, and the nubots controller. A typical optimisation run involves the following steps.
-1.	Set up git branches
-    -	Both the nubots and nuwebots repos must point to special optimisation branches, as the optimisation-specific changes haven’t been merged into main yet.
-    -	PR on NUWebots: Add a controller to interface with the Optimiser by wongjoel · Pull Request #92 · NUbots/NUWebots (github.com)
-    -	PR on NUBots: Setup NSGA II optimiser for the webots walk by JosephusPaye · Pull Request #540 · NUbots/NUbots (github.com)
-2.	Set up configuration
-    -	module/platform/Webots/data/config/webots.yaml server address should point to the IP address of the computer running webots.
-    -	module/support/optimisation/NSGA2Optimiser/data/config/NSGA2Optimiser.yaml contains the configuration for the optimiser: the task and the optimiser parameters
-    -	roles/webotswalkoptimisation.role contains all the required nuclear roles to run the optimisation (e.g. the webots module, the walk engine module, the optimiser modules)
-    -	check the docker container for old files from previous optimisation runs, to avoid having to sort through them later ./b shell (cd ../build)
-3.	Set up optimiser world NUWebots/webots/projects/samples/contests/robocup/worlds/robocup_nuoptim.wbt
-    -	This should be as empty as possible, but still contain the field, as the field has an effect on the dynamics of the robot’s walk.
-    -	This is where the special controller is loaded in and given its arguments (including allowed hosts) – Ensure your host IP is set in the argument list, otherwise you’ll get errors about not being whitelisted
-    -	This is also where the initial camera viewpoint is set.
-4.	Ensure the nuoptimiser code has been compiled
-    -	Make sure the protobuf has been compiled to cpp compatible code: from NUWebots/webots/projects/samples/contests/robocup/controllers/nuoptimiser, run protoc –cpp_out=./ messages.proto
+
+<!-- 1.	Set up git branches
+    -	Both the nubots and nuwebots repos must point to special optimisation branches, as the optimisation-specific changes haven't been merged into main yet.
+    -	PR on NUWebots: Add a controller to interface with the Optimiser by wongjoel· Pull Request #92 · NUbots/NUWebots (github.com)
+    -	PR on NUBots: Setup NSGA II optimiser for the webots walk by JosephusPaye · Pull Request #540 · NUbots/NUbots (github.com) -->
+1.	Set up configuration
+    -	Locate the file module/platform/Webots/data/config/webots.yaml and update the server address to point to the IP address of the computer running webots. In your terinaml window, 
+        typing hostname -I will show your IP address of the computer your using.
+    -	Locate the file module/support/optimisation/NSGA2Optimiser/data/config/NSGA2Optimiser.yaml. This is an important file as it contains the configuration for the optimiser: the task to be optimised
+        and the task optimisation parameters.
+    -	The file roles/webotswalkoptimisation.role contains all the required nuclear roles to run the optimisation (e.g. the webots module, the optimiser modules, and the modules required for the task your're optimising)
+    -	Check the docker container for old files (.yaml and csv files) from previous optimisation runs, to avoid having to sort through them later. This is achieved by typing ./b shell (cd ../build) in the terminal window.
+2.	Set up optimiser world NUWebots/nuwebots/worlds/robocup_nuoptim.wbt
+    -	This should be as empty as possible, but still contain the field, as the field has an effect on the dynamics of the robot's optimiastion parameters.
+    -	This is where the special controller is loaded in and given its arguments (including allowed hosts) - Ensure your host IP is set in the argument list, otherwise you'll get errors about not being whitelisted
+    -	This is also where the initial robot position and initial camera viewpoint is set.
+3.	Ensure the nuoptimiser code has been compiled
+    -	Make sure the protobuf has been compiled to cpp compatible code: from NUWebots/nuwebots/nuoptimiser, run protoc - cpp_out=./ messages.proto
     -	Ensure projects/samples/contests/robocup/controllers/Makefile includes nuoptimiser.Makefile as a prerequisite
     -	The folder from which you run the make command also matters. projects/samples/contests/robocup is the folder
-    - Having the correct environment variables also matters. You might have to manually set WEBOTS_HOME if you get error messages about /resources/Makefile.include
-    -	There is now a standard way to make controllers for nubots which bypasses all the messing around with makefiles etc. (as you’ll see in the NUBook docs), but this controller hasn’t been switched over to that method yet (because it also enables stricter compiler flags that stop the existing code from compiling). 
-5.	Ensure the NUbots codebase is up to date
+    -   Having the correct environment variables also matters. You might have to manually set WEBOTS_HOME if you get error messages about /resources/Makefile.include
+    -	There is now a standard way to make controllers for nubots which bypasses all the messing around with makefiles etc. (as you'll see in the NUBook docs), but this controller hasn't been switched over to that method yet 
+        (because it also enables stricter compiler flags that stop the existing code from compiling). 
+4.	Ensure the NUbots codebase is up to date
     -	Normally this is just “./b build”
-    -	Sometimes you’ll need to clear the environment with “./b configure --clean”
+    -	Sometimes you'll need to clear the environment with “./b configure --clean”, particulary if you add new files and or tasks.
     -	To update the docker image “./b target generic”
-6.	Run webots from the NUWebots dir with the command: “./webots/webots ./webots/projects/samples/contests/robocup/worlds/robocup_nuoptim.wbt”
-    -	Webots will start up, and you’ll see the console messages on start up when the controller is ready
-7.	Run NUbots with the command “./b run webotswalkoptimisation”
-    -	You’ll see the logging messages in the console
+5.	Run webots from the NUWebots dir with the command: “./webots/webots nuwebots/worlds/robocup_nuoptim.wbt”
+    -	Webots will start up, and you'll see the console messages on start up when the controller is ready
+6.	Run NUbots with the command “./b run webotswalkoptimisation” from a different terminal window.
+    -	You'll see the logging messages in the console
     -	NUClear will start the system by sending startup messages to the active modules
-    -	Webots module will attempt to connect to the simulation on the IP address specified in the config
+    -	Webots module will attempt to connect to the simulation on the IP address specified in the config (module/platform/Webots/data/config/webots.yaml)
     -	NSGA2Evaluator module will enter into the WAITING_FOR_REQUEST state, and busy wait until the NSGA2Optimiser is ready to send an individual to evaluate
     -	NSGA2Optimiser module will read the config file, set up the NSGA2 algorithm, then start sending individuals to NSGA2Evaluator for evaluation.
     -	NSGA2 Optimiser and NSGA2 Evaluator pass messages back and forth via NUClear. They also receive messages from the simulator via NUClear. (These messages reflect the TCP socket managed by the Webots module)
-8.	When finished, the output files will be inside the Docker container, move them out manually
+7.	When finished, the output files will be inside the Docker container, move them out manually
     -	./b shell (start a shell inside docker)
     -	cd .. (go up one level)
     -	cd build (move into the build dir)
     -	ls (list the files)
-    -	the files you want are the nsga2_*.csv files – these have the results
+    -	the files you want are the nsga2_*.csv files - these have the results
     -	the genXXX-indXXX*.yaml files contain the exact parameters that was given to the engine (this may be easier to read than the format in the CSV file and can be dropped right on top of the existing yaml files in the codebase to rerun an individual directly).
-    -	Move the files out of the build dir into the nubots dir (the one you started in) to make them available on the host computer. (You can write a quick script for this, I just haven’t gotten around to it yet)
-9.	Process the CSV files to generate a visualisation
+    -	Move the files out of the build dir into the nubots dir (the one you started in) to make them available on the host computer. (You can write a quick script for this, I just haven't gotten around to it yet)
+8.	Process the CSV files to generate a visualisation
     -	We have basic tools to do this, but they are probably not enough to fully visualise the results.
-    -	Note that it’s possible to record videos (both static viewpoint and dynamic viewpoint) in webots, though watch out for reproducibility – a single video of a set of parameters working doesn’t mean it will work like that every time.
+    -	Note that it's possible to record videos (both static viewpoint and dynamic viewpoint) in webots, though watch out for reproducibility - a single video of a set of parameters working doesn't mean it will work like that every time.
+
+### Walk engine example
+
+A brief example of the NSGA2 optimiser used on the quintic walk engine of the NUgus robot.
