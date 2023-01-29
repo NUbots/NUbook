@@ -46,8 +46,9 @@ The optimisation involves the running of two separate programs: the webots simul
 1.	Set up configuration
     -	Locate the file module/platform/Webots/data/config/webots.yaml and update the server address to point to the IP address of the computer running webots. In your terinaml window, 
         typing hostname -I will show your IP address of the computer your using.
-    -	Locate the file module/support/optimisation/NSGA2Optimiser/data/config/NSGA2Optimiser.yaml. This is an important file as it contains the configuration for the optimiser: the task to be optimised
-        and the task optimisation parameters.
+    -	The NSGA2 configuration file is located in the NUbot repository at module/support/optimisation/NSGA2Optimiser/data/config/NSGA2Optimiser.yaml, is an important file as it contains the configuration settings for the optimiser:- 
+        That is the task to be optimised and the task optimisation parameters. This file is optimiastion specific. A new one will have to be written for each collections of optimisation tasks. Please see below for the exaple used 
+        for the NUgus robot walk engine.
     -	The file roles/webotswalkoptimisation.role contains all the required nuclear roles to run the optimisation (e.g. the webots module, the optimiser modules, and the modules required for the task your're optimising)
     -	Check the docker container for old files (.yaml and csv files) from previous optimisation runs, to avoid having to sort through them later. This is achieved by typing ./b shell (cd ../build) in the terminal window.
 2.	Set up optimiser world NUWebots/nuwebots/worlds/robocup_nuoptim.wbt
@@ -89,3 +90,506 @@ The optimisation involves the running of two separate programs: the webots simul
 ### Walk engine example
 
 A brief example of the NSGA2 optimiser used on the quintic walk engine of the NUgus robot.
+
+1.  Example Configuration Files 
+    - webots.yaml
+    
+    This is an example of the webots configuration file. Sever address is the only parameter that needed to be set. Every computer will more than likely be different,
+    depending the network you are on.
+    ```
+    # Controls the minimum log level that NUClear log will display
+    log_level: WARN
+
+    # Maximum FSR sensor value. This is based on the Darwin-OP FSR sensors
+    # Max value 65,535 / 1000 (N) = 65.535 N
+    max_fsr_value: 65.535
+    # Maximum velocity from NUgus.proto motors
+    max_velocity_mx64: 8.17
+    max_velocity_mx106: 5.76
+    # Requested time step between sensors
+    time_step: 8
+    # Minimum time step allowed between camera sensors
+    min_camera_time_step: 16
+    # Minimum time step allowed between other sensors
+    min_sensor_time_step: 8
+
+    clock_smoothing: 0.6
+
+    # Connection details
+    server_address: "192.168.20.12"
+    port: 10001
+    ```
+
+    - NSGA2Optimiser.yaml
+
+    As mentioned above the NSGA2Optimiser file optimisation is task specific. Shown here is the file use to set the parameters that were optimised for the quintic walk engine of the NUgus robots.
+    As can be seen there were 12 parameters that were optimised for the walk engine. 
+    ``` 
+    # Larger population encourages wider search
+    population_size: 4
+    # More generations encourages deeper search
+    max_generations: 5
+    num_objectives: 1
+    num_constraints: 2
+    seed: 7777777
+    trial_duration_limit: 65 # number of seconds to run a single trial for
+    probabilities:
+    real:
+        # Note that simulated binary crossover (SBX) does something like mutation as well
+        crossover: 0.9
+        # recommended nsga2 mutation probability is 1/n, where n is number of parameters
+        mutation: 0.083
+    binary:
+        crossover: 0.9
+        mutation: 0.083
+    eta:
+    # eta_c is distribution index for simulated binary crossover (SBX)
+    # higher values of eta_c makes children more similar to parents
+    # Recommended nsga2 value for eta_c is 20
+    C: 20
+    M: 20
+
+    task: "walk"
+    task_config_path: "config/webots/QuinticWalk.yaml"
+
+    # Only for multipath
+    task_supplied_pop: "false"
+    task_supplied_pop_file: ""
+
+    initial_translation: [-4.0, -3.0, 0.51] # x, y, z
+    intial_rotation: [0, 0, 1, 0] # x, y, z, angle (rads)
+    # The following values are setting the initial values and limits for the walk engine parameters.
+    # Each param is the tuple [initial value, minimum, maximum]. These values are merged with the
+    # values in QuinticWalk.yaml for an individual, and then evaluated with the walk.
+    walk:
+    # Full walk cycle frequency (how long it takes in seconds for a left + right steps)
+    # (in Hz, > 0)
+    freq: [1, 0.1, 3.0]
+    # Length of double support phase in half cycle (how long both legs should be on the ground, as a ratio of how long it takes for a single step)
+    # (ratio, [0:1])
+    double_support_ratio: [0.1, 0.05, 0.2]
+    foot:
+        # Lateral distance between the feet center (how spread apart the feet should be)
+        # (in m, >= 0)
+        distance: [0.18, 0.12, 0.24] #This can be wider fpor strafe
+        # Maximum flying foot height (how high we lift a foot from the ground)
+        # (in m, >= 0)
+        rise: [0.075, 0.05, 0.17]
+    trunk:
+        # Height of the trunk from ground (how much we bend the knee, for the entire walk, fully standing is 0.51-ish)
+        # (in m, > 0)
+        height: [0.5, 0.4, 0.6]
+        # Trunk pitch orientation (how much we lean the torso forward or backward, does not change)
+        # (in rad)
+        pitch: [15 * pi / 180, -10 * pi / 180, 30 * pi / 180]
+        # Trunk forward offset (how much we offset the trunk forward or backward lean when walking)
+        # (in m)
+        x_offset: [0.03, -0.05, 0.05]
+        # Trunk lateral offset (how much we offset the trunk left or right lean when walking)
+        # (in m)
+        y_offset: [0.03, -0.05, 0.05] #[-0.01, -0.02, 0.02]
+        # Trunk lateral oscillation amplitude ratio (how much we swing the trunk left and right when stepping)
+        # (ratio, >= 0)
+        swing: [0.03, 0.01, 0.05]
+        # Trunk swing pause length in phase at apex (how long we keep the trunk at the max swing position, before swinging back)
+        # (half cycle ratio, [0:1])
+        pause: [0.1, 0.0, 0.2]
+    pause:
+        # Time that the walking is paused when becoming unstable
+        # (in s, [0:10])
+        duration: [0.05, 0.0, 0.5]
+
+    # The following values are setting the initial values and limits for the walk engine command.
+    walk_command:
+    velocity: [1.0, 0.01, 2.00] #  [-0.2, -1.00, -0.01]
+    rotation: [0.15, -1.57, 0.1] # [0.15, 0.1, 1.57] 
+    ```
+
+    - webotswalkoptimisation role configuration 
+
+    This NUclear role example shows the roles needed to be incuded for NSGA2 optimisation and evaluation modules, and the required roles for the
+    optimisation of the NUgus quintic walk engine.  
+    ```
+    nuclear_role(
+    # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+    # and without it many roles do not run
+    extension::FileWatcher
+    support::SignalCatcher
+    support::logging::ConsoleLogHandler
+
+    # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+    motion::KinematicsConfiguration
+
+    support::configuration::GlobalConfig
+
+    platform::Webots
+
+    behaviour::Controller
+    behaviour::skills::Stand
+
+    motion::ScriptEngine
+    motion::QuinticWalk
+    
+    support::optimisation::NSGA2Evaluator
+    support::optimisation::NSGA2Optimiser
+    )
+    ```
+2.  Webots World Configuration 
+    - robocup_nuoptim.wbt
+
+    This is the file that sets up the Webots world for you optimisation task/tasks. Please not the contrller arguments. 
+    You will need to enter your IP address here is it will be whitelisted by Webots. Also the start position of the robot is set here and the camera veiwpoint.
+    ```
+    #VRML_SIM R2021b utf8
+    WorldInfo {
+    info [
+        "Description: walk optimisation world"
+        "Version 0.2"
+    ]
+    title "Robocup V-HL Kid"
+    basicTimeStep 8
+    optimalThreadCount 1
+    physicsDisableTime 0.1
+    physicsDisableLinearThreshold 0.1
+    physicsDisableAngularThreshold 0.1
+    contactProperties [
+        ContactProperties {
+        material1 "grass"
+        coulombFriction [
+            0.5
+        ]
+        softCFM 0.03
+        }
+        ContactProperties {
+        material1 "grass"
+        material2 "robocup soccer ball"
+        coulombFriction [
+            0.5
+        ]
+        bounce 0.76
+        softCFM 0.05
+        }
+        ContactProperties {
+        material2 "robocup soccer ball"
+        bounce 0.76
+        }
+    ]
+    }
+    Viewpoint {
+    orientation 0.791 -0.345 -0.505 1.42
+    position -12.0 -12.0 4.96
+    }
+    TexturedBackground {
+    texture "stadium_dry"
+    }
+    TexturedBackgroundLight {
+    texture "stadium_dry"
+    }
+    RobocupSoccerField {
+    size "adult"
+    }
+    DEF RED_PLAYER_1 NUgus {
+    supervisor TRUE
+    controller "nuoptimiser"
+    name "red player 1"
+    translation -7.0 -3.0 0.51  # 0.0 0.0 0.51 
+    rotation 0 0 1 0
+    controllerArgs [
+        "10001"
+        "1",
+        "127.0.1.1",
+        "10.1.0.102"
+        ]
+    }
+    ```
+3.  Optimiser and Evaluator tasks
+    - WlakOptimiser.ccp
+
+    ```
+    namespace module {
+        namespace support {
+            namespace optimisation {
+                using message::support::optimisation::NSGA2EvaluationRequest;
+                using utility::support::Expression;
+
+                void WalkOptimiser::SetupNSGA2(const ::extension::Configuration& config, nsga2::NSGA2& nsga2Algorithm) {
+                    NUClear::log<NUClear::INFO>("Walk Optimiser Setting up NSGA2");
+                    // The initial values of the parameters to optimise
+                    std::vector<double> paramInitialValues;
+
+                    // Parallel to paramInitialValues, sets the limit (min, max) of each parameter value
+                    std::vector<std::pair<double, double>> paramLimits;
+
+                    // Extract the initial values and limits and from config file, for all of the parameters
+                    auto walk = config["walk"];
+                    for (const auto& element :
+                        std::vector<std::string>({std::string("freq"), std::string("double_support_ratio")})) {
+                        paramInitialValues.emplace_back(walk[element][0].as<Expression>());
+                        paramLimits.emplace_back(walk[element][1].as<Expression>(), walk[element][2].as<Expression>());
+                    }
+
+                    auto foot = walk["foot"];
+                    for (const auto& element : std::vector<std::string>({std::string("distance"), std::string("rise")})) {
+                        paramInitialValues.emplace_back(foot[element][0].as<Expression>());
+                        paramLimits.emplace_back(foot[element][1].as<Expression>(), foot[element][2].as<Expression>());
+                    }
+
+                    auto trunk = walk["trunk"];
+                    for (const auto& element : std::vector<std::string>({std::string("height"),
+                                                                        std::string("pitch"),
+                                                                        std::string("x_offset"),
+                                                                        std::string("y_offset"),
+                                                                        std::string("swing"),
+                                                                        std::string("pause")})) {
+                        paramInitialValues.emplace_back(trunk[element][0].as<Expression>());
+                        paramLimits.emplace_back(trunk[element][1].as<Expression>(), trunk[element][2].as<Expression>());
+                    }
+
+                    auto pause = walk["pause"];
+                    for (const auto& element : std::vector<std::string>({std::string("duration")})) {
+                        paramInitialValues.emplace_back(pause[element][0].as<Expression>());
+                        paramLimits.emplace_back(pause[element][1].as<Expression>(), pause[element][2].as<Expression>());
+                    }
+
+                    auto walk_command = config["walk_command"];
+                    for (const auto& element : std::vector<std::string>({std::string("velocity")})) {
+                        paramInitialValues.emplace_back(walk_command[element][0].as<Expression>());
+                        paramLimits.emplace_back(walk_command[element][1].as<Expression>(),
+                                                walk_command[element][2].as<Expression>());
+                    }
+
+                    quintic_walk_path    = config["task_config_path"].as<std::string>();
+                    trial_duration_limit = config["trial_duration_limit"].as<int>();
+
+                    // Set configuration for real variables
+                    NUClear::log<NUClear::INFO>("Real Var Count: ", paramInitialValues.size());
+                    nsga2Algorithm.SetRealVariableCount(paramInitialValues.size());
+                    nsga2Algorithm.SetRealVarLimits(paramLimits);
+                    nsga2Algorithm.SetInitialRealVars(paramInitialValues);
+
+                    // Set configuration for binary variables
+                    nsga2Algorithm.SetBinVariableCount(0);
+                }
+
+                std::unique_ptr<NSGA2EvaluationRequest> WalkOptimiser::MakeEvaluationRequest(const int id,
+                                                                                            const int generation,
+                                                                                            std::vector<double> reals) {
+                    auto request              = std::make_unique<NSGA2EvaluationRequest>();
+                    request->id               = id;
+                    request->generation       = generation;
+                    request->task             = "walk";
+                    request->task_config_path = quintic_walk_path;
+
+                    request->trial_duration_limit = trial_duration_limit;
+
+                    // Add the individual's parameters to the message
+                    request->parameters.real_params = reals;
+                    return request;
+                }
+
+            }  // namespace optimisation
+        }      // namespace support
+    }  // namespace module
+    ```
+    - WalkEvaluator.ccp
+
+
+    ```
+    namespace module {
+        namespace support {
+            namespace optimisation {
+                using message::motion::DisableWalkEngineCommand;
+                using message::motion::EnableWalkEngineCommand;
+                using message::motion::WalkCommand;
+                using message::platform::RawSensors;
+                using message::support::optimisation::NSGA2EvaluationRequest;
+                using message::support::optimisation::NSGA2FitnessScores;
+                using message::support::optimisation::NSGA2TrialExpired;
+
+                using utility::behaviour::RegisterAction;
+                using utility::input::LimbID;
+                using utility::input::ServoID;
+                using utility::support::Expression;
+
+                using extension::Configuration;
+
+                void WalkEvaluator::processRawSensorMsg(const RawSensors& sensors, NSGA2Evaluator* evaluator) {
+                    updateMaxFieldPlaneSway(sensors);
+                    if (checkForFall(sensors)) {
+                        evaluator->emit(std::make_unique<NSGA2Evaluator::Event>(NSGA2Evaluator::Event::TerminateEarly));
+                    }
+                }
+
+                void WalkEvaluator::processOptimisationRobotPosition(const OptimisationRobotPosition& position) {
+                    if (!initial_position_set) {
+                        initial_position_set       = true;
+                        initial_robot_position.x() = position.value.X;
+                        initial_robot_position.y() = position.value.Y;
+                        initial_robot_position.z() = position.value.Z;
+                    }
+
+                    robot_position.x() = position.value.X;
+                    robot_position.y() = position.value.Y;
+                    robot_position.z() = position.value.Z;
+                }
+
+                void WalkEvaluator::setUpTrial(const NSGA2EvaluationRequest& current_request) {
+                    // Set our generation and individual identifiers from the request
+                    trial_duration_limit = std::chrono::seconds(current_request.trial_duration_limit);
+
+                    // Set our walk command
+                    walk_command_velocity.x() = current_request.parameters.real_params[11];
+                    walk_command_velocity.y() = 0.0;
+                    walk_command_rotation     = 0.0;
+
+                    // Read the QuinticWalk config and overwrite the config parameters with the current individual's
+                    // parameters
+                    YAML::Node walk_config = YAML::LoadFile(current_request.task_config_path);
+                    NUClear::log<NUClear::INFO>("CurrentConfigPath", current_request.task_config_path);
+
+                    // The mapping of parameters depends on how the config file was read by the optimiser
+                    auto walk                    = walk_config["walk"];
+                    walk["freq"]                 = current_request.parameters.real_params[0];
+                    walk["double_support_ratio"] = current_request.parameters.real_params[1];
+
+                    auto foot        = walk["foot"];
+                    foot["distance"] = current_request.parameters.real_params[2];
+                    foot["rise"]     = current_request.parameters.real_params[3];
+
+                    auto trunk        = walk["trunk"];
+                    trunk["height"]   = current_request.parameters.real_params[4];
+                    trunk["pitch"]    = current_request.parameters.real_params[5];
+                    trunk["x_offset"] = current_request.parameters.real_params[6];
+                    trunk["y_offset"] = current_request.parameters.real_params[7];
+
+                    trunk["swing"] = current_request.parameters.real_params[8];
+                    trunk["pause"] = current_request.parameters.real_params[9];
+
+                    auto pause        = walk["pause"];
+                    pause["duration"] = current_request.parameters.real_params[10];
+
+                    // Write the updated config to disk
+                    std::ofstream overwrite_file_stream(current_request.task_config_path);
+                    overwrite_file_stream << YAML::Dump(walk_config);
+                    overwrite_file_stream.close();
+
+                    // Write the config to keep for later
+                    NUClear::log<NUClear::DEBUG>(fmt::format("Saving as: gen{:03d}_ind{:03d}_task-{}.yaml",
+                                                            current_request.generation,
+                                                            current_request.id,
+                                                            current_request.task));
+                    std::ofstream save_file_stream(fmt::format("gen{:03d}_ind{:03d}_task-{}.yaml",
+                                                            current_request.generation,
+                                                            current_request.id,
+                                                            current_request.task));
+                    save_file_stream << YAML::Dump(walk_config);
+                    save_file_stream.close();
+
+                        // Get constant variables
+                    YAML::Node eval_config = YAML::LoadFile("config/NSGA2Evaluator.yaml");
+
+                    gravity_Max = eval_config["gravity"]["MAX"].as<float>();
+                    gravity_Min = eval_config["gravity"]["MIN"].as<float>();
+                }
+
+                void WalkEvaluator::resetSimulation() {
+                    // Reset our local stateconst OptimisationRobotPosition& position
+                    trial_start_time       = 0.0;
+                    robot_position         = Eigen::Vector3d::Zero();
+                    initial_robot_position = Eigen::Vector3d::Zero();
+                    max_field_plane_sway   = 0.0;
+                }
+
+                void WalkEvaluator::evaluatingState(size_t subsumptionId, NSGA2Evaluator* evaluator) {
+                    NUClear::log<NUClear::DEBUG>(fmt::format("Trialling with walk command: ({}, {}) {}",
+                                                            walk_command_velocity.x(),
+                                                            walk_command_velocity.y(),
+                                                            walk_command_rotation));
+
+                    evaluator->emit(std::make_unique<WalkCommand>(
+                        subsumptionId,
+                        Eigen::Vector3d(walk_command_velocity.x(), walk_command_velocity.y(), walk_command_rotation)));
+                    evaluator->ScheduleTrialExpiredMessage(0, trial_duration_limit);
+                }
+
+                std::unique_ptr<NSGA2FitnessScores> WalkEvaluator::calculateFitnessScores(bool earlyTermination,
+                                                                                        double sim_time,
+                                                                                        int generation,
+                                                                                        int individual) {
+                    auto scores      = calculateScores();
+                    auto constraints = earlyTermination ? calculateConstraints(sim_time) : constraintsNotViolated();
+
+                    double trial_duration = sim_time - trial_start_time;
+                    NUClear::log<NUClear::DEBUG>("Trial ran for", trial_duration);
+                    NUClear::log<NUClear::DEBUG>("SendFitnessScores for generation", generation, "individual", individual);
+                    NUClear::log<NUClear::DEBUG>("    scores:", scores[0], scores[1]);
+                    NUClear::log<NUClear::DEBUG>("    constraints:", constraints[0], constraints[1]);
+
+                    // Create the fitness scores message based on the given results and emit it back to the Optimiser
+                    std::unique_ptr<NSGA2FitnessScores> fitness_scores = std::make_unique<NSGA2FitnessScores>();
+                    fitness_scores->id                                 = individual;
+                    fitness_scores->generation                         = generation;
+                    fitness_scores->obj_score                          = scores;
+                    fitness_scores->constraints                        = constraints;
+                    return fitness_scores;
+                }
+
+                std::vector<double> WalkEvaluator::calculateScores() {
+                    auto robot_distance_travelled = std::fabs(initial_robot_position.x() - robot_position.x());
+                    return {
+                        max_field_plane_sway,            // For now, we want to reduce this
+                        1.0 / robot_distance_travelled  // 1/x since the NSGA2 optimiser is a minimiser
+                    };
+                }
+
+                std::vector<double> WalkEvaluator::calculateConstraints(double sim_time) {
+                    // Convert trial duration limit to ms, add 1 for overhead
+                    const auto overhead = std::chrono::seconds(1);
+                    double max_trial_duration =
+                        (std::chrono::duration_cast<std::chrono::milliseconds>(trial_duration_limit + overhead)).count();
+                    double trial_duration = sim_time - trial_start_time;
+                    return {
+                        trial_duration - max_trial_duration,  // Punish for falling over, based on how long the trial took
+                                                            // (more negative is worse)
+                        0.0                                  // Second constraint unused, fixed to 0
+                    };
+                }
+
+                std::vector<double> WalkEvaluator::constraintsNotViolated() {
+                    return {
+                        0.0,  // Robot didn't fall
+                        0.0   // Second constraint unused, fixed to 0
+                    };
+                }
+
+
+                bool WalkEvaluator::checkForFall(const RawSensors& sensors) {
+                    bool fallen        = false;
+                    auto accelerometer = sensors.accelerometer;
+
+                    if ((std::fabs(accelerometer.x()) > gravity_Max || std::fabs(accelerometer.y()) > gravity_Max)
+                        && std::fabs(accelerometer.z()) < gravity_Min) {
+                        NUClear::log<NUClear::DEBUG>("Fallen!");
+                        NUClear::log<NUClear::DEBUG>("acc at fall (x y z):",
+                                                    std::fabs(accelerometer.x()),
+                                                    std::fabs(accelerometer.y()),
+                                                    std::fabs(accelerometer.z()));
+                        fallen = true;
+                    }
+                    return fallen;
+                }
+
+                void WalkEvaluator::updateMaxFieldPlaneSway(const RawSensors& sensors) {
+                    auto accelerometer = sensors.accelerometer;
+
+                    // Calculate the robot sway along the field plane (left/right, forward/backward)
+                    double field_plane_sway = std::pow(std::pow(accelerometer.x(), 2) + std::pow(accelerometer.y(), 2), 0.5);
+                    if (field_plane_sway > max_field_plane_sway) {
+                        max_field_plane_sway = field_plane_sway;
+                    }
+                }
+
+            }  // namespace optimisation
+        }      // namespace support
+    }  // namespace module
+    ```
