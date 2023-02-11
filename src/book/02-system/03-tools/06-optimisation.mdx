@@ -74,7 +74,7 @@ The optimisation involves the running of two separate programs: the webots simul
             port: 10001
         ```
     -	The NSGA2 configuration file is located in the NUbot repository at module/support/optimisation/NSGA2Optimiser/data/config/NSGA2Optimiser.yaml, is an important file as it contains the configuration settings for the optimiser:- 
-        That is the task to be optimised and the task optimisation parameters. This file is optimiastion specific. A new one will have to be written for each collections of optimisation tasks. Please see below for the exaple used 
+        That is the task to be optimised and the task optimisation parameters. This file is optimiastion specific. A new one will have to be written for each collections of optimisation tasks. Please see below for the example used 
         for the NUgus robot walk engine.
     -	The file roles/webotswalkoptimisation.role contains all the required nuclear roles to run the optimisation (e.g. the webots module, the optimiser modules, and the modules required for the task your're optimising)
     -	Check the docker container for old files (.yaml and csv files) from previous optimisation runs, to avoid having to sort through them later. This is achieved by typing ./b shell (cd ../build) in the terminal window.
@@ -114,38 +114,11 @@ The optimisation involves the running of two separate programs: the webots simul
     -	We have basic tools to do this, but they are probably not enough to fully visualise the results.
     -	Note that it's possible to record videos (both static viewpoint and dynamic viewpoint) in webots, though watch out for reproducibility - a single video of a set of parameters working doesn't mean it will work like that every time.
 
-### Walk engine example
+### Optimisation of Walk Engine example
 
 A brief example of the NSGA2 optimiser used on the quintic walk engine of the NUgus robot.
 
 1.  Example Configuration Files 
-    - webots.yaml
-    
-    This is an example of the webots configuration file. Sever address is the only parameter that needed to be set. Every computer will more than likely be different,
-    depending the network you are on.
-    ```
-    # Controls the minimum log level that NUClear log will display
-    log_level: WARN
-
-    # Maximum FSR sensor value. This is based on the Darwin-OP FSR sensors
-    # Max value 65,535 / 1000 (N) = 65.535 N
-    max_fsr_value: 65.535
-    # Maximum velocity from NUgus.proto motors
-    max_velocity_mx64: 8.17
-    max_velocity_mx106: 5.76
-    # Requested time step between sensors
-    time_step: 8
-    # Minimum time step allowed between camera sensors
-    min_camera_time_step: 16
-    # Minimum time step allowed between other sensors
-    min_sensor_time_step: 8
-
-    clock_smoothing: 0.6
-
-    # Connection details
-    server_address: "192.168.20.12"
-    port: 10001
-    ```
 
     - NSGA2Optimiser.yaml
 
