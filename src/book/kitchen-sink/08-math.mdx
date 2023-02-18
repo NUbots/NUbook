@@ -10,28 +10,100 @@ slug: /kitchen-sink/math
 hidden: true
 ---
 
-# Math
+## Math
 
-## Inline
+### Inline
 
 This inline equation $a^2 + b^2 = c^2$ has surrounding text.
 
-## Block
+### Block
 
 $$
 e^{i\phi} = \cos(\phi) + i \sin(\phi)
 $$
 
-## In a grid
-
-<Grid columns='1fr 1fr'>
+### Large block
 
 $$
-e^{i\phi} = \cos(\phi) + i \sin(\phi)
+\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
 $$
 
 $$
-e^{i\phi} = \cos(\phi) + i \sin(\phi)
+\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+$$
+
+### In a list
+
+- Large maths equations in a list
+
+  $$
+  \text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+  $$
+
+  $$
+  \text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+  $$
+
+### In a grid
+
+<Grid columns='2fr 2fr'>
+
+$$
+\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+$$
+
+$$
+\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+$$
+
+$$
+\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+$$
+
+$$
+\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
 $$
 
 </Grid>
+
+### In collapsible
+
+<details> 
+<summary> Maths is Fun! </summary>
+
+$$
+\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+$$
+
+$$
+\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+$$
+
+</details>
+
+### In a table
+
+| First Header                                                                          | Second Header | Third Header |
+| ------------------------------------------------------------------------------------- | ------------- | ------------ |
+| $\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}$ | Content Cell  | Content Cell |
+| $\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}$                                 | Content Cell  | Content Cell |
+
+### In a blockquote
+
+> $\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}$
+>
+> $\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}$
+
+### In an alert
+
+<Alert type='info'>
+
+$$
+\text{angle}_i = \frac{\text{axis} \cdot \text{ray}_i}{ \text{radius}_{\text{max}}}
+$$
+
+$$
+\text{mean} = \frac{\sum_{i=0}^n \text{angle}_i}{n}
+$$
+
+</Alert>

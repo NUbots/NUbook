@@ -1,0 +1,153 @@
+---
+section: Guides
+chapter: General
+title: Troubleshooting
+description: Solutions to common problems you might encounter at NUbots.
+slug: /guides/general/troubleshooting
+authors:
+  - Ysobel Sims (@ysims)
+  - Josephus Paye II (@JosephusPaye)
+---
+
+## General
+
+If this page does not solve your problem, the following people can help you with specific parts of the system:
+
+- **Hardware**: Taylor Young
+- **Toolchain and build**: Kip Hamiltons
+- **NUClear**: Cameron Murtagh
+- **NUsight**: Josephus Paye II, Brendan Annable
+- **Machine Learning**: Joel Wong
+- **Mathematics**: Kip Hamiltons, Cameron Murtagh, Taylor Young, Ysobel Sims
+
+Team mentors **Alex Biddulph** and **Trent Houliston** can help with most parts of the system if this list does not help.
+
+## NUbots
+
+### Why am I having no such file errors?
+
+If your compiler can't find `FileWatcher.h` as in the following error:
+
+```bash
+nuclear/roles/firmwareinstaller.cpp:3:10: fatal error: extension/FileWatcher/src/FileWatcher.h: No such file or directory
+    3 | #include "extension/FileWatcher/src/FileWatcher.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
+
+Run `./b configure --clean`. This refreshes the docker volumes, removing the offending file.
+
+### Why isn't my new file being compiled?
+
+If you have just added a new file to the codebase, make sure that it's part of a role. After you have added it to a role, run `./b configure`, and the build system should detect the new file and compile it the next time you run `./b build`.
+
+### Why am I having CMakeCache errors when I run `./b <command>`?
+
+If you're having errors which say that there was no such value in `b.cmake_cache` such as in this snippet:
+
+```py
+Traceback (most recent call last):
+  File "/home/nubots/NUbots/nuclear/b.py", line 113, in <module>
+    module.run(**vars(command.parse_args()))
+  File "/home/nubots/NUbots/tools/utility/dockerise/run.py", line 79, in _run
+    func(**kwargs)
+  File "/home/nubots/NUbots/tools/run.py", line 34, in run
+    use_asan = b.cmake_cache["USE_ASAN"] == "ON"
+KeyError: 'USE_ASAN'
+```
+
+you might have a `CMakeCache.txt` file in your NUbots directory messing up the build's cache.
+You can find and delete the file in your text editor, or by running the find command inside the NUbots directory:
+
+```bash
+# Make sure that you're in the NUbots project directory before executing this...
+find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -delete
+```
+
+If the problem persists, try purging the build volume by running `./b configure --clean`.
+Note that purging the build volume means you'll have to rerun `./b build` to use built code.
+
+### Not enough memory in Docker? (macOS)
+
+By default Docker Desktop will allocate 2GB of memory to use for building images. When building the NUbots image, this is insufficient and will result in an error. To fix this, open the Docker menu in the menu bar, go to advanced settings, and increase the memory available.
+
+## NUsight
+
+### Multiple Docker robots in NUsight?
+
+This means someone else is also running a Docker robot. You can modify the name of your Docker robot by doing the following.
+
+1. Open the `NetworkConfiguration.yaml` file in a text editor (here we are using nano on the command line):
+
+   ```bash
+   nano module/support/configuration/NetworkConfiguration/data/config/NetworkConfiguration.yaml
+   ```
+
+2. Update the `name` field with the name you want to use and press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save the file and then <kbd>Ctrl</kbd>+<kbd>X</kbd> to exit.
+
+3. Rebuild using `./b build` for the changes to take effect.
+
+4. In NUsight, toggle off the robots you do not want to see by clicking the robot icon at the top right of the NUsight GUI and toggling the slider next to the name of every other robot except the one you set in step 2.
+
+## Hardware
+
+TODO
+
+## NUbook
+
+<Alert type="info">
+  The commands shown below should be run from the NUbook root folder, unless otherwise stated.
+</Alert>
+
+### Why is my newly added page not showing up?
+
+When you add a new page, you should remove the Gatsby `.cache` and `public` folders, by running:
+
+```bash
+rm -rf .cache public
+```
+
+And then try building again:
+
+```bash
+yarn dev
+```
+
+### Why am I getting weird errors when I run `yarn dev`?
+
+Usually this happens when there is a problem with one or more packages in the `node_modules` folder. Try deleting `node_modules` and running `yarn` to reinstall dependencies:
+
+```bash
+rm -rf node_modules && yarn
+```
+
+Then try building again:
+
+```bash
+yarn dev
+```
+
+### Why am I getting errors from Prettier when running `yarn dev`? / Why can't I push to GitHub?
+
+If a page you have added or changed is not formatted correctly, your changes may not show up in the NUbook preview, and you will not be able to push to GitHub.
+
+To fix this, run:
+
+```bash
+yarn format --fix
+```
+
+### Why are my changes not showing up in NUbook?
+
+First, make sure you have saved the file, then refresh NUbook in the browser to see if your changes show up.
+
+If you have created a new page or added a new image, you may need to remove the `.cache` and `public` folders. To do so, run:
+
+```bash
+rm -rf .cache public
+```
+
+And then try building again:
+
+```bash
+yarn dev
+```

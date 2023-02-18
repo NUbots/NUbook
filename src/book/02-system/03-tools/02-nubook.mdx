@@ -4,6 +4,8 @@ chapter: Tools
 title: NUbook
 description: The NUbots team handbook and documentation.
 slug: /system/tools/nubook
+authors:
+  - Josephus Paye II (@JosephusPaye)
 ---
 
 NUbook is the handbook and high-level documentation for the NUbots team. What you are looking at right now is NUbook! This page has information on how NUbook works.
@@ -19,7 +21,7 @@ You'll need [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [
 
 1. Install Git by running the following commands:
 
-   ```
+   ```bash
    sudo apt update
    sudo apt install git
    ```
@@ -47,7 +49,7 @@ Commands in the next section can be run from the Git Bash terminal, which was do
 1. Install Homebrew by following the instructions at <https://brew.sh/>
 2. Install Git, Node.js and Yarn
 
-   ```sh
+   ```bash
    brew upgrade
    brew install git node && brew install yarn
    ```
@@ -58,26 +60,26 @@ Commands in the next section can be run from the Git Bash terminal, which was do
 
 1. Navigate to the directory where you want to install NUbook
 
-   ```sh
+   ```bash
    cd <path>
    ```
 
 2. Clone the NUbook repository and `cd` into the cloned directory
 
-   ```sh
+   ```bash
    git clone https://github.com/NUbots/NUbook.git
    cd NUbook
    ```
 
 3. Install dependencies
 
-   ```sh
+   ```bash
    yarn
    ```
 
 4. Run the [Gatsby](https://www.gatsbyjs.org/) development server
 
-   ```sh
+   ```bash
    yarn dev
    ```
 
@@ -90,7 +92,7 @@ All additions and edits are done through GitHub pull requests. To add or edit co
 1. Clone the repo, install dependencies, and run the development server as shown in the [Getting Started](#getting-started) section above.
 2. Create a new branch for your changes, in the format `your_surname/short_description_of_change`. An example is below for someone with the surname 'paye'.
 
-   ```sh
+   ```bash
    git checkout -b paye/add_2019_debrief
    ```
 
@@ -101,7 +103,7 @@ All additions and edits are done through GitHub pull requests. To add or edit co
 
 More information on using Git can be found on the [Git Guide](/guides/general/git).
 
-NUbook content should be accessible and inclusive. A guide on making content accessible and inclusive can be found on the [Australian Government website](https://guides.service.gov.au/content-guide/accessibility-inclusivity/).
+NUbook content should be accessible and inclusive. A guide on making content accessible and inclusive can be found on the [Australian Government website](https://www.stylemanual.gov.au/accessible-and-inclusive-content).
 
 ## Writing Markdown
 
@@ -236,10 +238,10 @@ Here are some resources for learning how to draw graphs with Graphviz:
 
 You can show content such as images, code, and math equations side-by-side in a grid.
 
-The following example shows four images in a 2x2 grid with a caption:
+The following example shows four images in a 2x2 grid with large spacing between items and a caption:
 
-```mdx
-<Grid columns='1fr 1fr' rows="1fr 1fr" caption="Some lovely pets">
+```md
+<Grid columns='1fr 1fr' rows="1fr 1fr" gap="large" caption="Some lovely pets">
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
 ![Cat](https://source.unsplash.com/featured/1600x900/?cat,1 'Cat')
@@ -249,7 +251,9 @@ The following example shows four images in a 2x2 grid with a caption:
 </Grid>
 ```
 
-The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+The [columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) and [rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows) are specified using CSS grid syntax. `fr` is a fractional unit that specifies a fraction of the total available space (width for columns, and height for rows). `columns='1fr 1fr'` creates two columns of equal width, while `rows='1fr 1fr'` creates two rows of equal height.
+
+The `gap` property sets the spacing between items in the grid, and can be one of `none` (no gap), `small` (the default), `medium`, `large`, or `extra-large`.
 
 ### Images in Tabs
 
@@ -257,7 +261,7 @@ You can show multiple images in the same place by putting them in tabs. The capt
 
 The following example shows four images in tabs:
 
-```mdx
+```md
 <TabbedImages>
 
 ![Bird](https://source.unsplash.com/featured/1600x900/?bird,1 'Bird')
@@ -272,7 +276,7 @@ The following example shows four images in tabs:
 
 You can show an informational alert using:
 
-```mdx
+```md
 <Alert>
 
 Did you know you can lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -284,7 +288,7 @@ qui?
 
 You can also show a warning using:
 
-```mdx
+```md
 <Alert type='warning'>
 
 Be careful not to lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -293,6 +297,51 @@ qui.
 
 </Alert>
 ```
+
+## Bibtex Referencing
+
+NUbook supports Bibtex referencing in Markdown. You can use it as follows.
+
+1. First, add the Bibtex file containing your references to the same folder that contains the MDX file you're editing. Give the Bibtex file the same name as the MDX file, but with a `.bib` extension. For example, if you're editing `01-introduction.mdx`, the Bibtex file should be `01-introduction.bib`.
+
+  <details>
+  <summary>If you need to reference a Bibtex file from multiple MDX files</summary>
+
+    You can use the `references` key at the top of the MDX file to override the default Bibtex file path.
+
+    ```yaml
+    ---
+    title: My page
+    # ... other data
+    references: ./shared-references.bib # Relative path to the shared references file
+    ---
+    ```
+
+  </details>
+
+2. In the Markdown file, add in-text citations using `<cite>` tags. For example, if there's a citation in the Bibtex file with id `smith2018`, you can reference it in the Markdown file like so:
+
+   ```md
+   Fuga ullam cumque accusamus doloremque rem <cite>smith2019</cite>.
+   ```
+
+   This will add an inline citation with an auto generated citation number, linked to the full citation reference in the list of references.
+
+   You can add multiple in-text citations in the same place by including multiple comma-separated ids in the `<cite>` tag. For example, if there's a citation in the Bibtex file with id `smith2018` and a citation with id `brown2005`, you can reference both as follows:
+
+   ```md
+   Fuga ullam cumque accusamus doloremque rem <cite>smith2019,brown2005</cite>.
+   ```
+
+3. After adding your in-text citations, create a new section at the bottom of the MDX page to show the list of references:
+
+   ```md
+   ## References
+
+   <References />
+   ```
+
+See the [Referencing kitchen sink](/kitchen-sink/referencing) for an example of referencing.
 
 ## Organising Pages
 
@@ -308,20 +357,26 @@ Pages are written in MDX files and stored in section and chapter folders in the 
   title: Introduction to NUbots
   description: Learn about what we do, key people, and where to find the lab.
   slug: /team/introduction
+  authors:
+    - Josephus Paye II (@JosephusPaye)
+    - Ysobel Sims (@ysims)
+    - Lachlan Court (@LachlanCourt)
   ---
   ```
 
 - The frontmatter is written in [YAML](https://gettaurus.org/docs/YAMLTutorial/), with the following supported fields:
 
-  | Field         | Type    | Presence | Description                                                                 |
-  | ------------- | ------- | -------- | --------------------------------------------------------------------------- |
-  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive) |
-  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive) |
-  | `title`       | String  | Required | The page title                                                              |
-  | `description` | String  | Required | A short, one-sentence description of the page content                       |
-  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`            |
-  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                 |
-  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing       |
+  | Field         | Type    | Presence | Description                                                                                                                                                                                |
+  | ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+  | `section`     | String  | Required | The section the page will appear under in the sidebar menu (case sensitive)                                                                                                                |
+  | `chapter`     | String  | Required | The chapter the page will appear under in the sidebar menu (case sensitive)                                                                                                                |
+  | `title`       | String  | Required | The page title                                                                                                                                                                             |
+  | `description` | String  | Required | A short, one-sentence description of the page content                                                                                                                                      |
+  | `slug`        | String  | Required | The page URL relative to the root of the site, starting with `/`                                                                                                                           |
+  | `authors`     | List    | Required | A list of authors of the page, in the format `Name (@GitHubUsername)`, or just `Name`. Authors without a username will have the NUbots icon as a default avatar, without a link to GitHub. |
+  | `references`  | String  | Optional | Relative path to a `.bib` file with references for use on the page. Defaults to `[mdx-file-name].bib` if a matching Bibtex file with the same name as the MDX file is available.           |
+  | `keywords`    | List    | Optional | Keywords for the page content, used for SEO                                                                                                                                                |
+  | `hidden`      | Boolean | Optional | When `true`, removes the page from menus and disables search indexing                                                                                                                      |
 
 ## Formatting Code
 
@@ -342,8 +397,17 @@ The preview URL is of the form `https://deploy-preview-[PR number]--nubook.netli
 
 You can get this URL from the **Details** link of the `netlify/nubook/deploy-preview` check at the bottom of the PR page:
 
-![Screenshot of deploy previews link](./deploy-previews.png)
+![Screenshot of deploy previews link](./images/deploy-previews.png)
 
 **We recommend that you add this URL to your pull request description after the first deploy.** This makes it easier for reviewers to see your changes rendered without having to clone and build the PR locally.
 
-When a pull request is merged into master, it is automatically deployed to the main site.
+When a pull request is merged into main, it is automatically deployed to the main site.
+
+## Building for production
+
+The `yarn build` command is used to build the site into a set of static HTML, CSS, and JS files that can be deployed to any webserver. This command is run automatically by Netlify when a change is merged into `main`.
+
+Running `yarn build` locally can be useful to preview the site exactly as it will be in production, or to debug an issue that occurs only in production. To use it:
+
+- Run `yarn build` to build the site and optimise assets. The resulting output will be placed in `public/`.
+- Run `npx http-server public/` to start a simple webserver in the public folder. This will print a URL you can open in your browser to preview the built site.

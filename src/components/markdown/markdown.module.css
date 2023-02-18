@@ -91,9 +91,6 @@
     }
 
     code {
-      @apply p-4;
-      overflow-x: auto;
-
       &::-webkit-scrollbar {
         width: 0.7rem;
         height: 0.7rem;
@@ -273,6 +270,14 @@
         @apply mt-0;
       }
     }
+
+    :global(.math-display) {
+      @apply mt-6;
+
+      &:first-child {
+        @apply mt-0;
+      }
+    }
   }
 
   :not(pre):not(h1):not(h2):not(h3):not(h4) > code,
@@ -310,8 +315,8 @@
   /* ============================
    * Math
    * ============================ */
-  :global(.katex-display) {
-    @apply mb-0;
+  :global(.math .katex-display) {
+    @apply m-0;
   }
 
   /* ============================
@@ -377,6 +382,7 @@
   :not(pre) > code {
     @apply text-red-600;
     background-color: rgba(0, 0, 0, 0.04);
+    word-break: break-all;
   }
 
   /* ============================

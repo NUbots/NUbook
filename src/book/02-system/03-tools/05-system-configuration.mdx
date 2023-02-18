@@ -1,0 +1,66 @@
+---
+section: System
+chapter: Tools
+title: System Configuration
+description: A tool that sets up the robot.
+slug: /system/tools/system_configuration
+authors:
+  - Cameron Murtagh (@CMurtagh-LGTM)
+---
+
+## Description
+
+This module is used to ensure that the configuration that is running on a device matches what is required.
+
+It goes through several steps to ensure the system is set up correctly.
+
+### Filesystem
+
+The system will look through each file in the `module/tools/SystemConfiguration/data/system/default` directory.
+For each of these files it will see if there is an equivalent file in the
+`module/tools/SystemConfiguration/data/system/$HOSTNAME` directory and use that, otherwise it uses the default file.
+Using this file it will check that the same file in the root directory is identical to this one, and if not it will copy it across.
+This will ensure that all the system configuration files match the files that are in the repository.
+
+<Alert type='info'>
+
+The system will only look at files that exist in the `module/tools/SystemConfiguration/data/system/default` directory.
+If you have a file that will override for a specific system, you must provide a default file as well.
+After this, it will go through the list of permissions changes that are in the `SystemConfiguration.yaml` file and apply them.
+This configuration file must list the total permissions as an octal number.
+
+</Alert>
+<Alert type='info'>
+
+SystemConfiguration will not delete files that are not in `system/default`,
+even if they have been previously installed by SystemConfiguration.
+
+</Alert>
+
+After permissions are set, it will go through the list of symlinks that are in the `SystemConfiguration.yaml` and ensure they are created.
+Checks are made to ensure that the link target exists, and the link doesn't exist.
+
+- If the target doesn't exist, no link is made
+- If the link name already exists and is a regular file, the file is renamed to `<link name>.old` and the link is made
+- If the link name already exists and **is not** a symlink to the target, the link is removed and the correct link is made
+- If the link name already exists and **is** a symlink to the target, nothing is done
+- If the link name doesn't exist, the link is made
+
+### Steps
+
+The process is:
+
+- **Filesystem** see above.
+- **Packages** After this the system will then attempt to "upgrade" the system using the package manager, up till the date docker uses. This "upgrade" will actually be a downgrade if the robot is ahead of the date docker uses. Once this is done it will go through the list of packages in configuration and ensure that they are installed.
+- **Systemd:** The system will go through the list of units and ensure that they are enabled.
+- **Locale:** If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated.
+- **Grub:** If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date.
+- **Message Of The Day:** The message of the day file is regenerated to ensure it has the correct contents.
+- **Hosts and Hostname:** Both the hostname and the hosts file are regenerated with the correct contents.
+- **Groups:** The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them.
+- **ZSH:** [Zprezto](https://github.com/sorin-ionescu/prezto) is installed and the appropriate symlinks are made. The users' default shell is also changed to zsh.
+- **Python:** Python is updated to ensure that it will search for packages in `/usr/local`.
+
+## Usage
+
+Install the `system_configuration` role then run as a superuser on the robot and this role will ensure that the system configuration on the platform matches the configuration in the repository.

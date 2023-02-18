@@ -14,7 +14,7 @@ import PromoCard from './promo-card/promo-card'
 
 import Book from './book/book'
 
-const LandingPage = props => {
+const LandingPage = (props) => {
   const { menu } = props.pageContext
   return (
     <>
@@ -25,7 +25,7 @@ const LandingPage = props => {
 
       <Header
         menu={menu}
-        currentSection={menu.filter(section => !section.hidden)[0]}
+        currentSection={menu.filter((section) => !section.hidden)[0]}
         background='transparent'
         height='h-20'
       />
