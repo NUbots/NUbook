@@ -6,7 +6,7 @@ description: Introduction to the Director and how to use it to build behaviours.
 slug: /system/foundations/director
 ---
 
-The NUbots use the director system to control all their behaviour elements.
+The Director is a framework and algorithm used to control the flow of behaviour on the robots.
 It allows composable behaviours that can take advantage of transition rules to ensure that the robot performs the right task at the right time.
 
 The Director does this by providing a set of new DSL keywords to NUClear that describe what tasks to run, what conditions are required, and how those tasks build on other tasks.
@@ -23,92 +23,91 @@ Each provider will provide for a specific message type in a specific situation.
 For example a provider which executed a walk task, the code might look like:
 
 ```cpp
-on<Provides<Walk>>().then(...);
+on<Provide<Walk>>().then(...);
 ```
 
-Provider are triggered whenever a task needs to be executed by the director, however they can also be triggered using other NUClear keywords.
-The director will ensure that any provider which is not currently active will not run if it is not active, even if the other triggers would make it run.
-For example if the walk engine module wants to update at 10Hz when it is running a provider may look like.
+Providers are triggered whenever a Task needs to be executed by the Director, however they can also be triggered using other NUClear keywords.
+The Director will ensure that any Provider which is not currently active will not run if it is not active, even if the other triggers would make it run.
+For example if the walk engine module wants to update at 10Hz when it is running a Provider may look like.
 
 ```
-on<Provides<Walk>, Every<10, Per<std::chrono::seconds>>().then(...);
+on<Provide<Walk>, Every<10, Per<std::chrono::seconds>>().then(...);
 ```
 
-This provider would then run once every time the walk command was updated, as well as running at 10Hz while the provider is active.
+This Provider would then run once every time the Walk Task/message was updated, as well as running at 10Hz while the Provider is active.
 
-If you do want a provider to run even when it is inactive you can make them optional (e.g. `on<Optional<Provides<Walk>>>().then(...);`).
-Then this will still run although its task will be empty.
-Non active providers are unable to emit subtasks and will show an error if they attempt to.
+It is possible to run an inactive Provider with the `Optional` keyword.
 
-Note that for the director to recognise subtasks as coming from a specific provider, those tasks MUST be emitted from that specific reaction.
-Otherwise they will be considered root tasks and can cause all sorts of chaos.
+```
+on<Optional<Provide<Walk>>, Trigger<Sensors>>().then(...);
+```
+
+The reaction will run regardless of if there is a Walk task if a Sensors message is emitted. The Walk Task will be empty, and the Provider cannot emit subtasks.
+
+Subtasks must be emitted from the Provider reaction to be considered a child of that Provider. If the Task is emitted from a non-Provider reaction, it will be considered a root task.
 
 ### Provider Groups
 
-When there are multiple providers which provide for a single task type they are considered a provider group.
-When a new task is emitted the director will determine which of the providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the providers decleration.
-The director may also update which provider in a group is running if a state update means that the currently active provider can no longer run.
-In this case it will attempt to reassign that task to a provider which is able to run it.
+When there are multiple Providers which provide for a single Task type they are considered a provider group. For example, a both a static walk module and a ZMP walk module could have `Provide<Walk>` reactions. These two Providers would be considered a Provider group for the Walk task.
 
-Provider groups operate together as a single unit, so any task that is emitted from a provider in a group is considered as beign emitted from that group.
-So if you are running one Provider, and the director changes you to another provider, if that provider emits different subtasks than the original the subtasks that were not emitted will be considered "finished" and removed from the graph.
+When a Provider group is running, only one of the Providers in that group is allowed to execute at a time.
+
+When a new Task is emitted the Director will determine which of the Providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the Provider's decleration. If both Providers could run, then the one declared first will run.
+
+If the state of the Director system changes such that the currently active Provider can no longer run, then the Director will attempt to reassign that task to another Provider in the group.
+
+Provider groups operate together as a single unit. Any Task that is emitted from a Provider in a group is considered as being emitted from that group. Considering the walk examples, both Providers may emit a `LegIK` Task. Regardless of which Provider is active, the `LegIK` Task will be considered as coming from the walk Provider group. If the walk Providers emit different subtasks, then the old subtasks will be considered "finished" and removed from the graph, and the new subtasks will start running.
 
 ### Provider Types
 
-There are three different provider types that can be used.
-These three provider along with their `When` and `Causing` DSL words determine the flow of a provider, executing code as the director changes which tasks it executes.
+There are three different Provider types that can be used.
+These three provider types along with the `When` and `Causing` DSL words determine the flow of a Provider, executing code as the Director changes which Tasks it executes.
 
-#### Entering
+#### Start
 
-An entering provider is used to set up the state of a provider when it is running, or to ensure that a When condition of a main provider is met.
-They are executed in two scenarios:
+A Start Provider is used to set up the state of a Provider when it starts running. Start is executed when a Provider group has no active Tasks and then is given to one, ie it gains control.
 
-1. when a provider group has no active tasks and then is given to one.
-2. when it was running a task normally but the only `Provides` reaction that is running has its when condition fail and needs to re-enter to provide a `Causing`.
-
-Example:
+For example, the walk may need a Start Provider to initialise the state of the walk engine before it starts running.
 
 ```cpp
-on<Entering<Walk>>().then()
+on<Start<Walk>>().then( { // this is a Start Provider type for the Walk Task
+    // Initialise walk
+    delta = NUClear::clock::now();
+    walk_engine.reset();
+    current_orders = Eigen::Vector3d::Zero();
+});
 ```
 
-#### Provides
+#### Provide
 
-Provides are the normal providers which will be expected to execute a task.
-They will be chosen as the active provider in a group if there are no Entering statements in a provider group, or if at least one entering provider has executed making this group "entered".
-However an entering provider may be repeatedly run still if all the providers have `When` conditions that are not yet met.
-
-Example:
+Provide is the normal Provider which executes the functionality for a Task, as described previously. It will run after Start, if a Start exists.
 
 ```cpp
-on<Provides<Walk>>().then()
+on<Provide<Walk>>().then( { // a Provide Provider type for the Walk Task
+    // Run the walk
+    auto goals = calculate_joint_goals();
+    emit<Task>(std::make_unique<LegIK>(goals));
+});
 ```
 
-#### Leaving
+#### Stop
 
-Leaving providers are used for the state when a provider group is losing control and will no longer have access to subtasks, or when a higher priority task elsewhere needs a causing that it provides.
-Leaving providers are executed in two scenarios:
+Stop Providers run when a Provider group is losing control and will no longer run. That is, when the Provider group has no active Task. This is useful for performing a cleanup of the Provider.
 
-Firstly, A leaving provider will be executed once when the provider no longer has an active task.
-Note: If there no leaving providers that are satisfied in this situation (due to when conditions) the system will stop executing the provider without informing it.
-It may be advantageous to have a `Leaving` provider with no when conditions if you want to always know when you no longer have a task.
-
-Secondly, a leaving provider may be executed as a result of it having a causing reaction that another task needs if it has a higher priority than this task.
-For example, if a higher priority kick engine wanted to kick being staticallys stable, and the walk engine had a leaving which caused statically stable, then the leaving .
-In the event that the kick providers task had a lower priority than this providers task, then it is only able to change this module to run other non `Leaving` providers to achive its causing.
-
-In order for a leaving provider to be run however, it must have first been in the entering or normal states.
-The system cannot immediately jump to a leaving provider.
+A Stop Provider cannot run unless either a Start or Provide has run for that Provider group.
 
 Example:
 
 ```cpp
-on<Provides<Walk>>().then()
+on<Stop<Walk>>().then({ // a Stop Provider type for the Walk Task
+    // Log that the walk has stopped
+    log<NUClear::TRACE>("Walk Stopped");
+});
 ```
 
 ### When
 
-A when condition is used to ensure that a provider will only execute when its conditions are met.
+A When condition is used to ensure that a Provider will only execute when its conditions are met.
 These conditions are provided using a global enum message along with a statement that describes what condition you want.
 For example if you wanted a kick engine to only run if the robot is statically stable or better.
 
@@ -126,7 +125,7 @@ For example when the walk engine stopped moving it would be in a "Standing" stab
 This means the walk engine could have a `Leaving` reaction that caused this state so other modules know it can use this to be standing before they execute their actions.
 
 ```cpp
-on<Leaving<Walk>, Causing<Stability, Stability::STANDING>().then(...);
+on<Provide<Walk>, Causing<Stability, Stability::STANDING>().then(...);
 ```
 
 Other providers will take advantage of this in two ways.
