@@ -61,7 +61,7 @@ Provider groups operate together as a single unit. Any Task that is emitted from
 ### Provider Types
 
 There are three different Provider types that can be used.
-These three provider types along with the `When` and `Causing` DSL words determine the flow of a Provider, executing code as the Director changes which Tasks it executes.
+These three provider types along with the `Needs`, `When` and `Causing` DSL words determine the flow of a Provider, executing code as the Director changes which Tasks it executes.
 
 #### Start
 
@@ -96,7 +96,7 @@ Stop Providers run when a Provider group is losing control and will no longer ru
 
 A Stop Provider cannot run unless either a Start or Provide has run for that Provider group.
 
-Example:
+For example:
 
 ```cpp
 on<Stop<Walk>>().then({ // a Stop Provider type for the Walk Task
@@ -105,66 +105,169 @@ on<Stop<Walk>>().then({ // a Stop Provider type for the Walk Task
 });
 ```
 
-### When
+### Needs
 
-A When condition is used to ensure that a Provider will only execute when its conditions are met.
-These conditions are provided using a global enum message along with a statement that describes what condition you want.
-For example if you wanted a kick engine to only run if the robot is statically stable or better.
+The Needs DSL word is used to ensure a Provider can take control of subtasks, otherwise it cannot run.
 
 ```cpp
-on<Provides<Kick>, When<Stability, std::greater_equal, Stability::STATIC>>().then(...);
+on<Provide<Walk>, Needs<LegIK>>().then(...);
 ```
 
-These when conditions are updated by using normal NUClear emits.
+In this example, the Walk Provider will only run if it can take over the LegIK Task.
+
+If another, higher priority, Provider has already taken over the LegIK Task, then this Provider will not run. If the LegIK is not being used by any other Provider, or it has higher priority than the Provider controlling the LegIK, then this Provider will take over the LegIK Task.
+
+Without `Needs`, the Provider will still run and can emit subtasks, but the subtasks will not do anything if another Provider has access to them.
+
+### When
+
+A When condition is used to ensure that a Provider will only execute when the specified condition is met.
+These conditions are provided using a global enum message along with a statement that describes what condition you want.
+For example, if you wanted a kick engine to only run if the robot is statically stable or better then you would write:
+
+```cpp
+on<Provide<Kick>, When<Stability, std::greater_equal, Stability::STANDING>>().then(...);
+```
+
+These conditions are updated by using normal NUClear emits. For example if
+
+```cpp
+emit(std::make_unique<Stability>(Stability::STATIC));
+```
+
+was emitted in another reaction, then the `When` condition would be met and the Provider would run.
 
 ### Causing
 
-A causing statement is a promise that by running this provider, the desired state will be eventually reached.
-This is used to allow smooth transitions beween modules.
-For example when the walk engine stopped moving it would be in a "Standing" stability state.
-This means the walk engine could have a `Leaving` reaction that caused this state so other modules know it can use this to be standing before they execute their actions.
+A Causing statement is a promise that by running this Provider, a specified desired state will be eventually reached.
+This is used to allow smooth transitions between modules.
+For example, when the walk engine stops moving it would be in a `STANDING` Stability state.
+This means the walk engine could have a `Provide` reaction that causes this state:
 
 ```cpp
-on<Provide<Walk>, Causing<Stability, Stability::STANDING>().then(...);
+on<Provide<Walk>, Causing<Stability, Stability::STANDING>().then({
+    // Make the robot stop walking
+    set_orders = Eigen::Vector3d::Zero();
+    // Check if we have stopped moving
+    if (state == STOPPED) {
+        // Emit that we are standing
+        emit(std::make_unique<Stability>(Stability::STANDING));
+    }
+});
 ```
 
-Other providers will take advantage of this in two ways.
-If the other provider has higher priority than this one, it will force this provider group to switch to a `Provides` or `Leaving` that has a causing that satisfies the when condition it is limited on.
-If the other provider has lower priority than this one, it will only be able to force this provider to change to another `Provides` statement and not a leavign one.
+The implementation for the reaction should result in the desired state being eventually emitted. This would not be the primary Provider for the Walk, but would instead be actie when a higher priority Provider wants this state.
+
+For example, if the kick engine only runs `When<Stability, std::greater_equal, Stability::STANDING>` then it would not be able to run while the walk engine is running normally. However, if the kick Task has a higher priority than the walk Task, then it will push the walk engine into the Causing Provide reaction, which will then cause the Stability state to be STANDING so that the kick engine can run.
 
 ## Tasks
 
-Tasks are the jobs that should be executed using the providers.
+Tasks are the jobs that Providers execute. The are generally in the form of Protobuf messages, and may or may not contain data within them.
+
 Tasks are implemented using NUClears `emit` along with a custom scope `emit<Task>`.
 
-### Root level tasks
+```cpp
+// Emit a Task requesting to walk forwards
+emit<Task>(std::make_unique<Walk>(Eigen::Vector2d(1.0, 0.0, 0.0)));
+```
 
-When a task is emitted from a reaction which is not a provider, that task is considered a root level task.
+This walk engine Task contains information on the speed and direction that the robot should walk in. Other Tasks, such as `GetUpWhenFallen` does not need any data.
+
+Tasks can take four arguments
+
+```cpp
+emit<Task>(data, priority, optional, name)
+```
+
+where
+
+- data: A pointer to a Protobuf message.
+- priority: A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.
+- optional: A boolean. If true, then the Task is considered optional. If two Tasks need the same resources and have the same priority but one is optional, then the non-optional Task will be chosen. If no optional argument is specified, then the default optional value of false is used.
+- name: A string. If provided, then this string will be used in logging messages. The default is the empty string.
+
+### Root Level Tasks
+
+When a Task is emitted from a reaction which is not itself a Provider, that Task is considered a root level task.
 These root level tasks are all considered siblings within the priority comparision system at the root level of the graph.
-When a root level task is emitted with 0 priority it is removed from the list of tasks.
+When a root level task is emitted with a `nullptr` is removed from the list of Tasks.
+
+```cpp
+emit<Task>(std::make_unique<GetUpWhenFallen>(nullptr));
+```
 
 ### Subtasks
 
-A subtask is a task that is emitted by a provider.
-When multiple tasks are emitted by a provider, each of these are sibling tasks in the director graph.
+A subtask is a Task that is emitted by a Provider.
+When multiple Tasks are emitted by a Provider, each of these are sibling Tasks in the Director graph.
 
 ### Priority
 
-Priority in the Director is considered based on the closest common anscestor.
-For root tasks this will be the root element.
-Once the closest common anscestor is determined, the priority of the branch we are on is compared to the priority of the branch of the other task.
-The winner gets to use the resources and potentially evict the other task to wait in the queue for the provider group.
+Priority in the Director is considered based on the closest common ancestor of the two competing Tasks.
+For root tasks, the closest common ancestor will be the root element.
+Once the closest common ancestor is determined, the priority of each Task's branch will determine which Task has higher priority.
+The winner takes control and becomes active, while the evicted Task will need to watch for an opportunity to take back control.
 
-Tasks can also be emitted as optional tasks, if when finding a common anscestor between two tasks, an optional task is found in the parantage of a task before the common anscestor that task is considered "optional".
-If one task has an optional parentage and the other does not then the optional task will automatically lose.
-If both have optional tasks in their perantage, then the tasks will be compared using their common anscestor as normal as if the optional was not there.
-This means the higher priority root tasks optional elements are more important than a lower priority tasks optional elements.
+When a Task's ancestor tree has an optional Task between itself and the common ancestor, then the Task is considered optional.
+If one Task has an optional parentage and the other does not then the optional Task will automatically lose.
+If both have optional Tasks in their parentage, then the Tasks will be compared as before.
+A higher priority root Task's optional elements are more important than a lower priority Task's optional elements.
 
-### Done tasks
+### Done Tasks
 
-A Done task is a special task that can be emitted by a provider to signal to its parent that it has completed the task that was assigned to it.
-The provider group that created this task will then be re-executed with the knowledge that it was triggered as a done event from below.
-If a root task emits a `Done` task then it will be removed from the Director's root tasks as if it were emitted with a priority of 0.
+A Done Task is a special Task that can be emitted by a Provider to signal to its parent that it has completed the Task that was assigned to it.
+The Provider group that created this task will then be re-executed with the knowledge that it was triggered as a done event from below.
+The Task will not be removed from the Director tree, unless it is a root Task. If it is a root Task, it will be removed as if it was emitted with a `nullptr`.
+
+```cpp
+emit<Task>(std::make_unique<Done>());
+```
+
+### Idle Tasks
+
+An Idle Task is a special Task that can be emitted by a Provider to signal to continue running the Tasks it previously requested. For example, if a Provider is running a walk Task, it can emit an Idle Task to continue running the walk Task.
+
+```cpp
+emit<Task>(std::make_unique<Idle>());
+```
+
+## Data
+
+Providers can access data about the local state of the Director.
+
+### Uses
+
+The `Uses` DSL word is used to find out information about subtasks.
+
+```cpp
+on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
+    if (leg_ik.done) {
+        log<NUClear::INFO>("Leg IK is done");
+    }
+});
+```
+
+It gives access to information about if the subtask is Done. This is useful for when a Provider needs to know if multiple subtasks have completed.
+
+### Run Reason
+
+The `RunReason` DSL word is used to find out information about why a Provider was triggered.
+
+```cpp
+on<Provides<Walk>>().then([this] (const Walk& walk, const RunReason& reason) {
+    if (reason == RunReason::NEW_TASK) {
+        log<NUClear::INFO>("A new Walk Task triggered this reaction");
+    }
+});
+```
+
+Supported RunReasons are
+
+- NEW_TASK: The Provider is running because a new Task of the type it provides for was emitted.
+- STARTED: The Provider is running because it has now become active.
+- STOPPED: The Provider is running because it is becoming inactive.
+- SUBTASK_DONE: The Provider is running because one of its subtasks has completed.
+- PUSHED: The Provider is running because a higher priority module wants its Causing state to be true.
 
 ## The Director Graph
 
@@ -172,59 +275,57 @@ TODO algorithm development in progress
 
 ## Behaviours Layout
 
-In the NUbots codebase there are several different levels of behaviours that are used to group what each task will do.
-To the Director they are all equivalent but to make it easier for developers they are split into several different layers.
+The Director algorithm and framework is used to implement behaviours in the NUbots codebase. These behaviours can be categorised into multiple layers. The Director does not use the concept of these layers, but they are used to help organise the codebase and make it easier for developers to conceptualise.
 
-### Behaviour
+There are many modules that exist outside of the behaviour system, such as localisation and vision. These modules are not considered behaviours, but they are used by behaviours to make decisions.
 
-Behavour modules are the highest level modules and during normal debugging these will be the primary tasks that will be executed by the system.
-They live in `modules/behaviour/behaviour` in the source code.
-The generally will describe the overall goals and behavour of the robot.
-Some examples of a behavour level module would be:
+### Purpose
 
-- Striker: Combines stratigies to walk to the ball and kick it to the opposing goal
-- Defender: Combines strategies needed to intercept and defend incoming goals
-- Goalie: Combines strategies needed to stay near the goal and prevents the opponents to score
+Purpose modules are the highest level modules and will show the "big picture" view of what is happening in the system.
+They live in `modules/purpose` in the source code.
+The generally will describe the overall goals and purpose of the robot.
+Some examples of purpose-level modules would be:
+
+- Striker: Combines strategies to walk to the ball and kick it to the opposing goal
+- Defender: Combines strategies to intercept and defend incoming goals
+- Goalie: Combines strategies for staying near the goal and preventing the opponent from scoring
 
 ### Strategy
 
-Behaviours are modules that make high level strategy decisions for the robot.
-They live in `modules/behaviour/strategy` in the source code.
+Strategy modules make high level strategy decisions for the robot, to be used by the purpose modules to achieve their purpose.
+They live in `modules/strategy` in the source code.
 These modules are the behaviour elements that provide the "what" components rather than the "how" components.
-They will generally combine information from multiple systems in order to
+They will often combine information from multiple systems in order to decide what action to take.
 Some examples of strategy level modules would be:
 
 - WalkToBall: Tells the walk path planner to walk to the ball location
-- LookForBall: Tells the look planner to look for a specific set of objects
+- FallRecovery: Tells the falling relax planner and get up planner to recover from any falls
 
-### Planners
+### Planning
 
-Planners are where the system starts to think about the "how" part of behavour.
-They live in `modules/behaviour/planner` in the source code.
-Planner modules are modules which string together a set of skills in order to achive their goal.
-They are only interested in a single component of perofrming an action, such as walking a path or
+Planners are where the system address "how" the behaviour works.
+They live in `modules/planning` in the source code.
+Planner modules are modules which string together a set of skills in order to achieve their goal.
+They are only interested in a single component of performing an action, such as walking a path or looking around.
 
-- WalkPathPlanner: Strings together walk commands
-- LookPlanner: Controls how the robot is looking for a specific object or set of objects
+- WalkPathPlanner: Determines walk velocity given a target position
+- LookPlanner: Controls how the robot is looking for a specific object
 
-### Skills
+### Skill
 
-- Walk: The walk engine which walks given a walk command
-- Kick: Kicks the ball according to the desired direction
-- Look: Gets the head to look at a paticular location
+Skills are the modules that perform the actions specified by the planners.
+They live in `modules/skill` in the source code.
+Some examples are
 
-### Motions
+- Walk: Walks given a desired velocity from the walk path planner
+- Kick: Kicks the ball according to the desired direction from the kick planner
+- Look: Moves the head to look in a particular location, decided by the look planner
 
-The motions layer is concenred with implmementing the primitive actions
+### Actuation
+
+The actuation layer is where the (real or simulated) hardware is controlled.
+They live in `modules/actuation` in the source code.
+The end of the actuation layer involves emitting servo commands to the HardwareIO or Webots modules.
 
 - ScriptRunner: Executes scripts given to it
 - InverseKinematics: Takes limb positions/head positions and converts them into servo positions
-
-### Platform
-
-The platform layer deals with sending commands to the hardware itself.
-These modules should not have subtasks and will form the leaf nodes in the directors graph.
-Examples are modules such as:
-
-- Webots
-- HardwareIO
