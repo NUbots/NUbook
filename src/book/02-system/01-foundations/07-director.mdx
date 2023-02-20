@@ -324,8 +324,11 @@ Some examples are
 ### Actuation
 
 The actuation layer is where the (real or simulated) hardware is controlled.
-They live in `modules/actuation` in the source code.
-The end of the actuation layer involves emitting servo commands to the HardwareIO or Webots modules.
+These modules live in `modules/actuation` in the source code.
+The end of the actuation layer involves emitting servo commands to be picked up by a platform module, such as HardwareIO or Webots modules.
+Modules in this layer include
 
-- ScriptRunner: Executes scripts given to it
-- InverseKinematics: Takes limb positions/head positions and converts them into servo positions
+- Kinematics: Takes end effector positions and converts them into servo positions
+- Sequences: Takes a sequence of servo positions and emits them in order
+- Groups: Takes a group of servos and emits them together, will only emit Done when all servos are done
+- Servos: Takes a single servo and emits it, will only emit Done when the servo has finished moving
