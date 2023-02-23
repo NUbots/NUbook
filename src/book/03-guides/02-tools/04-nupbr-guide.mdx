@@ -1,0 +1,97 @@
+---
+section: Guides
+chapter: Tools
+title: Using NUpbr
+description: How to set up and run NUpbr
+slug: /guides/tools/nupbr-guide
+authors:
+  - Ysobel Sims (@ysims)
+---
+
+Information on how NUpbr works can be found on the [NUpbr system page](/system/tools/nupbr). This guide has been written for Ubuntu and Ubuntu-like systems.
+
+## Setting Up Blender
+
+1. Download [Blender 2.93](https://www.blender.org/download/lts/2-93/). Click on the Linux link, as shown below.
+
+   [Blender download link](./images/blender-download.png 'The Blender 2.93 download page highlighting the Linux option.')
+
+2. Create a Blender folder and extract the tar file into it. This assumes the tar you downloaded is inside the `Downloads` folder.
+
+   ```bash
+   sudo mkdir /opt/blender
+   sudo tar -Jxf ~/Downloads/blender-2.93.13-linux-x64.tar.xz --strip-components=1 -C /opt/blender
+
+   ```
+
+3. Make sure you can see the Blender files inside the folder by running `ls /opt/blender` in a terminal.
+
+4. Test that you can run Blender by running `/opt/blender/blender` in a terminal.
+
+5. Set up your computer so you can access Blender from the menu and with the `blender` command. If you have multiple versions of Blender installed, you may want to skip this step and only open Blender for NUpbr using `/opt/blender/blender`.
+
+   1. Open the config file
+
+      ```bash
+      sudo gedit /opt/blender/blender.desktop
+      ```
+
+   2. Find the lines starting with `Exec` and `Icon` and change those lines to
+
+      ```bash
+      Exec=/opt/blender/blender %f
+      Icon=/opt/blender/blender.svg
+      ```
+
+   3. To be able to run Blender using just `blender`, run
+
+      ```bash
+      echo alias blender=/opt/blender/blender >> ~/.bashrc
+      ```
+
+6. Install libraries for Blender
+
+   ```bash
+   sudo /opt/blender/2.93/python/bin/python3.9 -m ensurepip
+   sudo /opt/blender/2.93/python/bin/python3.9 -m pip install --upgrade pip
+   sudo /opt/blender/2.93/python/bin/python3.9 -m pip install opencv-contrib-python
+   ```
+
+## GPU Support (Optional)
+
+Running NUpbr with a GPU is generally quicker than with a CPU. You can skip this step if you want to run on CPU.
+
+To run on GPU, you need to ensure that your computer has the correct GPU drivers installed. This depends on your manufacturer. On an NVIDIA GPU, `nvidia-smi` will tell you the driver you are using. It can also be used to check if Blender is using the GPU.
+
+If Blender is not using the GPU, then you may need to edit your Blender settings. Open Blender and go to `Edit > Preferences > System`. Under `Compute Device`, select `CUDA`. If you have multiple GPUs, you can select which one to use here.
+
+## Setting Up NUpbr
+
+1. Clone the repository and navigate into the folder
+
+   ```bash
+   git clone https://github.com/NUbots/NUpbr.git
+   cd NUpbr
+   ```
+
+2. Download the [resources.zip](http://10.1.0.223:8080/share.cgi?ssid=05GE7Tx) file from the NUbots NAS and copy the resources directory from it into the NUpbr root directory. A more comprehensive resources folder can be found on the NAS.
+
+   <Alert>
+
+   To access the download, you need to be in the NUbots lab and connected to the local network. QNAP cloud can be used to connect to the NAS remotely.
+
+   </Alert>
+
+3. Set up the configuration. This often just involves setting the number of images to generate in [output_config.py](https://github.com/NUbots/NUpbr/blob/main/pbr/config/output_config.py).
+
+4. Run NUpbr using
+
+   ```bash
+   blender --python pbr/pbr.py
+   ```
+
+   NUpbr can also be run in headless mode with
+
+   ```bash
+   blender -b --python pbr/pbr.py
+   ```
