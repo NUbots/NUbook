@@ -237,7 +237,9 @@ Providers can access data about the local state of the Director.
 
 ### Uses
 
-The `Uses` DSL word is used to find out information about subtasks.
+The `Uses` DSL word is used to find out information about subtasks. It contains information on if the subtask is Done and what the current run state of the subtask is.
+
+The `done` field is a boolean that is true if the subtask is Done, regardless of if this Provider ran it. It is useful when the user wants to know if specific or multiple subtasks are Done.
 
 ```cpp
 on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
@@ -247,7 +249,21 @@ on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
 });
 ```
 
-It gives access to information about if the subtask is Done. This is useful for when a Provider needs to know if multiple subtasks have completed.
+The `run_state` field is a `RunState` enum that indicates the current run state of the subtask. It is useful when the user wants to know if the subtask is running, has been queued to run, or has not been emitted from this Provider.
+
+```cpp
+on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
+    if (leg_ik.run_state == GroupInfo::RunState::RUNNING) {
+        log<NUClear::INFO>("The LegIK task is running");
+    }
+    else if (leg_ik.run_state == GroupInfo::RunState::QUEUED) {
+        log<NUClear::INFO>("The LegIK task is queued");
+    }
+    else if (leg_ik.run_state == GroupInfo::RunState::NO_TASK) {
+        log<NUClear::INFO>("The LegIK task has not been emitted");
+    }
+});
+```
 
 ### Run Reason
 
