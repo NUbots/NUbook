@@ -1,0 +1,102 @@
+---
+section: System
+chapter: Tools
+title: NatNet SDK
+description: A tool that captures positional information from the Motive motion capture software.
+slug: /system/tools/natnet_sdk
+authors:
+  - Luke Haigh (@Dereferenced-Null)
+---
+
+The NUbots NatNet module is module that works in conjunction with the [OptiTrack Motive software](https://www.optitrack.com/software/motive/) and motion tracking camera system. The purpose of the NatNet system is to record positional information about the NUgus robots in relation to the playing field and the external environment.
+
+## Running NatNet
+
+In order to run NatNet you will require a licenced version of the Optitrack Motive software and at least 2 [Optive Motion Capture Cameras](https://www.optitrack.com/cameras/). NatNet currently supports motive version 3.0 and below. Below is a detailed guide on how to setup motive.
+
+<details>
+<summary>Setting up Motive</summary>
+
+1. Follow the [Optitrack guide for Installation and Activation](https://docs.optitrack.com/motive/installation-and-activation) if you don't already have Motive installed.
+
+2. Open the Motive software. You will be presented with a range of options, but it is safest to choose "Perform Camera Calibration" and re-calibrate the cameras, in case one or two of them have been accidentally moved since the last calibration.
+
+3. You should have black boxes visible that correspond with the number of camera's you are using at the bottom of your screen representing the view of the cameras mounted around the room, they will default to object mode which only displays objects whiter than a certain threshold, assuming them to be motion capture dots. If you don't have the same amount of camera boxes displaying as the number of cameras you are using, check the netgear ethernet switch is powered on. If the cameras are on, they will display a number on their LCD screen.
+
+4. Make sure there are no motion capture dots anywhere on the soccer field.
+
+5. On the left hand side of the screen, you will see a Camera Calibration panel, and up the top you will see the button "Mask visible". Click this. This will cover up any static reflective objects in the cameras' views (including the active infra-red emissions from other cameras).
+
+6. Once all the bright patches have been masked with red, click on the "Start Wanding" button next to the button clicked in step 4. Use the wanding stick with three MoCap dots on the cross bar, and slowly make your way around the volume you wish to work in, waving the wand around. You will be able to see coloured lines in the camera boxes. You want to aim to fill as much of each camera box as possible to achieve the best calibration. Each camera has a ring of green LEDs- as you start to wave the wand in front of each camera, each ring will slowly fill up. Aim to completely fill up each camera’s ring.
+
+7. After you have finished wanding, click the "calibrate" button further down in the side panel.
+
+8. The side panel will now switch to the ground plane tab. Find the Ground Plane L Frame (It is black with 3 MoCap dots on it and two bubble levels), and place in on the ground at the center circle (normally with the Z axis pointing towards the goals with the brick wall behind it. Don't bother trying to level out the L frame as it seems to be a hopeless task). Back on the computer, click the "Set Ground Plane" button. This will produce a pop-up window prompting you to save your calibration. Click save. Congratulations, your calibration is complete.
+
+</details>
+
+1. Follow the [Getting Started instructions](/guides/main/getting-started).
+
+2. Start the Motive software, it doesn't matter if motive is running locally or on another machine. Ensure that the [Data Streaming option](https://docs.optitrack.com/motive/data-streaming) in Motive is enabled. This will start sending packets to the Motive defined default multicast address on the local network.
+
+3. Once you have the NUbots codebase running on your OS of choice and Motive running and Streaming packets to the network, NatNet can be run in one of two ways:
+
+<details>
+<summary>On the Robot</summary>
+
+This is the default method for running NatNet. If you wish to output motive packets directly to file for debugging purposes, change the dump_packets option in NatNet.yaml to true.
+
+1. Ensure that the NatNet role has been installed on the robot.
+
+2. [SSH into the robot](guides/main/getting-started#running-on-a-real-robot).
+
+3. `cd config`
+
+4. `nano DataLogging.yaml`
+
+5. You will need to add message.input.MotionCapture and set its value to true. Additionally, set to true any of the sub messages that you want to use such as ".RigidBody". If you want "output.CompressedImage" or "input.sensors" logged, you can set them to true as well.
+
+6. To exit nano, press <kbd>Ctrl</kbd>+<kbd>X</kbd>, then <kbd>y</kbd>, then hit enter.
+
+7. Run Natnet using `./b run natnet`
+
+8. After your program has finished, check that a new nbs file has been created in `log/<your_program's_name>/`. The filename should be the date and timestamp when the file was run.
+
+9. Exit out of the ssh of the robot.
+
+10. We now need to copy the nbs file off the robot. Use `scp nubots@10.1.1.<robot_id#>:/home/nubots/log/<your_program_name>/<name_of_nbs_file> ./log/`
+
+11. You now need to extract the information you want from the nbs file. We have a number of .nbs extraction tools and is recommended that you use `./b nbs extract_images <path>` for extracting images from the nbs file and `./b nbs json <path>` to extract the information into JSON format.
+
+</details>
+
+<details>
+<summary>From your computer</summary>
+
+This method may be useful to determine if Motive is outputting packets directly or debugging depacketization without the need of a robot.
+
+1. Ensure that the NatNet role has been installed locally.
+
+2. Ensure that the option `message.input.MotionCapture` in DataLogging.yaml is set to true.
+
+3. Run Natnet using `./b run natnet`
+
+4. After your program has finished, check that a new nbs file has been created in "log/<your_program's_name>/". The filename should be the date and timestamp when the file was run.
+
+5. You now need to extract the information you want from the nbs file. We have a few nbs decoders that have already been written for specific purposes. If one of those does not suit your needs, you will need to either modify an existing nbs extraction file, or write your own. The location of these nbs files is `nubots/tools/nbs_tools/`. For example purposes, let's assume you want to extract images and Motion Capture data. To run this program, make sure you are in the nubots home directory, then you would use: `./b nbs extract_images_MoCap ./log/<file_name> --output ./log/<your_extraction_folder>`
+
+</details>
+
+<Alert type='info'>
+
+NatNet may not always pick up motive packets immediately. This may be dependent of the amount of traffic on your local network or how it is configured. Best Practice to ensure the least flakeyness is to start streaming packets on motive significantly before you run NatNet and if NatNet still doesn't work, try stopping and starting NatNet a few times. If this still doesn't work, try restarting motive streaming and then run NatNet again.
+</Alert>
+
+## Development information
+
+Our NatNet implementation works using the concept of [Direct Depacketization](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-4.0#direct-depacketization). The way that motion tracking information is transmitted from Motive is in packets containing binary that is then decoded by the NatNet module. There are a several types of packets sent by Motive, a Ping and Response used for connections, a Model Defintions packet that is used for sending motive model definitions to NatNet, Frames of Data which contain the frame information from motive and Unrecognized request and message packets for error when errors occur.
+NatNet 4.0 handles 6 types of objects, a Marker set model, Rigidbodies, Skeleton models, Force Plate Models, Device Models and Camera Models. For more information on the purpose of these models and packets, refer to the [Motive documentation](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-data-types).
+
+Currently network configuration and model definition updating is done automatically based on model and network infomation packets recieved from Motive and Model updates are done automatically when NatNet recieves information from Motive that does not match NatNet's current model defintions.
+
+The best practice for updating to future versions of NatNet is by cross referencing the current code base with the sample depacketization clients provided by motive. These examples can be found at the [NatNet Samples](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-sample-projects) page and using the PacketClient example as a reference for the order of operations to correctly depacketize motive packets. Unfortunately, due to Motive's suggestion not to use direct depacketization there is no documentation beyond the code samples for a method for depacketization.
