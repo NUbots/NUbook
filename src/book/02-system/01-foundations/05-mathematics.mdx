@@ -4,6 +4,10 @@ chapter: Foundations
 title: Mathematics
 description: Detailed explanation of how mathematics is written in the NUbots codebase.
 slug: /system/foundations/mathematics
+authors:
+  - Ysobel Sims (@ysims)
+  - Alex Biddulph (@Bidski)
+  - Cameron Murtagh (@CMurtagh-LGTM)
 ---
 
 The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
@@ -194,7 +198,7 @@ $$
 This is written in the codebase as
 
 ```cpp
-Eigen::Affine3d Hca = Hcb * Hba;
+Eigen::Isometry3d Hca = Hcb * Hba;
 ```
 
 ### Velocity
@@ -211,14 +215,14 @@ Eigen::Vector3d rA_tAb = vAb * t;
 
 ### Examples
 
-Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Isometry3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Isometry3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
 
-It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
+It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Isometry3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Isometry3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Isometry3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
 
-When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
+When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Isometry3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
 
 ```cpp
-Eigen::Affine3d Htw(sensors.Htw);
+Eigen::Isometry3d Htw(sensors.Htw);
 ```
 
 If you have a transformation matrix `Htw` (**world** to **torso** transform) and you want the matrix `Hwt` (**torso** to **world** transform), this is can be achieved by calling `Htw.inverse()`. The inverse function **swaps** the letter order. The returned inverse matrix is not **mutable**.
@@ -234,7 +238,7 @@ Negating does not change the space the vector is measured in.
 If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the **inner two letters** should be **identical**, i.e. the same space.
 
 ```cpp
-Eigen::Affine3d Htf = Htw * Hwf;
+Eigen::Isometry3d Htf = Htw * Hwf;
 ```
 
 This gives the **foot** to **torso** transform by **multiplying** the **world** to **torso** transform with the **foot** to **world** transform.
@@ -257,18 +261,18 @@ For measurements on the field we use field space. For field coordinates the **x-
 
 ### Summary
 
-| Item                  | Description                                                                  |
-| --------------------- | ---------------------------------------------------------------------------- |
-| `Hab`                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
-| `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
-| `rABb`                | Denotes a vector from point $B$ to point $A$ in space $b$.                   |
-| `vAb`                 | The velocity of $A$ in space $b$.                                            |
-| `rXZa = rXYa + rYZa`  | Create a new vector from two other vectors.                                  |
-| `rACc = Hcb * rABb`   | Changing a vector from one space to another using a homogeneous transform.   |
-| `rABd = Rdc * rABc`   | Changing a vector from one space to another using a rotation transform       |
-| `Hba = Hab.inverse()` | Inverting a matrix swaps the letter order.                                   |
-| `Hac = Hab * Hbc`     | Creating a new transform from two other transforms.                          |
-| Euler Angles          | Are of the form Z-Y-X.                                                       |
+| Item                  | Description                                                                       |
+| --------------------- | --------------------------------------------------------------------------------- |
+| `Hab`                 | Denotes a 3D homogeneous transformation matrix going from space $b$ to space $a$. |
+| `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                         |
+| `rABb`                | Denotes a vector from point $B$ to point $A$ in space $b$.                        |
+| `vAb`                 | The velocity of $A$ in space $b$.                                                 |
+| `rXZa = rXYa + rYZa`  | Create a new vector from two other vectors.                                       |
+| `rACc = Hcb * rABb`   | Changing a vector from one space to another using a homogeneous transform.        |
+| `rABd = Rdc * rABc`   | Changing a vector from one space to another using a rotation transform            |
+| `Hba = Hab.inverse()` | Inverting a matrix swaps the letter order.                                        |
+| `Hac = Hab * Hbc`     | Creating a new transform from two other transforms.                               |
+| Euler Angles          | Are of the form Z-Y-X.                                                            |
 
 ### Useful Links
 

@@ -4,6 +4,11 @@ chapter: Tools
 title: Setting Up Webots
 description: Setup instructions for Webots.
 slug: /guides/tools/webots-setup
+authors:
+  - Ysobel Sims (@ysims)
+  - Kip Hamiltons (@KipHamiltons)
+  - Josephus Paye II (@JosephusPaye)
+  - Mikyla Peters (@miikyla)
 ---
 
 [Webots](https://cyberbotics.com/) is a physics environment created by Cyberbotics. This guide details how to set up Webots. It gives instructions on setting up Ubuntu (WSL) inside Windows for Windows users, and the rest of the guide is aimed at Ubuntu users (including Windows WSL Ubuntu users). If you would like to learn more about Webots itself, refer to [the Webots User Guide](https://cyberbotics.com/doc/guide/index).
@@ -134,7 +139,7 @@ This section assumes you have completed the previous section, including adding t
 1. Set up the symlink for the NUgus proto:
 
    ```bash
-   ln -s $WEBOTS_HOME/../protos/robot/NUgus $WEBOTS_HOME/projects/samples/contests/robocup/protos
+   ln -s $WEBOTS_HOME/../nuwebots/protos/robot/NUgus $WEBOTS_HOME/projects/samples/contests/robocup/protos
    ```
 
    This allows us to use our NUgus robot with the official RoboCup simulation.
@@ -223,7 +228,7 @@ This section assumes you have completed the previous section, including adding t
 
 ### Set Up with the NUbots Robot Code
 
-Running the RoboCup scenario requires two things: [the Webots simulator](https://github.com/NUbots/NUWebots/webots), of which there is one instance; and [the robot code](https://github.com/NUbots/NUbots), of which there can be any number of instances equal to the number of robots you would like to run. These programs can be run on any combination of computers. All robots and the Webots simulator can be run locally on one computer, or a separate computer for the Webots simulator and each robot, or any combination inbetween.
+Running the RoboCup scenario requires two things: [the Webots simulator](https://github.com/NUbots/NUWebots/tree/main/webots), of which there is one instance; and [the robot code](https://github.com/NUbots/NUbots), of which there can be any number of instances equal to the number of robots you would like to run. These programs can be run on any combination of computers. All robots and the Webots simulator can be run locally on one computer, or a separate computer for the Webots simulator and each robot, or any combination inbetween.
 
 1. Use the [Getting Started page](/guides/main/getting-started) to set up the codebase, configure and build on all computers that will be running robot code, if not done so already. When configuring, ensure that `ROLE_webots_robocup` is `ON`.
 
@@ -360,7 +365,7 @@ Follow these steps to set up a NUbots developed environment rather than the Robo
 
    1. Click on `File->Open World...`.
 
-   2. In the pop-up, navigate to the [NUbots/NUWebots/worlds](https://github.com/NUbots/NUWebots/tree/main/worlds) folder on your computer and open the world you would like to run.
+   2. In the pop-up, navigate to the [NUWebots/nuwebots/worlds](https://github.com/NUbots/NUWebots/tree/main/nuwebots/worlds) folder on your computer and open the world you would like to run.
 
 ## Creating a New Controller
 
