@@ -1,19 +1,4 @@
-.searchInput {
-  .DocSearch .DocSearch-Button {
-    /* backdrop-filter: blur(4px); */
-    background: '#f00';
-    /* @apply h-10 w-full pl-10 md:pl-14 pr-3 md:pr-4 rounded appearance-none text-lg outline-none; */
-    
-  }
-
-  .DocSearch-Button-Keys {
-    display: 'none';
-  }
-}
-
-/* absolute top-0 left-0 w-5 md:w-6 h-6 ml-3 md:ml-4 mt-2 pointer-events-none */
-
-/* .search {
+.search {
   position: relative;
 }
 
@@ -155,4 +140,4 @@
       background-color: rgba(255, 255, 255, 0.1);
     }
   }
-} */
+}
