@@ -10,7 +10,7 @@ authors:
 
 The NUbots NatNet module is module that works in conjunction with the [OptiTrack Motive software](https://www.optitrack.com/software/motive/) and motion tracking camera system. The purpose of the NatNet system is to record positional information about the NUgus robots in relation to the playing field and the external environment.
 
-##  Running NatNet
+## Running NatNet
 
 In order to run NatNet you will require a licenced version of the Optitrack Motive software and at least 2 [Optive Motion Capture Cameras](https://www.optitrack.com/cameras/). NatNet currently supports motive version 3.0 and below. Below is a detailed guide on how to setup motive.
 
@@ -25,14 +25,13 @@ In order to run NatNet you will require a licenced version of the Optitrack Moti
 
 4. Make sure there are no motion capture dots anywhere on the soccer field.
 
-5. On the left hand side of the screen, you will see a Camera Calibration panel, and up the top you will see the button "Mask visible". Click this. This will cover up any static reflective objects in the cameras' views (including the active infra-red emissions from other cameras). 
+5. On the left hand side of the screen, you will see a Camera Calibration panel, and up the top you will see the button "Mask visible". Click this. This will cover up any static reflective objects in the cameras' views (including the active infra-red emissions from other cameras).
 
 6. Once all the bright patches have been masked with red, click on the "Start Wanding" button next to the button clicked in step 4. Use the wanding stick with three MoCap dots on the cross bar, and slowly make your way around the volume you wish to work in, waving the wand around. You will be able to see coloured lines in the camera boxes. You want to aim to fill as much of each camera box as possible to achieve the best calibration. Each camera has a ring of green LEDs- as you start to wave the wand in front of each camera, each ring will slowly fill up. Aim to completely fill up each camera’s ring.
 
 7. After you have finished wanding, click the "calibrate" button further down in the side panel.
 
 8. The side panel will now switch to the ground plane tab. Find the Ground Plane L Frame (It is black with 3 MoCap dots on it and two bubble levels), and place in on the ground at the center circle (normally with the Z axis pointing towards the goals with the brick wall behind it. Don't bother trying to level out the L frame as it seems to be a hopeless task). Back on the computer, click the "Set Ground Plane" button. This will produce a pop-up window prompting you to save your calibration. Click save. Congratulations, your calibration is complete.
-
 
 </details>
 
@@ -45,7 +44,7 @@ In order to run NatNet you will require a licenced version of the Optitrack Moti
 <details>
 <summary>On the Robot</summary>
 
-This is the default method for running NatNet. If you wish to output motive packets directly to file for debugging purposes, change the dump_packets option in NatNet.yaml to true. 
+This is the default method for running NatNet. If you wish to output motive packets directly to file for debugging purposes, change the dump_packets option in NatNet.yaml to true.
 
 1. Ensure that the NatNet role has been installed on the robot.
 
@@ -65,10 +64,9 @@ This is the default method for running NatNet. If you wish to output motive pack
 
 9. Exit out of the ssh of the robot.
 
-10. We now need to copy the nbs file off the robot. Use "scp nubots@10.1.1.<robot_id#>:/home/nubots/log/<your_program_name>/<name_of_nbs_file>    ./log/"
+10. We now need to copy the nbs file off the robot. Use "scp nubots@10.1.1.<robot_id#>:/home/nubots/log/<your_program_name>/<name_of_nbs_file> ./log/"
 
-11. You now need to extract the information you want from the nbs file. We have a number of .nbs extraction tools and is recommended that you use `./b nbs extract_images <path>` for extracting images from the nbs file and  `./b nbs json <path>` to extract the information into JSON format.
-
+11. You now need to extract the information you want from the nbs file. We have a number of .nbs extraction tools and is recommended that you use `./b nbs extract_images <path>` for extracting images from the nbs file and `./b nbs json <path>` to extract the information into JSON format.
 
 </details>
 
@@ -85,14 +83,13 @@ This method may be useful to determine if Motive is outputting packets directly 
 
 4. After your program has finished, check that a new nbs file has been created in "log/<your_program's_name>/". The filename should be the date and timestamp when the file was run.
 
-5. You now need to extract the information you want from the nbs file. We have a few nbs decoders that have already been written for specific purposes. If one of those does not suit your needs, you will need to either modify an existing nbs extraction file, or write your own. The location of these nbs files is "nubots/tools/nbs_tools/". For example purposes, let's assume you want to extract images and Motion Capture data. To run this program, make sure you are in the nubots home directory, then you would use: "./b nbs extract_images_MoCap ./log/<file_name>  --output ./log/<your_extraction_folder>"
+5. You now need to extract the information you want from the nbs file. We have a few nbs decoders that have already been written for specific purposes. If one of those does not suit your needs, you will need to either modify an existing nbs extraction file, or write your own. The location of these nbs files is "nubots/tools/nbs_tools/". For example purposes, let's assume you want to extract images and Motion Capture data. To run this program, make sure you are in the nubots home directory, then you would use: "./b nbs extract_images_MoCap ./log/<file_name> --output ./log/<your_extraction_folder>"
 
 </details>
 
 <Alert type='info'>
 NatNet may not always pick up motive packets immediately. This may be dependent of the amount of traffic on your local network or how it is configured. Best Practice to ensure the least flakeyness is to start streaming packets on motive significantly before you run NatNet and if NatNet still doesn't work, try stopping and starting NatNet a few times. If this still doesn't work, try restarting motive streaming and then run NatNet again.
 </Alert>
-
 
 ## Development information
 
