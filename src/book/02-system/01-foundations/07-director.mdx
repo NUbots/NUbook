@@ -4,6 +4,9 @@ chapter: Foundations
 title: Director
 description: Introduction to the Director and how to use it to build behaviours.
 slug: /system/foundations/director
+authors:
+  - Trent Houliston (@TrentHouliston)
+  - Ysobel Sims (@ysims)
 ---
 
 The Director is a framework and algorithm used to control the flow of behaviour on the robots.
@@ -287,7 +290,101 @@ Supported RunReasons are
 
 ## The Director Graph
 
-TODO algorithm development in progress
+```dot
+# Example of a Director graph
+digraph {
+    "Root" -> "Provide<Play>" [label=" Play"]
+    "Provide<Play>" -> "Provide<Walk>" [label="Walk"]
+
+    "Provide<Play>" -> "Provide<Kick>" [label="Kick"]
+
+    "Provide<Walk>" -> "Provide<LegIK>" [label="LegIK", color="red"]
+    "Provide<Kick>" -> "Provide<LegIK>" [label="LegIK", color="green"]
+
+    "Provide<LegIK>" -> "Provide<LeftLeg>" [label="LeftLeg"]
+    "Provide<LegIK>" -> "Provide<RightLeg>" [label="RightLeg"]
+}
+```
+
+The Root node represents a non-Provider reaction, eg an `on<Startup>()` reaction. It emits a `Play` Task with `emit<Task>(std::make_unique<Play>())`.
+
+There is one Provider in this tree for the `Play` Task, which is the `Provide<Play>` node. It has two subtasks, `Walk` and `Kick`. These are both emitted from the Play Provider. The Kick is given a higher priority than the Walk.
+
+```cpp
+emit<Task>(std::make_unique<Walk>());    // 0 priority by default
+emit<Task>(std::make_unique<Kick>(), 1); // higher priority number is higher priority
+```
+
+The Walk Provider has emitted a `LegIK` Task, but it is blocked because the Kick Provider has also emitted a `LegIK` Task. The Kick Provider has a higher priority, so it is the one that is currently active.
+
+The Walk Provider's subtask will become unblocked if the Kick Provider is stopped or the Kick Provider stops requesting the `LegIK` Task.
+
+The `LegIK` Task emits two subtasks, one for each leg. These in turn would emit subtasks for each servo, but this has been omitted in the graph for clarity.
+
+If the Kick Provider decides it no longer should Kick, such as if the ball is not in front of the robot, it might emit a `nullptr` to stop the Kick Provider. This will cause the Kick Provider to stop, and the Walk Provider to become active.
+
+```cpp
+on<Provide<Kick>>().then([this] (const Kick& kick) {
+    if (kick.ball_in_front) {
+        emit<Task>(std::make_unique<Kick>());
+    }
+    else {
+        emit<Task>(std::make_unique<Kick>(nullptr));
+    }
+});
+```
+
+The following graph represents the case where the `else` statement runs.
+
+```dot
+# The Kick Provider stops requesting a LegIK Task and the Walk takes over
+digraph {
+    "Root" -> "Provide<Play>" [label=" Play"]
+    "Provide<Play>" -> "Provide<Walk>" [label="Walk"]
+
+    "Provide<Play>" -> "Provide<Kick>" [label="Kick"]
+
+    "Provide<Walk>" -> "Provide<LegIK>" [label="LegIK", color="green"]
+
+    "Provide<LegIK>" -> "Provide<LeftLeg>" [label="LeftLeg"]
+    "Provide<LegIK>" -> "Provide<RightLeg>" [label="RightLeg"]
+}
+```
+
+This is an instance where multiple instances of the same Task type are emitted. Another situation is where there are multiple Providers for the same Task.
+
+The following example will remove the Kick Provider, and add another Walk Provider. One Walk Provider will run when the robot needs to be precise but slow, such as when there are many obstacles nearby. The other Walk Provider will run when the robot can be less precise and faster.
+
+```cpp
+# Static walk implementation
+on<Provide<Walk>, When<Obstacles, std::greater_equal, Obstacles::MANY>>().then({});
+
+# ZMP walk implementation
+on<Provide<Walk>, When<Obstacles, std::less, Obstacles::MANY>>().then({});
+```
+
+In this instance, there will be a non-Provider reaction checking for the number of obstacles. If there are many obstacles, the Static Walk Provider will be active. If there are few obstacles, the ZMP Walk Provider will be active. The following graph represents the case where there are few obstacles.
+
+```dot
+# There are few obstacles, so the ZMP Walk Provider is active
+digraph {
+    "Root" -> "Provide<Play>" [label=" Play"]
+    "Provide<Play>" -> "Provide<Walk> (ZMP)" [label="Walk"]
+
+    subgraph cluster_walk {
+        label="Provider Group"
+        "Provide<Walk> (ZMP)" [color="green"]
+        "Provide<Walk> (Static)" [color="red"]
+    }
+
+    "Provide<Walk> (ZMP)" -> "Provide<LegIK>" [label="LegIK"]
+
+    "Provide<LegIK>" -> "Provide<LeftLeg>" [label="LeftLeg"]
+    "Provide<LegIK>" -> "Provide<RightLeg>" [label="RightLeg"]
+}
+```
+
+The two Walk Providers form a ProviderGroup. The Director will only allow one Provider from a ProviderGroup to be active at a time. The ZMP Provider was chosen because its When condition was true, and the Static Provider's was not.
 
 ## Behaviours Layout
 
