@@ -55,7 +55,7 @@ When there are multiple Providers which provide for a single Task type they are 
 
 When a Provider group is running, only one of the Providers in that group is allowed to execute at a time.
 
-When a new Task is emitted the Director will determine which of the Providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the Provider's decleration. If both Providers could run, then the one declared first will run.
+When a new Task is emitted the Director will determine which of the Providers in a group to run based on the current state of the system as well as any extra DSL keywords that are on the Provider's declaration. If both Providers could run, then the one declared first will run.
 
 If the state of the Director system changes such that the currently active Provider can no longer run, then the Director will attempt to reassign that task to another Provider in the group.
 
@@ -68,7 +68,7 @@ These three provider types along with the `Needs`, `When` and `Causing` DSL word
 
 #### Start
 
-A Start Provider is used to set up the state of a Provider when it starts running. Start is executed when a Provider group has no active Tasks and then is given to one, ie it gains control.
+A Start Provider is used to set up the state of a Provider when it starts running. Start is executed when a Provider group has no active Tasks and then is given to one, i.e. it gains control.
 
 For example, the walk may need a Start Provider to initialise the state of the walk engine before it starts running.
 
@@ -132,13 +132,7 @@ For example, if you wanted a kick engine to only run if the robot is statically 
 on<Provide<Kick>, When<Stability, std::greater_equal, Stability::STANDING>>().then(...);
 ```
 
-These conditions are updated by using normal NUClear emits. For example if
-
-```cpp
-emit(std::make_unique<Stability>(Stability::STATIC));
-```
-
-was emitted in another reaction, then the `When` condition would be met and the Provider would run.
+These conditions are updated by using normal NUClear emits. For example if `emit(std::make_unique<Stability>(Stability::STATIC));` was emitted in another reaction, then the `When` condition would be met and the Provider would run.
 
 ### Causing
 
@@ -161,7 +155,7 @@ on<Provide<Walk>, Causing<Stability, Stability::STANDING>().then({
 
 The implementation for the reaction should result in the desired state being eventually emitted. This would not be the primary Provider for the Walk, but would instead be actie when a higher priority Provider wants this state.
 
-For example, if the kick engine only runs `When<Stability, std::greater_equal, Stability::STANDING>` then it would not be able to run while the walk engine is running normally. However, if the kick Task has a higher priority than the walk Task, then it will push the walk engine into the Causing Provide reaction, which will then cause the Stability state to be STANDING so that the kick engine can run.
+For example, if the kick engine only runs `When<Stability, std::greater_equal, Stability::STANDING>` then it would not be able to run while the walk engine is running normally. However, if the kick Task has a higher priority than the walk Task, then it will push the walk engine into the Causing Provide reaction, which will then cause the Stability state to be `STANDING` so that the kick engine can run.
 
 ## Tasks
 
@@ -176,13 +170,7 @@ emit<Task>(std::make_unique<Walk>(Eigen::Vector2d(1.0, 0.0, 0.0)));
 
 This walk engine Task contains information on the speed and direction that the robot should walk in. Other Tasks, such as `GetUpWhenFallen` does not need any data.
 
-Tasks can take four arguments
-
-```cpp
-emit<Task>(data, priority, optional, name)
-```
-
-where
+Tasks can take four arguments `emit<Task>(data, priority, optional, name)` where
 
 - data: A pointer to a Protobuf message.
 - priority: A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.
