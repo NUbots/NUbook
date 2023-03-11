@@ -8,7 +8,7 @@ authors:
   - Luke Haigh (@Dereferenced-Null)
 ---
 
-NatNet is module that works in conjunction with the [OptiTrack Motive software](https://www.optitrack.com/software/motive/) and motion tracking camera system. The purpose of the NatNat system is to record positional information about the NUgus robots in relation to the playing field and the external envrionment so that it can be provided to our automatic anotation system which will use the positional information of the robots to automatically create segmentation masks of the environment. 
+NatNet is module that works in conjunction with the [OptiTrack Motive software](https://www.optitrack.com/software/motive/) and motion tracking camera system. The purpose of the NatNet system is to record positional information about the NUgus robots in relation to the playing field and the external environment.
 
 ##  Running NatNet
 
@@ -21,7 +21,7 @@ In order to run NatNet you will require a licenced version of the Optitrack Moti
 
 2. Open the Motive software. You will be presented with a range of options, but it is safest to choose "Perform Camera Calibration" and re-calibrate the cameras, in case one or two of them have been accidentally moved since the last calibration.
 
-3. You should have 10 black boxes visible at the bottom of your screen representing the view of the 10 cameras mounted around the room (they will default to object mode which only displays objects whiter than a certain threshold, assuming them to be motion capture dots. If you don't have 10 camera boxes displaying, check the netgear ethernet switch is powered on. If the cameras are on, they will display a number on their LCD screen.
+3. You should have black boxes visible that correspond with the number of camera's you are using at the bottom of your screen representing the view of the cameras mounted around the room, they will default to object mode which only displays objects whiter than a certain threshold, assuming them to be motion capture dots. If you don't have the same amount of camera boxes displaying as the number of cameras you are using, check the netgear ethernet switch is powered on. If the cameras are on, they will display a number on their LCD screen.
 
 4. Make sure there are no motion capture dots anywhere on the soccer field.
 
@@ -55,7 +55,7 @@ This is the default method for running NatNet. If you wish to output motive pack
 
 4. `nano DataLogging.yaml`
 
-5. Scroll down to message.input.MotionCapture and set to true. Additionally, set to true any of the sub messages that you want to use such as ".RigidBody". If you want "output.CompressedImage" or "input.sensors" logged, you can set them to true as well. Don't log "input.Image" as this will consume huge amounts of storage.
+5. You will need to add message.input.MotionCapture and set its value to true. Additionally, set to true any of the sub messages that you want to use such as ".RigidBody". If you want "output.CompressedImage" or "input.sensors" logged, you can set them to true as well.
 
 6. To exit nano, press Ctrl+X, then 'y', then hit enter.
 
@@ -67,7 +67,7 @@ This is the default method for running NatNet. If you wish to output motive pack
 
 10. We now need to copy the nbs file off the robot. Use "scp nubots@10.1.1.<robot_id#>:/home/nubots/log/<your_program_name>/<name_of_nbs_file>    ./log/"
 
-11. You now need to extract the information you want from the nbs file. We have a few nbs decoders that have already been written for specific purposes. If one of those does not suit your needs, you will need to either modify an existing nbs extraction file, or write your own. The location of these nbs files is "nubots/tools/nbs_tools/". For example purposes, let's assume you want to extract images and Motion Capture data. To run this program, make sure you are in the nubots home directory, then you would use: "./b nbs extract_images_MoCap ./log/<file_name>  --output ./log/<your_extraction_folder>"
+11. You now need to extract the information you want from the nbs file. We have a number of .nbs extraction tools and is recommended that you use `./b nbs extract_images <path>` for extracting images from the nbs file and  `./b nbs json <path>` to extract the information into JSON format.
 
 
 </details>
