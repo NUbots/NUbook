@@ -103,3 +103,22 @@ Other roles may only have a subset of the above diagram, for testing purposes. S
 ## Codedocs
 
 We have documentation automatically generated from the main codebase [here](https://codedocs.nubots.net/).
+
+## Log Level
+
+When printing to the terminal, the `log` function is used.
+
+```cpp
+log<NUClear::INFO>("Hello World!");
+```
+
+The `NUClear::INFO` is the log level. The log will only print if the module's log level is set to `INFO` or higher. The following table describes the log levels.
+
+| Level   | Description                                                                                                                       |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `TRACE` | Used to debug code.                                                                                                               |
+| `DEBUG` | Used to debug behaviour.                                                                                                          |
+| `INFO`  | Used to inform the user of what the module is doing.                                                                              |
+| `WARN`  | Used to warn the user that something has gone wrong, but the system can still perform it's functions.                             |
+| `ERROR` | Used to inform the user that something has gone wrong, and the module cannot perform it's intended function at this time.         |
+| `FATAL` | Used to inform the user that something has gone wrong, and the module will never be able to perform it's intended function again. |
