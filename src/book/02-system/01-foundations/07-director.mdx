@@ -170,12 +170,14 @@ emit<Task>(std::make_unique<Walk>(Eigen::Vector2d(1.0, 0.0, 0.0)));
 
 This walk engine Task contains information on the speed and direction that the robot should walk in. Other Tasks, such as `GetUpWhenFallen` does not need any data.
 
-Tasks can take four arguments `emit<Task>(data, priority, optional, name)` where
+Tasks can take four arguments `emit<Task>(data, priority, optional, name)`, as described in the following table.
 
-- data: A pointer to a Protobuf message.
-- priority: A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.
-- optional: A boolean. If true, then the Task is considered optional. If two Tasks need the same resources and have the same priority but one is optional, then the non-optional Task will be chosen. If no optional argument is specified, then the default optional value of false is used.
-- name: A string. If provided, then this string will be used in logging messages. The default is the empty string.
+| Argument | Description                                                                                                                                                                                                                                                                       |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data     | A pointer to a Protobuf message.                                                                                                                                                                                                                                                  |
+| priority | A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.                                                                 |
+| optional | A boolean. If true, then the Task is considered optional. If two Tasks need the same resources and have the same priority but one is optional, then the non-optional Task will be chosen. If no optional argument is specified, then the default optional value of false is used. |
+| name     | A string. If provided, then this string will be used in logging messages. The default is the empty string.                                                                                                                                                                        |
 
 ### Root Level Tasks
 
@@ -268,13 +270,15 @@ on<Provides<Walk>>().then([this] (const Walk& walk, const RunReason& reason) {
 });
 ```
 
-Supported RunReasons are
+The following table lists possible RunReasons.
 
-- NEW_TASK: The Provider is running because a new Task of the type it provides for was emitted.
-- STARTED: The Provider is running because it has now become active.
-- STOPPED: The Provider is running because it is becoming inactive.
-- SUBTASK_DONE: The Provider is running because one of its subtasks has completed.
-- PUSHED: The Provider is running because a higher priority module wants its Causing state to be true.
+| RunReason    | Description                                                                                  |
+| ------------ | -------------------------------------------------------------------------------------------- |
+| NEW_TASK     | The Provider is running because a new Task of the type it provides for was emitted.          |
+| STARTED      | The Provider is running because it has now become active.                                    |
+| STOPPED      | The Provider is running because it is becoming inactive.                                     |
+| SUBTASK_DONE | The Provider is running because one of its subtasks has completed.                           |
+| PUSHED       | The Provider is running because a higher priority module wants its Causing state to be true. |
 
 ## The Director Graph
 
