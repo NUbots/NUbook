@@ -10,6 +10,17 @@ authors:
 
 This page details how to maintain various subsystems within the main codebase.
 
+## Odometry
+
+### Webots Live Error Tracking
+
+The `nugus_controller` in Webots has functionality to send live odometry ground truth data to the robot. To use this
+
+1. [Set up Webots and compile the NUWebots code](/guides/tools/webots-setup) (you do not need the RoboCup set up).
+2. Run the `kid.wbt` world in Webots.
+3. Run `webots/keyboardwalk` in NUbots. [See the Getting Started page to set up the NUbots codebase](/guides/main/getting-started).
+4. Run [NUsight](/guides/main/getting-started#get-build-and-run-nusight) or [PlotJuggler](https://github.com/NUbots/NUbots/tree/main/module/network/PlotJuggler/README.md) and observe the graphs for the robot's prediction, the ground truth and the error of the torso's real rotation and translation relative to world.
+
 ## Vision
 
 The accuracy of the vision system is reliant on the accuracy of odometry and kinematics because they affect the placement of the mesh and green horizon. It is important that these systems work reasonable well otherwise the robot may have issues detecting objects.
@@ -22,7 +33,7 @@ Synthetic and semi-synthetic training data for vision can be generated using [NU
 
 NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding [segmentation masks](https://paperswithcode.com/task/semantic-segmentation) for training.
 
-Find out how to get and use NUpbr on the [NUpbr NUbook page](/system/tools/nupbr) and the [NUpbr GitHub repository](https://github.com/NUbots/NUpbr).
+Information on NUpbr is available on the [NUbook page](/system/tools/nupbr), [NUbook guide](/guides/tools/nupbr-guide) and the [NUpbr GitHub repository](https://github.com/NUbots/NUpbr).
 
 #### Setting Up The Data
 
