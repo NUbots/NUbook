@@ -79,3 +79,15 @@ To change back to the NUbots laboratory network:
    $ sudo systemctl restart systemd-networkd
    $ sudo systemctl restart wpa_supplicant@wlp58s0
    ```
+
+### Troubleshooting
+
+If you are experiencing problem, it may be beneficial to reset any changes and start again. If you cannot connect to the robot wirelessly, you can connect to the robot via ethernet. If you cannot connect to the robot via ethernet, you can plug in a monitor and keyboard to directly run commands on the robot.
+
+The following general information may be useful in understanding the networking set up if anything goes wrong.
+
+The robot will default to using the first alphanumeric network configuration file. If you have multiple network configuration files, you can change the priority of the network configuration files by changing the number in the filename. For example, `30-wlp58s0.network` will be used before `40-wlp58s0.network`.
+
+`eno1` refers to ethernet. `wlp58s0` refers to wireless. `bond0` refers to the bonded network interface. This abstracts the ethernet and wireless configurations so it is easier to switch between them.
+
+The network configuration files on the robot are found in `/etc/systemd/network`. The wireless network settings are found in `/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`.
