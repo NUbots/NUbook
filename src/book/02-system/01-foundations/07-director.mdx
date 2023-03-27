@@ -172,12 +172,12 @@ This walk engine Task contains information on the speed and direction that the r
 
 Tasks can take four arguments, as described in the following table in order.
 
-| Argument | Description                                                                                                                                                                                                                                                                       |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| data     | A pointer to a Protobuf message, describing the Task.                                                                                                                                                                                                                                                  |
-| priority | A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.                                                                 |
+| Argument | Description                                                                                                                                                                                                                                                                                                                                                              |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| data     | A pointer to a Protobuf message, describing the Task.                                                                                                                                                                                                                                                                                                                    |
+| priority | A positive integer. Higher numbers indicate higher priority. If two Tasks have the same priority, then the one emitted first will be chosen. If no priority is specified, then the default priority of 0 is used.                                                                                                                                                        |
 | optional | A boolean. If true, then the Task is considered optional. If two Tasks need the same resources and have the same priority but one is optional, then the non-optional Task will be chosen. Optional Tasks do not need to be active for other Tasks from the same Provider to run. If no optional argument is specified, then the default optional value of false is used. |
-| name     | A string. If provided, then this string will be used when logging messages. The default is the empty string.                                                                                                                                                                        |
+| name     | A string. If provided, then this string will be used when logging messages. The default is the empty string.                                                                                                                                                                                                                                                             |
 
 ### Root Level Tasks
 
@@ -379,7 +379,7 @@ digraph {
 }
 ```
 
-The two Walk Providers form a ProviderGroup. The Director will only allow one Provider from a ProviderGroup to be active at a time. The ZMP Provider was chosen because its When condition was true, and the Static Provider's was not. 
+The two Walk Providers form a ProviderGroup. The Director will only allow one Provider from a ProviderGroup to be active at a time. The ZMP Provider was chosen because its When condition was true, and the Static Provider's was not.
 
 ## Behaviours Layout
 
