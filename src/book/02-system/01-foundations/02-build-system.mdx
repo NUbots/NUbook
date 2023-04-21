@@ -4,6 +4,11 @@ chapter: Foundations
 title: Build System
 description: The NUbots build system.
 slug: /system/foundations/build-system
+authors:
+  - Alex Biddulph (@Bidski)
+  - Yosiah de Koeyer (@Y0sh1dk)
+  - Kip Hamiltons (@KipHamiltons)
+  - Trent Houliston (@TrentHouliston)
 ---
 
 ## The NUbots Build System
@@ -126,10 +131,10 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 
 ##### Build
 
-As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `sensortest`) then use the command
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test_sensor`) then use the command
 
 ```bash
-./b build sensortest
+./b build test_sensor
 ```
 
 If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
@@ -233,6 +238,8 @@ The `module` command allows you to generate a new module. To generate a new line
 ```
 
 This will generate all necessary module files in the `module/vision/LineDetector` folder. This includes an empty configuration file, a basic C++ source and header file implementing the `LineDetector` reactor, and an empty unit test file.
+
+Add the `--director` flag at the end of the command to generate a module that will use Director functionality.
 
 ##### NBS
 
@@ -566,3 +573,56 @@ target = {
     "asm_object": "elf64",
 }
 ```
+
+### Dependency Declaration
+
+CMake needs to know what dependencies we have and where to find them.
+In a module's folder the `CMakeLists.txt` file tells CMake what is needed to build a module.
+The `nuclear_module()` function tells CMake that this directory contains a module that may be added to a role.
+This function may take named parameters.
+
+| Parameter  | Usage                                                                |
+| ---------- | -------------------------------------------------------------------- |
+| LANGUAGE   | The programming language that this module is in (currently only C++) |
+| LIBRARIES  | The libraries that this module depends on and must be linked with    |
+| SOURCES    | Extra code outside the `src` directory that must be built            |
+| DATA_FILES | Extra data files outside the `data` directory that the module uses   |
+
+CMake needs to know where libraries are located. The `cmake/Modules/` directory contains files called `FindX.cmake`, where `X` is the name of a library. These files contain the logic for finding library files. The function `find_package(X)` is used to tell CMake to look for one of these `.cmake` files and run it.
+
+CMake can also look for build instruction files in `/lib/cmake/X/XConfig.cmake` where `X` is the name of the library.
+An example of one of these files, `FindAravis.cmake` which finds the Aravis library, is shown below
+
+```cmake
+include(ToolchainLibraryFinder)
+
+find_package(glib2 REQUIRED)
+
+ToolchainLibraryFinder(
+  NAME Aravis
+  HEADER arv.h
+  LIBRARY aravis-0.8
+  PATH_SUFFIX aravis-0.8
+)
+
+target_link_libraries(Aravis::Aravis INTERFACE glib2::glib2)
+```
+
+The first line includes a custom function for later use.
+We have `find_package` again, as this library has its own dependency.
+Then there is `ToolchainLibraryFinder` which is the function that finds the library.
+Finally there is `target_link_libraries` which tells CMake that we have a dependency of the library.
+`ToolchainLibraryFinder` parameters:
+
+| Parameter                | Usage                                                                                                                                                                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NAME                     | The name we use for the package                                                                                                                                                                                                     |
+| HEADER                   | Any header, e.g. `.h` or `.hpp`, files that define the api of the library                                                                                                                                                           |
+| LIBRARY                  | The name of the library on disk, e.g. if we have `/usr/lib/libaravis-0.8.so` it'd be `aravis`                                                                                                                                       |
+| LIBRARIES                | A list instead of a single LIBRARY                                                                                                                                                                                                  |
+| PATH_SUFFIX              | Add subdirectories to look for includes and libraries in the normal search directories                                                                                                                                              |
+| BINARY                   | A binary that can be used to extract the version number                                                                                                                                                                             |
+| VERSION_BINARY_ARGUMENTS | The arguments to pass to the binary that will result in a version number being printed                                                                                                                                              |
+| VERSION_FILE             | A file that contains information on the version number of the library                                                                                                                                                               |
+| VERSION_REGEX            | The regex used on the version file to extract the version number                                                                                                                                                                    |
+| LINK_TYPE                | The type of linkage that the library will use: `UNKNOWN` is the default and will pick either, `SHARED` will use dynamic linkage and look for a `.so` library file `STATIC` will use static linkage and look for a `.a` library file |

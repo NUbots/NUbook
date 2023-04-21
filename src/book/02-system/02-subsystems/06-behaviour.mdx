@@ -4,6 +4,8 @@ chapter: Subsystems
 title: Behaviour
 description: Behaviour and how it works in the NUbots codebase.
 slug: /system/subsystems/behaviour
+authors:
+  - Ysobel Sims (@ysims)
 ---
 
 The behaviour subsystem includes walk planning, soccer strategies, get up detection, head behaviour, script running and tuning, and kick behaviour.
@@ -39,7 +41,7 @@ Keyboard walk uses **keyboard inputs** to control the robot. The inputs availabl
 
 To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalk.role) and run the binary.
 
-The [**keyboardwalkfake** role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalkfake.role) uses HardwareSimulator, and is useful for when you don't want to run keyboard walk on the robot.
+The [**fake_keyboardwalk** role](https://github.com/NUbots/NUbots/blob/main/roles/fake_keyboardwalk.role) uses HardwareSimulator, and is useful for when you don't want to run keyboard walk on the robot.
 
 ### PS3 Walk
 
