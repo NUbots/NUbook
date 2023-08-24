@@ -163,11 +163,12 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and the
 
 </Alert>
 
-Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration. You can also set and unset roles by passing `--set_roles` or `--unset_roles` followed the roles you want to toggle. This supports globbing patterns, and groups of roles can be toggled with `--set_<group name>_roles`. For example, you can clean docker build volumes and enable all roles ending in `walk` or starting with `script` using the following command
+Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
+
+You can also set and unset roles by passing `--set_roles` or `--unset_roles` followed the roles you want to toggle. This supports globbing patterns, and groups of roles can be toggled with `--set_<group name>_roles`. For example, you can clean docker build volumes and enable all roles ending in `walk` or starting with `script` using the following command
 
 ```bash
   ./b configure --clean --unset_all_roles --set_roles "*walk" "script*"
-```
 
 ##### Edit
 
