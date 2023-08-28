@@ -165,6 +165,20 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and the
 
 Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
 
+You can also set and unset roles by passing `--set_roles` or `--unset_roles` followed the roles you want to toggle (this supports globbing patterns). For example, you can disable all roles ending in `walk`, then enable keyboardwalk and all roles starting with `script` using the following command.
+
+```bash
+  ./b configure --unset_all_roles "*walk" --set_roles keyboardwalk "script*"
+```
+
+Roles selected with `--unset` flags will always be disabled before roles selected with `--set` flags are enabled.
+
+You can also toggle groups of roles with `--set_<group>_roles` and `--unset_<group>_roles`. Currently there is a role group for each subdirectory in `roles` and a group containing all roles. For example, you can clean all docker build volumes and enable only roles in the `roles/webots` directory using the following command.
+
+```bash
+  ./b configure --clean --unset_all_roles --set_webots_roles
+```
+
 ##### Edit
 
 If you are running roles on your local machine and you need to edit the configuration or data files for the modules in the role then the preferred method is to edit the file in the source tree and then rebuild the code using `./b build` to copy the edited file into the build folder.
