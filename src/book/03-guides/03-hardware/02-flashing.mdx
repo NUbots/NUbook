@@ -14,13 +14,14 @@ authors:
 
 To install Arch Linux (our OS of choice) on to a robot perform the following instructions. Make sure you know the robot number for this NUC before beginning.
 
-1. Download the latest [Arch Linux LiveUSB](https://www.archlinux.org/download/) image and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
+<!--- ↓↓↓ UPDATE MIRRORS HERE ↓↓↓ -->
+1. Download the [Arch Linux LiveUSB image matching the date of the mirrorlist in our Dockerfile](https://archive.archlinux.org/iso/2022.07.01/) and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
 
    - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
    - Burn the Arch Linux ISO you just downloaded to the USB drive (in this example we are using `/dev/sdb`)
    - ```bash
-     sudo dd bs=4M if=~/Downloads/archlinux-2019.11.01-x86_64.iso of=/dev/sdb status=progress oflag=sync
+     sudo dd bs=4M if=~/Downloads/archlinux-2022.07.10-x86_64.iso of=/dev/sdb status=progress oflag=sync
      ```
 
 2. If you are using a brand new NUC, Boot into the BIOS on the NUC
@@ -128,13 +129,13 @@ It is possible that `ip addr` will show a valid IP address for `bond0`, but `pin
 
 If there is no connection, then the following files need to be modified (using either `sudo nano` or `sudo vim`)
 
-- `/etc/systemd/network/20-eth0.network`
-- `/etc/systemd/network/30-wlan0.network`
-- `/etc/systemd/network/99-eth0.network`
-- `/etc/systemd/network/99-wlan0.network`
-- `/etc/wpa_supplicant/wpa_supplicant-wlan0.conf`
+- `/etc/systemd/network/20-ethernet.network`
+- `/etc/systemd/network/30-wifi.network`
+- `/etc/systemd/network/99-ethernet.network`
+- `/etc/systemd/network/99-wifi.network`
+- `/etc/wpa_supplicant/wpa_supplicant-wlp0s20f3.conf`
 
-These 5 files need to be both renamed (replacing `eth0` or `wlp58s0` with the new interface name) and the contents of the files need to be edited, specifically the line that says `Name=eth0` or `Name=wlp58s0`.
+These 5 files need to be edited. Specifically, the value of `Name` should correspond with the interface name of the device being targeted. On the Nuc 12 this is `enp86s0` for ethernet and `wlp0s20f3` for wifi.
 
 Next, correct the `wpa_supplicant` service by running
 
