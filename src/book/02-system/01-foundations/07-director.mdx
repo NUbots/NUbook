@@ -13,7 +13,7 @@ The Director is a framework and algorithm used to control the flow of behaviour 
 It allows composable behaviours that can take advantage of transition rules to ensure that the robot performs the right task at the right time.
 
 The Director does this by providing a set of new DSL keywords to NUClear that describe what tasks to run, what conditions are required, and how those tasks build on other tasks.
-It then uses these keywords to make a graph that it will use to decide which tasks to execute in order to achive the goals of the modules.
+It then uses these keywords to make a graph that it will use to decide which tasks to execute in order to achieve the goals of the modules.
 
 The two DSL components that are added are Providers and Tasks.
 
@@ -51,7 +51,7 @@ Subtasks must be emitted from the Provider reaction to be considered a child of 
 
 ### Provider Groups
 
-When there are multiple Providers which provide for a single Task type they are considered a Provider group. For example, a both a static walk module and a ZMP walk module could have `Provide<Walk>` reactions. These two Providers would be considered a Provider group for the Walk task.
+When there are multiple Providers which provide for a single Task type they are considered a Provider group. For example, both a static walk module and a ZMP walk module could have `Provide<Walk>` reactions. These two Providers would be considered a Provider group for the Walk task.
 
 When a Provider group is running, only one of the Providers in that group is allowed to execute at a time.
 
@@ -304,7 +304,7 @@ digraph {
 }
 ```
 
-The Root node represents a non-Provider reaction, eg an `on<Startup>()` reaction. It emits a `Play` Task with `emit<Task>(std::make_unique<Play>())`.
+The Root node represents a non-Provider reaction, e.g. an `on<Startup>()` reaction. It emits a `Play` Task with `emit<Task>(std::make_unique<Play>())`.
 
 There is one Provider in this tree for the `Play` Task, which is the `Provide<Play>` node. It has two subtasks, `Walk` and `Kick`. These are both emitted from the Play Provider. The Kick is given a higher priority than the Walk.
 
