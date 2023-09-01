@@ -183,7 +183,7 @@ Tasks can take four arguments, as described in the following table in order.
 
 When a Task is emitted from a reaction which is not itself a Provider, that Task is considered a root level task.
 These root level tasks are all considered siblings within the priority comparison system at the root level of the graph.
-When a root level task is emitted with a `nullptr` is removed from the list of Tasks.
+When a root level task is emitted with a `nullptr`, that root level task is removed from the Director tree and the current list of Tasks to execute.
 
 ```cpp
 emit<Task>(std::unique_ptr<GetUpWhenFallen>(nullptr));
