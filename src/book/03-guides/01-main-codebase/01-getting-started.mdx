@@ -11,7 +11,7 @@ authors:
   - Lachlan Court (@LachlanCourt)
 ---
 
-Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the fake_keyboardwalk binary (which uses simulated hardware) and seeing the robot move in NUsight.
+Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the fake/keyboardwalk binary (which uses simulated hardware) and seeing the robot move in NUsight.
 
 ## Prerequisites
 
@@ -219,7 +219,7 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
    ```bash
    cd NUbots
-   sudo -H pip3 install -r requirements.txt
+   sudo -H pip3 install -r tools/requirements.txt
    ```
 
 ## Building the Code
@@ -250,7 +250,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
    Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   If you are following the `fake_keyboardwalk` example, you will need to make sure `fake_keyboardwalk` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `fake_keyboardwalk`, which should be `ON`. You do not need to change any other build options in this example.
+   If you are following the `fake/keyboardwalk` example, you will need to make sure `fake/keyboardwalk` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `fake/keyboardwalk`, which should be `ON`. You do not need to change any other build options in this example.
 
    Press <kbd>c</kbd> to configure. This will show a confirmation menu, press <kbd>e</kbd> to go back to the main menu. Press <kbd>g</kbd> to generate the build list, and then press <kbd>e</kbd> to exit.
 
@@ -280,14 +280,14 @@ If you are not running the code on a robot, you will need to use a simulated rob
 
 Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
 
-If you are following the example, run `./b run fake_keyboardwalk`. If you are on Windows or MacOS, see the note below.
+If you are following the example, run `./b run fake/keyboardwalk`. If you are on Windows or MacOS, see the note below.
 
 <Alert>
 
 Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
 
 ```bash
-./b run fake_keyboardwalk --network nuclearnet
+./b run fake/keyboardwalk --network nuclearnet
 ```
 
 See the [NUsight](#get-build-and-run-nusight) section below for details.
@@ -343,7 +343,7 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 NUsight is a visual debugging web application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
-You will need this for our example to see the robot walking when we run `fake_keyboardwalk`.
+You will need this for our example to see the robot walking when we run `fake/keyboardwalk`.
 
 Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
 
@@ -434,10 +434,10 @@ Open up a new terminal to run NUsight and NUbots code side by side.
    docker network create nuclearnet
    ```
 
-3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `fake_keyboardwalk` binary, use the command
+3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `fake/keyboardwalk` binary, use the command
 
    ```bash
-   ./b run fake_keyboardwalk --network nuclearnet
+   ./b run fake/keyboardwalk --network nuclearnet
    ```
 
 4. Make the Docker script executable by running
@@ -473,7 +473,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
 ## Example
 
-In this section we will finish off our example of setting up the codebase, running the fake_keyboardwalk binary and seeing the robot walk in NUsight.
+In this section we will finish off our example of setting up the codebase, running the fake/keyboardwalk binary and seeing the robot walk in NUsight.
 
 By now you will have gone through this page and have everything set up to make the robot walk. Ensure you have all the following steps complete
 
@@ -489,10 +489,10 @@ By now you will have gone through this page and have everything set up to make t
 
 - Build and Run NUsight
 
-With the `fake_keyboardwalk` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
+With the `fake/keyboardwalk` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
 
 - Select the 'localisation' tab in NUsight.
 
 - You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
 
-- To make the robot walk, go into the terminal that is running `fake_keyboardwalk` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.
+- To make the robot walk, go into the terminal that is running `fake/keyboardwalk` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.
