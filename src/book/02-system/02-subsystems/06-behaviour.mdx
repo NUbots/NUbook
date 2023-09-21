@@ -38,6 +38,14 @@ Keyboard walk uses **keyboard inputs** to control the robot. The inputs availabl
 | <kbd>↓</kbd> | Head turns downwards.                                                            |
 | <kbd>r</kbd> | Resets keyboardwalk. Head rotation is set to 0. Walk command is set to 0.        |
 | <kbd>q</kbd> | Quits keyboardwalk.                                                              |
+| <kbd>1</kbd> | Performs move Step Clap 1.                                                       |
+| <kbd>2</kbd> | Performs move Step Clap 2.                                                       |
+| <kbd>3</kbd> | Performs move Overhead Thrust Right.                                             |
+| <kbd>4</kbd> | Performs move Overhead Thrust Left.                                              |
+| <kbd>5</kbd> | Performs move Star 1.                                                            |
+| <kbd>6</kbd> | Performs move Star 2.                                                            |
+| <kbd>7</kbd> | Performs move Crouch 1.                                                          |
+| <kbd>8</kbd> | Performs move Crouch 2.                                                          |
 
 To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalk.role) and run the binary.
 
@@ -47,7 +55,7 @@ The [**fake/keyboardwalk** role](https://github.com/NUbots/NUbots/blob/main/role
 
 The [PS3 walk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/PS3Walk) is an interface for **testing** and **demonstrating** the walk and other functionalities using a **PS3 controller**.
 
-The module connects to the PS3 controller using bluetooth (or USB) and reacts based on joystick or button input.
+The module connects to the PS3 controller using USB and reacts based on joystick or button input.
 
 | Command                   | Description                                |
 | ------------------------- | ------------------------------------------ |
@@ -55,11 +63,22 @@ The module connects to the PS3 controller using bluetooth (or USB) and reacts ba
 | Left Joystick Vertical    | Adds x speed to the walk command.          |
 | Right Joystick Horizontal | Changes the head yaw.                      |
 | Right Joystick Vertical   | Changes the head pitch.                    |
-| TRIANGLE                  | Toggles walking on/off.                    |
-| SQUARE                    | Toggles locking of the head.               |
+| START                     | Toggles walking on/off.                    |
+| SELECT                    | Toggles locking of the head.               |
 | R2                        | Right kick.                                |
+| L2                        | Left  kick.                                |
+| DPAD Up                   | Step Clap 1.                               |
+| DPAD Down                 | Step Clap 2.                               |
+| DPAD Left                 | Overhead Thrust Right.                     |
+| DPAD Right                | Overhead Thrust Left.                      |
+| Triangle                  | Star 1.                                    |
+| Circle                    | Star 2.                                    |
+| Cross                     | Crouch 1.                                  |
+| Square                    | Crouch 2.                                  |
 
-To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. When the controller is connected to the robot, it will be paired, and you can remove the cable.
+To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. The lights above the plug on the controller should then start blinking, indicating it is attempting to pair with the robot. When this happens press the PS/home button and the controller will pair with the robot.
+
+The robot will initially not perform any action. If you want the robot to stand, pick up the robot and press the start button. It will then move to its standing position.
 
 ## Script Runner
 
