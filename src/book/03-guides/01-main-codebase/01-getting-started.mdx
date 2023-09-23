@@ -280,19 +280,7 @@ If you are not running the code on a robot, you will need to use a simulated rob
 
 Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
 
-If you are following the example, run `./b run fake/keyboardwalk`. If you are on Windows or MacOS, see the note below.
-
-<Alert>
-
-Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
-
-```bash
-./b run fake/keyboardwalk --network nuclearnet
-```
-
-See the [NUsight](#get-build-and-run-nusight) section below for details.
-
-</Alert>
+If you are following the example, run `./b run fake/keyboardwalk`.
 
 ### Running on a Real Robot
 
@@ -345,56 +333,21 @@ NUsight is a visual debugging web application used at NUbots that visually repre
 
 You will need this for our example to see the robot walking when we run `fake/keyboardwalk`.
 
-Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
-
-```bash
-./b edit config/NetworkForwarder.yaml
-```
-
-This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
-
-Set the messages you would like NUsight to receive to 'true'. For our example, you need `message.input.Sensors` set to true.
-
 Open up a new terminal to run NUsight and NUbots code side by side.
 
-<details>
-
-<summary>Ubuntu/Linux Mint</summary>
-
-1. Install Node.js by running
-
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   ```
-
-2. Install npm by running
-
-   ```bash
-   sudo apt install npm
-   ```
-
-3. Configure the package repository and install yarn by running
-
-   ```bash
-   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-   sudo apt update && sudo apt install yarn
-   ```
-
-4. Get the dependencies for NUsight by running
+1. Get the dependencies for NUsight by running
 
    ```bash
    ./b yarn
    ```
 
-5. Build NUsight by running
+2. Build NUsight by running
 
    ```bash
    ./b yarn build
    ```
 
-6. Find the IP address of the Docker container. Run
+3. Find the IP address of the Docker container. Run
 
    ```bash
    ifconfig
@@ -402,7 +355,11 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
    There will be an entry called `docker0`, or similar. Find the address after the word `broadcast`. We will refer to this address as `<ADDRESS>`.
 
-7. Run the following command to run NUsight
+   <Alert type='info'>
+      Make sure you have run `./b run fake/keyboardwalk` first.
+   </Alert>
+
+4. Run the following command to run NUsight
 
    ```bash
    ./b yarn prod --address <ADDRESS>
@@ -414,62 +371,7 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
    </Alert>
 
-8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
-
-</details>
-
-<details>
-
-<summary> Windows/MacOS </summary>
-
-1. NUsight is within the NUbots repository. Move into the NUsight directory by running
-
-   ```bash
-   cd nusight2
-   ```
-
-2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
-
-   ```bash
-   docker network create nuclearnet
-   ```
-
-3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `fake/keyboardwalk` binary, use the command
-
-   ```bash
-   ./b run fake/keyboardwalk --network nuclearnet
-   ```
-
-4. Make the Docker script executable by running
-
-   ```bash
-   chmod +x ./docker
-   ```
-
-5. Install the NUsight dependencies in the container and build NUsight for prod in the container
-
-   ```bash
-   ./docker yarn
-   ./docker yarn build
-   ```
-
-6. Inspect the network to find the NUbots container's IP address
-
-   ```bash
-   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
-   ```
-
-   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
-
-7. Run NUsight with the NUbots container address
-
-   ```bash
-   ./docker yarn prod --address <ADDRESS>
-   ```
-
-8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
-
-</details>
+5. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
 
 ## Example
 
