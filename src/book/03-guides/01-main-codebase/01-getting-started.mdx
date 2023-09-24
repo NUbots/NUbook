@@ -347,10 +347,18 @@ Open up a new terminal to run NUsight and NUbots code side by side.
    ./b yarn build
    ```
 
-3. Find the IP address of the Docker container. Run
+3. Find the IP address of the Docker container.
+
+   In Linux, run
 
    ```bash
    ifconfig
+   ```
+
+   In Windows WSL, make sure you are running a binary (eg `fake/keyboardwalk`) in your original terminal, and in your second terminal run
+
+   ```bash
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
    ```
 
    There will be an entry called `docker0`, or similar. Find the address after the word `broadcast`. We will refer to this address as `<ADDRESS>`.
