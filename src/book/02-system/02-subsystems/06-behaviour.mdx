@@ -67,18 +67,18 @@ The module connects to the PS3 controller using USB and reacts based on joystick
 | SELECT                    | Toggles locking of the head.               |
 | R2                        | Right kick.                                |
 | L2                        | Left  kick.                                |
-| DPAD Up                   | Step Clap 1.                               |
-| DPAD Down                 | Step Clap 2.                               |
-| DPAD Left                 | Overhead Thrust Right.                     |
-| DPAD Right                | Overhead Thrust Left.                      |
-| Triangle                  | Star 1.                                    |
-| Circle                    | Star 2.                                    |
-| Cross                     | Crouch 1.                                  |
-| Square                    | Crouch 2.                                  |
+| DPAD Up                   | Perform Step Clap 1 move.                  |
+| DPAD Down                 | Perform Step Clap 2 move.                  |
+| DPAD Left                 | Perform Overhead Thrust Right move.        |
+| DPAD Right                | Perform Overhead Thrust Left move.         |
+| Triangle                  | Perform Star 1 move.                       |
+| Circle                    | Perform Star 2 move.                       |
+| Cross                     | Perform Crouch 1 move.                     |
+| Square                    | Perform Crouch 2 move.                     |
 
 To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. The lights above the plug on the controller should then start blinking, indicating it is attempting to pair with the robot. When this happens press the PS/home button and the controller will pair with the robot.
 
-The robot will initially not perform any action. If you want the robot to stand, pick up the robot and press the start button. It will then move to its standing position.
+The robot will initially not perform any action. If you want the robot to stand, pick up the robot and press the start button. It will then move to its standing position and begin looking for walk inputs.
 
 ## Script Runner
 
