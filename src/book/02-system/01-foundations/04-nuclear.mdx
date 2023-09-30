@@ -347,8 +347,6 @@ This tells the PowerPlant to emit something across the network. In this case, we
 
 Looking at line 112 of [`ScriptTuner.cpp`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/module/behaviour/tools/ScriptTuner/src/ScriptTuner.cpp#L112), we can see an example of an `INITIALIZE` scoped emit statement.
 
-You will notice that this lambda accepts no parameters, instead it uses the `getch()` function to read a character from keyboard.
-
 ```cpp
 emit<Scope::INITIALIZE>(std::make_unique<RegisterAction>(RegisterAction{
     id,
