@@ -75,10 +75,12 @@ nuclear_role(
   # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
   motion::KinematicsConfiguration
   support::configuration::GlobalConfig
-  network::NUClearNetwork
-  platform::cm740::HardwareIO
-  platform::cm740::SensorFilter
-  support::NUsight
+  # Networking
+  network::NetworkForwarder
+  network::NUClearNet
+  # Sensors
+  platform::${SUBCONTROLLER}::HardwareIO
+  input::SensorFilter
 )
 ```
 
