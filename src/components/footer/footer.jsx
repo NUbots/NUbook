@@ -10,7 +10,11 @@ import NUbotsIcon from './nubots-icon.svg'
 const Footer = () => (
   <div className='max-w-screen-xl mx-auto px-8'>
     <div className='pt-12 pb-8 border-t border-gray-200 dark:border-gray-900 text-gray-500 dark:text-gray-700 text-center flex flex-col lg:flex-row italic font-medium text-lg'>
-      NUbots acknowledges the traditional custodians of the lands within our footprint areas: Awabakal, Darkinjung, Biripai, Worimi, Wonnarua, and Eora Nations. We acknowledge that our laboratory is situated on unceded Pambalong land. We pay respect to the wisdom of our Elders past and present.
+      NUbots acknowledges the traditional custodians of the lands within our
+      footprint areas: Awabakal, Darkinjung, Biripai, Worimi, Wonnarua, and Eora
+      Nations. We acknowledge that our laboratory is situated on unceded
+      Pambalong land. We pay respect to the wisdom of our Elders past and
+      present.
     </div>
     <div className='pt-12 pb-8 border-t border-gray-200 dark:border-gray-900 text-gray-500 dark:text-gray-700 text-center flex flex-col lg:flex-row lg:text-left'>
       <div className='mb-8 lg:mb-0 lg:w-1/3'>
