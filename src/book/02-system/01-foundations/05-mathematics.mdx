@@ -4,6 +4,10 @@ chapter: Foundations
 title: Mathematics
 description: Detailed explanation of how mathematics is written in the NUbots codebase.
 slug: /system/foundations/mathematics
+authors:
+  - Ysobel Sims (@ysims)
+  - Alex Biddulph (@Bidski)
+  - Cameron Murtagh (@CMurtagh-LGTM)
 ---
 
 The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
@@ -57,10 +61,10 @@ $$
 
 To make computations such as **inner product** (also called **dot product**) or **cross product** with coordinates, the vectors must be relative to the **same basis**.
 
-When drawing a vector $\mathbf{r}_{AB}^b$, that is a vector from $B$ to $A$ in the space $b$, the **tail** is at $B$ and the **head** is at $A$. **Vector addition** requires that the head of one vector is the same as the tail of the other. This is demonstrated [here](http://mathworld.wolfram.com/VectorAddition.html). We have that
+When drawing a vector $\mathbf{r}_{A/B}^b$, that is a vector from $B$ to $A$ in the space $b$, the **tail** is at $B$ and the **head** is at $A$. **Vector addition** requires that the head of one vector is the same as the tail of the other. This is demonstrated [here](http://mathworld.wolfram.com/VectorAddition.html). We have that
 
 $$
-\mathbf{r}^b_{AC} = \mathbf{r}^b_{AB} + \mathbf{r}^b_{BC} = \mathbf{r}^b_{BC} + \mathbf{r}^b_{AB}
+\mathbf{r}^b_{A/C} = \mathbf{r}^b_{A/B} + \mathbf{r}^b_{B/C} = \mathbf{r}^b_{B/C} + \mathbf{r}^b_{A/B}
 $$
 
 since vector addition is **commutative**. This is written in code as
@@ -108,10 +112,10 @@ $$
 
 The first property reduces the **complexity** of the computation to find the inverse matrix. The second property tells us this matrix can be inverted and it **preserves scale** between the two spaces.
 
-If we have a vector $\mathbf{r}_{CD}^a$, that is it goes from point D to point C in a space $a$, and we want to **rotate** it from space $a$ to space $b$, we write
+If we have a vector $\mathbf{r}_{C/D}^a$, that is it goes from point D to point C in a space $a$, and we want to **rotate** it from space $a$ to space $b$, we write
 
 $$
-\mathbf{r}^b_{CD} = \mathbf{R}^b_a \cdot \mathbf{r}^a_{CD}
+\mathbf{r}^b_{C/D} = \mathbf{R}^b_a \cdot \mathbf{r}^a_{C/D}
 $$
 
 This is written in the NUbots codebase as `rCDb = Rba * rCDa`. Note that the notation is $\mathbf{R}_{from}^{to}$.
@@ -120,20 +124,20 @@ This is written in the NUbots codebase as `rCDb = Rba * rCDa`. Note that the not
 
 A homogeneous transformation matrix in three dimensions is a 4x4 matrix containing a **rotation** component and a **translation** component.
 
-If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b_{AB}$, then we have a transformation matrix that transforms from space $a$ to space $b$:
+If we have some rotation $\mathbf{R}_a^b$ and a translation component $\mathbf{r}^b_{A/B}$, then we have a transformation matrix that transforms from space $a$ to space $b$:
 
 $$
 \mathbf{H}_a^b = \begin{bmatrix}
-\mathbf{R}_a^b & \mathbf{r}_{AB}^b \\
+\mathbf{R}_a^b & \mathbf{r}_{A/B}^b \\
 \mathbf{0} & 1
 \end{bmatrix}
 $$
 
 This is written in the NUbots codebase as `Hba`.
 
-The vector $\mathbf{r}_{AB}^b$ is the vector from B (the origin of space b) to A (the origin of space a) in b space, which would be written in the codebase as `rABb`.
+The vector $\mathbf{r}_{A/B}^b$ is the vector from B (the origin of space b) to A (the origin of space a) in b space, which would be written in the codebase as `rABb`.
 
-The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system. The vector is from B to A because a point (0, 0, 0) in space $a$ should be moved to the origin of $a$ in $b$ space after transformation. Thus, the translation vector is $\mathbf{r}_{AB}^b$.
+The reason for this is that if we apply the transform $H^b_a$ to some point $\rho^a$, then $\rho^a$ will first be rotated by $R_a^b$, giving $\rho^b$. $\rho^b$ will then be translated by some vector according to the transformation matrix. Since $\rho^b$ is now rotated in the $b$ coordinate system, the translation vector must also be in this $b$ coordinate system. The vector is from B to A because a point (0, 0, 0) in space $a$ should be moved to the origin of $a$ in $b$ space after transformation. Thus, the translation vector is $\mathbf{r}_{A/B}^b$.
 
 This is illustrated in the following diagram.
 
@@ -145,7 +149,7 @@ Finding the inverse of $H^b_a$ is made simpler by the properties of the matrix.
 
 $$
 (H^b_a)^{-1} = H^a_b = \begin{bmatrix}
-(\mathbf{R}_a^b)^T & (\mathbf{R}_a^b)^T \cdot -\mathbf{r}_{AB}^b \\
+(\mathbf{R}_a^b)^T & (\mathbf{R}_a^b)^T \cdot -\mathbf{r}_{A/B}^b \\
 \mathbf{0} & 1
 \end{bmatrix}
 $$
@@ -153,7 +157,7 @@ $$
 Transformation matrices **left multiply** with vectors to get a vector in the new space. This vector is **rotated and then translated**.
 
 $$
-\mathbf{r}^b_{CB} = \mathbf{H}^b_a \cdot \mathbf{r}^a_{CA}
+\mathbf{r}^b_{CB} = \mathbf{H}^b_a \cdot \mathbf{r}^a_{C/A}
 $$
 
 This is written in the codebase as `rCBb = Hba * rCAa`.
@@ -161,7 +165,7 @@ This is written in the codebase as `rCBb = Hba * rCAa`.
 This is equivalent to
 
 $$
-r_{CB}^b = r_{AB}^b + (R^b_a * r_{CA}^a)
+r_{CB}^b = r_{A/B}^b + (R^b_a * r_{C/A}^a)
 $$
 
 or in code,
@@ -194,31 +198,61 @@ $$
 This is written in the codebase as
 
 ```cpp
-Eigen::Affine3d Hca = Hcb * Hba;
+Eigen::Isometry3d Hca = Hcb * Hba;
 ```
 
-### Velocity
+### Unit Vectors
 
-The velocity of some object is represented relative to some space. If we have the **velocity** of object A moving **relative** to space b, then we write this in the codebase as `vAb`.
+A **unit vector** is a vector with a **length** of **1**. They are used to represent **directions** in space.
 
-Velocities can only be **rotated**, **not translated**. They should **not** be multiplied by a homogeneous transformation matrix, but they can be multiplied by a **rotation matrix**.
+They are written by describing their origin, the direction they are pointing and the space they are in.
 
-If a velocity is multiplied with **time**, it becomes a **vector**.
+$\mathbf{u}^b_{A/B}$ is a unit vector at B pointing towards A measured in space b.
+
+The **direction** of a vector can be found by **normalising** it. This is done by dividing the vector by its **length**.
+
+```cpp
+Eigen::Vector3d uABb = rABb.normalized();
+```
+
+Unit vectors can be rotated by rotation matrices but not translated. They should not be multiplied by a homogeneous transformation matrix.
+
+### Velocity and Acceleration
+
+The velocity and acceleration of some object is represented relative to some space.
+
+If we have the **velocity** of object A moving **relative** to space b $\mathbf{v}^b_{A}$, then we write this in the codebase as `vAb`.
+
+If we have the **acceleration** of object A moving **relative** to space b $\mathbf{a}^b_{A}$, then we write this in the codebase as `aAb`.
+
+Velocities and accelerations can only be **rotated**, **not translated**. They should **not** be multiplied by a homogeneous transformation matrix, but they can be multiplied by a **rotation matrix**.
+
+If a velocity is multiplied with **time**, it becomes a **displacement vector**.
 
 ```cpp
 Eigen::Vector3d rA_tAb = vAb * t;
 ```
 
-### Examples
-
-Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Affine3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Affine3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
-
-It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Affine3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Affine3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Affine3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
-
-When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Affine3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
+If an acceleration is multiplied with **time**, it becomes a **velocity vector**.
 
 ```cpp
-Eigen::Affine3d Htw(sensors.Htw);
+Eigen::Vector3d vA_tAb = aAb * t;
+```
+
+If you only have a partial velocity or acceleration, such as velocity in the direction of an object you can represent this by labelling the target the velocity is towards.
+
+For example $\mathbf{v}^b_{A/B}$ would describe the velocity of B towards the point A.
+
+### Examples
+
+Using **Eigen**, we define our **vectors** as `Eigen::Vector3d`, **rotation matrices** as `Eigen::Matrix3d`, and **homogeneous transformation matrices** as `Eigen::Isometry3d`. The `d` denotes `double` and instead can be `f` for `float`. `Eigen::Isometry3d` allows us to do computations **easier** than with `Eigen::Matrix4d`.
+
+It allows **multiplication** with a `Eigen::Vector3d` even though the dimensions do not match. Using `Eigen::Isometry3d` makes it quicker to find the **inverse**, as it employs the techniques mentioned above. `Eigen::Isometry3d` has functions to **individually return** the **rotational component** of the matrix and the **translation component** of the matrix, by using `Htw.rotation()` and `Htw.translation()` respectively, where `Htw` is of type `Eigen::Isometry3d`. It also makes it easy to individually **assign** the **rotational** and the **translational** components of the matrix by using `Htw.linear() = Rtw` and `Htw.translation() = rWTt` respectively.
+
+When we get a message that is a homogeneous matrix it will be of type `mat4`. This can then be cast to `Eigen::Isometry3d`. Let the matrix be called `Htw` (**world** to **torso** transform) and the message be called `sensors` (see: [Sensors.proto](https://github.com/NUbots/NUbots/blob/105b78ad6655801f5f74d029cbd169ba8e8cb5e8/shared/message/input/Sensors.proto#L68)). Then this is written as
+
+```cpp
+Eigen::Isometry3d Htw(sensors.Htw);
 ```
 
 If you have a transformation matrix `Htw` (**world** to **torso** transform) and you want the matrix `Hwt` (**torso** to **world** transform), this is can be achieved by calling `Htw.inverse()`. The inverse function **swaps** the letter order. The returned inverse matrix is not **mutable**.
@@ -234,7 +268,7 @@ Negating does not change the space the vector is measured in.
 If you have two transformation matrices and you would like to multiply them to get a new transformation matrix, the **inner two letters** should be **identical**, i.e. the same space.
 
 ```cpp
-Eigen::Affine3d Htf = Htw * Hwf;
+Eigen::Isometry3d Htf = Htw * Hwf;
 ```
 
 This gives the **foot** to **torso** transform by **multiplying** the **world** to **torso** transform with the **foot** to **world** transform.
@@ -262,7 +296,11 @@ For measurements on the field we use field space. For field coordinates the **x-
 | `Hab`                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
 | `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
 | `rABb`                | Denotes a vector from point $B$ to point $A$ in space $b$.                   |
+| 'uABb`                | Denotes a unit vector from point $B$ towards point $A$ in space $b$.         |
 | `vAb`                 | The velocity of $A$ in space $b$.                                            |
+| `vABb`                | The velocity of $B$ towards $A$ in space $b$.                                |
+| `aAb`                 | The acceleration of $A$ in space $b$.                                        |
+| `aABb`                | The acceleration of $B$ towards $A$ in space $b$.                            |
 | `rXZa = rXYa + rYZa`  | Create a new vector from two other vectors.                                  |
 | `rACc = Hcb * rABb`   | Changing a vector from one space to another using a homogeneous transform.   |
 | `rABd = Rdc * rABc`   | Changing a vector from one space to another using a rotation transform       |
@@ -302,7 +340,7 @@ y = r\textrm{sin}\left(\theta\right)\textrm{sin}\left(\varphi\right) \\
 z = r\textrm{cos}\left(\varphi\right) \\
 $$
 
-A vector representing a point in the spherical coordinates would be written as $s_{AB}^b$, which would be `sABb` in the codebase.
+A vector representing a point in the spherical coordinates would be written as $s_{A/B}^b$, which would be `sABb` in the codebase.
 
 In order to ensure a unique representation of coordinates, the following restrictions are enforced on spherical coordinates:
 
@@ -318,7 +356,7 @@ A common variation on spherical coordinates in our codebase is to use reciprocal
 
 This is used in the vision detectors and localisation when representing the distance from the camera to an object. Using reciprocal distance also means our covariance (our uncertainty in our measurement) scales better with distance. The further away an object is the less certain we are about out measurement of it.
 
-If $s_{AB}^b$ is the vector in spherical coordinates, then $sr_{AB}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
+If $s_{A/B}^b$ is the vector in spherical coordinates, then $sr_{A/B}^b$ is the same vector in spherical coordinates, but with reciprocal radial distance.
 
 ## Interpolation
 
