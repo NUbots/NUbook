@@ -287,7 +287,7 @@ When measured relative to the robot the **x-axis** is **forward** out of the tor
 
 World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
 
-Robot space is defined with the **x-axis** pointing **forward** out of the torso, the **y-axis** is to the **left** and the **z-axis** is **up** the neck. The origin of this space is the base of the torso between the legs projected to the ground.
+Robot space is defined with the **z-axis** pointing **up** inline with world, the **x-axis** pointing **forward** out of the torso, and **y-axis** to the left. The origin of this space is below the torso, on the ground. It is created from the X-Y position and yaw angle from odometry.
 
 For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
 
