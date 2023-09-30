@@ -205,7 +205,7 @@ Eigen::Affine3d Hca = Hcb * Hba;
 
 A **unit vector** is a vector with a **length** of **1**. They are used to represent **directions** in space.
 
-They are written by describing their origin the direction they are pointing and the space they are in.
+They are written by describing their origin, the direction they are pointing and the space they are in.
 
 $\mathbf{u}^b_{A/B}$ is a unit vector at B pointing towards A measured in space b.
 
@@ -216,7 +216,6 @@ Eigen::Vector3d uABb = rABb.normalized();
 ```
 
 Unit vectors can be rotated by rotation matrices but not translated. They should not be multiplied by a homogeneous transformation matrix.
-
 
 ### Velocity and Acceleration
 
@@ -243,7 +242,6 @@ Eigen::Vector3d vA_tAb = aAb * t;
 If you only have a partial velocity or acceleration, such as velocity in the direction of an object you can represent this by labelling the target the velocity is towards.
 
 For example $\mathbf{v}^b_{A/B}$ would describe the velocity of B towards the point A.
-
 
 ### Examples
 
