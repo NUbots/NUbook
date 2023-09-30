@@ -131,10 +131,10 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 
 ##### Build
 
-As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test_sensor`) then use the command
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test/sensor`) then use the command
 
 ```bash
-./b build test_sensor
+./b build test/sensor
 ```
 
 If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
@@ -164,6 +164,20 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and the
 </Alert>
 
 Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
+
+You can also set and unset roles by passing `--set_roles` or `--unset_roles` followed the roles you want to toggle (this supports globbing patterns). For example, you can disable all roles ending in `walk`, then enable keyboardwalk and all roles starting with `script` using the following command.
+
+```bash
+  ./b configure --unset_all_roles "*walk" --set_roles keyboardwalk "script*"
+```
+
+Roles selected with `--unset` flags will always be disabled before roles selected with `--set` flags are enabled.
+
+You can also toggle groups of roles with `--set_<group>_roles` and `--unset_<group>_roles`. Currently there is a role group for each subdirectory in `roles` and a group containing all roles. For example, you can clean all docker build volumes and enable only roles in the `roles/webots` directory using the following command.
+
+```bash
+  ./b configure --clean --unset_all_roles --set_webots_roles
+```
 
 ##### Edit
 
@@ -239,6 +253,8 @@ The `module` command allows you to generate a new module. To generate a new line
 
 This will generate all necessary module files in the `module/vision/LineDetector` folder. This includes an empty configuration file, a basic C++ source and header file implementing the `LineDetector` reactor, and an empty unit test file.
 
+Add the `--director` flag at the end of the command to generate a module that will use Director functionality.
+
 ##### NBS
 
 NBS (NUClear Binary Stream) files are, effectively, concatenations of protobuf messages with a small header packet per message. They provide a simple and effective means for recording real data from the robots in real time.
@@ -285,10 +301,10 @@ Be sure to set `USE_ASAN` to `OFF` and `CMAKE_BUILD_TYPE` to `MinSizeRel` once y
 
 </Alert>
 
-When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
+When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `fake/keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
 ```bash
-ASAN_OPTIONS=option1=value1:option2=value ./b run keyboardwalk
+ASAN_OPTIONS=option1=value1:option2=value ./b run fake/keyboardwalk
 ```
 
 <Alert type="info">
