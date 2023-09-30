@@ -7,6 +7,6 @@ PR description here.
 
 ### Preview
 
-https://deploy-preview-[PR number]--nubook.netlify.com/
+[https://deploy-preview-[PR number]--nubook.netlify.com/](https://deploy-preview-[PR number]--nubook.netlify.com/)
 
 Note: Update PR_number to the number on this PR and complete the link to the page you have updated/added. 
