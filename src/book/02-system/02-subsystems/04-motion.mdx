@@ -10,11 +10,25 @@ authors:
 
 This page details motion modules within the NUbots main codebase, such as the walk engine and the script engine. Information about modules for running and tuning scripts can be found on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
+## Actuation
+
+Actuation is the process of moving the robot's joints. The robot has 20 joints, each with a servo motor. The actuation layer is implemented within the Director system. A Provider for each servo and each limb exists so that only one higher level Provider can take control of a particular servo or limb at a time. If the walk has control of the leg, the kick cannot also take control of the leg. If the kick has a higher priority than the walk, the walk will lose control of the leg and the kick will take control.
+
+```dot
+# Actuation layer
+digraph actuation {
+  rankdir=LR
+  "Left Leg IK" -> "Left Leg" -> {"Left Hip Yaw", "Left Hip Roll", "Left Hip Pitch", "Left Knee", "Left Ankle Pitch", "Left Ankle Roll"}
+  "Right Leg IK" -> "Right Leg" -> {"Right Hip Yaw", "Right Hip Roll", "Right Hip Pitch", "Right Knee", "Right Ankle Pitch", "Right Ankle Roll"}
+  "Head IK" -> "Head" -> {"Head Yaw", "Head Pitch"}
+}
+```
+
 ## Walk Engine
 
 NUbots use an **open loop walk** based on **quintic splines**. This walk engine takes care of the mathematics and control involved in taking steps without falling over. The walk engine does not plan where to walk, only how to walk.
 
-The walk engine will trigger when a [**Walk message**](https://github.com/NUbots/NUbots/blob/main/shared/message/motion/WalkCommand.proto) is [**emitted**](/system/foundations/nuclear#emit-statements) in the [Director system](/system/foundations/director). The walk command gives a vector `[x, y, z]` which represents:
+The walk engine will trigger when a [**Walk message**](https://github.com/NUbots/NUbots/blob/main/shared/message/skill/Walk.proto) is [**emitted**](/system/foundations/nuclear#emit-statements) in the [Director system](/system/foundations/director). The walk command gives a vector `[x, y, z]` which represents:
 
 | Variable | Description                                                                                |
 | -------- | ------------------------------------------------------------------------------------------ |
