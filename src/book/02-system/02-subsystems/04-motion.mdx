@@ -95,9 +95,13 @@ digraph walk {
 }
 ```
 
+## Kick Engine
+
+The kick engine is based off the improved quintic spline walk engine. Splines are created for the torso and kicking foot movements based on configuration values. It is open loop and has similarities to a scripted kick, with a simplified tuning process and spline interpolation rather than linear interpolation.
+
 ## Scripts
 
-Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do more complex movements like getting up or kicking.
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do short movements that may be hard to dynamically implement, such as getting up.
 
 To learn how to tune scripts, see the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
