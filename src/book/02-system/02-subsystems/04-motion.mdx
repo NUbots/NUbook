@@ -15,7 +15,7 @@ This page details motion modules within the NUbots main codebase, such as the wa
 Actuation is the process of moving the robot's joints. The robot has 20 joints, each with a servo motor. The actuation layer is implemented within the Director system. A Provider for each servo and each limb exists so that only one higher level Provider can take control of a particular servo or limb at a time. If the walk has control of the leg, the kick cannot also take control of the leg. If the kick has a higher priority than the walk, the walk will lose control of the leg and the kick will take control.
 
 ```dot
-# Actuation layer
+# Actuation layer. The first level are the Inverse Kinematics Providers, the second level are the Group/Limb Providers, and the third level are the Servo Providers.
 digraph actuation {
   rankdir=LR
   "Left Leg IK" -> "Left Leg" -> {"Left Hip Yaw", "Left Hip Roll", "Left Hip Pitch", "Left Knee", "Left Ankle Pitch", "Left Ankle Roll"}
@@ -23,6 +23,10 @@ digraph actuation {
   "Head IK" -> "Head" -> {"Head Yaw", "Head Pitch"}
 }
 ```
+
+The Groups level also includes the Body, Limbs, Legs and Arms Groups. These are more commonly used in the system in the context of Sequences with Scripts.
+
+Sequences contain a list of Group commands that are to be executed sequentially. Once a Director `Done` is received from every servo in the group, then the frame is completed and the next set of commands in the sequence are requested. This concept is the driving force behind the script system.
 
 ## Walk Engine
 
