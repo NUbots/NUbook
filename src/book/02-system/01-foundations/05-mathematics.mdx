@@ -281,11 +281,13 @@ If you have two **vectors** in the **same space** and their **inner** (or **oute
 Eigen::Vector3d rXZa = rXYa + rYZa;
 ```
 
-In general, `t` is reserved for the **torso**, `w` for the **world**, `f` for the **foot** (which one is determined by context, but is usually the **support foot**), and `b` for **ball**.
+In general, `t` is reserved for the **torso**, `w` for the **world**, `r` for the **robot**, and `b` for **ball**. `f` could be **field** or **foot**, and should be determined from context.
 
 When measured relative to the robot the **x-axis** is **forward** out of the torso, the **y-axis** is to the **left** and the **z-axis** is **up** the neck. This is robot space, also called torso space. The origin of this space is the base of the torso between the legs.
 
 World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
+
+Robot space is defined with the **z-axis** pointing **up** inline with world, the **x-axis** pointing **forward** out of the torso, and **y-axis** to the left. The origin of this space is below the torso, on the ground. It is created from the X-Y position and yaw angle from odometry.
 
 For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
 
@@ -296,7 +298,7 @@ For measurements on the field we use field space. For field coordinates the **x-
 | `Hab`                 | Denotes a 3D affine transformation matrix going from space $b$ to space $a$. |
 | `Rab`                 | Denotes a 3D rotation matrix from space $b$ to space $a$.                    |
 | `rABb`                | Denotes a vector from point $B$ to point $A$ in space $b$.                   |
-| 'uABb`                | Denotes a unit vector from point $B$ towards point $A$ in space $b$.         |
+| `uABb`                | Denotes a unit vector from point $B$ towards point $A$ in space $b$.         |
 | `vAb`                 | The velocity of $A$ in space $b$.                                            |
 | `vABb`                | The velocity of $B$ towards $A$ in space $b$.                                |
 | `aAb`                 | The acceleration of $A$ in space $b$.                                        |
