@@ -278,7 +278,7 @@ If you are not running the code on a robot, you will need to use a simulated rob
 ./b run test
 ```
 
-Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
+Roles run this way generally contain `platform::HardwareSimulator`, a module that simulates robot hardware input and output, or `platform::Webots`, a module that communicates with the simulated robot in Webots.
 
 If you are following the example, run `./b run fake/keyboardwalk`.
 
