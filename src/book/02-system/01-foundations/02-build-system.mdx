@@ -76,11 +76,11 @@ nuclear_role(
   actuation::KinematicsConfiguration
   support::configuration::GlobalConfig
   # Networking
-  network::NUClearNetwork
   network::NetworkForwarder
+  network::NUClearNet
   # Sensors
-  platform::darwin::HardwareIO
-  platform::darwin::SensorFilter
+  platform::${SUBCONTROLLER}::HardwareIO
+  input::SensorFilter
 )
 ```
 
