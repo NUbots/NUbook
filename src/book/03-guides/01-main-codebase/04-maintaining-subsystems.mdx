@@ -85,17 +85,17 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 
    Turn `vision object` and `compressed images` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight NUbook page](/system/tools/nusight).
 
-4. Run the `visualmesh` role
+4. Run the `test/visualmesh` role
 
    ```bash
-   ./visualmesh
+   ./test/visualmesh
    ```
 
 5. Wait for the cameras to load and then watch the Vision tab in NUsight. To determine if the output is correct, consult the [vision page](/system/subsystems/vision) for images of the expected output.
 
 If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
 
-- In step 1 of Recording Data, use the [`visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/visualmesh.role) role to record the data.
+- In step 1 of Recording Data, use the [`test/visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/test/visualmesh.role) role to record the data.
 - In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
 - In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/playback.role) role to playback the data, without changes.
 
@@ -105,7 +105,7 @@ Potentially, the Visual Mesh had positive results after training, but when used 
 
 [BallDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/data/config/BallDetector.yaml) and [GoalDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/data/config/GoalDetector.yaml) contain the values for tuning the ball and goal detectors respectively.
 
-1. Build and install the `visualmesh` role to a robot.
+1. Build and install the `test/visualmesh` role to a robot.
 2. SSH onto the robot.
 3. Enable NUsight messages on the robot by running
 
@@ -116,14 +116,14 @@ Potentially, the Visual Mesh had positive results after training, but when used 
    and set `message.vision.Balls` and `message.vision.Goals` to `true`.
 
 4. Run NUsight using `yarn prod` on a computer. Set up NUsight using the [Getting Started page](/guides/main/getting-started) if necessary.
-5. Run `./visualmesh` on the robot.
+5. Run `./test/visualmesh` on the robot.
 6. Alter the configuration file for the detectors while simultaneously running the binary on the robot. In a new terminal, SSH onto the robot again and run:
 
    ```bash
    nano config/BallDetector.yaml
    ```
 
-   Change the values and upon saving, the changes will be used immediately by the robot **without** needing to rebuild or rerun the `./visualmesh` binary.
+   Change the values and upon saving, the changes will be used immediately by the robot **without** needing to rebuild or rerun the `./test/visualmesh` binary.
 
 7. Repeat #6 for the goal detector by running
 
