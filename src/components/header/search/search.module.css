@@ -1,15 +1,26 @@
-.searchInput {
-  .DocSearch .DocSearch-Button {
-    /* backdrop-filter: blur(4px); */
-    background: '#f00';
-    /* @apply h-10 w-full pl-10 md:pl-14 pr-3 md:pr-4 rounded appearance-none text-lg outline-none; */
-    
+.search {
+  
+   > :global.DocSearch-Button {
+    backdrop-filter: blur(4px);
+    @apply h-10 w-full  pr-3 md:pr-4 rounded appearance-none text-lg outline-none;
+
+
+    > :global.DocSearch-Button-Keys {
+      display: none;
+    }
   }
 
-  .DocSearch-Button-Keys {
-    display: 'none';
+  :global(.dark) {
+    > :global.DocSearch-Button {
+      background-color: rgba(255, 255, 255, 0.15);
+      cursor: text;
+    }
   }
+
+  
 }
+
+
 
 /* absolute top-0 left-0 w-5 md:w-6 h-6 ml-3 md:ml-4 mt-2 pointer-events-none */
 
@@ -29,7 +40,9 @@
   }
 }
 
-:global(.light) {
+*/
+
+/* :global(.light) {
   .search:focus-within {
     .searchIcon {
       @apply text-icon;
@@ -108,10 +121,14 @@
       @apply text-icon-inverted;
     }
   }
-}
+} */
 
-:global(.dark) {
-  .backgroundTransparent,
+
+
+
+
+
+  /* .backgroundTransparent,
   .backgroundSolid {
     &:hover {
       .searchInput {
@@ -154,5 +171,5 @@
     .searchInput {
       background-color: rgba(255, 255, 255, 0.1);
     }
-  }
-} */
+  } */
+
