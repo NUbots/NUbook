@@ -98,6 +98,10 @@
 }
 
 :global(.light) {
+  --docsearch-highlight-color: #CC880D;
+  --docsearch-hit-active-color: rgba(50,50,50,.87);
+
+
   .search {
       > :global.DocSearch-Button {
         background-color: rgba(255, 255, 255, 0.15);
