@@ -1,8 +1,9 @@
 .search {
-   > :global.DocSearch-Button {
+  > :global.DocSearch-Button {
     backdrop-filter: blur(4px);
     font-weight: inherit;
-    transition: all .2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+
     @apply h-10 w-full pr-3 md:pr-4 rounded appearance-none outline-none;
 
     > :global.DocSearch-Button-Container {
@@ -15,11 +16,12 @@
 
     > :global.DocSearch-Button-Keys {
       display: none;
-    }  
-    
-    &:hover  {
+    }
+
+    &:hover {
       box-shadow: none;
     }
+
     &:focus {
       box-shadow: none;
     }
@@ -28,256 +30,97 @@
 
 *:global.DocSearch-Modal {
   box-shadow: none;
-  >:global.DocSearch-SearchBar {
-    >:global.DocSearch-Form {
+
+  > :global.DocSearch-SearchBar {
+    > :global.DocSearch-Form {
       box-shadow: none;
     }
   }
 
-  >:global.DocSearch-Footer {
+  > :global.DocSearch-Footer {
     box-shadow: none;
-    >:global.DocSearch-Commands {
+
+    > :global.DocSearch-Commands {
       display: none;
     }
   }
 }
 
 :global(.dark) {
-    .search {
-      > :global.DocSearch-Button {
-        background-color: rgba(255, 255, 255, 0.15);
-        color: hsla(0,0%,100%,.45);
+  --docsearch-modal-background: gray-700;
+  --docsearch-footer-background: gray-700;
+  --docsearch-hit-background: gray-800;
+  --docsearch-hit-color: text-primary-inverted;
+  --docsearch-hit-active-color: rgba(50, 50, 50, 0.87);
+  --docsearch-highlight-color: #cc880d;
+  --docsearch-hit-shadow: 0 1px 3px 0 hsla(0, 0%, 100%, 0.45);
+  --docsearch-text-color: text-primary-inverted;
 
-        > :global.DocSearch-Button-Container {
-          > :global.DocSearch-Search-Icon {
-            color: hsla(0,0%,100%,.45);
-          }
+  .search {
+    > :global.DocSearch-Button {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: hsla(0, 0%, 100%, 0.45);
+
+      > :global.DocSearch-Button-Container {
+        > :global.DocSearch-Search-Icon {
+          color: hsla(0, 0%, 100%, 0.45);
         }
-
-        &:hover  {
-          box-shadow: none;
-          background-color: rgba(66,66,66,1);
-        }        
       }
+
+      &:hover {
+        box-shadow: none;
+        background-color: rgba(66, 66, 66, 1);
+      }
+    }
   }
 
   *:global.DocSearch-Modal {
-    --docsearch-modal-background: gray-700;
-    --docsearch-footer-background: gray-700;
-    --docsearch-hit-background: gray-800;
-    --docsearch-hit-color: text-primary-inverted;
-    --docsearch-hit-active-color: rgba(50,50,50,.87);
-    --docsearch-highlight-color: #CC880D;
-    --docsearch-hit-shadow: 0 1px 3px 0 hsla(0,0%,100%,.45);
-    --docsearch-text-color: text-primary-inverted;
-
     @apply bg-gray-800;
-    
-    >:global.DocSearch-SearchBar {
-      >:global.DocSearch-Form {
-         @apply bg-gray-700 ; 
-    
+
+    > :global.DocSearch-SearchBar {
+      > :global.DocSearch-Form {
+        @apply bg-gray-700;
       }
-    } 
-    >:global.DocSearch-Dropdown {
-      >:global.DocSearch-Dropdown-Container {
-        >:global.DocSearch-Hits {
-          >:global.DocSearch-Hit-source {
-            @apply bg-gray-800
+    }
+
+    > :global.DocSearch-Dropdown {
+      > :global.DocSearch-Dropdown-Container {
+        > :global.DocSearch-Hits {
+          > :global.DocSearch-Hit-source {
+            @apply bg-gray-800;
           }
         }
       }
     }
-     
-    /* >:global.DocSearch-Footer {
-      @apply bg-gray-800
-    }  */
   }
-
-
 }
 
 :global(.light) {
-  --docsearch-highlight-color: #CC880D;
-  --docsearch-hit-active-color: rgba(50,50,50,.87);
-
+  --docsearch-highlight-color: #cc880d;
+  --docsearch-hit-active-color: rgba(50, 50, 50, 0.87);
 
   .search {
-      > :global.DocSearch-Button {
-        background-color: rgba(255, 255, 255, 0.15);
-        color: hsla(0,0%,100%,.45);
-        
+    > :global.DocSearch-Button {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: hsla(0, 0%, 100%, 0.45);
+
+      > :global.DocSearch-Button-Container {
+        > :global.DocSearch-Search-Icon {
+          color: hsla(0, 0%, 100%, 0.45);
+        }
+      }
+
+      &:hover {
+        box-shadow: none;
+        background-color: rgba(255, 255, 255, 1);
+        color: rgba(50, 50, 50, 0.87);
+
         > :global.DocSearch-Button-Container {
           > :global.DocSearch-Search-Icon {
-            color: hsla(0,0%,100%,.45);
-          }
-        }
-
-        &:hover  {
-          box-shadow: none;
-          background-color: rgba(255,255,255,1);
-          color: rgba(50,50,50,.87);
-
-          > :global.DocSearch-Button-Container {
-            > :global.DocSearch-Search-Icon {
-              color: rgba(50,50,50,.87);
-            }
+            color: rgba(50, 50, 50, 0.87);
           }
         }
       }
+    }
   }
 }
-
-
-
-/* absolute top-0 left-0 w-5 md:w-6 h-6 ml-3 md:ml-4 mt-2 pointer-events-none */
-
-/* .search {
-  position: relative;
-}
-
-.searchIcon,
-.searchInput,
-.searchInput::placeholder {
-  transition: all 0.2s ease-in-out;
-}
-
-.backgroundTransparent {
-  .searchInput {
-    backdrop-filter: blur(4px);
-  }
-}
-
-*/
-
-/* :global(.light) {
-  .search:focus-within {
-    .searchIcon {
-      @apply text-icon;
-    }
-  }
-
-  .backgroundSolid {
-    &:hover {
-      .searchInput {
-        @apply bg-white text-primary;
-
-        &::placeholder {
-          @apply text-secondary;
-        }
-      }
-
-      .searchIcon {
-        @apply text-icon;
-      }
-    }
-
-    .searchInput {
-      @apply bg-gray-800 text-white;
-
-      &::placeholder {
-        @apply text-secondary-inverted;
-      }
-
-      &:focus {
-        @apply bg-white text-primary;
-
-        &::placeholder {
-          @apply text-secondary;
-        }
-      }
-    }
-
-    .searchIcon {
-      @apply text-icon-inverted;
-    }
-  }
-
-  .backgroundTransparent {
-    &:hover {
-      .searchInput {
-        @apply bg-white text-primary;
-
-        &::placeholder {
-          @apply text-secondary;
-        }
-      }
-
-      .searchIcon {
-        @apply text-icon;
-      }
-    }
-
-    .searchInput {
-      @apply text-white;
-      background-color: rgba(255, 255, 255, 0.15);
-
-      &::placeholder {
-        @apply text-secondary-inverted;
-      }
-
-      &:focus {
-        @apply bg-white text-primary;
-
-        &::placeholder {
-          @apply text-secondary;
-        }
-      }
-    }
-
-    .searchIcon {
-      @apply text-icon-inverted;
-    }
-  }
-} */
-
-
-
-
-
-
-  /* .backgroundTransparent,
-  .backgroundSolid {
-    &:hover {
-      .searchInput {
-        @apply bg-gray-800 text-primary-inverted;
-
-        &::placeholder {
-          @apply text-secondary-inverted;
-        }
-      }
-    }
-
-    .searchInput {
-      @apply text-primary-inverted;
-
-      &::placeholder {
-        @apply text-secondary-inverted;
-      }
-
-      &:focus {
-        @apply bg-gray-800 text-primary-inverted;
-
-        &::placeholder {
-          @apply text-secondary-inverted;
-        }
-      }
-    }
-
-    .searchIcon {
-      @apply text-icon-inverted;
-    }
-  }
-
-  .backgroundTransparent {
-    .searchInput {
-      background-color: rgba(255, 255, 255, 0.15);
-    }
-  }
-
-  .backgroundSolid {
-    .searchInput {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  } */
-
