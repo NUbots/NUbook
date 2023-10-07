@@ -1912,12 +1912,12 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
-"@josephuspaye/gatsby-remark-graphviz@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.3.0.tgz#0677aa01ee83b03793d44484de0d3c5fb2aab1d2"
-  integrity sha512-2xyRsc9SH6k2GYG02rg46nynoFjFw/dBusJY0wcpH46jejFvSrquXMf/7JKFA7AFu8ybUiqn78VBKPTqKDTEkA==
+"@josephuspaye/gatsby-remark-graphviz@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@josephuspaye/gatsby-remark-graphviz/-/gatsby-remark-graphviz-0.3.1.tgz#636e4a7ea5f63437bab246dff455f6336fcec9bd"
+  integrity sha512-5B6ahCxYkTJRXr3qNGJtXNXqMB4pxXKttGuJzy5yGNF9aUrxMnfDxFTqpaQWa46sL5rIdGTOf77djIms0usi5g==
   dependencies:
-    node-graphviz "^0.1.0"
+    node-graphviz "^0.1.1"
     svgo "^1.3.2"
     unist-util-visit "^2.0.3"
 
@@ -4644,7 +4644,7 @@ deep-is@^0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.4.tgz#a6f2dce612fadd2ef1f519b73551f17e85199831"
   integrity sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
 
-deepmerge@^4.0.0, deepmerge@^4.2.2:
+deepmerge@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
@@ -9622,10 +9622,10 @@ node-fetch@^2.5.0, node-fetch@^2.6.1:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-graphviz@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/node-graphviz/-/node-graphviz-0.1.0.tgz#540093aa91ce9b0de13fd6c99ae4d369d9fa28e5"
-  integrity sha512-RhRb+HXYp8ZVVlsxW1/I61taWuQSS6x3o9GanZOdiMyP4TFaBHwfcn221/dZtmI4wdBgu/q7/Zt4jMgi3XQiGA==
+node-graphviz@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/node-graphviz/-/node-graphviz-0.1.1.tgz#3360c8710dbe42b744997419a635d224ad5861a6"
+  integrity sha512-riY8/pFGSD1ipmyzqCwuN2M6W02ELfuLDjhJvTrQCUS/15tyU8ExkC96mlQrNLBK8Ws0z8PdH+ChBT6DuPFWWA==
 
 node-object-hash@^2.3.9:
   version "2.3.10"
@@ -10799,12 +10799,12 @@ prismjs@^1.24.1:
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.28.0.tgz#0d8f561fa0f7cf6ebca901747828b149147044b6"
   integrity sha512-8aaXdYvl1F7iC7Xm1spqSaY/OJBpYW3v+KJ+F17iYxvdc8sfjW194COK5wVhMZX45tGteiBQgdvD/nhxcRwylw==
 
-probe-image-size@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/probe-image-size/-/probe-image-size-6.0.0.tgz#4a85b19d5af4e29a8de7d53a9aa036f6fd02f5f4"
-  integrity sha512-99PZ5+RU4gqiTfK5ZDMDkZtn6eL4WlKfFyVJV7lFQvH3iGmQ85DqMTOdxorERO26LHkevR2qsxnHp0x/2UDJPA==
+probe-image-size@^6.0.0, probe-image-size@^7.0.0:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/probe-image-size/-/probe-image-size-7.2.3.tgz#d49c64be540ec8edea538f6f585f65a9b3ab4309"
+  integrity sha512-HubhG4Rb2UH8YtV4ba0Vp5bQ7L78RTONYu/ujmCu5nBI8wGv24s4E9xSKBi0N1MowRpxk76pFCpJtW0KPzOK0w==
   dependencies:
-    deepmerge "^4.0.0"
+    lodash.merge "^4.6.2"
     needle "^2.5.2"
     stream-parser "~0.3.1"
 
