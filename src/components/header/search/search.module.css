@@ -2,22 +2,52 @@
   
    > :global.DocSearch-Button {
     backdrop-filter: blur(4px);
-    @apply h-10 w-full  pr-3 md:pr-4 rounded appearance-none text-lg outline-none;
+    font-weight: inherit;
+    transition: all .2s ease-in-out;
+    @apply h-10 w-full pr-3 md:pr-4 rounded appearance-none outline-none;
+    
+    &:hover  {
+      box-shadow: none;
+    }
+    &:focus {
+      box-shadow: none;
+    }
+   
+    > :global.DocSearch-Button-Container {
+      @apply gap-4;
 
+      > :global.DocSearch-Button-Placeholder {
+        @apply text-lg;
+      }
+    }
 
     > :global.DocSearch-Button-Keys {
       display: none;
-    }
+    }    
   }
 
-  :global(.dark) {
-    > :global.DocSearch-Button {
-      background-color: rgba(255, 255, 255, 0.15);
-      cursor: text;
-    }
-  }
+ 
 
   
+}
+
+:global(.dark) {
+   .search {
+    > :global.DocSearch-Button {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: hsla(0,0%,100%,.45);
+      &:hover  {
+        box-shadow: none;
+        background-color: rgba(66,66,66,1);
+      }
+
+      > :global.DocSearch-Button-Container {
+        > :global.DocSearch-Search-Icon {
+          color: hsla(0,0%,100%,.45);
+        }
+      }
+    }
+}
 }
 
 
