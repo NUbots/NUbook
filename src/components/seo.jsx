@@ -19,18 +19,8 @@ function SEO({ description, lang, meta, keywords, title }) {
             }}
             title={title}
             titleTemplate={`%s | ${data.site.siteMetadata.title}`}
-            link={[
-              {
-                rel: 'stylesheet',
-                href: 'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css',
-              },
-            ]}
-            script={[
-              {
-                defer: true,
-                src: withPrefix('algolia-search-event-listener.js'),
-              },
-            ]}
+            link={[]}
+            script={[]}
             meta={[
               {
                 name: 'description',
