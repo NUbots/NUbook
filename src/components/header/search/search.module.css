@@ -4,10 +4,10 @@
     font-weight: inherit;
     transition: all 0.2s ease-in-out;
 
-    @apply h-10 w-full pr-3 md:pr-4 rounded appearance-none outline-none;
+    @apply m-0 h-10 w-full pr-3 md:px-4 rounded appearance-none outline-none;
 
     > :global.DocSearch-Button-Container {
-      @apply gap-4;
+      @apply gap-3 w-full;
 
       > :global.DocSearch-Button-Placeholder {
         display: block;
@@ -39,6 +39,16 @@
     }
   }
 
+  > :global.DocSearch-Dropdown {
+    > :global.DocSearch-Dropdown-Container {
+      > :global.DocSearch-Hits {
+        mark {
+          @apply font-semibold
+        }
+      }
+    }
+  }
+
   > :global.DocSearch-Footer {
     box-shadow: none;
 
@@ -49,14 +59,15 @@
 }
 
 :global(.dark) {
+  --docsearch-container-background: rgba(115,115,115,0.8);
   --docsearch-modal-background: gray-700;
   --docsearch-footer-background: gray-700;
-  --docsearch-hit-background: gray-800;
   --docsearch-hit-color: text-primary-inverted;
-  --docsearch-hit-active-color: rgba(50, 50, 50, 0.87);
-  --docsearch-highlight-color: #cc880d;
-  --docsearch-hit-shadow: 0 1px 3px 0 hsla(0, 0%, 100%, 0.45);
   --docsearch-text-color: text-primary-inverted;
+  --docsearch-hit-background: rgba(255, 255, 255, 0.07);
+  --docsearch-hit-active-color: #000;
+  --docsearch-highlight-color: #f9a50d;
+  --docsearch-hit-shadow: none;
 
   .search {
     > :global.DocSearch-Button {
@@ -77,11 +88,11 @@
   }
 
   *:global.DocSearch-Modal {
-    @apply bg-gray-800;
+    background-color:  #222;
 
     > :global.DocSearch-SearchBar {
       > :global.DocSearch-Form {
-        @apply bg-gray-700;
+        background-color: rgba(255,255,255,0.075);
       }
     }
 
@@ -89,7 +100,7 @@
       > :global.DocSearch-Dropdown-Container {
         > :global.DocSearch-Hits {
           > :global.DocSearch-Hit-source {
-            @apply bg-gray-800;
+            background-color: #222;
           }
         }
       }
@@ -98,9 +109,10 @@
 }
 
 :global(.light) {
+  --docsearch-container-background: rgba(115,115,115,0.8);
   --docsearch-highlight-color: #cc880d;
-  --docsearch-hit-active-color: rgba(50, 50, 50, 0.87);
-
+  --docsearch-hit-active-color: #fff;
+  
   .search {
     > :global.DocSearch-Button {
       background-color: rgba(255, 255, 255, 0.15);
