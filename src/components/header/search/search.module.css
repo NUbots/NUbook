@@ -43,7 +43,7 @@
     > :global.DocSearch-Dropdown-Container {
       > :global.DocSearch-Hits {
         mark {
-          @apply font-semibold
+          @apply font-semibold;
         }
       }
     }
@@ -59,7 +59,7 @@
 }
 
 :global(.dark) {
-  --docsearch-container-background: rgba(115,115,115,0.8);
+  --docsearch-container-background: rgba(115, 115, 115, 0.8);
   --docsearch-modal-background: gray-700;
   --docsearch-footer-background: gray-700;
   --docsearch-hit-color: text-primary-inverted;
@@ -88,11 +88,11 @@
   }
 
   *:global.DocSearch-Modal {
-    background-color:  #222;
+    background-color: #222;
 
     > :global.DocSearch-SearchBar {
       > :global.DocSearch-Form {
-        background-color: rgba(255,255,255,0.075);
+        background-color: rgba(255, 255, 255, 0.075);
       }
     }
 
@@ -109,10 +109,10 @@
 }
 
 :global(.light) {
-  --docsearch-container-background: rgba(115,115,115,0.8);
+  --docsearch-container-background: rgba(115, 115, 115, 0.8);
   --docsearch-highlight-color: #cc880d;
   --docsearch-hit-active-color: #fff;
-  
+
   .search {
     > :global.DocSearch-Button {
       background-color: rgba(255, 255, 255, 0.15);
