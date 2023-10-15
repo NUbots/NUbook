@@ -106,15 +106,15 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
 
 1. Move into the directory you would like the clone into. The following command will put you in your `home` directory.
 
-```bash
-cd ~
-```
+   ```bash
+   cd ~
+   ```
 
 2. Clone the RoboCup TC Virtual Season repository:
 
-```bash
-git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
-```
+   ```bash
+   git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
+   ```
 
 ### Set Up the Controllers
 
@@ -125,7 +125,7 @@ git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
    pip3 install -r controllers/referee/requirements.txt
    ```
 
-2. Build the Robocup controllers:
+2. Build the RoboCup controllers:
 
    ```bash
    make -j$(nproc)
@@ -145,7 +145,7 @@ git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
    sudo apt-get install ant default-jdk
    ```
 
-2. Clone the Robocup TC GameController repo:
+2. Clone the RoboCup TC GameController repo:
 
    ```bash
    cd ~
@@ -187,7 +187,7 @@ git clone https://github.com/RoboCup-Humanoid-TC/hlvs_webots.git
    export GAME_CONTROLLER_UDP_FILTER=<IP_ADDRESS> # replace <IP_ADDRESS> with your IP address from step 1
    ```
 
-3. Run the following to open Webots with the Robocup world and the GameController:
+3. Run the following to open Webots with the RoboCup world and the GameController:
 
    ```bash
    webots ~/hlvs_webots/worlds/robocup.wbt
@@ -215,7 +215,7 @@ Running the RoboCup scenario requires two things: [the Webots simulator](https:/
 
    1. As done previously, get the hostname of each computer by running `hostname -I` in a terminal on each computer.
 
-   2. On each computer you will be running the robot code on, run `./b edit config/webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step. For any robots running on the same computer as the Webots simulator, do not change the IP.
+   2. On each computer you will be running the robot code on, run `./b edit config/Webots.yaml` and change the IP in `server_address` to the hostname of the Webots simulator computer found in the previous step. For any robots running on the same computer as the Webots simulator, do not change the IP.
 
    3. On the computer you will be running the Webots simulator on, open the `hlvs_webots` repo in a text editor. Open the file `controllers/referee/game.json` (you can use <kbd>Ctrl</kbd>+<kbd>p</kbd>, search for `game.json` and the first file should be the correct one).
 
@@ -382,7 +382,7 @@ NUbots runs full Webots games to benchmark the current performance of the code. 
    2. Change the `"blue":` `"id"` to `13`.
    3. Change the `"blue":` `"config"` field to `"team_1.json"`.
 
-3. Open a terminal and run the following to open Webots with the Robocup world and the GameController:
+3. Open a terminal and run the following to open Webots with the RoboCup world and the GameController:
 
    ```bash
    webots ~/hlvs_webots/worlds/robocup.wbt
