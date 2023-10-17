@@ -4,17 +4,58 @@ chapter: Subsystems
 title: Behaviour
 description: Behaviour and how it works in the NUbots codebase.
 slug: /system/subsystems/behaviour
+authors:
+  - Ysobel Sims (@ysims)
 ---
 
-The behaviour subsystem includes walk planning, soccer strategies, get up detection, head behaviour, script running and tuning, and kick behaviour.
+The behaviour subsystem includes the purpose, strategy and planning layers of the system. These utilise the Director system and will be made up of Providers and Tasks. The behaviour subsystem is responsible for the high-level decision making of the robot.
 
-## Walk Behaviour
+## Planning
 
-The [Direct Walk Controller](https://github.com/NUbots/NUbots/tree/main/module/behaviour/skills/DirectWalkController) sends messages to the walk engine. It can send a message to enable or disable the walk engine, stop the walk engine, or send a `WalkCommand` message to the walk engine.
+The planning layer is given a straightforward goal and uses mathematics to determine how to achieve that goal using skills. These skills are generally [motions](/system/subsystems/motion), such as kicking, walking and getting up. Examples of planners are the [walk path planner](#walk-path-planner) and the [kick planner](#kick-planner).
+
+### Walk Path Planner
+
+There are three main walk path planners. Each are Providers and emit `Walk` Tasks.
+
+- `WalkTo`: This planner is given a vector position and heading to walk to in robot space. It moves towards the position linearly and rotates to reach the given heading. As it approaches the position to walk to, it decelerates so it stops smoothly.
+- `TurnOnSpot`: This planner is given a direction to rotate (clockwise or anti-clockwise) and rotates in that direction on the spot.
+- `TurnAroundBall`: This planner assumes the ball is in front of the robot and pivots around it so that the ball is still in front of the robot. It is given a direction to rotate (clockwise or anti-clockwise). This is useful for aligning the robot with the ball and a target, ie the ball or a teammate.
+
+### Kick Planner
+
+The kick planner checks if the ball is close enough to kick and if we are aligned towards our target, ie goal or teammate. When these conditions are satisifed, it emits a `Kick` Task.
+
+### Look Planner
+
+Looking does not often need planning functionality behind it, as a vector to look to can be given directly to the skill. We do implement a `LookAround` planner that oscillates between points given from the module's configuration file. This is useful for looking around the field for the ball.
+
+## Strategy
+
+The strategy modules contain a high-level request that utilises environment information and the planning layer to achieve its goal. The `module/strategy` folder contains these strategies. We list some of these with their functions below.
+
+- `StandStill`: uses the walk engine to stand still.
+- `FindBall`: if the ball is not visible, uses the look and walk planners to find it
+- `WalkToBall`: uses ball localisation to emit a Task to the walk path planner.
+- `LookAtBall`: uses ball localisation to emit a Task to the look planner to look at the ball.
+- `KickToGoal`: uses field localisation to determine when to emit a Task to the kick planner.
+- `AlignToGoal`: uses field localisation to determine when to emit a Task to the walk path planner to pivot around the ball to face the goal.
+
+## Purpose
+
+The purpose layer determines the overall goal of the robot. For soccer-playing, it contains the logic for soccer positions. These modules form the root of the Director tree.
+
+### Soccer
+
+The Soccer purpose uses GameController information to determine how to act. If it is penalised, then it stands still. If it is not penalised, it determines whether to play as a striker, defender or goalie.
+
+- Striker: An offensive position that attempts to score goals by moving towards the ball and kicking to the goal.
+- Defender: A defensive position that attempts to prevent the opponent from scoring goals by moving towards the ball and kicking it away from the goal if the ball is in our half.
+- Goalie: A defensive position that attempts to prevent the opponent from scoring goals by staying in the goal area and diving towards the ball if the opponent tries to score.
 
 ### Keyboard Walk
 
-The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/KeyboardWalk) is used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase, and acts as an interface for any one of them.
+The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/KeyboardWalk) is a purpose-level module used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase, and acts as an interface for any one of them.
 
 Keyboard walk uses **keyboard inputs** to control the robot. The inputs available are detailed in the following table.
 
@@ -39,7 +80,7 @@ Keyboard walk uses **keyboard inputs** to control the robot. The inputs availabl
 
 To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalk.role) and run the binary.
 
-The [**fake_keyboardwalk** role](https://github.com/NUbots/NUbots/blob/main/roles/fake_keyboardwalk.role) uses HardwareSimulator, and is useful for when you don't want to run keyboard walk on the robot.
+The [**fake/keyboardwalk** role](https://github.com/NUbots/NUbots/blob/main/roles/fake/keyboardwalk.role) uses HardwareSimulator, and is useful for when you don't want to run keyboard walk on the robot.
 
 ### PS3 Walk
 
@@ -59,9 +100,9 @@ The module connects to the PS3 controller using bluetooth (or USB) and reacts ba
 
 To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. When the controller is connected to the robot, it will be paired, and you can remove the cable.
 
-## Script Runner
+### Script Runner
 
-[ScriptRunner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptRunner) is a module in the behaviour subsystem. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute. Any role with the ScriptRunner module must also contain the [ScriptEngine](/system/subsystems/motion#script-engine) module.
+[ScriptRunner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptRunner) is a purpose-level module. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute.
 
 When ScriptRunner is executed, it stores the script file names passed to it as a vector of strings. When the green button on the robot is pushed, the scripts are executed in order of appearance, one after the other. ScriptRunner also provides an option to set a delay before the execution of the first script, as well as a delay between the execution of each script.
 
@@ -71,9 +112,9 @@ An example of using ScriptRunner to run a script called `Stand.yaml` is:
 ./scriptrunner Stand.yaml
 ```
 
-## Script Tuner
+### Script Tuner
 
-[ScriptTuner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptTuner) is a module in the behaviour subsystem. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](<https://en.wikipedia.org/wiki/Curses_(programming_library)>) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
+[ScriptTuner](https://github.com/NUbots/NUbots/tree/96357855b059cd499021552b3e25a4b158828dc5/module/behaviour/tools/ScriptTuner) is a purpose-level module. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](<https://en.wikipedia.org/wiki/Curses_(programming_library)>) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
 
 A script consists of frames (also called targets) which specify the position of one or more servos at a given time. The ScriptTuner interface allows for stepping through and modifying those frames. When a frame is selected in ScriptTuner, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
 

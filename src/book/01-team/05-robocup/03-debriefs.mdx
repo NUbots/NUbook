@@ -4,7 +4,276 @@ chapter: RoboCup
 title: Debriefs
 description: Debriefs and takeaways from our performances at RoboCup.
 slug: /team/robocup/debriefs
+authors:
+  - Ysobel Sims (@ysims)
+  - Josephus Paye II (@JosephusPaye)
+  - Lachlan Court (@LachlanCourt)
 ---
+
+## 2023: Bordeaux, France
+
+### What went wrong
+
+#### Hardware
+
+- Heads fell off
+- Servo blowing when tuning
+- Overload turn on not off!
+- Printed knee mounts PLA breaking, onyx good tho
+- OpenCR died, issues with OpenCR
+- Need more battery extension cables, one broke
+- NUC might be dead? Unknown, maybe cable or power. Not OpenCR because Kevin is fine with the OpenCR from it.
+- Ethernet port breaking, ethernet cables being annoying/breaking
+- Cables came out a lot and broke a lot
+- Damage a lot when falling, parts snapping, such as head - maybe falling relax would help
+- Voltage in HardwareIO, other HardwareIO bugs
+- Redesign back, button panel is annoying, the cables on a removable part is annoying
+- Too many cables in the torso!
+- Decide on foot studs - new base? Rubber underside/shoe
+- Red button on some robots inconsistent/didn’t work, and other buttons
+- Bolts coming loose a lot! Neck and hips.
+- Robots are a little different
+- Knee spring mounts breaking easily
+- Can’t connect two cameras at once because they are on the same bus
+- Power connection hard to get to in robot when back plate on
+
+#### Motions
+
+- Walk didn’t handle the bumpy ground well, ground was uneven in Bordeaux
+- Falling relax not on
+- Couldn’t get up
+- Couldn’t kick
+
+#### Networking
+
+- Beginning of comp needed to iron out some issues with understanding how to connect to fields - drop in games are difficult for networking!!
+- NUsight could be used to a bigger potential
+- NUsight unreliable in the lab
+- People not working on NUsight
+
+#### Vision
+
+- White balance, annoying to put the white paper in front
+- Visual mesh failed to train with harder dataset, no robot detection
+
+#### Localisation
+
+- Bug in second half where it thinks its on the wrong side of the field
+
+#### Team Communication / Behaviour
+
+- Don’t want to collide so better behaviour for that and robot detection
+- Walk path planning kinda dodgy and align to ball not great
+- Diving all over the place
+
+#### Organisational
+
+- Didn’t have enough time to test and tune because we implemented many new things - new legs, new odometry, new behaviour system, new nucs, new subcontrollers, new localisation
+- User experience for running games - buttons not working and could be better used for running games, eg localisation reset
+- Duplicate code and build times high
+- Some people not well trained in how to code in the main codebase
+- Get air conditioned rooms next time
+
+### What went well
+
+#### WE WON A GAME!
+
+#### Hardware
+
+- X Series knees performed well when walking and standing
+- New hips held up well
+- Can get up from front or back now without rolling over
+- Hips hot swappable
+- Computational power good, no issues
+- Cooling on nucs good, didn’t cook any
+- We had a subcontroller to use on all robots
+- Despite bugs, OpenCR did work generally
+
+#### Motions
+
+- Walk was acceptable, nice wiggle
+
+#### Networking
+
+- GameController connection flawless
+- Wifi worked, networking good, way better than last time
+
+#### Vision
+
+- Worked without any retuning
+- Field and field lines were really good
+- Balls were detectable after some tuning
+
+#### Localisation and Odometry
+
+- Odometry worked
+- Localisation worked most of the time
+
+#### Behaviour
+
+- Was good, worked with basic walk ball to goal
+- Ready was good with localisation
+- No Director seg faults, worked well
+
+#### Organisational
+
+- ROBOTS ARRIVED!!
+- AIR TAGS WORKED!!
+- Tape used well
+- Game kit good
+- Team work, coming to games
+- Trent got on TC
+- Jason liked ref-ing
+- People knew what to do for the most part
+
+### What’s Next
+
+- Stagger NUSense in robots rather than switch them at the same time
+- Maybe use localisation to determine when to throw out balls
+- NUsense, no OpenCR
+- Kicking
+- X-Series in the ankles
+- Ankles shock absorber springs, ankle forward so force is on centre of foot
+- Foot out of aluminium
+- Feedback based control, balancing, for kicking and walking
+- Redesign hips, weight reduction, baring design
+- Torso design, buttons, space, extension on nuc ports so damage is on the extension not the nuc, maybe include in the extension routing for the usb to get another camera bus
+- Vision for goals and robots
+- Directional kicks later
+- Safety measures eg buzzer, rotational limits
+- Culling codebase
+- Aluminium head mounts
+- Analysis and research on design of hardware
+- Tom wants faster development
+- Build times, more dev ops
+- Falling relax
+- Bug fixing and ironing out things
+- Heatsinks for the knee servos
+
+## 2022: Bangkok, Thailand
+
+RoboCup Bangkok was the first in-person competition in three years due to COVID-19. All but one team member had never been to an in-person RoboCup competition, and none had been to an overseas RoboCup competition. The team faced further issues when the majority of the luggage did not arrive until the end of the first competition day.
+
+### What went wrong
+
+#### Hardware
+
+- Didn't pack enough cables for battery chargers
+- CM740s are no good, need to get something new. Cannot buy more, and we only have two working.
+- NUC died due to overheating
+- Needed more monitors: one was just not enough
+- Issues of wiring getting in the way – makes it hard to swap things out
+- No soldering happened, but the setup could have been better if we did use it
+- Long ethernet cables became tedious to use and untangle
+- Heat dissipation in the torso is an issue
+
+#### Motions
+
+- Rollover from back to front, then using get up front does require a lot of floor space and caused a few tangles, such as the robot getting its feet caught in the goal net.
+
+#### Networking
+
+- One robot had broken WiFi antenna, preventing it from connecting to GameController
+- Interference in the venue made it sometimes hard to connect to GameController
+
+#### Vision
+
+- Cameras had a red tinge due to automatic white balancing.
+- New mesh is too computationally expensive for the NUCs that we have. Potentially go down to one camera per robot and lower the number of images received from the camera
+- The bottom of the mesh, near the robot's feet, bends around, possibly causing issues with ball detection near the feet
+- Hoc was slightly off - odometry or camera calibration
+- NUsight was unreliable for testing vision
+- The 360 degrees Theta camera used for collecting vision data was in check-in, not carry-on, so the team couldn’t collect data until later. The team did get one image earlier using a Theta camera from CIT Brains
+
+#### NUsight
+
+- Difficulty connecting to NUsight
+
+#### Localisation and Odometry
+
+- No localisation
+- Hoc was slightly off for vision
+
+#### Miscellanious
+
+- No robots until end of first competition day due to missing luggage
+
+### What went well
+
+#### Hardware
+
+- Didn’t replace a single servo at the competition
+- Padding was effective for keeping the robot protected and for colour requirement in inspection
+
+#### Motions
+
+- The robots were able to walk stably!!
+- Getups basically worked flawlessly
+
+#### Networking
+
+- Able to connect to GameController with at least one robot for most of the games
+
+#### Odometry
+
+- Pitch and roll were good, better than the previous year
+
+#### Vision
+
+- Fine tuning for vision worked well despite not having our own Theta camera
+
+#### Teamwork and Moral
+
+- Got robot ready for qualification very quickly
+- We all came to the games - had three different robot handlers for four games
+- Got lots of promotional footage of the robot
+- We made the quarter finals despite not having two whole set up days and the first competition day to test the system and networking
+- Within 30 minutes of getting our robots from the airport, the robots were walking and getting up
+- Good preparation before the competition was vital to the team being able to perform at all when the robots arrived at the end of the first competition day
+- Overall made good progress compared to RoboCup 2019 Sydney
+- On par or better than Team-KMUTT, UTRA, Hamburg Bit-Bots, Bold Hearts, ITAndroids, RoboFEI
+- Students at home were around to help with vision fine-tuning
+
+### What’s Next
+
+#### Networking
+
+- System configuration tool
+- Configurable headless mode, lightweight, if no system config tool due to it being tedious to set up networking
+- Team Robot communication – only one robot connects to GameController and then sends information to the other robots
+- Make GameController connection more robust
+- See how the small robots do team communication
+
+#### Hardware
+
+- Find a replacement for CM740’s quick so we can buy or make them before the end of the year.
+  - Possibly redesign NUsense to only contain the core functionality. Additional functionality can be added with daughterboards/shields, creating a more modular system.
+- Get a decent battery powered soldering iron (TS100), a decent stand, sponge, and safety glasses with some back up wire and various connections. Ryobi may have some interesting products.
+- Better servos on the knees
+- Kneecaps to stop the knees overextending
+- Servo covers - couldn't get up from the back because of servos hitting each other
+- Improve cable management in the robot
+- Sort out a reel for longer ethernet cables
+- Look into purchasing small portable monitors for RoboCup
+- Look into more off the shelf solutions for hardware, such as a proper cooling system that we can buy off the shelf
+- Redesigning the back of the robot for easy access and able to give better padding protection
+
+#### Organisation
+
+- Target research / postgrad students - remove ‘maybe’ from do you plan on doing postgrad question
+- Attempt the git workshop again
+- Project management. Make a physical board
+- Create a culture of high performance
+- Keep momentum up, particularly post Robocup
+- Try and keep dev evenings early in the week (Monday, Tuesday) so people aren't busy with assignments
+- Make team desirable for academics
+- Come up with ideas on how to improve motivation
+- Keep dev evenings / time in the lab focused on development
+- Pack robots whole rather than disassembled - 2 in large case, one in square case, possibly carry-on
+
+#### NUsight
+
+- Sort out general connectivity to NUsight for testing systems - fix issue that prevents consistent connection
 
 ## 2021: Online Simulation
 

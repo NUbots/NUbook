@@ -5,12 +5,16 @@ function loadAlgoliaScript() {
     const script = document.createElement('script')
     const head = document.head || document.getElementsByTagName('head')[0]
 
-    script.src =
+    const scriptSrc =
       'https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js'
+
+    script.src = scriptSrc
     script.async = false
 
     script.addEventListener('load', resolve)
     script.addEventListener('error', reject)
+
+    for (let child of head.children) if (child.src === scriptSrc) return
 
     head.appendChild(script)
   })
