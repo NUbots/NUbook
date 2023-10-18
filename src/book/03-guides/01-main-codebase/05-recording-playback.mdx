@@ -8,7 +8,7 @@ authors:
   - Ysobel Sims (@ysims)
 ---
 
-The NUbots system is based on [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
+The NUbots system utilises [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
 
 ## Recording Data
 
@@ -27,7 +27,7 @@ The following steps detail how to record data. An example will be given througho
 
      In this example, the sensors message already exists in the file (`message.input.Sensors`). Set the boolean to `true` next to this message.
 
-     If you would like to log a different message, do the following:
+     If you would like to log a different message and it doesn't already have a corresponding line in the DataLogging configuration file, do the following:
 
      1. Find the `.proto` file that defines that message, such as [`Sensors.proto`](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto).
      2. Find what the `package` is. For `Sensor.proto`, it is `package message.input`.
@@ -55,7 +55,7 @@ The following steps detail how to record data. An example will be given througho
 
    **Locally in Docker:** The log file will be in your NUbots directory under `/recordings/<role_name>`.
 
-   **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else installs to the robot any recordings will be lost, so immediately copy them to another computer.
+   **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else uses the robot any recordings may be lost, so immediately copy them to another computer.
 
    1. The NBS file will be located on the robot in the `log/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `log/test/sensor/18072020T082100.nbs`.
    2. Copy the file across. On the destination computer, run:
@@ -170,7 +170,7 @@ Following on from the previous example, lets now run `test/sensor.role` with rec
 
 Playing back recorded data is useful when:
 
-- Working remotely, where the data is previously recorded or recorded by another team member
+- Working remotely, where the data was previously recorded or recorded by another team member
 - Testing a system with the same input data
 - Not wanting to run the real robot continuously, where it is possible to use the same data
 - Viewing the Visual Mesh in NUsight, due to bandwidth issues in sending it over the network
