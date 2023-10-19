@@ -9,10 +9,19 @@ authors:
 references: references.bib
 ---
 
+This page explains how the NUbots team uses the NSGA-II genetic algorithm to run optimisation of various tasks.
+
 ## NSGA2 Optimisation
-How to set it up?
-How it works?
-What is NSGA-2 algorithm
+The NUbots NSGA-II optimisation consists of two main components; the `NSGA2Optimiser` and `NSGA2Evaluator`. Each component has a group of sub-classes that handle the specific requirements for an optimisation task.
+
+### NSGA2Optimiser
+The `NSGA2Optimiser` is responsible for managing the whole optimisation process by setting up the parameters underlying NSGA-II algorithm, generating individuals to run in the optimisation, and reporting fitness scores back to the algorithm. It's sub-classes handle the loading of parameters into the algorithm based on the task, and setting up evaluation requests for the algorithm.
+
+### NSGA2Evaluator
+The `NSGA2Evaluator` is responsible for running each individual and calculating fitness scores to report back to the `NSGA2Optimiser`.
+Events and States
+Tasks
+
 
 The output files consist of:
   - `nsga2_all_pop.csv`: The objectives and parameters for each individual that has run.
