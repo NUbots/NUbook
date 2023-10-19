@@ -9,18 +9,71 @@ authors:
 references: references.bib
 ---
 
-## NSGA2Optimiser
+## NSGA2 Optimisation
 How to set it up?
 How it works?
 What is NSGA-2 algorithm
 
-## NSGA2Evaluator
+The output files consist of:
+  - `nsga2_all_pop.csv`: The objectives and parameters for each individual that has run.
+  - `nsga2_initial_pop.csv`: The objectives and parameters for the first population run.
+  - `nsga2_final_pop.csv`: The objectives and parameters for the last population run.
+  - `nsga2_params.csv`: A list of the overall parameters for the optimisation including general NSGA-II parameters and a list of all the specified parameter initial values, lower and upper limits.
+  - `.yaml` files of the task for each individual in the same format as the input `.yaml` file.
 
 ## Walk Optimisation
 
+
 ## NSGA-2 Algorithm
 
-## Running the Optimiser
-### Webots
+## Running the Walk Optimiser
+### Running in Webots
+1. Follow the [Getting Started](/guides/main/getting-started) guide to set up the codebase and the [Setting Up Webots](/guides/tools/webots) guide to setup Webots. Make sure to complete the `Running a NUbots Enviroment` section of the Webots guide.
 
-### Real Robot
+2. Launch the optimisation world in `NUWebots`. This can be either done by opening the world `NUWebots/worlds/nuoptimiser.wbt` from Webots or by running this command from the `NUWebots` folder:
+  ```bash
+  webots worlds/nuoptimiser.wbt
+  ```
+
+3. In the `NUbots` folder, update the optimisation task and parameters in `NSGA2Optimiser.yaml`.
+
+4. Configure and build the codebase with the appropriate role.
+
+5. Run the code with:
+  ```bash
+  ./run webots/walkoptimisation
+  ```
+
+6. Once the optimisation has finished the results files will be inside the Docker container, extract them to the `NUbots` folder using:
+  ```bash
+  ./b shell
+  cd ../build
+  mv *.csv ../NUbots
+  mv *.yaml ../NUbots
+  ```
+  After extracting the files move them from the `NUbots` folder to the desired location.
+
+### Running on a Real Robot
+
+1. Follow the [Getting Started](/guides/main/getting-started) guide to set up the codebase and robots.
+
+2. Update the optimisation task and parameters in `NSGA2Optimiser.yaml` if required.
+
+3. Configure and build the codebase with the appropriate role.
+
+4. Install the built roles onto the robot and `ssh` into the robot.
+
+5. Run the optimiser on the robot with:
+  ```bash
+  ./onboardwalkoptimisation
+  ```
+
+6. The robot will take an initial 4 seconds to boot up, after which it will assume a standing position.
+
+  To start running an individual robot will require to be standing upright for the time specified in `OnboardOptimisation.yaml`. After an individual has run, the robot will assume a standing position and wait again, repeating this process until the optimisation is finished.
+
+7. After the optimisation has finished the results files can be found in the root directory of the robot. To extract them run: 
+  ```bash
+  scp nubots@<address>:*.csv <path_on_your computer>
+  scp nubots@<address>:*.yaml <path_on_your_computer>
+  ```
