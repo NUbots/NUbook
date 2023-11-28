@@ -36,11 +36,6 @@ The following steps detail how to record data. An example will be given througho
 
      You can enable multiple messages at once, and they will all be recorded.
 
-   - **If** you are **not** running on a real robot, e.g. you are logging data from a simulator, change the output directory of the logs.
-
-     1. Find the line `directory: log` in the configuration file.
-     2. Change `log` to `recordings`.
-
 3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/main/getting-started) page.
 
 4. Run the binary for the role you want to record.
@@ -57,18 +52,18 @@ The following steps detail how to record data. An example will be given througho
 
    **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else uses the robot any recordings may be lost, so immediately copy them to another computer.
 
-   1. The NBS file will be located on the robot in the `log/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `log/test/sensor/18072020T082100.nbs`.
+   1. The NBS file will be located on the robot in the `recordings/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `recordings/test/sensor/18072020T082100.nbs`.
    2. Copy the file across. On the destination computer, run:
 
       ```bash
-      scp nubots@<address>:log/rolename/file_name path/to/destination
+      scp nubots@<address>:recordings/rolename/file_name path/to/destination
       ```
 
       For our example, you could run:
 
       ```bash
       # Replace <address> with the robot's IP address
-      scp nubots@<address>:log/test/sensor/18072020T082100.nbs .
+      scp nubots@<address>:recordings/test/sensor/18072020T082100.nbs .
       ```
 
       The file will be copied from the robot to the folder you ran the command in. The [`scp`](https://linux.die.net/man/1/scp) command is like the regular [`cp`](https://linux.die.net/man/1/cp) command, but it copies to or from another computer over SSH. The first path in the command points to the file we are copying and the second path points to where we want to copy that file to.
