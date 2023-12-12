@@ -19,13 +19,13 @@ Localisation is the process of estimating the position and orientation of the ro
 
 The NUbots codebase uses a number of different reference frames (spaces) for different purposes. The following is a list of the commonly used spaces in the codebase.
 
-| Space    | Letter | Description                                                                                  |
-| -------- | ------ | -------------------------------------------------------------------------------------------- |
-| `camera` | C      | Located at camera (left/right) with x pointed "outwards", y to the "left" and z "up"         |
-| `world`  | W      | Located on the ground below the robot on startup. (Fixed inertial frame)                     |
-| `torso`  | T      | Fixed midway between the robots hip yaw joints, with x "forward", y to the "left" and z "up" |
-| `robot`  | R      | Located beneath torso space on the ground, with x "forward", y to the "left" and z "up"      |
-| `field`  | F      | Located at the centre circle of the field, with x pointing towards the "own" goal and z "up" |
+| Space    | Letter | Description                                                                                            |
+| -------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| `camera` | C      | Located at camera (left/right) with x pointed "outwards", y to the "left" and z "up"                   |
+| `world`  | W      | Located on the ground below the robot on startup. (Fixed inertial frame)                               |
+| `torso`  | T      | Fixed midway between the robots hip yaw joints, with x "forward", y to the "left" and z "up"           |
+| `robot`  | R      | Located directly beneath torso projected onto the ground, with x "forward", y to the "left" and z "up" |
+| `field`  | F      | Located at the centre circle of the field, with x pointing towards the "own" goal and z "up"           |
 
 ![NUbots spaces](./images/spaces.png 'NUbots spaces')
 
@@ -35,36 +35,32 @@ The `FieldLocalisation` module is a primary component of the NUbots localization
 
 #### Initialisation
 
-At intilisation, n particles are initialised around an initial guess of the state sampled from a multivariate normal distribution. A visual illustration of 20 particles being initialized around the centre of the field is shown below.
+At initialisation, n particles are sampled from a multivariate normal distributions on either side of the field facing towards the centre, to produce initial hypothesis' of the robots starting position. For example, a visual illustration of 20 particles being initialized around the centre of the field is shown below.
 ![Initialisation](./images/init.png 'Initialisation')
 
-#### Field Line Map
-
-A field line map is pre-computed at startup which is a 2D array of doubles which represents the discretization of the field lines. Each cell encodes the minimum distance to an occupied cell (field line), for example, a cell with value 0.0 is occupied by a field line. An example of a field line map is shown below.
+Additionally, a discretized field line distance map is pre-computed at startup which encodes the minimum distance to an occupied cell (field line). An example of a field line map is shown below.
 
 ![Field Line Map](./images/field_line_map.png 'Field Line Map')
 
 #### Measurement Update
 
-The measurement update involves weighting each particle. The general idea is to weight particles higher if field line point observations overlap with more of the field lines. For each particle, the field line point observations (on the ground plane) are transformed into field space, and discretized into an index in the field line map. The weight of the particle is then calculated as follows:
+The measurement update involves weighting each particle. The general idea is to weight particles higher if field line point observations are closer to field lines. For each particle, the field line point observations are projected onto the field plane (using Odometry) and mapped into an index in the field line distance map. The weight of the particle is then calculated using simple inverse function:
 
 $$
-W_n = \sum_{i=1}^{k} \frac{1}{{\sqrt{2\pi\sigma^2}}} \exp\left(-\frac{1}{2}\left(\frac{v_i}{\sigma}\right)^2\right)
+W_n = 1/(\delta + \epsilon)
 $$
 
-where $W_n$ is the weight of the $n$th particle, $v_i$ is the minimum distance to an occupied cell in the field line map for the $i$th field line point observation, and $\sigma$ is a parameter representing the measurement noise and $k$ is the number of field line point observations.
+where $W_n$ is the weight of the $n$th particle, $\delta = \sum_{i=1}^{k} \delta_i$ is the total sum of distance values obtained from the map for all field line point observations, and $\epsilon$ is machine epsilon to prevent numerical issues.
 
-#### Resampling
+#### Time Update
+
+Since the latest Odometry information is used within the measurement update, the time update does not directly involve propagating particles forward in time using any motion model. Instead, the time update involves simply adding noise to the particles to simulate the uncertainty in the robot's motion and resampling the particles.
 
 Resampling refines the set of particles in Particle Filter localization based on their calculated weights.
 
-1. **Weight Summation**: The combined weight of all particles is computed. If it's near zero, indicating low confidence across all particles, they're perturbed with added noise to prevent localization failure.
+1. **Normalize Weights**: Particle weights are adjusted so their sum is 1, ensuring each represents its proportional likelihood.
 
-2. **Normalize Weights**: Particle weights are adjusted so their sum is 1, ensuring each represents its proportional likelihood.
-
-3. **Particle Selection**: Using the normalized weights, particles are probabilistically chosen using `std::discrete_distribution`. Particles with higher weights are more likely to be picked, potentially multiple times, while those with lower weights might not be selected at all.
-
-4. **Replace Particles**: The original set of particles is replaced with the newly resampled set, now skewed towards more likely positions and orientations of the robot.
+2. **Particle Selection**: Using the normalized weights, particles are probabilistically chosen. The original set of particles is replaced with the newly resampled set, now skewed towards more likely positions and orientations of the robot.
 
 Below is after a few iterations of the filter after the measurement update and resampling is shown below
 ![After Measurement Update](./images/resample.png 'After Measurement Update and Resampling')
