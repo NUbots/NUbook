@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import '@docsearch/css'
-import * as style from './search.module.css'
+import './search.module.css'
 import { DocSearch } from '@docsearch/react'
 
 const Search = () => {
