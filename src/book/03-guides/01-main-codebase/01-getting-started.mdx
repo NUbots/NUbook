@@ -11,7 +11,7 @@ authors:
   - Lachlan Court (@LachlanCourt)
 ---
 
-Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the fake_keyboardwalk binary (which uses simulated hardware) and seeing the robot move in NUsight.
+Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the fake/keyboardwalk binary (which uses simulated hardware) and seeing the robot move in NUsight.
 
 ## Prerequisites
 
@@ -219,7 +219,7 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
    ```bash
    cd NUbots
-   sudo -H pip3 install -r requirements.txt
+   sudo -H pip3 install -r tools/requirements.txt
    ```
 
 ## Building the Code
@@ -250,7 +250,7 @@ To build the code, open a terminal and change into the NUbots code directory. Th
 
    Note that you will need to do `configure` without `-i` the very first time you do this. Using `-i` will show a menu that will allow you to choose the roles to build. Enable the roles you want to build and disable the ones you don't by highlighting them using using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off.
 
-   If you are following the `fake_keyboardwalk` example, you will need to make sure `fake_keyboardwalk` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `fake_keyboardwalk`, which should be `ON`. You do not need to change any other build options in this example.
+   If you are following the `fake/keyboardwalk` example, you will need to make sure `fake/keyboardwalk` is set to `ON`. Find the list of items that are prefixed with `ROLE_` and set all to `OFF` except for `fake/keyboardwalk`, which should be `ON`. You do not need to change any other build options in this example.
 
    Press <kbd>c</kbd> to configure. This will show a confirmation menu, press <kbd>e</kbd> to go back to the main menu. Press <kbd>g</kbd> to generate the build list, and then press <kbd>e</kbd> to exit.
 
@@ -278,21 +278,9 @@ If you are not running the code on a robot, you will need to use a simulated rob
 ./b run test
 ```
 
-Roles run this way generally contain `platform::darwin::HardwareSimulator`, a module that simulates robot hardware input and output.
+Roles run this way generally contain `platform::HardwareSimulator`, a module that simulates robot hardware input and output, or `platform::Webots`, a module that communicates with the simulated robot in Webots.
 
-If you are following the example, run `./b run fake_keyboardwalk`. If you are on Windows or MacOS, see the note below.
-
-<Alert>
-
-Windows and MacOS users who want to connect to NUsight will need to set up the docker network and run
-
-```bash
-./b run fake_keyboardwalk --network nuclearnet
-```
-
-See the [NUsight](#get-build-and-run-nusight) section below for details.
-
-</Alert>
+If you are following the example, run `./b run fake/keyboardwalk`.
 
 ### Running on a Real Robot
 
@@ -343,66 +331,39 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
 
 NUsight is a visual debugging web application used at NUbots that visually represents what the robot is doing. It can be used to view output from any platform, whether that is a real NUgus robot or a simulation. Read more on the capabilities of NUsight on the [NUsight page](/system/tools/nusight).
 
-You will need this for our example to see the robot walking when we run `fake_keyboardwalk`.
-
-Before setting up NUsight you'll need to configure what messages you want to send to NUsight. Open up the NetworkForwarder configuration file by running:
-
-```bash
-./b edit config/NetworkForwarder.yaml
-```
-
-This will open the file using the nano editor. If you are not familiar with nano, check out [this YouTube guide](https://www.youtube.com/watch?v=Jf0ZJZJ8jlI&ab_channel=SavvyNik) to help you complete this step.
-
-Set the messages you would like NUsight to receive to 'true'. For our example, you need `message.input.Sensors` set to true.
+NUsight is needed to see the robot walking when we run `fake/keyboardwalk`.
 
 Open up a new terminal to run NUsight and NUbots code side by side.
 
-<details>
-
-<summary>Ubuntu/Linux Mint</summary>
-
-1. Install Node.js by running
-
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   ```
-
-2. Install npm by running
-
-   ```bash
-   sudo apt install npm
-   ```
-
-3. Configure the package repository and install yarn by running
-
-   ```bash
-   curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-   echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-   sudo apt update && sudo apt install yarn
-   ```
-
-4. Get the dependencies for NUsight by running
+1. Get the dependencies for NUsight by running
 
    ```bash
    ./b yarn
    ```
 
-5. Build NUsight by running
+2. Build NUsight by running
 
    ```bash
    ./b yarn build
    ```
 
-6. Find the IP address of the Docker container. Run
+3. Find the IP address of the Docker container.
+
+   In Linux, run
 
    ```bash
    ifconfig
    ```
 
+   In Windows WSL, make sure you are running a binary (eg `fake/keyboardwalk`) in your original terminal, and in your second terminal run
+
+   ```bash
+   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
+   ```
+
    There will be an entry called `docker0`, or similar. Find the address after the word `broadcast`. We will refer to this address as `<ADDRESS>`.
 
-7. Run the following command to run NUsight
+4. Run the following command to run NUsight
 
    ```bash
    ./b yarn prod --address <ADDRESS>
@@ -410,70 +371,15 @@ Open up a new terminal to run NUsight and NUbots code side by side.
 
    <Alert type='info'>
 
-   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `yarn prod`.
+   If you are on the NUbots lab network `epsilon-z` you do not need the `--address` argument. Just run `./b yarn prod`.
 
    </Alert>
 
-8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
-
-</details>
-
-<details>
-
-<summary> Windows/MacOS </summary>
-
-1. NUsight is within the NUbots repository. Move into the NUsight directory by running
-
-   ```bash
-   cd nusight2
-   ```
-
-2. Create the Docker nuclearnet network to allow communication between the NUsight Docker container and the NUbots Docker container.
-
-   ```bash
-   docker network create nuclearnet
-   ```
-
-3. Run a NUbots binary in another window, with our newly created network `nuclearnet`. For example, if you want to run the `fake_keyboardwalk` binary, use the command
-
-   ```bash
-   ./b run fake_keyboardwalk --network nuclearnet
-   ```
-
-4. Make the Docker script executable by running
-
-   ```bash
-   chmod +x ./docker
-   ```
-
-5. Install the NUsight dependencies in the container and build NUsight for prod in the container
-
-   ```bash
-   ./docker yarn
-   ./docker yarn build
-   ```
-
-6. Inspect the network to find the NUbots container's IP address
-
-   ```bash
-   docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep nubots:selected | cut -d " " -f1)
-   ```
-
-   The IP address given will be referred to as `<ADDRESS>`. You will need to be running a binary in NUbots or this will not work. See step 3 for details.
-
-7. Run NUsight with the NUbots container address
-
-   ```bash
-   ./docker yarn prod --address <ADDRESS>
-   ```
-
-8. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
-
-</details>
+5. The terminal will output a link - [localhost:9090](localhost:9090). Visit it to view NUsight.
 
 ## Example
 
-In this section we will finish off our example of setting up the codebase, running the fake_keyboardwalk binary and seeing the robot walk in NUsight.
+In this section we will finish off our example of setting up the codebase, running the fake/keyboardwalk binary and seeing the robot walk in NUsight.
 
 By now you will have gone through this page and have everything set up to make the robot walk. Ensure you have all the following steps complete
 
@@ -489,10 +395,10 @@ By now you will have gone through this page and have everything set up to make t
 
 - Build and Run NUsight
 
-With the `fake_keyboardwalk` binary running (with `--network nuclearnet` if using Windows or MacOS), and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
+With the `fake/keyboardwalk` binary running, and with NUsight running and your browser open to [localhost:9090](localhost:9090), do the following
 
 - Select the 'localisation' tab in NUsight.
 
 - You will see a stationary robot. To focus on the robot, click inside the window and press <kbd>space</kbd> to change perspective.
 
-- To make the robot walk, go into the terminal that is running `fake_keyboardwalk` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.
+- To make the robot walk, go into the terminal that is running `fake/keyboardwalk` and hit <kbd>e</kbd> to enable walking. Use <kbd>w</kbd>, <kbd>a</kbd>, <kbd>s</kbd> and <kbd>d</kbd> to make the robot move. Note that this is a basic simulation that does not use gravity, so the robot will move its limbs but it likely won't move in the world.

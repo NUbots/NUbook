@@ -38,12 +38,16 @@ Conventions for variables representing vectors and homogeneous transformations a
 
 A summary is given in the table below.
 
-| Variable name | Description                                                                       |
-| ------------- | --------------------------------------------------------------------------------- |
-| `Hab`         | Denotes a 3D homogeneous transformation matrix going from space $b$ to space $a$. |
-| `Rab`         | Denotes a 3D rotation from space $b$ to space $a$.                                |
-| `rABb`        | Denotes a vector from point $B$ to point $A$ in space $b$.                        |
-| `vAb`         | The velocity of $A$ in space $b$.                                                 |
+| Variable name | Description                                                                      |
+| ------------- | -------------------------------------------------------------------------------- |
+| `Hab`         | Denotes a 3D affine transformation matrix going from space $b$ to space $a$.     |
+| `Rab`         | Denotes a 3D rotation from space $b$ to space $a$.                               |
+| `rABb`        | Denotes a vector from point $B$ to point $A$ in space $b$.                       |
+| `uABb`        | Denotes a unit vector from point $B$ in the direction of point $A$ in space $b$. |
+| `vBb`         | The velocity of $B$ in space $b$.                                                |
+| `vABb`        | The velocity of $B$ towards A in space $b$.                                      |
+| `aBb`         | The acceleration of $B$ in space $b$.                                            |
+| `aABb`        | The acceleration of $B$ towards $A$ in space $b$.                                |
 
 ## Documentation
 
