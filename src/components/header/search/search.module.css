@@ -80,6 +80,7 @@
   *:global.DocSearch-Modal {
     background-color: #222;
   }
+
   *:global.DocSearch-Form {
     background-color: rgba(255, 255, 255, 0.075);
   }
@@ -108,6 +109,7 @@
       box-shadow: none;
       background-color: rgba(255, 255, 255, 1);
       color: rgba(50, 50, 50, 0.87);
+
       > :global.DocSearch-Button-Container {
         > :global.DocSearch-Search-Icon {
           color: rgba(50, 50, 50, 0.87);
