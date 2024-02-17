@@ -8,7 +8,7 @@ slug: /guides/hardware/servo-calibration
 
 Servos are electromechanical components that allow for the precise control and positioning of the various limbs attached to the NUgus robot. Usually, when a servo is found to not be performing correctly (i.e. seizing or a crunching sound can be heard), it should be removed and replaced with a new servo.
 
-Before a servo is first used, its default parameters need to be updated to ensure correct operation. This is done using Dynamixel Wizard, which can be installed for [Windows, Linux or Mac from the Robotis website](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/).
+Before a servo is first used, its default parameters need to be updated to ensure correct operation. This is done using Dynamixel Wizard, which can be installed for [Windows, Linux or macOS from the Robotis website](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_wizard2/).
 
 ## Set Up
 
@@ -28,7 +28,7 @@ To calibrate a servo perform the following instructions:
 
 1. Select "**Tools -> Calibration**". A window will pop up with instructions on how to calibrate the servo.
 
-2. Select the correct servo model. The model will be written on the servo (either MX-64 for head and arm servos or MX-106 for leg servos). Do **NOT** select the 2.0 versions.
+2. Select the correct servo model. The model will be written on the servo. The arms and head use MX-64 and the legs use a mixture of MX-106 and XH540-W270 servos. For the MX servos, choose the 2.0 version.
 
 3. Select the communication port from the dropdown menu (if correctly connected and there is only a single servo attached, this port will autofill).
 
@@ -122,4 +122,4 @@ If this occurs, the following should be performed to validate that the error exi
 
 3. If there are no issues detected, perform another calibration by repeating the above instructions under **Calibration** and **Testing**.
 
-If any issues persist after performing these steps, the servo should be marked as **BAD**. More thorough diagnostic testing is performed by Peter Turner for problem servos.
+If any issues persist after performing these steps, the servo should be marked as **BAD**. More thorough diagnostic testing is performed by Peter Turner/Tribotix for problem servos.

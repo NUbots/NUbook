@@ -28,15 +28,14 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
 5.  Check the focus of the lenses using the NUsight vision tab. If it is not sharp, focus the camera. This involves pulling the camera out from the head, still plugged in, and loosening the three grub screws. Twist until the camera is focused.
 
-6.  Check the [transformation matrix](/system/foundations/mathematics#homogeneous-transformations) from the left camera to the pitch motor (Hpc) is correct in the `Left.yaml` file. This should be the transformation matrix from the camera to the end of the rigid body, i.e. the pitch motor as used in forward kinematics. Currently this is 69.952mm in $x$, 33.795mm in $y$, 64.88mm in $z$, and a positive $y$-axis rotation of $2^\circ$. In SI units the matrix is
+6.  Verify that the extrinsics look correct in NUsight. The extrinsics are the transform from the last neck motor to the camera. This is retrieved from the robot's URDF model, but differences in the real robots may result in required offsets. Offset values for both pitch and roll are in the camera configuration files. The offsets are in radians.
 
-    $$
-    \text{Hpc} = \begin{bmatrix}
-    \cos(\frac{2 \pi}{180}) & 0 & \sin(\frac{2 \pi}{180}) & 0.069952 \\
-    0 & 1 & 0 & 0.033795 \\
-    -\sin(\frac{2 \pi}{180}) & 0 & \cos(\frac{2 \pi}{180}) & 0.06488 \\
-    0 & 0 & 0 & 1 \end{bmatrix}
-    $$
+    1. Ensure `NetworkForwarder.yaml` has a `message.output.CompressedImage` value greater than 0.
+    2. Stand the robot up with `./scriptrunner Stand.yaml`
+    3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
+    4. Run `./test/visualmesh` and switch to the vision tab in NUsight
+
+    NUsight should show a blue horizontal line. Adjust the offsets until the line is drawn at a constant height (the height of the cameras) along the wall.
 
 7.  Run `./test/camera` on the robot and hold up a board as shown in the below image. There is an appropriate board in the NUbots laboratory. Move the board around to cover the robot's view over time, taking into account that the lenses have a $180^{\circ}$ field of view. Move the board around at different distances and angles.
 
@@ -58,7 +57,7 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
     1. To stop the program running, hit <kbd>Ctrl</kbd> + <kbd>c</kbd>.
 
-    2. Discover the name of the log file created. The file is in the `log/test/camera/` folder on the robot. The name corresponds to the date and time it was created, according to the robot. Run `ls log/test/camera/` to list all logs.
+    2. Discover the name of the log file created. The file is in the `recordings/test/camera/` folder on the robot. The name corresponds to the date and time it was created, according to the robot. Run `ls recordings/test/camera/` to list all logs.
 
     3. (optional) Rename the log file, making it easier to copy across to the computer. Change the name with the command `mv <old path> <new path>`.
 
@@ -89,12 +88,9 @@ The calibration requires two steps, creating the `nbs` recording and using it to
 
 3.  Verify these values by running vision and checking the output in NUsight.
 
-    1. Ensure `NetworkForwarder.yaml` has a `message.output.CompressedImage` value greater than 0.
-    2. Stand the robot up with `./scriptrunner Stand.yaml`
-    3. Face the robot towards a straight horizontal line, such as a line of bricks on a brick wall.
-    4. Run `./test/visualmesh` and switch to the vision tab in NUsight
+    You should see the same blue line as before, correctly aligned with the wall. If the line is not aligned, you will need to adjust the camera offsets.
 
-    NUsight should show a blue horizontal line, drawn at a constant height along the wall. If this is the case, then the calibration is verified.
+    Run the `test/localisation` role and check that the field lines in the localisation view are parallel or perpendicular to each other. If the perspective does not look right, then the cameras are not calibrated correctly.
 
 4.  Repeat this process with other robots if needed.
 
