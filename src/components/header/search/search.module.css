@@ -1,61 +1,53 @@
-.search {
-  > :global.DocSearch-Button {
-    backdrop-filter: blur(4px);
-    font-weight: inherit;
-    transition: all 0.2s ease-in-out;
+*:global.DocSearch-Button {
+  backdrop-filter: blur(4px);
+  font-weight: inherit;
+  transition: all 0.2s ease-in-out;
 
-    @apply m-0 h-10 w-full pr-3 md:px-4 rounded appearance-none outline-none;
+  @apply m-0 h-10 w-full pr-3 md:px-4 rounded appearance-none outline-none;
 
-    > :global.DocSearch-Button-Container {
-      @apply gap-3 w-full;
-
-      > :global.DocSearch-Button-Placeholder {
-        display: block;
-
-        @apply text-lg;
-      }
-    }
-
-    > :global.DocSearch-Button-Keys {
-      display: none;
-    }
-
-    &:hover {
-      box-shadow: none;
-    }
-
-    &:focus {
-      box-shadow: none;
-    }
+  &:hover {
+    box-shadow: none;
   }
+
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+*:global.DocSearch-Button-Keys {
+  display: none;
+}
+
+*:global.DocSearch-Button-Container {
+  @apply gap-3 w-full;
+}
+
+*:global.DocSearch-Button-Placeholder {
+  display: block;
+
+  @apply text-lg;
 }
 
 *:global.DocSearch-Modal {
   box-shadow: none;
+}
 
-  > :global.DocSearch-SearchBar {
-    > :global.DocSearch-Form {
-      box-shadow: none;
-    }
+*:global.DocSearch-Hits {
+  mark {
+    @apply font-semibold;
   }
+}
 
-  > :global.DocSearch-Dropdown {
-    > :global.DocSearch-Dropdown-Container {
-      > :global.DocSearch-Hits {
-        mark {
-          @apply font-semibold;
-        }
-      }
-    }
+*:global.DocSearch-Footer {
+  box-shadow: none;
+
+  *:global.DocSearch-Commands {
+    display: none;
   }
+}
 
-  > :global.DocSearch-Footer {
-    box-shadow: none;
-
-    > :global.DocSearch-Commands {
-      display: none;
-    }
-  }
+*:global.DocSearch-Form {
+  box-shadow: none;
 }
 
 :global(.dark) {
@@ -69,42 +61,31 @@
   --docsearch-highlight-color: #f9a50d;
   --docsearch-hit-shadow: none;
 
-  .search {
-    > :global.DocSearch-Button {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: hsla(0, 0%, 100%, 0.45);
+  *:global.DocSearch-Button {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: hsla(0, 0%, 100%, 0.45);
 
-      > :global.DocSearch-Button-Container {
-        > :global.DocSearch-Search-Icon {
-          color: hsla(0, 0%, 100%, 0.45);
-        }
+    > :global.DocSearch-Button-Container {
+      > :global.DocSearch-Search-Icon {
+        color: hsla(0, 0%, 100%, 0.45);
       }
+    }
 
-      &:hover {
-        box-shadow: none;
-        background-color: rgba(66, 66, 66, 1);
-      }
+    &:hover {
+      box-shadow: none;
+      background-color: rgba(66, 66, 66, 1);
     }
   }
 
   *:global.DocSearch-Modal {
     background-color: #222;
+  }
+  *:global.DocSearch-Form {
+    background-color: rgba(255, 255, 255, 0.075);
+  }
 
-    > :global.DocSearch-SearchBar {
-      > :global.DocSearch-Form {
-        background-color: rgba(255, 255, 255, 0.075);
-      }
-    }
-
-    > :global.DocSearch-Dropdown {
-      > :global.DocSearch-Dropdown-Container {
-        > :global.DocSearch-Hits {
-          > :global.DocSearch-Hit-source {
-            background-color: #222;
-          }
-        }
-      }
-    }
+  *:global.DocSearch-Hit-source {
+    background-color: #222;
   }
 }
 
@@ -113,26 +94,23 @@
   --docsearch-highlight-color: #cc880d;
   --docsearch-hit-active-color: #fff;
 
-  .search {
-    > :global.DocSearch-Button {
-      background-color: rgba(255, 255, 255, 0.15);
-      color: hsla(0, 0%, 100%, 0.45);
+  *:global.DocSearch-Button {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: hsla(0, 0%, 100%, 0.45);
 
+    > :global.DocSearch-Button-Container {
+      > :global.DocSearch-Search-Icon {
+        color: hsla(0, 0%, 100%, 0.45);
+      }
+    }
+
+    &:hover {
+      box-shadow: none;
+      background-color: rgba(255, 255, 255, 1);
+      color: rgba(50, 50, 50, 0.87);
       > :global.DocSearch-Button-Container {
         > :global.DocSearch-Search-Icon {
-          color: hsla(0, 0%, 100%, 0.45);
-        }
-      }
-
-      &:hover {
-        box-shadow: none;
-        background-color: rgba(255, 255, 255, 1);
-        color: rgba(50, 50, 50, 0.87);
-
-        > :global.DocSearch-Button-Container {
-          > :global.DocSearch-Search-Icon {
-            color: rgba(50, 50, 50, 0.87);
-          }
+          color: rgba(50, 50, 50, 0.87);
         }
       }
     }
