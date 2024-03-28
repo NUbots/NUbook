@@ -24,7 +24,7 @@ const Header = ({ menu, currentSection, background, height }) => {
             </div>
             <div className='flex flex-grow items-center lg:w-3/4 xl:w-4/5'>
               <div className='w-full lg:px-6 xl:w-3/4 xl:px-12'>
-                <Search background={background} />
+                <Search />
               </div>
               <div className='px-6 lg:hidden'>
                 <MenuToggle menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
