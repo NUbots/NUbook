@@ -4,13 +4,15 @@ chapter: Main Codebase
 title: Running and Tuning Scripts
 description: How to tune and run scripts.
 slug: /guides/main/tuning-and-running-scripts
+authors:
+  - Ysobel Sims (@ysims)
 ---
 
 Scripts are static motions for the robot. By static, we mean they are preconfigured motions that won't change at runtime. They specify what joint angles to move to and how long the robot should take to go to those joint angles. For example, standing up is a small script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
-The Script Engine executes script files by performing the robot motions that they describe. It takes each joint position and time from the `.yaml` file and sends the information to the servos, causing the robot to move.
+Scripts are run using the script utility and the [Director system](/system/foundations/director). The script utility will convert a specified script yaml file into a [Sequence Task message](/system/subsystems/motion#actuation). It takes each joint position and time from the `.yaml` file and adds these frames to the Sequence of servo targets. The Sequence Provider will request a Director Task for each Group in its Sequence, and will only progress to the next Group when the previous has completed.
 
-Information on Script Engine is on the [Motion](/system/subsystems/motion#script-engine) page. Information on Script Runner and Script Tuner is on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
+More information on the script system is on the [Motion](/system/subsystems/motion#scripts) page. Information on Script Runner and Script Tuner is on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
 
 ## Script Runner
 
@@ -20,7 +22,7 @@ The `scriptrunner` command will run a script. It is used as follows:
 ./scriptrunner <script_name>
 ```
 
-Where `<script_name>` is the name of the script you want to run, such as `Stand.yaml`. All scripts can be found in the NUbots repository under `/module/motion/ScriptEngine/data/scripts/`.
+Where `<script_name>` is the name of the script you want to run, such as `Stand.yaml`. All scripts can be found in the NUbots repository under `/shared/utility/skill/scripts`.
 
 The script you are running needs to be on the robot in the `/scripts/` folder. These scripts can be robot specific. For example, you could have a stand script specifically for the NUgus 1 robot stored in `/scripts/nugus1/Stand.yaml`. When you run `./scriptrunner Stand.yaml` on NUgus 1, the ScriptEngine will first look for the robot-specific `Stand.yaml` in the `/scripts/nugus1/` folder. If found, it will execute it. If not, it will look for a platform-specific `Stand.yaml` in the `/scripts/nugus/` folder, which it will execute if found. Otherwise, it will look for a more general `Stand.yaml` in the `/scripts/` folder.
 
@@ -107,18 +109,19 @@ The bottom of the interface shows what commands are available. It does not show 
 
 ## List of Scripts
 
-| Script Name          | Description                                                                                         |
-| -------------------- | --------------------------------------------------------------------------------------------------- |
-| `KickLeft.yaml`      | The robot kicks with its left foot.                                                                 |
-| `KickRight.yaml`     | The robot kicks with its right foot.                                                                |
-| `NodYes.yaml`        | The robot nods its head.                                                                            |
-| `Relax.yaml`         | The robot relaxes all of its joints. Be prepared to hold it if it's standing, as it will fall over. |
-| `RelaxHead.yaml`     | The robot relaxes its head joints.                                                                  |
-| `RollOverFront.yaml` | The robot rolls from its back onto its front.                                                       |
-| `Stand.yaml`         | The robot moves into a standing position.                                                           |
-| `StandUpBack.yaml`   | The robot gets up from its back and moves into a standing position.                                 |
-| `StandUpFront.yaml`  | The robot gets up from its front and moves into a standing position.                                |
-| `Zombie.yaml`        | The robot moves into a standing zombie position, with arms straight out.                            |
+| Script Name          | Description                                                                                             |
+| -------------------- | ------------------------------------------------------------------------------------------------------- |
+| `DiveLeft.yaml`      | The robot stretches its arm out to the left and moves its left leg so that it will dive to the left.    |
+| `DiveRight.yaml`     | The robot stretches its arm out to the right and moves its right leg so that it will dive to the right. |
+| `KickLeft.yaml`      | The robot kicks with its left foot.                                                                     |
+| `KickRight.yaml`     | The robot kicks with its right foot.                                                                    |
+| `NodYes.yaml`        | The robot nods its head.                                                                                |
+| `Relax.yaml`         | The robot relaxes all of its joints. Be prepared to hold it if it's standing, as it will fall over.     |
+| `RollOverFront.yaml` | The robot rolls from its back onto its front.                                                           |
+| `Stand.yaml`         | The robot moves into a standing position.                                                               |
+| `StandUpBack.yaml`   | The robot gets up from its back and moves into a standing position.                                     |
+| `StandUpFront.yaml`  | The robot gets up from its front and moves into a standing position.                                    |
+| `Zombie.yaml`        | The robot moves into a standing zombie position, with arms straight out.                                |
 
 ## Modifying and Adding Scripts
 
@@ -134,4 +137,4 @@ scp nubots@<address>:<path_to_script> <path_on_your_computer>
 
 `<address>` is the address of the robot, such as `10.1.1.1` for NUgus 1. `<path_to_script>` is the path to the script. `<path_on_your_computer>` is the path you want to copy the script to on your computer. Run this command on your computer.
 
-After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `main` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git visit the [Git guide](/guides/general/git).
+After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `main` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git and GitHub visit the [Git guide](/guides/general/git).

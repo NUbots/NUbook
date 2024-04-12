@@ -27,7 +27,7 @@ Make sure you have
 
 If the last two commands ran successfully, you are ready to go!
 
-### The folder structure
+### The Folder Structure
 
 Before getting into it, let's look at what we are working with.
 
@@ -45,17 +45,17 @@ Other folders that are important but won't be visited in this tutorial are the f
 
 ### Generate the Module
 
-There is a neat tool that you can run that will generate the boilerplate code for a module. Here's the command
+The generate tool will create the boilerplate code for a module. Here's the command
 
 ```bash
 ./b module generate TestModule
 ```
 
-Run it if you haven't already done so. If you look in the `module` folder, you will see a new folder called `TestModule`!
+Run it if you haven't already done so. If you look in the `module` folder, you will see a new folder called `TestModule`.
 
 This module wasn't created in a folder, but if you are making a new module in a real scenario you should identify the folder your module best fits in and put it in there.
 
-Ok, so lets see what we have in this folder.
+Lets see what we have in this folder.
 
 - **data/config**: Contains a `TestModule.yaml` file, which holds configuration values. Rather than hardcoding values in your implementation, put the values in this file so they can be easily seen and updated. This file is generated with one value, `log_level`. We will look into how this works later.
 - **src**: This folder contains the `.hpp` and `.cpp` files for the module. If you look in the `.hpp`, you'll see a TestModule class is declared that extends `NUClear::Reactor`. The `.cpp` file implements the constructor with one lambda statement that reads configuration values.
@@ -87,7 +87,7 @@ Most of this is copied from other role files. The first three modules are necess
 
 The last module added is our new module, `TestModule`.
 
-This should compile. Let's have a go. First we'll need to turn the role we just made `ON`. Run
+This should compile. First we'll need to turn the role we just made `ON`. Run
 
 ```bash
 ./b configure
@@ -120,7 +120,7 @@ This file will store any of values for the program that might change. It is bad 
 
 Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, the Configuration `on` statement. The code inside this function will run on startup and whenever the configuration file `TestModule.yaml` is changed.
 
-Inside this statement, after the log_level is set, add the following code
+Inside this statement, after the `log_level` is set, add the following code
 
 ```cpp
 log<NUClear::TRACE>("This is a TRACE log.");
@@ -131,20 +131,20 @@ log<NUClear::ERROR>("This is a ERROR log.");
 log<NUClear::FATAL>("This is a FATAL log.");
 ```
 
-`log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `DEBUG`. Let's compile and run the program again.
+`log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `INFO`. Let's compile and run the program again.
 
 ```cpp
 ./b build
 ./b run testprogram
 ```
 
-You should see all of the logs print except for `TRACE`. This is because all logs with level `DEBUG` and higher will run. Lets change the configuration file without stopping the program! Open a new terminal and run `./b edit config/TestModule.yaml`. This will open the TestModule configuration file in `nano`. Change `DEBUG` to `TRACE`. Save with <kbd>CTRL</kbd> + <kbd>O</kbd> and then <kbd>Enter</kbd>. If you look at the program, you will see the logs print out again, but with `TRACE` included. Go back and change the config file to `WARN`. You will now see the logs print again, but with only `WARN`, `ERROR` and `FATAL`.
+You should see all of the logs print except for `TRACE` and `DEBUG`. This is because all logs with level `INFO` and higher will run. Lets change the configuration file without stopping the program! Open a new terminal and run `./b edit config/TestModule.yaml`. This will open the TestModule configuration file in `nano`. Change `INFO` to `TRACE`. Save with <kbd>CTRL</kbd> + <kbd>O</kbd> and then <kbd>Enter</kbd>. If you look at the program, you will see the logs print out again, but with `TRACE` and `DEBUG` included. Go back and change the config file to `WARN`. You will now see the logs print again, but with only `WARN`, `ERROR` and `FATAL`.
 
 The log level system allows you to keep statements for debugging or tuning without the logs spamming the terminal when someone is running the module for other purposes.
 
 Remove all of the log statements. We will be making a 'ping-pong' program that sends an incrementing count between reactions. The increment size will be a configuration value. Let's add that configuration value now.
 
-In `TestModule.yaml` (in your text editor, not in the terminal since this is not persistent), add in the following lines
+In `TestModule.yaml` (in your text editor, not with `./b edit` since this is not persistent), add in the following lines
 
 ```yaml
 # Each time the Ping Pong messages are sent, a count is incremented and the increment is of the following size
@@ -174,7 +174,7 @@ Save, recompile and check that the program prints the message.
 ./b run testprogram
 ```
 
-Make sure you see your `INFO` log and then lets move onto making the messages that we need.
+Make sure you see your `INFO` log and then lets move onto making the messages that we need. If you can't see the log in the terminal, make sure that `log_level` in `TestModule.yaml` is set to `INFO`.
 
 ### Protobuf Messages
 
@@ -196,7 +196,7 @@ message Pong {
 }
 ```
 
-There is an integer in each of these messages. This is the count that will be incremented each time a new `Ping` or `Pong` message is sent. The number it is assigned, `1`, is not the value but its position in the Protobuf message. Save this file and head back over to `TestModule.cpp`.
+There is an unsigned 32-bit integer in each of these messages. This is the count that will be incremented each time a new `Ping` or `Pong` message is sent. The number it is assigned, `1`, is not the value but its position in the Protobuf message. Save this file and head back over to `TestModule.cpp`.
 
 Up at the top of the file, include the protobuf message we just created. Note that these messages are transcompile into C++ code, so include the generated header.
 
@@ -256,7 +256,7 @@ And for the second reaction
 // Print the Pong message!
 log<NUClear::INFO>("Pong count", pong.count);
 
-// Make a Pong message to send
+// Make a Ping message to send
 auto ping = std::make_unique<Ping>();
 ping->count = pong.count + config.increment;
 

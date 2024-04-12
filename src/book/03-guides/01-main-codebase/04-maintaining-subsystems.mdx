@@ -25,6 +25,8 @@ The `nugus_controller` in Webots has functionality to send live odometry ground 
 
 The accuracy of the vision system is reliant on the accuracy of odometry and kinematics because they affect the placement of the mesh and green horizon. It is important that these systems work reasonable well otherwise the robot may have issues detecting objects.
 
+If you are using Webots, you can turn on odometry ground truth in the SensorFilter module. Go to the `SensorFilter.yaml` configuration file and set the `filtering_method` to `GROUND_TRUTH`. This will use the ground truth odometry from Webots instead of the odometry from the robot. This is useful for testing the vision system without having to worry about odometry errors.
+
 ### Dataset Generation
 
 Synthetic and semi-synthetic training data for vision can be generated using [NUpbr](/system/tools/nupbr). Pre-generated datasets for training the Visual Mesh are on the <abbr title="Network-Attached Storage">NAS</abbr> in the lab.
@@ -69,7 +71,7 @@ An automatic camera calibration tool is available in the NUbots repository. See 
 
 After updating the Visual Mesh in the NUbots repository, it should be tested before merging. Refer to the [Getting Started guide](/guides/main/getting-started) for assistance for the following steps.
 
-1. Build the code, ensuring `ROLE_visualmesh` is set to `ON` in `./b configure -i`, and install it to the robot. Ensure the new configuration file is installed by using the `-cu` or `-co` options when installing - check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
+1. Build the code, ensuring `ROLE_test-visualmesh` is set to `ON` in `./b configure -i`, and install it to the robot. Ensure the new configuration file is installed by using the `-cu` or `-co` options when installing - check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
 
 2. When your new Visual Mesh is installed onto the robot, connect to the robot using:
 
@@ -77,13 +79,13 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
    ssh nubots@<address>
    ```
 
-3. Ensure NUsight is on:
+3. Ensure the robot is sending vision data:
 
    ```bash
    nano config/NetworkForwarder.yaml
    ```
 
-   Turn `vision object` and `compressed images` on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight NUbook page](/system/tools/nusight).
+   CompressedImage, Balls, Goals and GreenHorizon should be on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight NUbook page](/system/tools/nusight). If you have not already set up and built NUsight, refer to the [Getting Started page](/guides/main/getting-started).
 
 4. Run the `test/visualmesh` role
 
@@ -93,7 +95,7 @@ After updating the Visual Mesh in the NUbots repository, it should be tested bef
 
 5. Wait for the cameras to load and then watch the Vision tab in NUsight. To determine if the output is correct, consult the [vision page](/system/subsystems/vision) for images of the expected output.
 
-If you would like to see the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback, since the data is too large to send over a network. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
+To see the Visual Mesh itself in NUsight, you will need to enable the `message.vision.VisualMesh` message in the `NetworkForwarder.yaml` file. Most of the time the networking should work, but sometimes there may be issues since the Visual Mesh data is large. If there are issues with seeing the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
 
 - In step 1 of Recording Data, use the [`test/visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/test/visualmesh.role) role to record the data.
 - In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
