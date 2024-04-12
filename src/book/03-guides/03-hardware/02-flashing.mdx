@@ -15,7 +15,7 @@ authors:
 To install Arch Linux (our OS of choice) on to a robot perform the following instructions. Make sure you know the robot number for this NUC before beginning.
 
 <!--- ↓↓↓ UPDATE MIRRORS HERE ↓↓↓ -->
-1. Download the [Arch Linux LiveUSB image matching the date of the mirrorlist in our Dockerfile](https://archive.archlinux.org/iso/2022.07.01/) and burn it on to a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
+1. Find the arch linux archive date in the [mirrorlist for our dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/etc/pacman.d/mirrorlist), go to the [Arch Linux Archive ISO page](https://archive.archlinux.org/iso/), download `archlinux-x86_64.iso` and burn it onto a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
 
    - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
