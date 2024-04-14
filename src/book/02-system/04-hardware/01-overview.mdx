@@ -18,16 +18,20 @@ The NUbots team uses the NUgus hardware platform, a modification of the [igus® 
 
 The following modifications were made to fit our specific requirements:
 
-- The components of the robot were split to to fit the size of the printer bed and volume.
-- The torso was modified to have open shoulder covers for shoulder servo cable access.
+- Split components of the robot to fit the size of the printer bed and volume.
+- Modified the torso to have open shoulder covers for shoulder servo cable access.
+- Redesigned the legs with a simpler model made out of aluminium, with XH540-W270-R servos rather than MX-106 servos, and onyx connectors for the hip and ankle blocks and onyx supports inside the legs. 
+- Moved the buttons to the panel above the removable back panel to prevent issues with button cables when removing the back panel.
+- Added an aluminium bar between the hip yaw servos to reduce flex.
+- Created custom draws for the computer (intel NUC) and subcontrollers (OpenCR, NUSense) 
 
 ## Servos
 
-The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-64/), with two in each shoulder, one in each elbow, and two in the neck. The legs use [Dynamixel MX106 servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-106/), with two in each ankle and three in each hip. There is one [Dynamixel XH540-W270-R servo](https://emanual.robotis.com/docs/en/dxl/x/xh540-w270/) in each knee.
+The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-64/), with two in each shoulder, one in each elbow, and two in the neck. The legs use [Dynamixel XH540-W270-R servo](https://emanual.robotis.com/docs/en/dxl/x/xh540-w270/), with two in each ankle, one in each knee, and three in each hip. 
 
 There are custom made mounting brackets milled from aluminium for the [flywheels](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Flywheel_Bracket.stl), and servo-to-servo mounting brackets in the [neck](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Head_Bracket.stl), hip, and ankle. There are also 3D printed cable clamps on the back of the [knees](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Servo_cable_holder.stl), [ankle and hip blocks](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Cable_Holder.stl).
 
-The servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor.
+The MX servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor.
 This is done to prevent induced EMF from overloading the electronics in the servo.
 EMF can be induced when the servos are manually moved without power being applied (i.e. grabbing the robot's leg and forcing the knee to bend).
 
