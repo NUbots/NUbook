@@ -4,6 +4,10 @@ chapter: General
 title: Git and PR Workflow
 description: How to contribute to a NUbots project using Git and GitHub PRs.
 slug: /guides/general/git
+authors:
+  - Kip Hamiltons (@KipHamiltons)
+  - Cameron Murtagh (@CMurtagh-LGTM)
+  - Trent Houliston (@TrentHouliston)
 ---
 
 ## Prerequisites
@@ -44,7 +48,7 @@ To be approved, you should add reviewers to the pull request. Each reviewer will
 
 The reviewers will give constructive feedback about your code, by making comments on code snippets from your changes. You can respond to these on GitHub. They can also directly suggest changes to specific sections. Additional commits you make to the branch will update the PR and will reset reviews of the changed sections.
 
-Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and Buildkite Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `main` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
+Once all of the comments are resolved, the reviewers have approved the PR, and the build checks have passed (see [_Formatting and PR Checks_](#formatting-and-buildkite-checks)), you can **Squash and Merge**. Squashing combines every commit on the PR into a single commit so that the `main` branch history is clean and easy to follow. Once the code has been squashed and merged, it is in the codebase and you have succeeded in contributing code to NUbots.
 
 ## Commit Etiquette
 
@@ -52,7 +56,7 @@ Commits should make minor changes, and the changes in each commit should have a 
 
 Commit messages should describe what you did, starting with an action verb in the <abbr title="Why? Think of your commit message as completing the sentence 'When applied, this commit will ...'">present tense</abbr>. If you added a file with a new stand script, for example, prefer "Add new stand script" over "Added new stand script" or "Adding new stand script" or "Add script".
 
-## Formatting and Buildkite Checks
+## Formatting and PR Checks
 
 Before making a pull request, it is important that your code adheres to the code style and formatting rules for the project you are contributing to.
 

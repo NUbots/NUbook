@@ -7,7 +7,8 @@
   "dependencies": {
     "@babel/core": "^7.15.0",
     "@babel/eslint-parser": "^7.15.0",
-    "@josephuspaye/gatsby-remark-graphviz": "^0.3.0",
+    "@docsearch/react": "^3.5.2",
+    "@josephuspaye/gatsby-remark-graphviz": "^0.3.1",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
     "autoprefixer": "^10.2.4",
@@ -61,8 +62,8 @@
     "dev": "gatsby develop",
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
-    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\"",
-    "format:check": "prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\" \"static/**/*.js\""
+    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\"",
+    "format:check": "prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\""
   },
   "repository": {
     "type": "git",
@@ -88,5 +89,8 @@
   "browserslist": [
     ">0.25%",
     "not dead"
-  ]
+  ],
+  "resolutions": {
+    "probe-image-size": "^7.0.0"
+  }
 }
