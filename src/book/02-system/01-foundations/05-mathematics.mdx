@@ -281,15 +281,19 @@ If you have two **vectors** in the **same space** and their **inner** (or **oute
 Eigen::Vector3d rXZa = rXYa + rYZa;
 ```
 
-In general, `t` is reserved for the **torso**, `w` for the **world**, `r` for the **robot**, and `b` for **ball**. `f` could be **field** or **foot**, and should be determined from context.
+### Reference Frames
 
-When measured relative to the robot the **x-axis** is **forward** out of the torso, the **y-axis** is to the **left** and the **z-axis** is **up** the neck. This is robot space, also called torso space. The origin of this space is the base of the torso between the legs.
+The NUbots codebase uses a number of different reference frames (spaces) for different purposes. The following is a list of the commonly used spaces in the codebase.
 
-World space is defined with the **z-axis** pointing **up**. The other two axes are determined from the directions of the x-axis and the y-axis of the robot when it turns on. The origin of this space is the same as torso space when the robot is turned on, but on the ground.
+| Space    | Letter | Description                                                                                            |
+| -------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| `camera` | C      | Located at camera (left/right) with x pointed "outwards", y to the "left" and z "up"                   |
+| `world`  | W      | Located on the ground below the robot on startup. (Fixed inertial frame)                               |
+| `torso`  | T      | Fixed midway between the robots hip yaw joints, with x "forward", y to the "left" and z "up"           |
+| `robot`  | R      | Located directly beneath torso projected onto the ground, with x "forward", y to the "left" and z "up" |
+| `field`  | F      | Located at the centre circle of the field, with x pointing towards the "own" goal and z "up"           |
 
-Robot space is defined with the **z-axis** pointing **up** inline with world, the **x-axis** pointing **forward** out of the torso, and **y-axis** to the left. The origin of this space is below the torso, on the ground. It is created from the X-Y position and yaw angle from odometry.
-
-For measurements on the field we use field space. For field coordinates the **x-axis** is **toward the opponent's goal**, the **y-axis** is **left** when facing the opponents goal and the **z-axis** is **up**. The origin of this space is the centre of the field.
+![NUbots spaces](./images/spaces.png 'NUbots spaces')
 
 ### Summary
 
