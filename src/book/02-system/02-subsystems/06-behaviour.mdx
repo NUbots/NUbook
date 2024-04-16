@@ -122,25 +122,22 @@ ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When 
 
 To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
 
-## Subsystem-Relevant RoboCup Rules
+## RoboCup Rules
 
-<details>
-<summary>Play-States and Penalty Considerations (RoboCup 2022)</summary>
+### Play-States and Penalty Considerations
 
-Based on the specifications in the [RoboCup Humanoid Rules](https://github.com/RoboCup-Humanoid-TC/Rules) there are some states in the game where the robots must perform a particular behaviour differently to normal play. An example of this is when a penalty occurs in favor of the opposing team, which then recieves either a direct or indirect free kick, where the robots need to then act in a particular way such as standing still, or move out of the way for the duration of the kick.
+Based on the specifications in the [RoboCup Humanoid Rules](https://github.com/RoboCup-Humanoid-TC/Rules) there are some states in the game where the robots need to behave differently to regular play. For example if the opposing team has been granted a free kick, we might need to stand still, or move out of the way for the duration of the kick.
 
 [In the revision of the rules as per the 24th of March 2022:](http://humanoid.robocup.org/wp-content/uploads/RC-HL-2022-Rules.pdf)
 
-### All free kicks are taken from the place where the offence occurred, except:
+All free kicks are taken from the place where the offence occurred, except:
 
 - **Indirect free kicks to the attacking team for an offence inside the opponent's penalty area** are taken from the nearest point on the penalty area line which runs parallel to the goal line.
 
 - In the physical competition, **free kicks to the defending team in their goal area may be taken from anywhere in that area**
 
-### Until the ball is in play all opponents must remain:
+Until the ball is in play all opponents must remain:
 
 - **0.75m for KidSize and 1.5m for AdultSize from the ball until it is in play**, unless they are on their own goal line between the goalposts
 
 - Outside the penalty area for free kicks inside the opponent's penalty area
-
-</details>
