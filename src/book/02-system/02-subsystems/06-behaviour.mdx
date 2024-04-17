@@ -121,3 +121,25 @@ A script consists of frames (also called targets) which specify the position of 
 ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When a servo is "locked", its position can only be changed in ScriptTuner. When it is "unlocked", the servo can be moved physically on the robot, which will update the position value in the script. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
 
 To learn how to use ScriptTuner, read the [ScriptTuner guide](/guides/main/tuning-and-running-scripts#script-tuner).
+
+## RoboCup Rules
+
+[Currently up to date with the 2024 competition rules.](https://humanoid.robocup.org/wp-content/uploads/RC-HL-2024-Rules.pdf)
+
+The latest competition rules as well as previous years' rules can be found on the [RoboCup Humanoid League website](https://humanoid.robocup.org/rules/).
+
+### Play-States and Penalty Considerations
+
+There are unique states in the game where the robots need to behave differently to regular play. For example, if the opposing team has been granted a free kick, we might need to stand still, or move out of the way for the duration of the kick.
+
+All free kicks are taken from the place where the offence occurred, except:
+
+- **Indirect free kicks to the attacking team for an offence inside the opponent's penalty area** are taken from the nearest point on the penalty area line which runs parallel to the goal line.
+
+- In the physical competition, **free kicks to the defending team in their goal area may be taken from anywhere in that area**
+
+Until the ball is in play all opponents must remain:
+
+- **0.75m for KidSize and 1.5m for AdultSize from the ball until it is in play**, unless they are on their own goal line between the goalposts
+
+- Outside the penalty area for free kicks inside the opponent's penalty area
