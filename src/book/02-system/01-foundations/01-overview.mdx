@@ -82,17 +82,74 @@ Any code should run with `platform::HardwareSimulator`, but this is a very basic
 This is a general system diagram for the `robocup` role. `Hardware Input` and `Camera` can be replaced with `Webots` when considering the `webots/robocup` role. These roles are used in the main RoboCup competition and the Virtual Season competition. Transitive edges have been removed to make the graph easier to view.
 
 ```dot
-# A graph of the system
+# The system diagram for the robocup role
 digraph {
-    "Camera" -> "Visual Mesh" -> "Green Horizon" -> {"Ball Detector", "Goal Detector"}
-    {"Servo State", "IMU State"} -> "Hardware Input" -> "Forward Kinematics" -> "Odometry" -> "Visual Mesh"
-    "Goal Detector" -> "Localisation" -> "Soccer Strategy"
-    "Soccer Strategy" -> "Walk Path Planner" -> "Walk Engine" -> "Inverse Kinematics"
-    "Soccer Strategy" -> "Script Engine (Kick, Getup)" -> "Servo Command"
-    "Ball Detector" -> "Ball Localisation"
-    "Game Controller" -> "Soccer Strategy"
-    "Ball Localisation" -> "Head Behaviour Soccer" -> "Head Controller" -> "Inverse Kinematics" -> "Servo Command"
-    "Servo Command" -> "Subsumption Controller" -> "Hardware Output"
+
+  {"Servo State", "IMU State"} -> "Hardware Input" -> "Forward Kinematics" -> "Odometry" -> "Visual Mesh"
+  "Camera" -> "Visual Mesh" -> "Green Horizon" -> {"Ball Detector", "Field Line Detector"}
+  "Field Line Detector" -> "Field Localisation" -> "Strategy"
+  "Ball Detector" -> "Ball Localisation" -> "Strategy"
+  "Game Controller" -> "Purpose"
+
+  subgraph cluster_director {
+    label="Director"
+    "Purpose" -> "Strategy" -> "Planning" -> "Skill" -> "Actuation"
+  }
+
+  "Actuation" -> "Servo Command" -> "Hardware Output"
+
+}
+```
+
+```dot
+# The behaviour subgraph driven by the Director system
+digraph {
+  compound=true
+
+  subgraph cluster_purpose {
+    label = "Purpose"
+    "Striker"
+    "Defender"
+    "Goalie"
+  }
+
+  subgraph cluster_strategy {
+    label = "Strategy"
+    "KickToGoal"
+    "WalkToBall"
+    "FallManagement"
+  }
+
+  subgraph cluster_planning {
+    label = "Planning"
+    "KickTo"
+    "WalkTo"
+    "LookAround"
+    "Plan Getup"
+    "Plan Fall"
+  }
+
+  subgraph cluster_skill {
+    label = "Skill"
+    "Kick"
+    "Walk"
+    "Look"
+    "Getup"
+    "Relax"
+  }
+
+  subgraph cluster_actuation {
+    label = "Actuation"
+    "LegIK"
+    "Arms"
+    "Head"
+  }
+
+  "Defender" -> "WalkToBall" [ltail=cluster_purpose,lhead=cluster_strategy]
+  "WalkToBall" -> "LookAround" [ltail=cluster_strategy,lhead=cluster_planning]
+  "LookAround" -> "Look" [ltail=cluster_planning,lhead=cluster_skill]
+  "Look" -> "Arms" [ltail=cluster_skill,lhead=cluster_actuation]
+
 }
 ```
 

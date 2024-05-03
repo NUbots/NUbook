@@ -16,7 +16,7 @@ The module will buffer up packets from the future and emit them at the same rate
 
 ### Usage
 
-Add `support::logging::DataPlayback` to your role file and comment out the roles that you want the `nbs` files to replace. For example, if you are playing back `message.input.Sensors` you need to comment out `platform::darwin::SensorFilter` from your role otherwise you will have two different modules emitting conflicting `Sensors` messages. You must recompile your role for these changes to take effect.
+Add `support::logging::DataPlayback` to your role file and comment out the roles that you want the `nbs` files to replace. For example, if you are playing back `message.input.Sensors` you need to comment out `input::SensorFilter` from your role otherwise you will have two different modules emitting conflicting `Sensors` messages. You must recompile your role for these changes to take effect.
 
 In order to play back the messages you need to enable the message types that are the input to the modules that you wish to test by setting them to true in the configuration (e.g. `message.input.Sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats <nbs-file>`).
 

@@ -7,9 +7,10 @@ slug: /system/foundations/director
 authors:
   - Trent Houliston (@TrentHouliston)
   - Ysobel Sims (@ysims)
+references: references.bib
 ---
 
-The Director is a framework and algorithm used to control the flow of behaviour on the robots.
+The Director <cite>director2023</cite> is a framework and algorithm used to control the flow of behaviour on the robots.
 It allows composable behaviours that can take advantage of transition rules to ensure that the robot performs the right task at the right time.
 
 The Director does this by providing a set of new DSL keywords to NUClear that describe what tasks to run, what conditions are required, and how those tasks build on other tasks.
@@ -440,3 +441,7 @@ Modules in this layer include
 - Sequences: Takes a sequence of servo positions and emits them in order
 - Groups: Takes a group of servos and emits them together, will only emit Done when all servos are done
 - Servos: Takes a single servo and emits it, will only emit Done when the time the servo has to move is over
+
+## References
+
+<References />
