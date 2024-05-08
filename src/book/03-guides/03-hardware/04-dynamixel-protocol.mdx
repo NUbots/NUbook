@@ -14,8 +14,9 @@ Dynamixel is the name that Robotis gives to its [system](https://www.robotis.us/
 
 The goal of this guide is to give an overview of the Dynamixel communication. It is not meant to be an exhaustive list of what is already on the Robotis [manual](https://emanual.robotis.com/docs/en/dxl/protocol2/) but to give further insight into things left out of said manual, mostly the low-level electrical side, as well as any idiosyncracities. Said manual should be read after the reader has read this guide.
 
-The target-audience is somewhat broad and can be anywhere between 
-- a team-member who is experienced with the Dynamixel system but wants to cross-reference something, 
+The target-audience is somewhat broad and can be anywhere between
+
+- a team-member who is experienced with the Dynamixel system but wants to cross-reference something,
 - a new electrical, computer, or mechatronics engineering student who has had some experience with some of these concepts such as UART in ELEC2720 but may want to refresh some of the basics and needs to learn some new things such as RS485 and the Dynamixel protocol,
 - and a computer-science student who has some experience with telecommunications such as Ethernet but may have no experience at all with UART and RS485.
 
@@ -27,7 +28,7 @@ Assumed knowledge is a basic understanding of electrical concepts like voltage a
 
 ## Universal Asynchronous Receiver-Transmitter
 
-A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike SPI and I2C where there is one extra signal for the clock, often just called the serial clock, both devices on either end have to know the common baudrate beforehand. Thus, it is common to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral. 
+A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike SPI and I2C where there is one extra signal for the clock, often just called the serial clock, both devices on either end have to know the common baudrate beforehand. Thus, it is common to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
 
 <Alert type="info">
 
@@ -43,13 +44,13 @@ The term UART can also refer to the way how data is framed. If one will, it can 
 
 ![An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.](./images/dynamixel_protocol/uart_frame.drawio.png 'An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.')
 
-| Line        | Logic-level | Description                                                                 | Optional  |
-|-------------|-------------|-----------------------------------------------------------------------------|-----------|
-| Idle        | 1           | is where there is no data.                                                  | no        |
-| Start-bit   | 0           | is the beginning of the data.                                               | no        |
-| Data-bits   | ?           | are the bits of data from the least significant to the most significant.    | no        |
-| Parity-bits | ?           | tell whether there has been any corruption of the data during transmission. | yes       |
-| Stop-bit    | 1           | is the end of the data.                                                     | yes       |
+| Line        | Logic-level | Description                                                                 | Optional |
+| ----------- | ----------- | --------------------------------------------------------------------------- | -------- |
+| Idle        | 1           | is where there is no data.                                                  | no       |
+| Start-bit   | 0           | is the beginning of the data.                                               | no       |
+| Data-bits   | ?           | are the bits of data from the least significant to the most significant.    | no       |
+| Parity-bits | ?           | tell whether there has been any corruption of the data during transmission. | yes      |
+| Stop-bit    | 1           | is the end of the data.                                                     | yes      |
 
 The receiver looks for the start-bit's falling edge. When it has found the edge, it begins to time and to sample each bit thereforth based on the agreed upon bitrate. Most setups are written by three symbols, e.g. 8N1 means that there are eight data-bits, no parity bits, and one stop-bit. Both Dynamixel protocols and many other serial ones are 8N1. Henceforth in this guide, this is the assumed framing.
 
@@ -91,7 +92,7 @@ Often, a Dynamixel device's microcontroller has a UART to communicate on the bus
 
 ## Transistor-Transistor-Logic
 
-Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data. 
+Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data.
 
 <Alert type="warn">
 
@@ -115,9 +116,9 @@ The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&r
 
 ### Differential Signal
 
-In order to appreciate the power of such a differential signal, one must understand the challenges of noise and interference. For very long cables, the wires often behave like antennae and can thus pick up nearby interference from other electrical devices, especially from servos which tend to emit switching noise. As such, a big enough interference can flip a bit and lead to an error. 
+In order to appreciate the power of such a differential signal, one must understand the challenges of noise and interference. For very long cables, the wires often behave like antennae and can thus pick up nearby interference from other electrical devices, especially from servos which tend to emit switching noise. As such, a big enough interference can flip a bit and lead to an error.
 
-However, RS485 and other such techniques have an answer for this. Given a message $m(t)$, the transmitter sends a positive copy $p(t) = m(t)$ and a negative copy $n(t) = -m(t)$ together as a pair. As long as the two physical wires are close together, any interference $w(t)$ is both added where the received positive signal is $p'(t) = m(t) + w(t)$, and the received negative signal is $n'(t) = -m(t) + w(t)$. The receiver then subtracts the two, often with a difference amplifier, such that the interference is cancelled out, and the received message is $m'(t) = p'(t) - n'(t) = m(t) + w(t) - ( -m(t) + w(t) ) = 2 m(t)$. 
+However, RS485 and other such techniques have an answer for this. Given a message $m(t)$, the transmitter sends a positive copy $p(t) = m(t)$ and a negative copy $n(t) = -m(t)$ together as a pair. As long as the two physical wires are close together, any interference $w(t)$ is both added where the received positive signal is $p'(t) = m(t) + w(t)$, and the received negative signal is $n'(t) = -m(t) + w(t)$. The receiver then subtracts the two, often with a difference amplifier, such that the interference is cancelled out, and the received message is $m'(t) = p'(t) - n'(t) = m(t) + w(t) - ( -m(t) + w(t) ) = 2 m(t)$.
 
 ![A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.](./images/dynamixel_protocol/differential.drawio.png 'A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.')
 
@@ -137,7 +138,7 @@ RS485 was historically used for communicating to automated machines on very long
 
 ### Twisted Pair
 
-The robustness to interference is better when the two wires are twisted. This method is very common not only for RS485 but throughout telecommunications. When a pair of wires is untwisted, the area between the wires, although very small and thin, may make up a big enough loop that can pick up magnetic fields going through it. Since interference is mostly picked up as electromagnetic waves, half of which are made up of a magnetic field, then any loop of wire can pick up interference. However, if the pair is twisted, then the big loop is now split up into smaller loops which are alternating in polarity such that the current induced across one small loop is cancelled out by that across the next small loop. Even if there are an odd number of loops, the last unpaired loop is much smaller than the big loop that was before for the untwisted pair. Furthermore, a twisted pair is easier to manage and keeps the two wires close at all times. 
+The robustness to interference is better when the two wires are twisted. This method is very common not only for RS485 but throughout telecommunications. When a pair of wires is untwisted, the area between the wires, although very small and thin, may make up a big enough loop that can pick up magnetic fields going through it. Since interference is mostly picked up as electromagnetic waves, half of which are made up of a magnetic field, then any loop of wire can pick up interference. However, if the pair is twisted, then the big loop is now split up into smaller loops which are alternating in polarity such that the current induced across one small loop is cancelled out by that across the next small loop. Even if there are an odd number of loops, the last unpaired loop is much smaller than the big loop that was before for the untwisted pair. Furthermore, a twisted pair is easier to manage and keeps the two wires close at all times.
 
 ### Terminating Resistors
 
