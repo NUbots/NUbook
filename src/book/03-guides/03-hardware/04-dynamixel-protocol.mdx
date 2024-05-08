@@ -1,0 +1,144 @@
+---
+section: Guides
+chapter: Hardware
+title: Dynamixel Protocol
+description: Learn about the systems of the Dynamixel protocol
+slug: /guides/hardware/dynamixel-protocol
+authors:
+  - Clayton Carlon (@Claegtun)
+---
+
+## Introduction
+
+Dynamixel is the name that Robotis gives to its [system](https://www.robotis.us/dynamixel/) of off-the-shelf servos that have integrated control. These are such that the servos are controlled by commands over a digital interface. There are broadly three protocols for such an interface, namely ModbusRTU, Dynamixel v1, and Dynamixel v2. We will only look into the last of the three which will be simply called the Dynamixel protocol. However, before we do so, we must look at the lower-level electrical system.
+
+The goal of this guide is to give an overview of the Dynamixel communication. It is not meant to be an exhaustive list of what is already on the Robotis [manual](https://emanual.robotis.com/docs/en/dxl/protocol2/) but to give further insight into things left out of said manual, mostly the low-level electrical side, as well as any idiosyncracities. Said manual should be read after the reader has read this guide.
+
+The target-audience is somewhat broad and can be anywhere between 
+- a team-member who is experienced with the Dynamixel system but wants to cross-reference something, 
+- a new electrical, computer, or mechatronics engineering student who has had some experience with some of these concepts such as UART in ELEC2720 but may want to refresh some of the basics and needs to learn some new things such as RS485 and the Dynamixel protocol,
+- and a computer-science student who has some experience with telecommunications such as Ethernet but may have no experience at all with UART and RS485.
+
+<Alert type="warn">
+
+Assumed knowledge is a basic understanding of electrical concepts like voltage and maybe some HSC physics such as magnetic fields as well as a basic intuition for electronic devices in daily life.
+
+</Alert>
+
+## Universal Asynchronous Receiver-Transmitter
+
+A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike SPI and I2C where there is one extra signal for the clock, often just called the serial clock, both devices on either end have to know the common baudrate beforehand. Thus, it is common to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral. 
+
+<Alert type="info">
+
+There is also a universal synchronous and asynchronous receiver-transmitter (USART) which is a device that can handle both synchronous and asynchronous communication. Many microcontrollers would have both USARTs and UARTs, the former of which can more of less be used as the latter. However, we will only talk about the asynchronous side in which a UART henceforth can easily be applied for a USART as well.
+
+</Alert>
+
+A UART has two pins, an input called RX, and an output called TX.
+
+![Two abstract UARTs](./images/dynamixel_protocol/pure_uart.drawio.png 'Two abstract UARTs have their RX-pins and TX-pins connected each way.')
+
+The term UART can also refer to the way how data is framed. If one will, it can almost be informally thought of as a very low-level and very basic protocol. Here, UART can refer to the special bits that are needed to frame data, all of which need to be agreed upon between both devices on either end.
+
+![An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.](./images/dynamixel_protocol/uart_frame.drawio.png 'An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.')
+
+| Line        | Logic-level | Description                                                                 | Optional  |
+|-------------|-------------|-----------------------------------------------------------------------------|-----------|
+| Idle        | 1           | is where there is no data.                                                  | no        |
+| Start-bit   | 0           | is the beginning of the data.                                               | no        |
+| Data-bits   | ?           | are the bits of data from the least significant to the most significant.    | no        |
+| Parity-bits | ?           | tell whether there has been any corruption of the data during transmission. | yes       |
+| Stop-bit    | 1           | is the end of the data.                                                     | yes       |
+
+The receiver looks for the start-bit's falling edge. When it has found the edge, it begins to time and to sample each bit thereforth based on the agreed upon bitrate. Most setups are written by three symbols, e.g. 8N1 means that there are eight data-bits, no parity bits, and one stop-bit. Both Dynamixel protocols and many other serial ones are 8N1. Henceforth in this guide, this is the assumed framing.
+
+<Alert type="warn">
+
+Two UARTs must agree on the baudrate, framing (e.g. 8N1), and the signal-levels in order to communicate.
+
+</Alert>
+
+However, pure UART often only refers to abstract bits or logic levels, not voltages. Signalling techniques such as RS485, RS232, and TTL are what are further needed for a complete system to define the electrical behaviour as well as maybe flow-control (e.g. RS232).
+
+## Duplexity
+
+Firstly, one must understand the concept of duplexity since the half duplexity of the Dynamixel protocol is not always intuitive for beginners. There are three kinds of digital communication, namely simplex, full duplex, and half duplex.
+
+Simplexity is when data goes in only one direction, from Device-A to Device-B, where only the former transmits and only the latter receives. There is only one channel, and there may often be only one electrical signal. An analogy would be Alice giving instructions to Bob through a loud-speaker very far away.
+
+![In simplexity, data always flows in only one direction.](./images/dynamixel_protocol/simplexity.drawio.png 'In simplexity, data always flows in only one direction.')
+
+Full duplexity is when data can go in both directions at the same time, between Device-A and Device-B. There are two channels, one for each direction such that one could think of each channel as simplex. There is no clash when both Device-A and Device-B send data at the same time since the two channels are separate. An analogy would be Alice and Bob writing letters or texting.
+
+![In full duplexity, data can flow in both directions at the same time.](./images/dynamixel_protocol/full_duplexity.drawio.png 'In full duplexity, data can flow in both directions at the same time.')
+
+A pure UART will have two signals, RX and TX, and if it were connected to another UART such that TX->RX both ways, then this would be an example of full duplexity.
+
+Half duplexity is when data can go in both directions but not at the same time. There seem to be two channels but are really combined into one. An analogy would be Alice and Bob talking to each other by walkie-talkies.
+
+![In half duplexity, data can flow in both directions but not at the same time.](./images/dynamixel_protocol/half_duplexity.drawio.png 'In half duplexity, data can flow in both directions but not at the same time.')
+
+<Alert type="warn">
+
+The Dynamixel protocol is half duplex; therefore, it is important to understand half duplexity and the needed flow-control and logic behind it.
+
+</Alert>
+
+We will see soon that the reason why the protocol is half duplex is the fewer number of wires - especially for RS485 - and the fact that servos only respond to instructions.
+
+Often, a Dynamixel device's microcontroller has a UART to communicate on the bus. This UART as said before has two pins, RX and TX. Therefore, in theory, it could be used for full duplexity. However, RX and TX get switched between by a transceiver which is often another chip on the board. This transceiver as the name suggests can switch between receiving and transmitting on the same bus-line. Therefore, this transceiver has another input pin to set the direction, sometimes called the TX-enable, the direction, etc.
+
+## Transistor-Transistor-Logic
+
+Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data. 
+
+<Alert type="warn">
+
+Some Dynamixel servos use TTL, seen by their three-pinned headers. Such servos are still used on the Darwins in NUbots. Therefore, TTL is included in this guide.
+
+</Alert>
+
+![A TTL transceiver switches the bus-line between directions based on the TX-enable.](./images/dynamixel_protocol/ttl.drawio.png 'A TTL transceiver switches the bus-line between directions based on the TX-enable.')
+
+The [NC7WZ241](https://www.onsemi.com/pdf/datasheet/nc7wz241-d.pdf) chip is an example of a TTL transceiver that is used on the [OpenCR](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
+
+## RS485
+
+### Transceiver
+
+RS485 is an electrical standard that defines the signal-levels for many serial devices; it does not define a protocol but is instead used for many protocols. Unlike TTL, this has two wires for the data, here called positive and negative, but sometimes under different names such as either plus and minus or A and B. These two wires make up a differential signal.
+
+![An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.](./images/dynamixel_protocol/rs485.drawio.png 'An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.')
+
+The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&ref_url=https%253A%252F%252Fwww.google.com%252F) chip is an example of an RS485 transceiver that is used on NUSense.
+
+### Differential Signal
+
+In order to appreciate the power of such a differential signal, one must understand the challenges of noise and interference. For very long cables, the wires often behave like antennae and can thus pick up nearby interference from other electrical devices, especially from servos which tend to emit switching noise. As such, a big enough interference can flip a bit and lead to an error. 
+
+However, RS485 and other such techniques have an answer for this. Given a message $m(t)$, the transmitter sends a positive copy $p(t) = m(t)$ and a negative copy $n(t) = -m(t)$ together as a pair. As long as the two physical wires are close together, any interference $w(t)$ is both added where the received positive signal is $p'(t) = m(t) + w(t)$, and the received negative signal is $n'(t) = -m(t) + w(t)$. The receiver then subtracts the two, often with a difference amplifier, such that the interference is cancelled out, and the received message is $m'(t) = p'(t) - n'(t) = m(t) + w(t) - ( -m(t) + w(t) ) = 2 m(t)$. 
+
+![A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.](./images/dynamixel_protocol/differential.drawio.png 'A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.')
+
+Indeed, this is a simple example as there is some more complexity in the way how the RS485 transceiver drives the signals, but this should give you the broad idea of how it works and to understand its advantage. Furthermore, this kind of interference is known as common-mode noise. As an aside, a differential pair cannot handle differential mode noise, which is however less common in our case. The reader can learn more about the two [here](https://www.allaboutcircuits.com/industry-white-papers/emc-basics-common-mode-vs-differential-noise/).
+
+<Alert type="warn">
+
+It is important to understand the fact that there are two signals that make up a differential pair when probing the bus with either an oscilloscope or a digital-signal analyser such as a Saleae. Often in such times, only one probed signal - ideally positive - is enough to see the data.
+
+</Alert>
+
+<Alert type="info">
+
+RS485 was historically used for communicating to automated machines on very long factory-floors with a lot of electromagnetic noise from machinery. Therefore, RS485 can deal with very long lengths up to a kilometre depending on the bandwidth. Therefore, one may think that RS485 is overkill for such a small robot, but one should remember that servos can make a lot of electromagnetic noise because of their nature.
+
+</Alert>
+
+### Twisted Pair
+
+The robustness to interference is better when the two wires are twisted. This method is very common not only for RS485 but throughout telecommunications. When a pair of wires is untwisted, the area between the wires, although very small and thin, may make up a big enough loop that can pick up magnetic fields going through it. Since interference is mostly picked up as electromagnetic waves, half of which are made up of a magnetic field, then any loop of wire can pick up interference. However, if the pair is twisted, then the big loop is now split up into smaller loops which are alternating in polarity such that the current induced across one small loop is cancelled out by that across the next small loop. Even if there are an odd number of loops, the last unpaired loop is much smaller than the big loop that was before for the untwisted pair. Furthermore, a twisted pair is easier to manage and keeps the two wires close at all times. 
+
+### Terminating Resistors
+
+Further to RS485 are terminating resistors which are often important to minimise reflections and to maximise the received power. A signal is a travelling wave like one on a rope. As such, if one end of the bus is not terminated properly, reflections can come back and interfere with the signal. RS485 can only have two terminating resistors, best at either end of a bus. RS485 doesn't always need two terminating resistors in order to work, but it is best to have them for the best performance. Nearly always, the terminating resistor is 120 Ω. You can read more [here](https://www.ti.com/document-viewer/lit/html/SSZTB23).
