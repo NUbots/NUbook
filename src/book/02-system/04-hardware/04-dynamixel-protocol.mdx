@@ -141,3 +141,248 @@ The robustness to interference is better when the two wires are twisted. This me
 #### Terminating Resistors
 
 Further to RS485 are terminating resistors which are often important to minimise reflections and to maximise the received power. RS485 can only have two terminating resistors, best at either end of a bus. However, RS485 doesn't always need two terminating resistors in order to work, but it is best to have them for the best performance. Nearly always, the terminating resistor is 120 Ω. You can read more [here](https://www.ti.com/document-viewer/lit/html/SSZTB23).
+
+## v2 Protocol
+
+### Asymmetry
+
+The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a controller and a device, analoguous to SPI, I2C, and Modbus for example, or a server and a client. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of instruction and status. Only the controller can iniate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
+
+![The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.](./images/dynamixel_protocol/asymmetric.drawio.png 'The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.')
+
+### Packets
+
+An instruction-packet is made up such:
+
+| Field         | Length    | Bytes         | Brief                                                                         |
+|---------------|-----------|---------------|-------------------------------------------------------------------------------|
+| Header        | 4         | 0x00FDFFFF    | The start of the packet.                                                      |
+| ID            | 1         | ?             | The ID of the receiving device                                                |
+| Length        | 2         | ?             | The length of the packet starting from the instruction, i.e. length = N + 3.  |
+| Instruction   | 1         | ?             | The kind of instruction                                                       |
+| Payload       | N         | ?             | The parameters relating to the instruction if any.                            |
+| CRC           | 2         | ?             | The error-checking for the receiving device.                                  |
+
+A status-packet is made up such:
+
+| Field         | Length    | Bytes         | Brief                                                                         |
+|---------------|-----------|---------------|-------------------------------------------------------------------------------|
+| Header        | 4         | 0x00FDFFFF    | The start of the packet.                                                      |
+| ID            | 1         | ?             | The ID of the responding device                                               |
+| Length        | 2         | ?             | The length of the packet starting from the instruction, i.e. length = N + 4.  |
+| Instruction   | 1         | 0x55          | The sign of a status.                                                         |
+| Error         | 1         | ?             | The error if any.                                                             |
+| Payload       | N         | ?             | The returned data relating to the instruction if any.                         |
+| CRC           | 2         | ?             | The error-checking for the receiving controller.                              |
+
+<Alert type="warn">
+
+The data is in little-endian format.
+
+</Alert>
+
+### Cyclic Redundancy Check
+
+The Cyclic Redundancy Check (CRC) is value that is appended at the end which helps tell whether there has been any corruption in the received packet. Firstly, the sender computes the CRC of the whole packet soon to be sent - excluding the CRC of course - and appends it on the end. The receiver computes its own version of the CRC of the packet that it has just received and compares it to the appended CRC. If the two CRCs are different, then there has been an error. One can learn more about how the CRC works mathematically [here](https://en.wikipedia.org/wiki/Cyclic_redundancy_check).
+
+There are different ways to calculate the CRC depending on the polynomial. The Dynamixel protocol uses CRC-16-IBM which has $x^{16} + x^{15} + x^{2} + 1$ as the polynomial, otherwise wrtten as 0x8005. An algorithm for the specific CRC that the Dynamixel protocol uses as well as a look-up-table can be found [here](https://emanual.robotis.com/docs/en/dxl/crc/).
+
+### Error
+
+One difference between an isntruction-packet and a status-packet is the extra error-field in the latter as well as the fixed instruction-field of 0x55. Firstly, if the most significant bit of the error-field is 1, then there has been a hardware problem; reading the hardware-error-status in the device can give more details. The rest of the bits can tell the following.
+
+| Value | Error             | Brief                                                                         |
+|-------|-------------------|-------------------------------------------------------------------------------|
+| 0x01  | Result Fail       | Failed to process the received instruction-packet. |
+| 0x02  | Instruction Error | Either an undefined instruction has been received or an action has been received without a reg-write. |
+| 0x03  | CRC Error         | The computed CRC does not match the received one. Likely, the instruction-packet has been corrupted or the original CRC is incorrect. |
+| 0x04  | Data Range Error  | Data to be written is outside the allowed range.                                                        |
+| 0x05  | Data Length Error | Data to be written is shorter than the addressed field. For example, only two bytes are written to a four-byte field. |
+| 0x06  | Data Limit Error  | Data to be written is outside the limit that is set in the ROM.                        |
+| 0x07  | Access Error      | Attempted to write to an either read-only or an undefined address; attempted to read from an either write-only or undefined address; attempted to write to the ROM whilst the torque is enabled.|
+
+### Control-Table
+
+Before we go further, some context may be needed for the protocol and how it is used as a means to an end. The Dynamixel servos have their own integrated control with a closed-loop, feedforward gains, etc. Therefore, one controls the servo by giving a target, often the angular position of the shaft. Such data can be written to and read from a unified control-table which is a block of memory that is accessable by the Dynamixel protocol. For example, the two most common registers to access are the goal-position and the present position; the former is written as a target for the servo; the latter is read as the actual position. One can look at [the control-table for the XH540-W270](https://emanual.robotis.com/docs/en/dxl/x/xh540-w270/#control-table-of-eeprom-area) as an example.
+
+### Instructions
+
+The controller can send a variety of instructions to either write to and read from these registers as well as to control the servo as a whole. The Dynamixel v2 [manual](https://emanual.robotis.com/docs/en/dxl/protocol2/) has a full overview of the different instructions. However here, we will only look at the most common ones that are used at NUbots.
+
+<details>
+
+<summary> Ping, 0x01 </summary>
+
+Pings either a device with the given ID or all devices if the ID is 0xFE which is the broadcast ID. The instruction-packet has no payload; so, the length is always 3. The status-packet has a payload of three bytes, namely a half word for the model-number and a byte for the firmware-version. If the broadcast ID is set, then all devices on the bus send status-packets in order of their IDs.
+
+The instruction-packet:
+
+| Field         | Length    | Bytes         |
+|---------------|-----------|---------------|
+| Header        | 4         | 0x00FDFFFF    |
+| ID            | 1         | ?             |
+| Length        | 2         | 0x03          |
+| Instruction   | 1         | 0x01          |
+| CRC           | 2         | ?             |
+
+The status-packet:
+
+| Field             | Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header            | 4         | 0x00FDFFFF    |
+| ID                | 1         | ?             |
+| Length            | 2         | 0x07          |
+| Instruction       | 1         | 0x55          |
+| Error             | 1         | ?             |
+| Model-number      | 2         | ?             |
+| Firmware-version  | 1         | ?             |
+| CRC               | 2         | ?             |
+
+</details>
+
+<details>
+
+<summary> Read, 0x02 </summary>
+
+Reads data from the device's control-table. The instruction's payload is the starting address in the table to read from which and the length of data, both as half words. The status' payload is the requested data from the servo's control-table; therefore, the packet-length is variable.
+
+The instruction-packet:
+
+| Field         	| Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header        	| 4         | 0x00FDFFFF    |
+| ID            	| 1         | ?             |
+| Length        	| 2         | 0x07          |
+| Instruction   	| 1         | 0x02          |
+| Starting Address	| 2         | ?             |
+| Data-length       | 2         | X             |
+| CRC           	| 2         | ?             |
+
+The status-packet:
+
+| Field             | Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header            | 4         | 0x00FDFFFF    |
+| ID                | 1         | ?             |
+| Length            | 2         | X + 4         |
+| Instruction       | 1         | 0x55          |
+| Error             | 1         | ?             |
+| Payload           | X         | ?             |
+| CRC               | 2         | ?             |
+
+<Alert type="warn">
+
+The status-packet's length is variable given how much data is requested in the original instruction. Therefore, the controller's firmware has to infer the length from how much data it had just requested.
+
+</Alert>
+
+</details>
+
+<details>
+
+<summary> Write, 0x03 </summary>
+
+Writes data to the device's control-table. The instruction's payload is at first the starting address in the table to write to which as a half word. Then, the rest is the stream of data to write. The status has no payload.
+
+The instruction-packet:
+
+| Field         	| Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header        	| 4         | 0x00FDFFFF    |
+| ID            	| 1         | ?             |
+| Length        	| 2         | X + 5         |
+| Instruction   	| 1         | 0x03          |
+| Starting Address	| 2         | ?             |
+| Data              | X         | ?             |
+| CRC           	| 2         | ?             |
+
+The status-packet:
+
+| Field             | Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header            | 4         | 0x00FDFFFF    |
+| ID                | 1         | ?             |
+| Length            | 2         | 0x04          |
+| Instruction       | 1         | 0x55          |
+| Error             | 1         | ?             |
+| CRC               | 2         | ?             |
+
+<Alert type="warn">
+
+The instruction-packet's length is variable given how much data is written in the original instruction. However, unlike that for the read-instruction, the device's firmware cannot expect what the length is and can only infer it from the length-field in the packet. Therefore, when one writes firmware for a device, one must consider how to parse a write-instruction of unknown length.
+
+</Alert>
+
+</details>
+
+<details>
+
+<summary> SyncRead, 0x82 </summary>
+
+Reads data from multiple devices' control-tables. The instruction's payload is at first the starting address in the table to read from which and the length of data, both as half words. Then, the rest are a list of IDs of the servos to read from which. 
+
+In response, all devices requested send their status-packets in order of ID. Each status' payload like before with a read-instruction is the requested data from the device's control-table.
+
+The instruction-packet:
+
+| Field         	| Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header        	| 4         | 0x00FDFFFF    |
+| ID            	| 1         | ?             |
+| Length        	| 2         | N + 7         |
+| Instruction   	| 1         | 0x82          |
+| Starting Address	| 2         | ?             |
+| Data-length       | 2         | X             |
+| List of IDs       | N         | ?             |
+| CRC           	| 2         | ?             |
+
+The status-packet:
+
+| Field             | Length    | Bytes         |
+|-------------------|-----------|---------------|
+| Header            | 4         | 0x00FDFFFF    |
+| ID                | 1         | ?             |
+| Length            | 2         | X + 4         |
+| Instruction       | 1         | 0x55          |
+| Error             | 1         | ?             |
+| Payload           | X         | ?             |
+| CRC               | 2         | ?             |
+
+<Alert type="warn">
+
+Both the instruction's packet-length and the statuses' packet-lengths are variable. Not only that, but a device has to wait for other devices with lesser IDs to send their status-packets before it. Therefore, when one writes firmware for a device, one must consider the timing of other requested devices.
+
+</Alert>
+
+</details>
+
+<details>
+
+<summary> SyncWrite, 0x83 </summary>
+
+Writes data to multiple devices' control-tables. The instruction's payload is at first the starting address in the table to write to which and the length of data, both as half words. Then, the rest are blocks where each block begins with an ID and the data to be written. 
+
+<Alert type="warn">
+
+The written devices do not send statuses, even if their status-return-levels are set to all.
+
+</Alert>
+
+The instruction-packet:
+
+| Field         	    | Length    | Bytes         |
+|-----------------------|-----------|---------------|
+| Header        	    | 4         | 0x00FDFFFF    |
+| ID            	    | 1         | ?             |
+| Length        	    | 2         | 7 + N(X+1)    |
+| Instruction   	    | 1         | 0x83          |
+| Starting Address	    | 2         | ?             |
+| Data-length           | 2         | X             |
+| ID, first device      | 1         | ?             |
+| Payload, first device | X         | ?             |
+| ...                   |           |               |
+| ID, N-th device       | 1         | ?             |
+| Payload, N-th device  | X         | ?             |
+| CRC           	    | 2         | ?             |
+
+</details>
