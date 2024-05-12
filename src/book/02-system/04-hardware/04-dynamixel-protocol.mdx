@@ -154,26 +154,26 @@ The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most 
 
 An instruction-packet is made up such:
 
-| Field         | Length    | Bytes         | Brief                                                                         |
-|---------------|-----------|---------------|-------------------------------------------------------------------------------|
-| Header        | 4         | 0x00FDFFFF    | The start of the packet.                                                      |
-| ID            | 1         | ?             | The ID of the receiving device                                                |
-| Length        | 2         | ?             | The length of the packet starting from the instruction, i.e. length = N + 3.  |
-| Instruction   | 1         | ?             | The kind of instruction                                                       |
-| Payload       | N         | ?             | The parameters relating to the instruction if any.                            |
-| CRC           | 2         | ?             | The error-checking for the receiving device.                                  |
+| Field       | Length | Bytes      | Brief                                                                        |
+| ----------- | ------ | ---------- | ---------------------------------------------------------------------------- |
+| Header      | 4      | 0x00FDFFFF | The start of the packet.                                                     |
+| ID          | 1      | ?          | The ID of the receiving device                                               |
+| Length      | 2      | ?          | The length of the packet starting from the instruction, i.e. length = N + 3. |
+| Instruction | 1      | ?          | The kind of instruction                                                      |
+| Payload     | N      | ?          | The parameters relating to the instruction if any.                           |
+| CRC         | 2      | ?          | The error-checking for the receiving device.                                 |
 
 A status-packet is made up such:
 
-| Field         | Length    | Bytes         | Brief                                                                         |
-|---------------|-----------|---------------|-------------------------------------------------------------------------------|
-| Header        | 4         | 0x00FDFFFF    | The start of the packet.                                                      |
-| ID            | 1         | ?             | The ID of the responding device                                               |
-| Length        | 2         | ?             | The length of the packet starting from the instruction, i.e. length = N + 4.  |
-| Instruction   | 1         | 0x55          | The sign of a status.                                                         |
-| Error         | 1         | ?             | The error if any.                                                             |
-| Payload       | N         | ?             | The returned data relating to the instruction if any.                         |
-| CRC           | 2         | ?             | The error-checking for the receiving controller.                              |
+| Field       | Length | Bytes      | Brief                                                                        |
+| ----------- | ------ | ---------- | ---------------------------------------------------------------------------- |
+| Header      | 4      | 0x00FDFFFF | The start of the packet.                                                     |
+| ID          | 1      | ?          | The ID of the responding device                                              |
+| Length      | 2      | ?          | The length of the packet starting from the instruction, i.e. length = N + 4. |
+| Instruction | 1      | 0x55       | The sign of a status.                                                        |
+| Error       | 1      | ?          | The error if any.                                                            |
+| Payload     | N      | ?          | The returned data relating to the instruction if any.                        |
+| CRC         | 2      | ?          | The error-checking for the receiving controller.                             |
 
 <Alert type="warn">
 
@@ -191,15 +191,15 @@ There are different ways to calculate the CRC depending on the polynomial. The D
 
 One difference between an isntruction-packet and a status-packet is the extra error-field in the latter as well as the fixed instruction-field of 0x55. Firstly, if the most significant bit of the error-field is 1, then there has been a hardware problem; reading the hardware-error-status in the device can give more details. The rest of the bits can tell the following.
 
-| Value | Error             | Brief                                                                         |
-|-------|-------------------|-------------------------------------------------------------------------------|
-| 0x01  | Result Fail       | Failed to process the received instruction-packet. |
-| 0x02  | Instruction Error | Either an undefined instruction has been received or an action has been received without a reg-write. |
-| 0x03  | CRC Error         | The computed CRC does not match the received one. Likely, the instruction-packet has been corrupted or the original CRC is incorrect. |
-| 0x04  | Data Range Error  | Data to be written is outside the allowed range.                                                        |
-| 0x05  | Data Length Error | Data to be written is shorter than the addressed field. For example, only two bytes are written to a four-byte field. |
-| 0x06  | Data Limit Error  | Data to be written is outside the limit that is set in the ROM.                        |
-| 0x07  | Access Error      | Attempted to write to an either read-only or an undefined address; attempted to read from an either write-only or undefined address; attempted to write to the ROM whilst the torque is enabled.|
+| Value | Error             | Brief                                                                                                                                                                                            |
+| ----- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0x01  | Result Fail       | Failed to process the received instruction-packet.                                                                                                                                               |
+| 0x02  | Instruction Error | Either an undefined instruction has been received or an action has been received without a reg-write.                                                                                            |
+| 0x03  | CRC Error         | The computed CRC does not match the received one. Likely, the instruction-packet has been corrupted or the original CRC is incorrect.                                                            |
+| 0x04  | Data Range Error  | Data to be written is outside the allowed range.                                                                                                                                                 |
+| 0x05  | Data Length Error | Data to be written is shorter than the addressed field. For example, only two bytes are written to a four-byte field.                                                                            |
+| 0x06  | Data Limit Error  | Data to be written is outside the limit that is set in the ROM.                                                                                                                                  |
+| 0x07  | Access Error      | Attempted to write to an either read-only or an undefined address; attempted to read from an either write-only or undefined address; attempted to write to the ROM whilst the torque is enabled. |
 
 ### Control-Table
 
@@ -217,26 +217,26 @@ Pings either a device with the given ID or all devices if the ID is 0xFE which i
 
 The instruction-packet:
 
-| Field         | Length    | Bytes         |
-|---------------|-----------|---------------|
-| Header        | 4         | 0x00FDFFFF    |
-| ID            | 1         | ?             |
-| Length        | 2         | 0x03          |
-| Instruction   | 1         | 0x01          |
-| CRC           | 2         | ?             |
+| Field       | Length | Bytes      |
+| ----------- | ------ | ---------- |
+| Header      | 4      | 0x00FDFFFF |
+| ID          | 1      | ?          |
+| Length      | 2      | 0x03       |
+| Instruction | 1      | 0x01       |
+| CRC         | 2      | ?          |
 
 The status-packet:
 
-| Field             | Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header            | 4         | 0x00FDFFFF    |
-| ID                | 1         | ?             |
-| Length            | 2         | 0x07          |
-| Instruction       | 1         | 0x55          |
-| Error             | 1         | ?             |
-| Model-number      | 2         | ?             |
-| Firmware-version  | 1         | ?             |
-| CRC               | 2         | ?             |
+| Field            | Length | Bytes      |
+| ---------------- | ------ | ---------- |
+| Header           | 4      | 0x00FDFFFF |
+| ID               | 1      | ?          |
+| Length           | 2      | 0x07       |
+| Instruction      | 1      | 0x55       |
+| Error            | 1      | ?          |
+| Model-number     | 2      | ?          |
+| Firmware-version | 1      | ?          |
+| CRC              | 2      | ?          |
 
 </details>
 
@@ -248,27 +248,27 @@ Reads data from the device's control-table. The instruction's payload is the sta
 
 The instruction-packet:
 
-| Field         	| Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header        	| 4         | 0x00FDFFFF    |
-| ID            	| 1         | ?             |
-| Length        	| 2         | 0x07          |
-| Instruction   	| 1         | 0x02          |
-| Starting Address	| 2         | ?             |
-| Data-length       | 2         | X             |
-| CRC           	| 2         | ?             |
+| Field            | Length | Bytes      |
+| ---------------- | ------ | ---------- |
+| Header           | 4      | 0x00FDFFFF |
+| ID               | 1      | ?          |
+| Length           | 2      | 0x07       |
+| Instruction      | 1      | 0x02       |
+| Starting Address | 2      | ?          |
+| Data-length      | 2      | X          |
+| CRC              | 2      | ?          |
 
 The status-packet:
 
-| Field             | Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header            | 4         | 0x00FDFFFF    |
-| ID                | 1         | ?             |
-| Length            | 2         | X + 4         |
-| Instruction       | 1         | 0x55          |
-| Error             | 1         | ?             |
-| Payload           | X         | ?             |
-| CRC               | 2         | ?             |
+| Field       | Length | Bytes      |
+| ----------- | ------ | ---------- |
+| Header      | 4      | 0x00FDFFFF |
+| ID          | 1      | ?          |
+| Length      | 2      | X + 4      |
+| Instruction | 1      | 0x55       |
+| Error       | 1      | ?          |
+| Payload     | X      | ?          |
+| CRC         | 2      | ?          |
 
 <Alert type="warn">
 
@@ -286,26 +286,26 @@ Writes data to the device's control-table. The instruction's payload is at first
 
 The instruction-packet:
 
-| Field         	| Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header        	| 4         | 0x00FDFFFF    |
-| ID            	| 1         | ?             |
-| Length        	| 2         | X + 5         |
-| Instruction   	| 1         | 0x03          |
-| Starting Address	| 2         | ?             |
-| Data              | X         | ?             |
-| CRC           	| 2         | ?             |
+| Field            | Length | Bytes      |
+| ---------------- | ------ | ---------- |
+| Header           | 4      | 0x00FDFFFF |
+| ID               | 1      | ?          |
+| Length           | 2      | X + 5      |
+| Instruction      | 1      | 0x03       |
+| Starting Address | 2      | ?          |
+| Data             | X      | ?          |
+| CRC              | 2      | ?          |
 
 The status-packet:
 
-| Field             | Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header            | 4         | 0x00FDFFFF    |
-| ID                | 1         | ?             |
-| Length            | 2         | 0x04          |
-| Instruction       | 1         | 0x55          |
-| Error             | 1         | ?             |
-| CRC               | 2         | ?             |
+| Field       | Length | Bytes      |
+| ----------- | ------ | ---------- |
+| Header      | 4      | 0x00FDFFFF |
+| ID          | 1      | ?          |
+| Length      | 2      | 0x04       |
+| Instruction | 1      | 0x55       |
+| Error       | 1      | ?          |
+| CRC         | 2      | ?          |
 
 <Alert type="warn">
 
@@ -319,34 +319,34 @@ The instruction-packet's length is variable given how much data is written in th
 
 <summary> SyncRead, 0x82 </summary>
 
-Reads data from multiple devices' control-tables. The instruction's payload is at first the starting address in the table to read from which and the length of data, both as half words. Then, the rest are a list of IDs of the servos to read from which. 
+Reads data from multiple devices' control-tables. The instruction's payload is at first the starting address in the table to read from which and the length of data, both as half words. Then, the rest are a list of IDs of the servos to read from which.
 
 In response, all devices requested send their status-packets in order of ID. Each status' payload like before with a read-instruction is the requested data from the device's control-table.
 
 The instruction-packet:
 
-| Field         	| Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header        	| 4         | 0x00FDFFFF    |
-| ID            	| 1         | ?             |
-| Length        	| 2         | N + 7         |
-| Instruction   	| 1         | 0x82          |
-| Starting Address	| 2         | ?             |
-| Data-length       | 2         | X             |
-| List of IDs       | N         | ?             |
-| CRC           	| 2         | ?             |
+| Field            | Length | Bytes      |
+| ---------------- | ------ | ---------- |
+| Header           | 4      | 0x00FDFFFF |
+| ID               | 1      | ?          |
+| Length           | 2      | N + 7      |
+| Instruction      | 1      | 0x82       |
+| Starting Address | 2      | ?          |
+| Data-length      | 2      | X          |
+| List of IDs      | N      | ?          |
+| CRC              | 2      | ?          |
 
 The status-packet:
 
-| Field             | Length    | Bytes         |
-|-------------------|-----------|---------------|
-| Header            | 4         | 0x00FDFFFF    |
-| ID                | 1         | ?             |
-| Length            | 2         | X + 4         |
-| Instruction       | 1         | 0x55          |
-| Error             | 1         | ?             |
-| Payload           | X         | ?             |
-| CRC               | 2         | ?             |
+| Field       | Length | Bytes      |
+| ----------- | ------ | ---------- |
+| Header      | 4      | 0x00FDFFFF |
+| ID          | 1      | ?          |
+| Length      | 2      | X + 4      |
+| Instruction | 1      | 0x55       |
+| Error       | 1      | ?          |
+| Payload     | X      | ?          |
+| CRC         | 2      | ?          |
 
 <Alert type="warn">
 
@@ -360,7 +360,7 @@ Both the instruction's packet-length and the statuses' packet-lengths are variab
 
 <summary> SyncWrite, 0x83 </summary>
 
-Writes data to multiple devices' control-tables. The instruction's payload is at first the starting address in the table to write to which and the length of data, both as half words. Then, the rest are blocks where each block begins with an ID and the data to be written. 
+Writes data to multiple devices' control-tables. The instruction's payload is at first the starting address in the table to write to which and the length of data, both as half words. Then, the rest are blocks where each block begins with an ID and the data to be written.
 
 <Alert type="warn">
 
@@ -370,19 +370,19 @@ The written devices do not send statuses, even if their status-return-levels are
 
 The instruction-packet:
 
-| Field         	    | Length    | Bytes         |
-|-----------------------|-----------|---------------|
-| Header        	    | 4         | 0x00FDFFFF    |
-| ID            	    | 1         | ?             |
-| Length        	    | 2         | 7 + N(X+1)    |
-| Instruction   	    | 1         | 0x83          |
-| Starting Address	    | 2         | ?             |
-| Data-length           | 2         | X             |
-| ID, first device      | 1         | ?             |
-| Payload, first device | X         | ?             |
-| ...                   |           |               |
-| ID, N-th device       | 1         | ?             |
-| Payload, N-th device  | X         | ?             |
-| CRC           	    | 2         | ?             |
+| Field                 | Length | Bytes      |
+| --------------------- | ------ | ---------- |
+| Header                | 4      | 0x00FDFFFF |
+| ID                    | 1      | ?          |
+| Length                | 2      | 7 + N(X+1) |
+| Instruction           | 1      | 0x83       |
+| Starting Address      | 2      | ?          |
+| Data-length           | 2      | X          |
+| ID, first device      | 1      | ?          |
+| Payload, first device | X      | ?          |
+| ...                   |        |            |
+| ID, N-th device       | 1      | ?          |
+| Payload, N-th device  | X      | ?          |
+| CRC                   | 2      | ?          |
 
 </details>
