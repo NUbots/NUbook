@@ -10,7 +10,7 @@ authors:
 
 ## Introduction
 
-[Dynamixel](https://www.robotis.us/dynamixel/) is an off-the-shelf servo with integrated control. The servos are controlled by commands over a digital interface. There are three protocols for such an interface: Modbus RTU, Dynamixel v1, and Dynamixel v2. We will only consider Dynamixel v2, which will be referred to as the Dynamixel protocol. However, before we do so, we must look at the lower-level electrical system.
+A [Dynamixel](https://www.robotis.us/dynamixel/) is an off-the-shelf servo with integrated control that are controlled by commands over a digital interface. There are three protocols for such an interface: Modbus RTU, Dynamixel v1, and Dynamixel v2. We will only consider Dynamixel v2, which will be simply referred to as the Dynamixel protocol. However, before we do so, we must look at the lower-level electrical system.
 
 This page provides an overview of the Dynamixel communication. It is not an exhaustive list of what is already in the [Robotis manual](https://emanual.robotis.com/docs/en/dxl/protocol2/) but gives further insight into things left out of the manual, such as the low-level electrical side and some peculiarities. The Robotis manual should be read after the reader has read this page.
 
@@ -20,19 +20,13 @@ The target-audience is somewhat broad and can be anywhere between
 - a new electrical, computer, or mechatronics engineering student who has had some experience with some of these concepts such as UART in ELEC2720 but may want to refresh some of the basics and needs to learn some new things such as RS485 and the Dynamixel protocol,
 - and a computer-science student who has some experience with telecommunications such as Ethernet but may have no experience at all with UART and RS485.
 
-<Alert type="warn">
-
-Assumed knowledge includes a basic understanding of electrical concepts (i.e. voltage), HSC physics (i.e. magnetic fields), and basic intuition for electronic devices in daily life.
-
-</Alert>
-
 ## Universal Asynchronous Receiver-Transmitter
 
-A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C) where there is one extra signal for the clock, often just called the serial clock, both devices on either end have to know the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
+A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C), there is no signal for the clock, and both devices on either end have to know the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
 
 <Alert type="info">
 
-There is also a universal synchronous and asynchronous receiver-transmitter (USART) which is a device that can handle both synchronous and asynchronous communication. Many microcontrollers would have both USARTs and UARTs, the former of which can more of less be used as the latter. However, we will only talk about the asynchronous side in which a UART henceforth can easily be applied for a USART as well.
+There is also a universal synchronous and asynchronous receiver-transmitter (USART) which is a device that can handle both synchronous and asynchronous communication and can more or less be used as a UART.
 
 </Alert>
 
@@ -74,7 +68,7 @@ Full duplexity is when data can go in both directions at the same time, between 
 
 ![In full duplexity, data can flow in both directions at the same time.](./images/dynamixel_protocol/full_duplexity.drawio.png 'In full duplexity, data can flow in both directions at the same time.')
 
-A pure UART will have two signals, RX and TX. RX is used for receiving signals and TX is used for transmitting signals. If two UART devices are connected, they will have two-way communication (TX->RX). This is an example of full duplexity.
+A pure UART will have two signals, RX and TX. RX is used for receiving signals and TX is used for transmitting signals. This is an example of full duplexity.
 
 Half duplexity is when data can go in both directions, but not at the same time. There seem to be two channels but they are really combined into one. An analogy would be Alice and Bob talking to each other by walkie-talkies.
 
@@ -86,15 +80,15 @@ The Dynamixel protocol is half duplex; therefore, it is important to understand 
 
 </Alert>
 
-We will see soon that the reason why the protocol is half duplex is the fewer number of wires - especially for RS485 - and the fact that servos only respond to instructions.
+The reader will soon see that the reason why the protocol is half duplex is the fewer number of wires - especially for RS485 - and the fact that servos only respond to instructions.
 
-Often, a Dynamixel device's microcontroller has a UART to communicate on the bus. This UART has two pins, RX and TX. Therefore, in theory, it could be used for full duplexity. However, RX and TX get switched between by a transceiver, which is often another chip on the board. The transceiver can switch between receiving and transmitting on the same bus-line. This transceiver has another input pin to set the direction, sometimes called the TX-enable, the direction, etc.
+Often, a Dynamixel device's microcontroller has a UART to communicate on the bus. This UART has two pins, RX and TX. Therefore, in theory, it could be used for full duplexity. However, RX and TX get switched between by a transceiver, which is another chip on the board. The transceiver can switch between receiving and transmitting on the same bus-line. This transceiver has another input pin to set the direction, sometimes called the TX-enable or the direction.
 
 ## Signal-levels
 
 ### Transistor-Transistor-Logic
 
-Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data. The [NC7WZ241](https://www.onsemi.com/pdf/datasheet/nc7wz241-d.pdf) chip is an example of a TTL transceiver that is found in the [OpenCR](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
+Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data. The [NC7WZ241](https://www.onsemi.com/pdf/datasheet/nc7wz241-d.pdf) chip is an example of a TTL transceiver that is found on the [OpenCR](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
 
 <Alert type="warn">
 
@@ -116,21 +110,21 @@ RS485 is an electrical standard that defines the signal-levels for many serial d
 
 In order to appreciate the power of such a differential signal, one must understand the challenges of noise and interference. For very long cables, the wires often behave like antennae and can thus pick up nearby interference from other electrical devices, especially from servos which tend to emit switching noise. As such, a big enough interference can flip a bit and lead to an error.
 
-However, RS485 and other such techniques have an answer for this. Given a message $m(t)$, the transmitter sends a positive copy $p(t) = m(t)$ and a negative copy $n(t) = -m(t)$ together as a pair. As long as the two physical wires are close together, any interference $w(t)$ is both added where the received positive signal is $p'(t) = m(t) + w(t)$, and the received negative signal is $n'(t) = -m(t) + w(t)$. The receiver then subtracts the two, often with a difference amplifier, such that the interference is cancelled out, and the received message is $m'(t) = p'(t) - n'(t) = m(t) + w(t) - ( -m(t) + w(t) ) = 2 m(t)$.
+However, RS485 and other such techniques have an answer for this. Given a message $m(t)$, the transmitter sends a positive copy $p(t) = m(t)$ and a negative copy $n(t) = -m(t)$ together as a pair. As long as the two physical wires are close together, any interference $w(t)$ is both added such that the received positive signal is $p'(t) = m(t) + w(t)$, and the received negative signal is $n'(t) = -m(t) + w(t)$. The receiver then subtracts the two, often with a difference amplifier, such that the interference is cancelled out, and the received message is $m'(t) = p'(t) - n'(t) = m(t) + w(t) - ( -m(t) + w(t) ) = 2 m(t)$.
 
 ![A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.](./images/dynamixel_protocol/differential.drawio.png 'A differential signal has a positive signal and a negative signal such that when they are subtracted, any common-mode interference is cancelled out.')
 
-Indeed, this is a simple example as there is some more complexity in the way how the RS485 transceiver drives the signals, but this should give you the broad idea of how it works and to understand its advantage. Furthermore, this kind of interference is known as common-mode noise. As an aside, a differential pair cannot handle differential mode noise, which is however less common in our case. The reader can learn more about the two [here](https://www.allaboutcircuits.com/industry-white-papers/emc-basics-common-mode-vs-differential-noise/).
+Indeed, this is a simple example as there is some more complexity in the way how the RS485 transceiver drives the signals, but this should give the reader the broad idea of how it works and to understand its advantage. Furthermore, this kind of interference is known as common-mode noise. As an aside, a differential pair cannot handle differential mode noise, which is however less common in our case. The reader can learn more about the two [here](https://www.allaboutcircuits.com/industry-white-papers/emc-basics-common-mode-vs-differential-noise/).
 
 <Alert type="warn">
 
-It is important to understand the fact that there are two signals that make up a differential pair when probing the bus with either an oscilloscope or a digital-signal analyser such as a Saleae. Often in such times, only one probed signal - ideally positive - is enough to see the data.
+It is important to understand the fact that there are two signals that make up a differential pair when probing the bus with either an oscilloscope or a digital-signal analyser - such as a Saleae. Often in such times, only one probed signal - ideally positive - is enough to see the data.
 
 </Alert>
 
 <Alert type="info">
 
-RS485 was historically used for communicating to automated machines on very long factory-floors with a lot of electromagnetic noise from machinery. Therefore, RS485 can deal with very long lengths up to a kilometre depending on the bandwidth. Therefore, one may think that RS485 is overkill for such a small robot, but one should remember that servos can make a lot of electromagnetic noise because of their nature.
+RS485 was historically used for communicating to automated machines on very long factory-floors with a lot of electromagnetic noise from machinery. Therefore, RS485 can deal with very long lengths up to a kilometre depending on the bandwidth. One may think that RS485 is overkill for such a small robot, but one should remember that servos can make a lot of electromagnetic noise because of their nature.
 
 </Alert>
 
@@ -140,13 +134,13 @@ The robustness to interference is better when the two wires are twisted. This me
 
 #### Terminating Resistors
 
-Further to RS485 are terminating resistors which are often important to minimise reflections and to maximise the received power. RS485 can only have two terminating resistors, best at either end of a bus. However, RS485 doesn't always need two terminating resistors in order to work, but it is best to have them for the best performance. Nearly always, the terminating resistor is 120 Ω. You can read more [here](https://www.ti.com/document-viewer/lit/html/SSZTB23).
+Further to RS485 are terminating resistors which are often important to minimise reflections and to maximise the received power. RS485 can only have two terminating resistors, best at either end of a bus. However, RS485 doesn't always need two terminating resistors in order to work, but it is best to have them for the best performance. Nearly always, the terminating resistor is 120 Ω. The reader can learn more [here](https://www.ti.com/document-viewer/lit/html/SSZTB23).
 
 ## v2 Protocol
 
 ### Asymmetry
 
-The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a controller and a device, analoguous to SPI, I2C, and Modbus for example, or a server and a client. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of instruction and status. Only the controller can iniate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
+The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a controller and a device, analoguous to SPI, I2C, and Modbus for example. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of 'instruction' and 'status' in their documentation, but the reader may also see 'request' and 'response' in other places. Only the controller can iniate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
 
 ![The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.](./images/dynamixel_protocol/asymmetric.drawio.png 'The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.')
 
@@ -183,13 +177,13 @@ The data is in little-endian format.
 
 ### Cyclic Redundancy Check
 
-The Cyclic Redundancy Check (CRC) is value that is appended at the end which helps tell whether there has been any corruption in the received packet. Firstly, the sender computes the CRC of the whole packet soon to be sent - excluding the CRC of course - and appends it on the end. The receiver computes its own version of the CRC of the packet that it has just received and compares it to the appended CRC. If the two CRCs are different, then there has been an error. One can learn more about how the CRC works mathematically [here](https://en.wikipedia.org/wiki/Cyclic_redundancy_check).
+The cyclic redundancy check (CRC) is a value that is appended at the end which helps tell whether there has been any corruption in the received packet. Firstly, the sender computes the CRC of the whole packet soon to be sent - excluding the CRC of course - and appends it on the end. When the receiver has received this packet, it computes its own version of the CRC and compares it to the appended CRC. If the two CRCs are different, then there has been an error. One can learn more [here](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) about how the CRC works mathematically.
 
 There are different ways to calculate the CRC depending on the polynomial. The Dynamixel protocol uses CRC-16-IBM which has $x^{16} + x^{15} + x^{2} + 1$ as the polynomial, otherwise wrtten as 0x8005. An algorithm for the specific CRC that the Dynamixel protocol uses as well as a look-up-table can be found [here](https://emanual.robotis.com/docs/en/dxl/crc/).
 
 ### Error
 
-One difference between an isntruction-packet and a status-packet is the extra error-field in the latter as well as the fixed instruction-field of 0x55. Firstly, if the most significant bit of the error-field is 1, then there has been a hardware problem; reading the hardware-error-status in the device can give more details. The rest of the bits can tell the following.
+One difference between an instruction-packet and a status-packet is the extra error-field in the latter as well as the fixed instruction-field of 0x55. Firstly, if the most significant bit of the error-field is 1, then there has been a hardware problem; reading the hardware-error-status in the device can give more details. The rest of the bits can tell the following.
 
 | Value | Error             | Brief                                                                                                                                                                                            |
 | ----- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -321,7 +315,7 @@ The instruction-packet's length is variable given how much data is written in th
 
 Reads data from multiple devices' control-tables. The instruction's payload is at first the starting address in the table to read from which and the length of data, both as half words. Then, the rest are a list of IDs of the servos to read from which.
 
-In response, all devices requested send their status-packets in order of ID. Each status' payload like before with a read-instruction is the requested data from the device's control-table.
+In response, all devices requested send their status-packets in order of ID. Like before with a read-instruction, each status' payload is the requested data from the device's control-table.
 
 The instruction-packet:
 
