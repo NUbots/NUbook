@@ -88,7 +88,7 @@ The Dynamixel protocol is half duplex; therefore, it is important to understand 
 
 We will see soon that the reason why the protocol is half duplex is the fewer number of wires - especially for RS485 - and the fact that servos only respond to instructions.
 
-Often, a Dynamixel device's microcontroller has a UART to communicate on the bus. This UART as said before has two pins, RX and TX. Therefore, in theory, it could be used for full duplexity. However, RX and TX get switched between by a transceiver which is often another chip on the board. This transceiver as the name suggests can switch between receiving and transmitting on the same bus-line. Therefore, this transceiver has another input pin to set the direction, sometimes called the TX-enable, the direction, etc.
+Often, a Dynamixel device's microcontroller has a UART to communicate on the bus. This UART has two pins, RX and TX. Therefore, in theory, it could be used for full duplexity. However, RX and TX get switched between by a transceiver, which is often another chip on the board. The transceiver can switch between receiving and transmitting on the same bus-line. This transceiver has another input pin to set the direction, sometimes called the TX-enable, the direction, etc.
 
 ## Signal-levels
 
