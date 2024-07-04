@@ -1,0 +1,149 @@
+---
+section: Readmes
+chapter: Module
+title: Tools
+description: .
+slug: /readmes/Module/tools
+---
+
+# FirmwareInstaller
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# SystemConfiguration
+
+## Description
+
+This module is used to ensure that the configuration that is running on a device matches what is required.
+
+It goes through several steps to ensure the system is setup correctly
+
+### Filesystem
+
+The system will look through each file in the `system/default` directory.
+For each of these files it will see if there is an equivalent file in the `system/$HOSTNAME` directory and use that, otherwise it uses the default file.
+Using this file it will check that the same file in the root directory is identical to this one, and if not it will copy it across.
+This will ensure that all the system configuration files match the files that are in the repository.
+
+> **_NOTE_**
+> The system will only look at files that exist in the `system/default` directory.
+> If you have a file that will override for a specific system, you must provide a default file as well.
+
+After this, it will go through the list of permissions changes that are in the `SystemConfiguration.yaml` file and apply them.
+This configuration file must list the total permissions as an octal number.
+
+After permissions are set, it will go through the list of symlinks that are in the `SystemConfiguration.yaml` and ensure they are created.
+Checks are made to ensure that the link target exists and the link doesn't exist.
+
+- If the target doesn't exist, no link is made
+- If the link name already exists and is a regular file, the file is renamed to `<link name>.old` and the link is made
+- If the link name already exists and **is not** a symlink to the target, the link is remove and the correct link is made
+- If the link name already exists and **is** a symlink to the target, nothing is done
+- If the link name doesn't exist, the link is made
+
+### Packages
+
+After this the system will then attempt to update and upgrade the system using the package manager.
+Once this is done it will go through the list of packages in configuration and ensure that they are installed.
+
+### Systemd
+
+The system will then go through the list of configuration entries for systems and ensure that they are enabled.
+
+### Locale
+
+If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated
+
+### Grub
+
+If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date
+
+### Message Of The Day
+
+The message of the day file is regenerated to ensure it has the correct contents
+
+### Hosts and Hostname
+
+Both the hostname and the hosts file are regenerated with the correct contents
+
+### Groups
+
+The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them
+
+### ZSH
+
+Zprezto is now installed and the appropriate symlinks are made. The users' default shell is also changed to zsh
+
+### Python
+
+Finally, python is updated to ensure that it will search for packages in `/usr/local`
+
+## Usage
+
+Run the system_configuration role as a superuser and this role will ensure that the system configuration on the platform matches the configuration in the repository.
+# RoboCupConfiguration
+
+## Description
+
+IMPORTANT: `systemconfiguration` and `robocup` roles should be built to the robot so that the relevant configuration files exist, if they do not already exist.
+
+The purpose of this module is to provide a simple way to set up the robot for RoboCup games. It has an ncurses inferface that shows the current configuration of the network and certain module configuration files. The user can modify these fields to set up the robot appropriately. Note that this is designed to be run directly on the robot. To revert the affects of this module, rebuild configuration files to the robot and remove
+
+- `system/nugus<number>/etc/systemd/network/30-wifi.network`
+- `system/nugus<number>/etc/wpa_supplicant/wpa_supplicant-<wifi_interface>.conf`
+
+Then run `./systemconfiguration` and reboot. Alternatively you can run this module again and revert the values manually.
+
+## Usage
+
+This module is to be used right before a RoboCup game to quickly set up the robot with the game-specific details.
+
+The interface has the following commands (shift-letter for uppercase)
+
+- Arrow keys: to move around the display.
+- Enter: to edit the selected field with user input.
+- Space: to toggle the value of the selected field.
+- R: reads the current config and sets the display, overwritting non-applied user inputs.
+- C: uses the current values shown in the display to write to the relevant configuration files.
+- N: applies network changes specified, restarts network services
+- S: starts the robocup service, which will start the robocup binary, and will rerun if it stops
+- D: stops the robocup service
+- E: enables wifi, useful for if it has been disabled and the robot is about to play a game.
+- W: disables wifi, useful for after a RoboCup game as wifi congestion is an issue at RoboCup and it is important to disconnect from any field networks when not playing.
+- X: shutdown the program
+
+## Consumes
+
+N/A
+
+## Emits
+
+N/A
+
+## Dependencies
+
+N/A
+# NBSPlayback
+
+## Description
+
+## Usage
+
+In order to play back the messages, you need to create a role with this module that has the modules you wish to test. You then need to enable the message types that are the input to these modules by setting them to true in the configuration (e.g. `message.input.sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats file`).
+
+Provide `.nbs` file paths via the command line. For example `./b run <role> recordings/<nbs-file-a> recordings/<nbs-file-b>`
+
+## Emits
+
+- `message.nbs.PlaybackNBS`: The message containing NBS file paths, message types to play and playback mode.
+
+## Dependencies
+
+Modules:
+
+- nbs/Player

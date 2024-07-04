@@ -1,0 +1,93 @@
+---
+section: Readmes
+chapter: Module
+title: Actuation
+description: .
+slug: /readmes/Module/actuation
+---
+
+# Kinematics
+
+## Description
+
+Provides inverse kinematics for left leg, right leg or head. Will emit a Done Task when the corresponding limb is Done.
+
+## Usage
+
+Emit the corresponding IK message as a task.
+
+## Consumes
+
+- `message::actuation::LeftLegIK` with information on the servo gains, torque, time to reach the position and the matrix from the target position for the left foot to the torso.
+- `message::actuation::RightLegIK` with information on the servo gains, torque, time to reach the position and the matrix from the target position for the right foot to the torso.
+- `message::actuation::HeadIK` with information on the servo gains, torque, time to reach the position and the vector that the head should look.
+
+## Emits
+
+- `message::actuation::LeftLeg` with servo control information for each servo in the left leg.
+- `message::actuation::RightLeg` with servo control information for each servo in the right leg.
+- `message::actuation::Head` with servo control information for each servo in the head.
+- `Done` when the limb Tasks are Done.
+
+## Dependencies
+
+- `utility/actuation/InverseKinematics.hpp` provides the IK functions
+# KinematicsModel
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# Servos
+
+## Description
+
+Takes specific servo requests and emits a ServoTarget for them. Uses Director DSL such that each servo can only be accessed by one Provider at a time.
+Individual Servo Providers are Done when their finish time is reached.
+Limb Providers are Done when all of the Servos in the Limb are Done.
+Sequence Providers run a sequence of Limbs one after the other. They are done when the final Limb is Done.
+
+## Usage
+
+Emit a servo, limb or sequence task, with priority to run according to the Director algorithm.
+
+## Consumes
+
+- Servo messages from `message/actuation/Servos.proto`.
+- Limb messages from `message/actuation/Limbs.proto`, which will then emit Servo Tasks from `message/actuation/Servos.proto` to be consumed as above.
+- Sequence messages from `message/actuation/Limbs.proto`, which will then emit Limb Tasks from `message/actuation/Limbs.proto` to be consumed as above.
+
+## Emits
+
+- `message::actuation::ServoTarget` the servo control information for the platform module.
+- Servo messages from `message/actuation/Servos.proto` when a `message/actuation/Limbs.proto` is received.
+- Limb messages from `message/actuation/Limbs.proto` when a Sequence message from `message/actuation/Limbs.proto` is received.
+
+## Dependencies
+# FootController
+
+## Description
+
+Skill which corrects the foot orientation to level it with the ground. The correction of the foot can be disabled in the
+config and the module will request the given orientation without correction.
+
+## Usage
+
+Include this module to allow the robot to control the feet of robot.
+
+## Consumes
+
+- `message::actuation::ControlLeftFoot` Task requesting the left leg is moved to desired pose.
+- `message::actuation::ControlRightFoot` Task requesting the right leg is moved to desired pose.
+
+## Emits
+
+- `message::actuation::LeftLegIK` Task requesting the left leg is moved using Inverse Kinematics, containing left leg motion information.
+- `message::actuation::RightLegIK` Task requesting the right leg is moved using Inverse Kinematics, containing right leg motion information.
+
+## Dependencies
+
+- Eigen

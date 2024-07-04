@@ -1,0 +1,287 @@
+---
+section: Readmes
+chapter: Module
+title: Logging
+description: .
+slug: /readmes/Module/support
+---
+
+# DataLogging
+
+## Description
+
+Logs serialisable neutrons in nbs files. It also creates nbs.idx files.
+
+## Usage
+
+Add the neutron types that you want to record in the config file in the messages list field. Specify the directory you
+want the log files to be written in the output directories field, the actual nbs and idx files will be created in a
+subdirectory of the given directory with the same name as the role that these messages were created by running. To
+specify a maximum size before which the current nbs and idx files will be closed and new nbs and idx files to be created
+use the output output/split_size field.
+
+Filenames will be of the format year, month, day, T, hours, \_, minutes, \_, seconds e.g.
+`20201110T13_31_50`.
+
+Files that are currently being written to will have an underscore prepended to the name, which will be removed when the
+file is closed.
+
+## Emits
+
+## Dependencies
+# Console Log Handler
+
+## Description
+
+Writes log messages to the console.
+
+## Usage
+
+Once installed, this module will echo all NUClear log messages to standard output.
+
+## Consumes
+
+- `NUClear::message::LogMessage` containing a message to be logged
+# FileLogHandler
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# DataPlayback
+
+## Description
+
+DataPlayback is a module which will allow you to play back `.nbs` files as if they were happening in realtime.
+This can be very useful for when you are trying to diagnose a problem for which you have a recording as you can continuously play back the same data.
+
+The module will buffer up packets from the future and emit them at the same rate that they were emitted originally.
+
+## Usage
+
+In order to play back the messages, you need to create a role with this module that has the modules you wish to test. You then need to enable the message types that are the input to these modules by setting them to true in the configuration (e.g. `message.input.Sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats file`).
+
+There are two methods to provide nbs files to this module, via the configuration file or via the command line. If the configuration file has arguments those are used first. If there are no files provided in the configuration file, the arguments from the command line are used instead. This is so that if you have another module in your role that relies on command line arguments you have an alternate way to provide these files.
+
+You can provide multiple `.nbs` files and they will be played in sequence. For example `./b run <role> recordings/<nbs-file-a> recordings/<nbs-file-b>` will run the role and play back
+
+### Notes
+
+There is some weird behaviour that will occur when using this module that won't happen in a real system. Take note of these if they influence your usage
+
+- If there are any timestamp fields in the messages, these will not be updated. If you are comparing the timestamps in the messages to the current time they will be wrong.
+- When you are providing paths to `.nbs` files via a `./b run` command they are relative to the build directory in docker. There is a symlink to `recordings` that is placed there to make any nbs file in recordings easier to use but outside of this path you will need to provide the full path from dockers perspective.
+# MessageLogHandler
+
+## Description
+
+This module provides an interface to take the LogMessage and ReactionStatistics messages from NUClear and recodes them into protobuf messages.
+These messages can then be sent using NetworkForwarder or recorded using DataLogging.
+Additionally it can be configured to ignore the display level of the logs so that the level can be adjusted at a later time for analysis.
+
+## Usage
+
+Include this module and configure NetworkForwarder or DataLogging to forward the LogMessage and ReactionStatistics messages.
+
+## Consumes
+
+- NUClear::message::LogMessage
+- NUClear::message::ReactionStatistics
+
+## Emits
+
+- message::nuclear::LogMessage
+- message::nuclear::ReactionStatistics
+
+## Dependencies
+
+None
+# GlobalConfig
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# SoccerConfig
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# NSGA2Optimiser
+
+## Description
+
+The optimiser half of the Multi-Objective, Non-Dominated Sorting Genetic Algorithm II (NSGA2) optimisation algorithm. Optimises parameters using an NSGA2 algorithm, using the NSGA2Evaluator module to run the evaluations.
+
+The NSGA2 library [here](./src/nsga2/) was adapted from https://github.com/dojeda/nsga2-cpp.
+
+There are individual optimisation tasks. These are contained in the tasks folder.
+The current tasks available are:
+
+- Walk forwards
+- Strafe walk
+- Rotate walk
+- Multipath walk
+
+The parameters to be optimised can be found in the 'NSGA2Optimiser.yaml' file.
+
+## Usage
+
+The NSGA2.yaml file contains the parameters for running this module. The parameters to set are:
+
+- Search space width (population size)
+- Search space depth (number of generations)
+- Number of objectives to be evaluated
+- Trial time limit
+- Simulated binary crossover value
+- Mutation value
+- The task, e.g. "walk"
+
+## Consumes
+
+- `message::support::optimisation::NSGA2FitnessScores` Containing the score evaluation of an individual, received from NSGA2Evaluator.
+- `module::support::optimisation::WalkOptimiser` A walk optimisation task.
+- `module::support::optimisation::StrafeOptimiser` A walk strafe optimisation task.
+- `module::support::optimisation::RotationOptimiser` A walk rotation optimisation task.
+- `module::support::optimisation::StandOptimiser` A stand optimisation task.
+- `module::support::optimisation::MultiPathOptimiser` A multipath walk optimisation task.
+
+## Emits
+
+- `message::support::optimisation::NSGA2EvaluatorReady` Emitted when initialisation has been completed to signal that evaluation can begin.
+- `message::support::optimisation::NSGA2Terminate` Sent to NSGA2Evaluator to stop the optimisation and shut down the powerplant.
+- `message::support::optimisation::NSGA2EvaluationRequest` Sent to NSGA2Evaluator to trigger the evaluation of a new individual.
+- `task->make_evaluation_request` (to NSGA2Evaluator. Request an evaluation of an individual)
+
+## Dependencies
+
+- `message::support::optimisation::NSGA2Evaluator` Runs evaluations of individuals that are used to optimise parameters.
+# NSGA2Evaluator
+
+## Description
+
+The evaluator half of the Multi-Objective Non-Dominated Sorting Genetic Algorithm II (NSGA2) optimisation algorithm. Evaluates parameters for an individual from the NSGA2Optimiser module based on fitness.
+
+Currently contains implementations for optimising the walk engine.
+
+## Usage
+
+The NSGA2Optimiser module uses this module. Please see 'NSGA2Evaluator.yaml' to set constants for boundary testing and scalars for multipath.
+
+To implement the evaluator for a new optimisation scenario, extend from the EvaluatorTask class.
+
+## Consumes
+
+- `module::support::optimisation::Event` Describes the current evaluator state. Possible values include WAITING_FOR_REQUEST, SETTING_UP_TRIAL, RESETTING_TRIAL, EVALUATING, TERMINATING_EARLY, TERMINATING_GRACEFULLY, and FINISHED.
+- `module::support::optimisation::WalkEvaluator` A walk evaluation task.
+- `module::support::optimisation::StrafeEvaluator` A walk strafe evaluation task.
+- `module::support::optimisation::RotationEvaluator` A walk rotation evaluation task.
+- `module::support::optimisation::StandEvaluator` A stand evaluation task.
+- `message::support::optimisation::NSGA2Terminate` Coordinates shutting down of the evaluator.
+- `message::support::optimisation::NSGA2EvaluationRequest` Enables the evaluation of individuals.
+- `message::input::Sensors` Contains sensor data which is used for calculating an individual's fitness.
+
+## Emits
+
+- `message::support::optimisation::NSGA2FitnessScores` Containing the score evaluation of an individual, to be used by the NSGA2Optimiser.
+
+## Dependencies
+
+- `module::support::optimisation::NSGA2Optimiser` Optimises parameters based on the performance of individuals that are evaluated.
+# OnboardWalkOptimisation
+
+## Description
+
+This module manages the use of running an optimisation routine onboard the real robot platform. It handles the period where the robot resets after an optimisation trial run and it checks for stability.
+
+## Usage
+
+Use this with an optimisation module, such as the NSGA2Evaluator and NSGA2Optimiser, to run optimisation onboard the real robot platform.
+
+## Consumes
+
+- `message::support::optimisation::OptimisationCommand` containing information on if the optimisation is to be reset or terminated.
+- `message::input::Sensors` to determine if the robot is stable.
+
+## Emits
+
+- `message::support::optimisation::OptimisationResetDone` to tell the optimisation when the robot has been reset for a new trial run.
+- `message::support::optimisation::OptimisationRobotPosition` to tell the optimiser where the robot is in the world.
+
+## Dependencies
+
+- An optimiser
+# Profiler
+
+## Description
+
+The Profiler module in NUbots is designed for profiling the execution of reactions within the system. It measures the execution time of each reaction and aggregates statistical data, such as total, average, minimum, and maximum execution times. This data helps in understanding the performance characteristics of different parts of the system.
+
+## Usage
+
+Include this module in role.
+
+## Emits
+
+- `ReactionProfiles` aggregated profiling data, including individual reaction profiles with statistics on execution times.
+
+## Dependencies
+# Signal Catcher
+
+## Description
+
+This module catches and handles signals.
+
+## Usage
+
+When SIGINT (interrupt - Ctrl+C) is received, SignalCatcher attempts to shut
+down the NUClear power plant and terminate the program. If another SIGINT is
+received (e.g. because shutting down the power plant did not fully terminate
+the program) it immediately exits the program with return code 1.
+
+If SIGSEGV (segmentation fault) is received, SignalCatcher throws a
+`message::SegmentationFault` exception.
+# ReactionTimer
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# LocalisationSimulator
+
+## Description
+
+## Usage
+
+## Emits
+
+## Dependencies
+# NUsight
+
+## Description
+
+This module simply emits sine wave data points to NUsight. It can be used to quickly test the
+connection between NUbots and NUsight.
+
+## Usage
+
+Include the module in a role, and it will automatically emit messages.
+
+Also ensure that sending data points are enabled in `config/NUsight.yaml`
+
+## Emits
+
+- `message::eye::DataPoint`
