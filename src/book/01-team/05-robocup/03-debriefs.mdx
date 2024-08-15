@@ -10,6 +10,179 @@ authors:
   - Lachlan Court (@LachlanCourt)
 ---
 
+## 2024: Eindhoven, The Netherlands
+
+### What went wrong
+
+#### OpenCR
+
+- Buttons not working
+- Dropping packets
+- Software had bad reaction to bad opencr data, should be able to handle it
+- Too much time into nusense, not enough opencr
+- Buzzer quiet
+- Face planting
+
+#### Hardware
+
+- Sharp section on back panel fraying cables
+- Buttons sticking
+- Head broke (PLA used)
+
+#### Architecture
+
+- Computation issues affected walk
+
+#### Vision
+
+- Visual Mesh didn't detect balls, and has false positives for balls and field lines
+- YOLO didn't see balls further away and mixed up T and L intersections
+
+#### Localisation
+
+- Flipping localisation
+
+#### Motion
+
+- No kick
+- Path planning had a lot of bugs because of lack of testing
+- Don't stablise after getting up and fall over when resuming walk
+- Lack of dribbling around obstacles
+- Falling over a lot
+- Get up are very slow, not good on servos
+- Getting up on the wrong side
+
+#### Behaviour
+
+- Lack of penalty behaviour until last game, and even then limited behaviour
+- Director tree messy
+- Sync groups in NUClear a problem
+
+#### Tools
+
+- NUsight memory leak, crashes
+- Data was not reliably being received in NUsight
+- NUsight performance
+
+#### Organisational
+
+- Utilisation of team members
+- Everyone needs to know how everything works well enough to fix bugs at RoboCup
+- Miscommunication with robot handlers, more practice in the lab
+- Keep track of the RoboCup service better
+
+### What went well
+
+- WE CAME FOURTH!!!
+- WE WON THREE GAMES!!!
+- Close to third!
+- Every robot contributed (Sarah contributed parts). Every robot we fielded scored a goal.
+
+#### Hardware
+
+- Platform close to very stable
+- Only one motor replaced, but it was already bad before we left home
+- X series servos worked very well
+- Hardware improvements since last year
+- Bumpers were great
+- Cable clips were great
+
+#### Motion
+
+- Get ups were very reliable, none failed
+- Walk pretty stable despite path planning, one of fastest in the league
+- Path planning much better, could dribble to score and defend
+
+#### Localisation
+
+- Worked most of the time, big improvement
+
+#### Behaviour
+
+- Team communication really useful, robots not walking into each other any more, robots switching to striker when one was penalised
+- Ready positions working nicely, two robots walking to ready
+- Reacting to different game states good
+- Director useful for quick behaviour changes
+
+#### Vision
+
+- Yolo was a good fall-back when the Visual Mesh failed
+
+#### Tools
+
+- RoboCup alias and RoboCup tool good
+- NUsight has a lot of new features, worked nicely, very useful.
+- Temperature view good, localisation view good
+- Localisation reset and idle button good
+- Game controller connection stable
+
+#### Organisational
+
+- Great RoboCup team
+- Hardware replacement team great
+- Good game participation
+- Good team spirit
+- Batteries charged
+- Ready to go early before the game
+- Refereeing good
+
+### Next steps
+
+#### Hardware
+
+- NUSense
+- Bumpers bigger
+- NUC mounted vertically or differently in some way to protect ports. Use of usb-c port for second camera. Shock resistance.
+- Ribbon type Ethernet cables
+- Custom heads for each robot to easily identify robot
+- Buttons redesigned (the button itself), tactile
+- Heat sinks on servos, fans
+- 1-2 more robots game ready
+
+#### Motion
+
+- Falling relax
+- Disturbance rejection (balancing after being pushed or walking on uneven ground)
+- Kick
+- Path planning around robots
+- Fix getup side detection
+
+#### Localisation
+
+- Robustness
+- Improve in corners and goals
+- Hungarian algorithm
+- Integrate robot to robot communication (swarm localisation)
+
+#### Behaviour
+
+- Reevaluate how we use the Director
+- More complex dynamic robot positions and decisions
+- Logic on robot team possession
+
+#### Vision
+
+- New Visual Mesh or segmentation architecture
+- Make Visual Mesh work
+
+#### Tools
+
+- USB device that starts/stops robocup service
+- Alternative to ncurses
+- Data logging working in games (computational issue)
+- NUsight: Consistent colours for components
+- NUsight: Localisation view rewritten/cleaned up
+
+#### Organisational
+
+- New full-size field
+- Make a router set up similar to RoboCup
+- Bring a tripod
+- Longer power cables for wall power to robot, or a 2D gantry
+- Numbers on back of robots
+- Get to the point where we can field three or four robots in a game
+- Allow robots to fall during tests to test falling/hardware robustness
+
 ## 2023: Bordeaux, France
 
 ### What went wrong
