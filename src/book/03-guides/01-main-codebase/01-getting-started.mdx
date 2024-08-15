@@ -9,6 +9,7 @@ authors:
   - Josephus Paye II (@JosephusPaye)
   - Mikyla Peters (@miikyla)
   - Lachlan Court (@LachlanCourt)
+  - Corah Oliver (@yippyy)
 ---
 
 Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the `fake/keyboardwalk` binary (which uses simulated hardware) and seeing the robot move in NUsight.
@@ -105,7 +106,7 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
      ```
    - Restart your computer.
 
-3. Go to the Microsoft Store. Search for '**Ubuntu 20.04 LTS**' and install it. Launch Ubuntu.
+3. Go to the Microsoft Store. Search for '**Ubuntu 22.04.3 LTS**' and install it. Launch Ubuntu.
 
 4. Ensure Ubuntu is using WSL 2.
 
@@ -115,7 +116,7 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
      ```
    - If the version is not 2, run:
      ```bash
-     wsl --set-version Ubuntu-20.04 2
+     wsl --set-version Ubuntu-22.04.3 2
      ```
 
    <Alert type='info'> Note that 'ubuntu' in the last command may need to be capitalised. Check the exact spelling from the list output in the first command of this step. </Alert>
@@ -195,6 +196,12 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
    sudo -H pip3 install -r tools/requirements.txt
    ```
 
+<Alert type='info'>
+
+If this fails, run `sudo apt-get update && sudo apt-get upgrade`.
+
+</Alert>
+
 ## Building the Code
 
 Run all these commands for our example, and pay special attention to the instructions in the second step relating to our example.
@@ -232,6 +239,14 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    ```bash
    ./b build
    ```
+
+<Alert type='info'>
+
+If your computer struggles to build and crashes, do './b build -jx', where x is the number of cores you want to use. A good recommended amount of cores is five, if you still struggle, perhaps use one core.
+
+</Alert>
+
+
 
 <Alert type='info'>
 
