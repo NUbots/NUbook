@@ -14,9 +14,56 @@ authors:
 
 NUbots have competed in RoboCup every year since 2002.
 
-NUbots have competed in the Four Legged League (2002-2007), the Standard Platform League (2008-2011), the Humanoid KidSize League (2012-2017, 2021-2023) and the Humanoid TeenSize League (2018-2019).
+NUbots have competed in the Four Legged League (2002-2007), the Standard Platform League (2008-2011), the Humanoid KidSize League (2012-2017, 2021-present) and the Humanoid TeenSize League (2018-2019).
 
 NUbots became the Four Legged League world champions in 2006 in Germany. NUbots, in collaboration with the National University of Maynooth from Ireland, won the first Standard Platform League in 2008, as team NUManoid in Suzhou, China.
+
+## 2024: Eindhoven, The Netherlands
+
+NUbots returned to the Netherlands with eight student team members plus NUbots alumni and 4Ai Systems liaison Trent Houliston, who was reelected to the Humanoid League Technical Committee for a second year. Three team members attended their first RoboCup.
+
+NUbots achieved 4th place, with three games won and eight goals scored.
+
+**Major hardware changes**
+
+- Upgraded ankles and hip pitch and roll to X-Series servos.
+- Moved button panel to fixed back panel
+- New power solution
+- New neck mounts
+
+**Major software changes**
+
+- YOLO implementation and training of own model
+- Hybrid YOLO and Visual Mesh vision object heuristics
+- Improved odometry with anchor point method
+- Switched field localisation from a particle filter to a non-linear optimiser
+- Addition of goals and field line intersections in localisation
+- Localisation of other robots on the field
+- Torso pitch controller
+- Robot-to-robot communication
+- Dynamic position decider for defender/striker
+- Dynamic bounding box behaviour for different positions, set based on other robots positions, to avoid collisions
+- New path planning for positioning to ball, avoiding robots, facing goal
+- Kick off and penalty state logic
+- NUsight additions: path planning visualisation, goalie/defender/striker visualisation, servo state view, logs view
+- RoboCup configuration command line GUI tool
+
+**Performance and Results**
+
+NUbots placed 14th out of 16 teams in the drop in games.
+
+NUbots placed third in the round robin, missing out on second by goals scored.
+
+| Rank | Team             | Points | Played | Won | Drew | Lost | Goals Scored |
+| ---- | ---------------- | ------ | ------ | --- | ---- | ---- | ------------ |
+| 1    | Ichiro ITS       | 9      | 3      | 3   | 0    | 0    | 12           |
+| 2    | Hamburg Bit-Bots | 4      | 3      | 1   | 1    | 1    | 5            |
+| 3    | NUbots           | 4      | 3      | 1   | 1    | 1    | 4            |
+| 4    | IT Androids      | 0      | 3      | 0   | 1    | 2    | 0            |
+
+NUbots played Bold Hearts in the round of 16 and won three goals to nil. In the quarter-finals, NUbots played TH-MOS and won two goals to nil.
+
+NUbots lost to CIT Brains in the semi-finals, and lost their third place playoff against Barelang FC. The team finished the competition in 4th place out of 16 teams.
 
 ## 2023: Bordeaux, France
 
