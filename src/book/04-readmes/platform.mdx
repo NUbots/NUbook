@@ -6,13 +6,13 @@ description: README files for the platform modules in the main NUbots codebase
 slug: /readmes/platform/
 ---
 
-# Webots
+## webots
 
-## Description
+### Description
 
 A module to connect to Webots controllers and exchange protobuf messages with them.
 
-## Usage
+### Usage
 
 Add the ip for the computer running Webots, and the port the controller is listening on. For Robocup the port determines
 which player this robot is.
@@ -23,23 +23,23 @@ Start the world in webots, then do `./b run webots`, `./b run webots_keyboard`, 
 this repositiory. If you disconnect or need to restart the world, stop the role running with `ctrl + c`, then refresh
 the world in webots and run the role with the same `./b` command as above.
 
-## Emits
+### Emits
 
 platform::RawSensors
 output::CompressedImage
 
-## Dependencies
+### Dependencies
 
 Configuration
 
-# OpenCR HardwareIO
+## OpenCR HardwareIO
 
-## Description
+### Description
 
 This module is responsible for communicating with the NUgus robot's OpenCR
 controller.
 
-## Usage
+### Usage
 
 OpenCR Hardware I/O connects at startup to the OpenCR controller and sets up the starting state of the device.
 
@@ -56,7 +56,7 @@ These are done in order on a loop and if we fail to get a return message when we
 
 Once every loop, a RawSensors message is constructed with the current data recorded from the controller.
 
-# Consumes
+## Consumes
 
 - `message::platform::RawSensors::EyeLED` requesting a change to eye LED colour
 - `message::platform::RawSensors::HeadLED` requesting a change to head LED colour
@@ -65,46 +65,46 @@ Once every loop, a RawSensors message is constructed with the current data recor
 - `message::actuation::ServoTargets` requesting a batch of servo commands be performed
 - `message::platform::StatusReturn` used locally in the module to capture data input from the controller and process it in a separate reaction with `Sync`.
 
-## Emits
+### Emits
 
 - `message::platform::RawSensors` containing the current status of the NUgus
 - `message::platform::StatusReturn` used locally in the module to capture data input from the controller and process it in a separate reaction with `Sync`.
 
-## Dependencies
+### Dependencies
 
 - The USB TTY communication relies on Linux-specific system calls
 
-# NUSense HardwareIO
+## NUSense HardwareIO
 
-## Description
+### Description
 
 This module is responsible for communicating with the NUgus robot's NUSense controller.
 
-## Usage
+### Usage
 
 NUSense handles reading and writing to the Dynamixel devices, and reads its own accelerometer and gyroscope (IMU). This module sends target requests for Dynamixel devices and receive the NUSense data on Dynamixel device states and IMU state.
 
 This module is built when the subcontroller CMake flag is set to `NUSense`. Using `platform::${SUBCONTROLLER}::HardwareIO` will use this module if the subcontroller CMake flag is set to `NUSense`.
 
-## Consumes
+### Consumes
 
 - `message::actuation::ServoTarget` requesting a single servo command be performed
 - `message::actuation::ServoTargets` requesting a batch of servo commands be performed
 
-## Emits
+### Emits
 
 - `message::platform::NUSense` with a `DIRECT` scope so that the message is picked up locally in this module to be converted to RawSensors.
 - `message::input::RawSensors` containing the current NUgus sensor data from the NUSense device.
 
-## Dependencies
+### Dependencies
 
-# Hardware Simulator
+## Hardware Simulator
 
-## Description
+### Description
 
 This module simulates the CM740 subcontroller and connected sensors from the NUgus' real hardware.
 
-## Usage
+### Usage
 
 CM740 Hardware I/O connects at startup to the CM740 controller located on
 `/dev/CM740`. If this does not succeed an exception is thrown and startup is
@@ -122,14 +122,14 @@ containing the colour you wish to set them to.
 To control the NUgus' servos, use `message::actuation::ServoTarget`. You may
 emit these commands individually or emit several at once in a `message::actuation::ServoTargets`.
 
-## Consumes
+### Consumes
 
 - `message::platform::RawSensors::EyeLED` requesting a change to eye LED colour
 - `message::platform::RawSensors::HeadLED` requesting a change to head LED colour
 - `message::actuation::ServoTarget` requesting a single servo command be performed
 - `message::actuation::ServoTargets` requesting a batch of servo commands be performed
 
-## Emits
+### Emits
 
 - `message::platform::RawSensors` containing the current status of the NUgus
 

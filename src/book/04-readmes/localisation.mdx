@@ -6,17 +6,17 @@ description: README files for the localisation modules in the main NUbots codeba
 slug: /readmes/localisation/
 ---
 
-# FieldLocalisationNLopt
+## FieldLocalisationNLopt
 
-## Description
+### Description
 
 A localisation method for estimating the where the field is in world space, which relies on field line points and field line intersections using non-linear optimisation.
 
-### Optimization Setup
+#### Optimization Setup
 
 The optimization framework integrates several cost components and constraints to compute the optimal field localisation state:
 
-### Cost Components
+#### Cost Components
 
 1. **Field Line Alignment Cost ($J_{\text{fl}}$)**:
 
@@ -35,7 +35,7 @@ The optimization framework integrates several cost components and constraints to
    - Expressed as:
      $$ J*{\text{sc}} = w*{\text{sc}} \|\textbf{x} - \textbf{x}\_{\text{init}}\|^2 $$
 
-### Constraints
+#### Constraints
 
 The optimization is subject to the following constraints:
 
@@ -54,7 +54,7 @@ The optimization is subject to the following constraints:
   - Optimization will not proceed if the robot is in an unstable state (e.g., falling):
     $$ \text{stability} > \text{FALLING} $$
 
-### Optimization Algorithm
+#### Optimization Algorithm
 
 - The overall cost function optimized is:
   $$ J(\textbf{x}) = J*{\text{fl}} + J*{\text{fi}} + J\_{\text{sc}} $$
@@ -66,35 +66,35 @@ Where:
 
 Optimization is carried out using NLopt's COBYLA (Constrained Optimization BY Linear Approximations) algorithm, respecting the constraints and bounds set on the changes allowed in the state to ensure plausible and robust field localisation.
 
-## Usage
+### Usage
 
 Include this module to allow the robot to estimate where the field is in world space.
 
-## Consumes
+### Consumes
 
 - `message::vision::FieldLines` uses the field line observations from FieldLineDetector module
 - `message::vision::FieldLineIntersections` uses the field line intersections from FieldLineDetector module
 
-## Emits
+### Emits
 
 - `message::localisation::Field` contains the estimated (x, y, theta) state
 
-## Dependencies
+### Dependencies
 
 - `Eigen`
 - `utility::math::stats::MultivariateNormal` Utility for sampling from a multivariate normal distribution
 
-# FieldLocalisationNLopt
+## FieldLocalisationNLopt
 
-## Description
+### Description
 
 A localisation method for estimating the where the field is in world space, which relies on field line points and field line intersections using non-linear optimisation.
 
-### Optimization Setup
+#### Optimization Setup
 
 The optimization framework integrates several cost components and constraints to compute the optimal field localisation state:
 
-### Cost Components
+#### Cost Components
 
 1. **Field Line Alignment Cost ($J_{\text{fl}}$)**:
 
@@ -113,7 +113,7 @@ The optimization framework integrates several cost components and constraints to
    - Expressed as:
      $$ J*{\text{sc}} = w*{\text{sc}} \|\textbf{x} - \textbf{x}\_{\text{init}}\|^2 $$
 
-### Constraints
+#### Constraints
 
 The optimization is subject to the following constraints:
 
@@ -132,7 +132,7 @@ The optimization is subject to the following constraints:
   - Optimization will not proceed if the robot is in an unstable state (e.g., falling):
     $$ \text{stability} > \text{FALLING} $$
 
-### Optimization Algorithm
+#### Optimization Algorithm
 
 - The overall cost function optimized is:
   $$ J(\textbf{x}) = J*{\text{fl}} + J*{\text{fi}} + J\_{\text{sc}} $$
@@ -144,74 +144,74 @@ Where:
 
 Optimization is carried out using NLopt's COBYLA (Constrained Optimization BY Linear Approximations) algorithm, respecting the constraints and bounds set on the changes allowed in the state to ensure plausible and robust field localisation.
 
-## Usage
+### Usage
 
 Include this module to allow the robot to estimate where the field is in world space.
 
-## Consumes
+### Consumes
 
 - `message::vision::FieldLines` uses the field line observations from FieldLineDetector module
 - `message::vision::FieldLineIntersections` uses the field line intersections from FieldLineDetector module
 
-## Emits
+### Emits
 
 - `message::localisation::Field` contains the estimated (x, y, theta) state
 
-## Dependencies
+### Dependencies
 
 - `Eigen`
 - `utility::math::stats::MultivariateNormal` Utility for sampling from a multivariate normal distribution
 
-# FieldLocalisation
+## FieldLocalisation
 
-## Description
+### Description
 
 A particle filter based localisation method for estimating the where the field is in world space, which relies solely on
 field line observations.
 
-## Usage
+### Usage
 
 Include this module to allow the robot to estimate where the field is in world space.
 
-## Consumes
+### Consumes
 
 - `message::vision::FieldLines` uses the field line observations from FieldLineDetector module
 
-## Emits
+### Emits
 
 - `message::localisation::Field` contains the estimated (x, y, theta) state and covariance
 
-## Dependencies
+### Dependencies
 
 - `Eigen`
 - `utility::math::stats::MultivariateNormal` Utility for sampling from a multivariate normal distribution
 
-# BallLocalisation
+## BallLocalisation
 
-## Description
+### Description
 
 This module takes in a list of vision balls, uses the ball measurement closest to our current estimate and applies an
 Unscented Kalman Filter to estimate the balls position and velocity in world space.
 
-## Usage
+### Usage
 
 Include this module to allow the robot to estimate the balls position and velocity.
 
-## Consumes
+### Consumes
 
 - `message::vision::Balls` uses the ball position estimate from vision
 - `message::input::Sensors` uses sensors to compute transform from camera {c} to torso space {t}
 - `message::support::FieldDescription` uses field description to obtain height of ball off the ground
 
-## Emits
+### Emits
 
 - `message::localisation::Ball` contains filtered ball position measurement
 
-## Dependencies
+### Dependencies
 
-# RobotLocalisation
+## RobotLocalisation
 
-## Description
+### Description
 
 Estimates the position and velocity of other robots on the field.
 
@@ -219,18 +219,18 @@ The module works by tracking multiple robots using a UKF filter for each. Vision
 
 Tracked robots are discarded if they are not seen for a consecutive number of times when they should be visible.
 
-## Usage
+### Usage
 
 Incluide this role to track other robots on the field.
 
-## Consumes
+### Consumes
 
 - `message::vision::Robots` uses the robot position estimates from vision
 - `message::vision::GreenHorizon` uses the GreenHorizon to manage tracked robots
 
-## Emits
+### Emits
 
 - `message::localisation::Robots` contains filtered robot positions and velocity estimates
 
-## Dependencies
+### Dependencies
 

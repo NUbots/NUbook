@@ -6,47 +6,47 @@ description: README files for the support modules in the main NUbots codebase
 slug: /readmes/support/
 ---
 
-# NUsight
+## NUsight
 
-## Description
+### Description
 
 This module simply emits sine wave data points to NUsight. It can be used to quickly test the
 connection between NUbots and NUsight.
 
-## Usage
+### Usage
 
 Include the module in a role, and it will automatically emit messages.
 
 Also ensure that sending data points are enabled in `config/NUsight.yaml`
 
-## Emits
+### Emits
 
 - `message::eye::DataPoint`
 
-# Console Log Handler
+## Console Log Handler
 
-## Description
+### Description
 
 Writes log messages to the console.
 
-## Usage
+### Usage
 
 Once installed, this module will echo all NUClear log messages to standard output.
 
-## Consumes
+### Consumes
 
 - `NUClear::message::LogMessage` containing a message to be logged
 
-# DataPlayback
+## DataPlayback
 
-## Description
+### Description
 
 DataPlayback is a module which will allow you to play back `.nbs` files as if they were happening in realtime.
 This can be very useful for when you are trying to diagnose a problem for which you have a recording as you can continuously play back the same data.
 
 The module will buffer up packets from the future and emit them at the same rate that they were emitted originally.
 
-## Usage
+### Usage
 
 In order to play back the messages, you need to create a role with this module that has the modules you wish to test. You then need to enable the message types that are the input to these modules by setting them to true in the configuration (e.g. `message.input.Sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats file`).
 
@@ -54,20 +54,20 @@ There are two methods to provide nbs files to this module, via the configuration
 
 You can provide multiple `.nbs` files and they will be played in sequence. For example `./b run <role> recordings/<nbs-file-a> recordings/<nbs-file-b>` will run the role and play back
 
-### Notes
+#### Notes
 
 There is some weird behaviour that will occur when using this module that won't happen in a real system. Take note of these if they influence your usage
 
 - If there are any timestamp fields in the messages, these will not be updated. If you are comparing the timestamps in the messages to the current time they will be wrong.
 - When you are providing paths to `.nbs` files via a `./b run` command they are relative to the build directory in docker. There is a symlink to `recordings` that is placed there to make any nbs file in recordings easier to use but outside of this path you will need to provide the full path from dockers perspective.
 
-# DataLogging
+## DataLogging
 
-## Description
+### Description
 
 Logs serialisable neutrons in nbs files. It also creates nbs.idx files.
 
-## Usage
+### Usage
 
 Add the neutron types that you want to record in the config file in the messages list field. Specify the directory you
 want the log files to be written in the output directories field, the actual nbs and idx files will be created in a
@@ -81,43 +81,53 @@ Filenames will be of the format year, month, day, T, hours, \_, minutes, \_, sec
 Files that are currently being written to will have an underscore prepended to the name, which will be removed when the
 file is closed.
 
-## Emits
+### Emits
 
-## Dependencies
+### Dependencies
 
-# MessageLogHandler
+## FileLogHandler
 
-## Description
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## MessageLogHandler
+
+### Description
 
 This module provides an interface to take the LogMessage and ReactionStatistics messages from NUClear and recodes them into protobuf messages.
 These messages can then be sent using NetworkForwarder or recorded using DataLogging.
 Additionally it can be configured to ignore the display level of the logs so that the level can be adjusted at a later time for analysis.
 
-## Usage
+### Usage
 
 Include this module and configure NetworkForwarder or DataLogging to forward the LogMessage and ReactionStatistics messages.
 
-## Consumes
+### Consumes
 
 - NUClear::message::LogMessage
 - NUClear::message::ReactionStatistics
 
-## Emits
+### Emits
 
 - message::nuclear::LogMessage
 - message::nuclear::ReactionStatistics
 
-## Dependencies
+### Dependencies
 
 None
 
-# Signal Catcher
+## Signal Catcher
 
-## Description
+### Description
 
 This module catches and handles signals.
 
-## Usage
+### Usage
 
 When SIGINT (interrupt - Ctrl+C) is received, SignalCatcher attempts to shut
 down the NUClear power plant and terminate the program. If another SIGINT is
@@ -127,45 +137,55 @@ the program) it immediately exits the program with return code 1.
 If SIGSEGV (segmentation fault) is received, SignalCatcher throws a
 `message::SegmentationFault` exception.
 
-# OnboardWalkOptimisation
+## LocalisationSimulator
 
-## Description
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## OnboardWalkOptimisation
+
+### Description
 
 This module manages the use of running an optimisation routine onboard the real robot platform. It handles the period where the robot resets after an optimisation trial run and it checks for stability.
 
-## Usage
+### Usage
 
 Use this with an optimisation module, such as the NSGA2Evaluator and NSGA2Optimiser, to run optimisation onboard the real robot platform.
 
-## Consumes
+### Consumes
 
 - `message::support::optimisation::OptimisationCommand` containing information on if the optimisation is to be reset or terminated.
 - `message::input::Sensors` to determine if the robot is stable.
 
-## Emits
+### Emits
 
 - `message::support::optimisation::OptimisationResetDone` to tell the optimisation when the robot has been reset for a new trial run.
 - `message::support::optimisation::OptimisationRobotPosition` to tell the optimiser where the robot is in the world.
 
-## Dependencies
+### Dependencies
 
 - An optimiser
 
-# NSGA2Evaluator
+## NSGA2Evaluator
 
-## Description
+### Description
 
 The evaluator half of the Multi-Objective Non-Dominated Sorting Genetic Algorithm II (NSGA2) optimisation algorithm. Evaluates parameters for an individual from the NSGA2Optimiser module based on fitness.
 
 Currently contains implementations for optimising the walk engine.
 
-## Usage
+### Usage
 
 The NSGA2Optimiser module uses this module. Please see 'NSGA2Evaluator.yaml' to set constants for boundary testing and scalars for multipath.
 
 To implement the evaluator for a new optimisation scenario, extend from the EvaluatorTask class.
 
-## Consumes
+### Consumes
 
 - `module::support::optimisation::Event` Describes the current evaluator state. Possible values include WAITING_FOR_REQUEST, SETTING_UP_TRIAL, RESETTING_TRIAL, EVALUATING, TERMINATING_EARLY, TERMINATING_GRACEFULLY, and FINISHED.
 - `module::support::optimisation::WalkEvaluator` A walk evaluation task.
@@ -176,17 +196,17 @@ To implement the evaluator for a new optimisation scenario, extend from the Eval
 - `message::support::optimisation::NSGA2EvaluationRequest` Enables the evaluation of individuals.
 - `message::input::Sensors` Contains sensor data which is used for calculating an individual's fitness.
 
-## Emits
+### Emits
 
 - `message::support::optimisation::NSGA2FitnessScores` Containing the score evaluation of an individual, to be used by the NSGA2Optimiser.
 
-## Dependencies
+### Dependencies
 
 - `module::support::optimisation::NSGA2Optimiser` Optimises parameters based on the performance of individuals that are evaluated.
 
-# NSGA2Optimiser
+## NSGA2Optimiser
 
-## Description
+### Description
 
 The optimiser half of the Multi-Objective, Non-Dominated Sorting Genetic Algorithm II (NSGA2) optimisation algorithm. Optimises parameters using an NSGA2 algorithm, using the NSGA2Evaluator module to run the evaluations.
 
@@ -202,7 +222,7 @@ The current tasks available are:
 
 The parameters to be optimised can be found in the 'NSGA2Optimiser.yaml' file.
 
-## Usage
+### Usage
 
 The NSGA2.yaml file contains the parameters for running this module. The parameters to set are:
 
@@ -214,7 +234,7 @@ The NSGA2.yaml file contains the parameters for running this module. The paramet
 - Mutation value
 - The task, e.g. "walk"
 
-## Consumes
+### Consumes
 
 - `message::support::optimisation::NSGA2FitnessScores` Containing the score evaluation of an individual, received from NSGA2Evaluator.
 - `module::support::optimisation::WalkOptimiser` A walk optimisation task.
@@ -223,29 +243,60 @@ The NSGA2.yaml file contains the parameters for running this module. The paramet
 - `module::support::optimisation::StandOptimiser` A stand optimisation task.
 - `module::support::optimisation::MultiPathOptimiser` A multipath walk optimisation task.
 
-## Emits
+### Emits
 
 - `message::support::optimisation::NSGA2EvaluatorReady` Emitted when initialisation has been completed to signal that evaluation can begin.
 - `message::support::optimisation::NSGA2Terminate` Sent to NSGA2Evaluator to stop the optimisation and shut down the powerplant.
 - `message::support::optimisation::NSGA2EvaluationRequest` Sent to NSGA2Evaluator to trigger the evaluation of a new individual.
 - `task->make_evaluation_request` (to NSGA2Evaluator. Request an evaluation of an individual)
 
-## Dependencies
+### Dependencies
 
 - `message::support::optimisation::NSGA2Evaluator` Runs evaluations of individuals that are used to optimise parameters.
 
-# Profiler
+## Profiler
 
-## Description
+### Description
 
 The Profiler module in NUbots is designed for profiling the execution of reactions within the system. It measures the execution time of each reaction and aggregates statistical data, such as total, average, minimum, and maximum execution times. This data helps in understanding the performance characteristics of different parts of the system.
 
-## Usage
+### Usage
 
 Include this module in role.
 
-## Emits
+### Emits
 
 - `ReactionProfiles` aggregated profiling data, including individual reaction profiles with statistics on execution times.
 
-## Dependencies
+### Dependencies
+
+## GlobalConfig
+
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## SoccerConfig
+
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## ReactionTimer
+
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+

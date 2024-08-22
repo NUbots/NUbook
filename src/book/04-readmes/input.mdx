@@ -6,15 +6,15 @@ description: README files for the input modules in the main NUbots codebase
 slug: /readmes/input/
 ---
 
-# FakeCamera
+## FakeCamera
 
-## Description
+### Description
 
 Loads compressed images (JPEGs) and corresponding lens parameters (YAML files) from the specified folder and emits them as `CompressedImage` messages
 
 Images are and lens files are expected to be named using a common theme (e.g. image000001.jpg and lens000001.yaml).
 
-## Usage
+### Usage
 
 In the config file set `image_folder` to be the path to the folder containing the image and lens files, `image_prefix` to the portion of the filename that is common to all image files and `lens_prefix` to the portion of the filename that is common to all lens files.
 
@@ -41,57 +41,77 @@ Hoc: # Camera to observation plane (world) homogeneous transformation
   - [0, 0, 0, 1]
 ```
 
-## Emits
+### Emits
 
 `message::output::CompressedImage` with a `JPEG` FOURCC code
 
-## Dependencies
+### Dependencies
 
-- Eigen
-- libjpeg-turbo
+Eigen
+libjpeg-turbo
 
-# Camera
+## Game Controller
 
-## Description
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## NatNet
+
+### Description
+
+### Usage
+
+### Emits
+
+### Dependencies
+
+## Camera
+
+### Description
 
 Reads Cameras: Which are GigE Vision or U3V (Usb3 Vision, via USB3 Cable).
 
-## Usage
+### Usage
 
 Settings are defined in the `config/Cameras`
 
-## Emits
+### Emits
 
 `message::input::Image`
 
-## Dependencies
+### Dependencies
 
 Aravis
 
-# ImageDecompressor
+## ImageDecompressor
 
-## Description
+### Description
 
 Decompresses images that are in JPEG format to raw images, using a variety of decompressors.
 It will use decompressors in order until it finds a free one to compress the image.
 In the event that no compressors are currently free it will drop the image.
 
-## Usage
+### Usage
 
 Triggers on `message::output::CompressedImage`
 Configuration from `ImageDecompressor.yaml`
 
-## Emits
+### Emits
 
 `message::input::Image`
 
-## Dependencies
+### Dependencies
 
 TurboJPEG
 
-# Sensor Filter
+## Sensor Filter
 
-## Description
+### Description
 
 Uses a Unscented Kalman filter to filter the raw incoming data, and provide clean platform agnostic data.
 
@@ -99,20 +119,20 @@ We assume that the IMU (accelerometer and gyroscope) are oriented to conform wit
 the front of the robot y-axis to the left z-axis up
 
 For the accelerometer the orientation should be as follows
-- x axis reports a +1g acceleration when robot is laying on its back
-- y axis reports a +1g acceleration when robot is laying on its right side
-- z axis reports a +1g acceleration when robot is vertical
+x axis reports a +1g acceleration when robot is laying on its back
+y axis reports a +1g acceleration when robot is laying on its right side
+z axis reports a +1g acceleration when robot is vertical
 
-## Usage
+### Usage
 
 When installed, it will read incoming `message::platform::RawSensors` objects and pass them through the kalman filter.
 The resulting filtered data will then be outputted as `message::input::Sensors` to be used by the rest of the system.
 
-## Consumes
+### Consumes
 
 - `message::platform::RawSensors` in order to filter them.
 
-## Emits
+### Emits
 
 - `message::input::Sensors` with filtered data from the input.
 - `message::input::ButtonLeftDown` when button pressed.
@@ -121,5 +141,5 @@ The resulting filtered data will then be outputted as `message::input::Sensors` 
 - `message::input::ButtonMiddleUp` when button released.
 - `message::eye::DataPoint` if log_level >= DEBUG, indicating if feet are down.
 
-## Dependencies
+### Dependencies
 

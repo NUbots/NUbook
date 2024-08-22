@@ -6,37 +6,37 @@ description: README files for the output modules in the main NUbots codebase
 slug: /readmes/output/
 ---
 
-# Overview
+## Overview
 
-## Description
+### Description
 
 Emits an overview packet that can be used by NUsight to display the state of the game.
 This should be forwarded to NUsight using the NetworkForwarder module
 
-## Emits
+### Emits
 
 An overview packet
 
-# ImageCompressor
+## ImageCompressor
 
-## Description
+### Description
 
 Compresses images into JPEG format of specified quality, using a variety of compressors including `VAAPI` and `TurboJPEG`.
 It will use compressors in order until it finds a free one to compress the image.
 In the event that no compressors are currently free it will drop the image.
 
-## Usage
+### Usage
 
 Triggers on `message::input::Image`
 Configuration from `ImageCompressor.yaml`
 
-## Emits
+### Emits
 
 `message::output::CompressedImage`
 
-## Dependencies
+### Dependencies
 
-- TurboJPEG
-- libva (vaapi)
-- Intel media driver
+TurboJPEG
+libva (vaapi)
+intel media driver
 

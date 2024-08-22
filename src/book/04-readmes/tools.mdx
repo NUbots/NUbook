@@ -6,9 +6,9 @@ description: README files for the tools modules in the main NUbots codebase
 slug: /readmes/tools/
 ---
 
-# RoboCupConfiguration
+## RoboCupConfiguration
 
-## Description
+### Description
 
 IMPORTANT: `systemconfiguration` and `robocup` roles should be built to the robot so that the relevant configuration files exist, if they do not already exist.
 
@@ -19,7 +19,7 @@ The purpose of this module is to provide a simple way to set up the robot for Ro
 
 Then run `./systemconfiguration` and reboot. Alternatively you can run this module again and revert the values manually.
 
-## Usage
+### Usage
 
 This module is to be used right before a RoboCup game to quickly set up the robot with the game-specific details.
 
@@ -37,47 +37,57 @@ The interface has the following commands (shift-letter for uppercase)
 - W: disables wifi, useful for after a RoboCup game as wifi congestion is an issue at RoboCup and it is important to disconnect from any field networks when not playing.
 - X: shutdown the program
 
-## Consumes
+### Consumes
 
 N/A
 
-## Emits
+### Emits
 
 N/A
 
-## Dependencies
+### Dependencies
 
 - ncurses
 
-# NBSPlayback
+## FirmwareInstaller
 
-## Description
+### Description
 
-## Usage
+### Usage
+
+### Emits
+
+### Dependencies
+
+## NBSPlayback
+
+### Description
+
+### Usage
 
 In order to play back the messages, you need to create a role with this module that has the modules you wish to test. You then need to enable the message types that are the input to these modules by setting them to true in the configuration (e.g. `message.input.sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats file`).
 
 Provide `.nbs` file paths via the command line. For example `./b run <role> recordings/<nbs-file-a> recordings/<nbs-file-b>`
 
-## Emits
+### Emits
 
 - `message.nbs.PlaybackNBS`: The message containing NBS file paths, message types to play and playback mode.
 
-## Dependencies
+### Dependencies
 
 Modules:
 
 - nbs/Player
 
-# SystemConfiguration
+## SystemConfiguration
 
-## Description
+### Description
 
 This module is used to ensure that the configuration that is running on a device matches what is required.
 
 It goes through several steps to ensure the system is setup correctly
 
-### Filesystem
+#### Filesystem
 
 The system will look through each file in the `system/default` directory.
 For each of these files it will see if there is an equivalent file in the `system/$HOSTNAME` directory and use that, otherwise it uses the default file.
@@ -100,44 +110,44 @@ Checks are made to ensure that the link target exists and the link doesn't exist
 - If the link name already exists and **is** a symlink to the target, nothing is done
 - If the link name doesn't exist, the link is made
 
-### Packages
+#### Packages
 
 After this the system will then attempt to update and upgrade the system using the package manager.
 Once this is done it will go through the list of packages in configuration and ensure that they are installed.
 
-### Systemd
+#### Systemd
 
 The system will then go through the list of configuration entries for systems and ensure that they are enabled.
 
-### Locale
+#### Locale
 
 If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated
 
-### Grub
+#### Grub
 
 If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date
 
-### Message Of The Day
+#### Message Of The Day
 
 The message of the day file is regenerated to ensure it has the correct contents
 
-### Hosts and Hostname
+#### Hosts and Hostname
 
 Both the hostname and the hosts file are regenerated with the correct contents
 
-### Groups
+#### Groups
 
 The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them
 
-### ZSH
+#### ZSH
 
 Zprezto is now installed and the appropriate symlinks are made. The users' default shell is also changed to zsh
 
-### Python
+#### Python
 
 Finally, python is updated to ensure that it will search for packages in `/usr/local`
 
-## Usage
+### Usage
 
 Run the system_configuration role as a superuser and this role will ensure that the system configuration on the platform matches the configuration in the repository.
 
