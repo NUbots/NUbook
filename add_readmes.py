@@ -2,6 +2,7 @@ import argparse
 import mmap
 import os
 from pathlib import Path
+import re
 
 # Add command line arguments for the root to NUbots and NUbook
 parser = argparse.ArgumentParser(
@@ -39,6 +40,9 @@ def process_readme_file(file):
     # Read the content of this README.md file
     with open(file, "r", encoding="utf-8") as f:
         md_content = f.read()
+
+    # Adjust headings by adding an extra #
+    md_content = re.sub(r'^(#+)', r'#\1', md_content, flags=re.MULTILINE)
 
     # The page slug this readme will be added to
     subfolder_name = Path(file).parts[Path(file).parts.index("module") + 1]
