@@ -19,9 +19,9 @@ Images are and lens files are expected to be named using a common theme (e.g. im
 In the config file set `image_folder` to be the path to the folder containing the image and lens files, `image_prefix` to the portion of the filename that is common to all image files and `lens_prefix` to the portion of the filename that is common to all lens files.
 
 ```yaml
-image_folder: "images"
-image_prefix: "image"
-lens_prefix: "lens"
+image_folder: 'images'
+image_prefix: 'image'
+lens_prefix: 'lens'
 ```
 
 All images are assumed to be JPEGs with either a `.jpg` or `.jpeg` extension. All lens files are assumed to be YAML files with a `.yaml` extension.
@@ -142,4 +142,3 @@ The resulting filtered data will then be outputted as `message::input::Sensors` 
 - `message::eye::DataPoint` if log_level >= DEBUG, indicating if feet are down.
 
 ### Dependencies
-
