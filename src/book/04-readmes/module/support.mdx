@@ -29,6 +29,7 @@ file is closed.
 ## Emits
 
 ## Dependencies
+
 # Console Log Handler
 
 ## Description
@@ -42,6 +43,7 @@ Once installed, this module will echo all NUClear log messages to standard outpu
 ## Consumes
 
 - `NUClear::message::LogMessage` containing a message to be logged
+
 # FileLogHandler
 
 ## Description
@@ -51,6 +53,7 @@ Once installed, this module will echo all NUClear log messages to standard outpu
 ## Emits
 
 ## Dependencies
+
 # DataPlayback
 
 ## Description
@@ -74,6 +77,7 @@ There is some weird behaviour that will occur when using this module that won't 
 
 - If there are any timestamp fields in the messages, these will not be updated. If you are comparing the timestamps in the messages to the current time they will be wrong.
 - When you are providing paths to `.nbs` files via a `./b run` command they are relative to the build directory in docker. There is a symlink to `recordings` that is placed there to make any nbs file in recordings easier to use but outside of this path you will need to provide the full path from dockers perspective.
+
 # MessageLogHandler
 
 ## Description
@@ -99,6 +103,7 @@ Include this module and configure NetworkForwarder or DataLogging to forward the
 ## Dependencies
 
 None
+
 # GlobalConfig
 
 ## Description
@@ -108,6 +113,7 @@ None
 ## Emits
 
 ## Dependencies
+
 # SoccerConfig
 
 ## Description
@@ -117,6 +123,7 @@ None
 ## Emits
 
 ## Dependencies
+
 # NSGA2Optimiser
 
 ## Description
@@ -166,6 +173,7 @@ The NSGA2.yaml file contains the parameters for running this module. The paramet
 ## Dependencies
 
 - `message::support::optimisation::NSGA2Evaluator` Runs evaluations of individuals that are used to optimise parameters.
+
 # NSGA2Evaluator
 
 ## Description
@@ -198,6 +206,7 @@ To implement the evaluator for a new optimisation scenario, extend from the Eval
 ## Dependencies
 
 - `module::support::optimisation::NSGA2Optimiser` Optimises parameters based on the performance of individuals that are evaluated.
+
 # OnboardWalkOptimisation
 
 ## Description
@@ -221,6 +230,7 @@ Use this with an optimisation module, such as the NSGA2Evaluator and NSGA2Optimi
 ## Dependencies
 
 - An optimiser
+
 # Profiler
 
 ## Description
@@ -236,6 +246,7 @@ Include this module in role.
 - `ReactionProfiles` aggregated profiling data, including individual reaction profiles with statistics on execution times.
 
 ## Dependencies
+
 # Signal Catcher
 
 ## Description
@@ -251,6 +262,7 @@ the program) it immediately exits the program with return code 1.
 
 If SIGSEGV (segmentation fault) is received, SignalCatcher throws a
 `message::SegmentationFault` exception.
+
 # ReactionTimer
 
 ## Description
@@ -260,6 +272,7 @@ If SIGSEGV (segmentation fault) is received, SignalCatcher throws a
 ## Emits
 
 ## Dependencies
+
 # LocalisationSimulator
 
 ## Description
@@ -269,6 +282,7 @@ If SIGSEGV (segmentation fault) is received, SignalCatcher throws a
 ## Emits
 
 ## Dependencies
+
 # NUsight
 
 ## Description

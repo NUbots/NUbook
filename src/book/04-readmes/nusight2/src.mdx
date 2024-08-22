@@ -19,31 +19,31 @@ Tabs and other components in NUsight that need networking should create their ow
 For example, for a tab called **Log**, you would have a file at `src/client/components/log/network.ts` with code like the following:
 
 ```ts
-import { action } from "mobx";
+import { action } from 'mobx'
 
-import { message } from "../../../shared/messages";
-import { Network } from "../../network/network";
-import { NUsightNetwork } from "../../network/nusight_network";
-import { RobotModel } from "../robot/model";
+import { message } from '../../../shared/messages'
+import { Network } from '../../network/network'
+import { NUsightNetwork } from '../../network/nusight_network'
+import { RobotModel } from '../robot/model'
 
-import { LogModel } from "./model";
+import { LogModel } from './model'
 
 export class LogNetwork {
   /** The network interface used for sending/receiving messages and making RPC calls */
-  network: Network;
+  network: Network
 
   /** The tab's data model which is updated when messages are received */
-  model: LogModel;
+  model: LogModel
 
   constructor(network: Network, model: LogModel) {
-    this.network = network;
-    this.model = model;
+    this.network = network
+    this.model = model
   }
 
   /** Used to create a new LogNetwork instance using the given NUsightNetwork and model */
   static of(nusightNetwork: NUsightNetwork, model: LogModel): LogNetwork {
-    const network = Network.of(nusightNetwork);
-    return new LogNetwork(network, model);
+    const network = Network.of(nusightNetwork)
+    return new LogNetwork(network, model)
   }
 
   /**
@@ -51,7 +51,7 @@ export class LogNetwork {
    * Should be called when the component for the tab is unmounted.
    */
   destroy() {
-    this.network.off();
+    this.network.off()
   }
 }
 ```
@@ -73,7 +73,7 @@ export class LogNetwork {
     // [...] (see above for rest of constructor)
 
     // Listen for Log messages from the server
-    this.network.on(Log, this.onLog);
+    this.network.on(Log, this.onLog)
   }
 
   /** Called when a Log message is received from the server */
@@ -83,7 +83,7 @@ export class LogNetwork {
     //   - `robotModel` has details about the peer that sent the message
     //   - `log` is the message that was sent
     // Use `log` to update the model here for rendering in the tab...
-  };
+  }
 }
 ```
 
@@ -103,9 +103,9 @@ export class LogNetwork {
 
   toggleLogging() {
     if (this.model.isLogging) {
-      this.network.emit(new message.output.StopLogging());
+      this.network.emit(new message.output.StopLogging())
     } else {
-      this.network.emit(new message.output.StartLogging());
+      this.network.emit(new message.output.StartLogging())
     }
   }
 }
@@ -131,7 +131,9 @@ export class LogNetwork {
   // [...] (see above for constructor, listeners, etc.)
 
   async searchLogs(query: string) {
-    const result = await this.network.call(new message.output.SearchLogsRequest({ query: query }));
+    const result = await this.network.call(
+      new message.output.SearchLogsRequest({ query: query })
+    )
 
     // If the RPC call was successful, `result.ok` will be true, and `result.response` will be the response message
     if (result.ok) {
@@ -141,13 +143,14 @@ export class LogNetwork {
     // which has a `cause` property that can be used to determine the cause of the error
     else {
       // Here we call the default error handler, which ignores cancellation errors and re-throws all other errors
-      result.error.defaultHandler();
+      result.error.defaultHandler()
     }
   }
 }
 ```
 
 The `searchLogs()` method can then be called from a controller or view, to send the request to the server.
+
 # ResizeContainer Component
 
 This folder exports a `ResizeContainer` component from [`resize_container.tsx`](./resize_container.tsx) and `ResizePanel` component from [`resize_panel.tsx`](./resize_panel.tsx) which combine to create a layout that can be resized at runtime by dragging the resize handles rendered between the panels.
@@ -211,6 +214,7 @@ const [currentState, setCurrentState] = useState("default");
   <ResizePanel minSize={200}>Content 2</ResizePanel>
 </ResizeContainer>
 ```
+
 # Icon component
 
 The [`view.tsx`](./view.tsx) file in this folder exports an `Icon` component that can be used to show an icon from the [Material Symbols](https://fonts.google.com/icons?icon.style=Outlined) icon set. The icons used are from the "Outlined" style.
@@ -260,6 +264,7 @@ import { Icon } from './src/components/icon/view'
 
 > **Note**
 > If you find an icon in the library that doesn't work with the component, it could be a newer icon that is not available in the local copy of the font we have. If this is the case, you can update our font file (at `src/assets/fonts/material-symbols/material-symbols-outlined.woff2`) to the latest version of the file from [this repo](https://github.com/marella/material-symbols/tree/main/material-symbols), which tracks Google's latest releases of the font files.
+
 # Camera Text Renderer
 
 The [`text.ts`](./text.ts) file in this folder exports a `TextViewModel` class which can generate THREE.JS meshes of text from strings to render text in a camera view.
@@ -276,25 +281,25 @@ Text meshes generated by the renderer have the option of being positioned either
 
 ```ts
 // Create a Text Renderer (from Camera Model attributes)
-const renderer = new TextViewModel(canvas, params, image);
+const renderer = new TextViewModel(canvas, params, image)
 
 // Create options for text positioned by a ray
 const rayTextOpts: TextOpts = {
-  type: "ray",
+  type: 'ray',
   ray: Vector3.of(x, y, z), // Ray from camera space
-  text: "Example Text",
-};
+  text: 'Example Text',
+}
 
 // Create options for text positioned by an image pixel
 const pixelTextOpts: TextOpts = {
-  type: "pixel",
+  type: 'pixel',
   pixel: Vector2.of(x, y), // Image pixel coordinate
-  text: "Example Text",
-};
+  text: 'Example Text',
+}
 
 // Create text geometry
-const rayTextGeometry = renderer.text(rayTextOpts);
-const pixelTextGeometry = renderer.text(pixelTextOpts);
+const rayTextGeometry = renderer.text(rayTextOpts)
+const pixelTextGeometry = renderer.text(pixelTextOpts)
 
 // Use the geometry to draw the text... (see the story linked below)
 ```

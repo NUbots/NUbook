@@ -32,6 +32,7 @@ Add this module to keep the robot within a bounding box on the field.
 - `message::strategy::WalkToFieldPosition` a Task to walk to desired field position
 
 ## Dependencies
+
 # FallRecovery
 
 ## Description
@@ -53,6 +54,7 @@ Emit a `message::strategy::FallRecovery` Task in order to activate this module's
 
 - `message::planning::GetUpWhenFalling` to activate the get up planner
 - `message::planning::RelaxWhenFalling` to activate a relax planner
+
 # KickToGoal
 
 ## Description
@@ -75,6 +77,7 @@ Add this module to kick towards the goals.
 - `message::planning::KickTo` a Task requesting to kick to the goals when applicable.
 
 ## Dependencies
+
 # StrategiseLook
 
 ## Description
@@ -101,6 +104,7 @@ Add this module to your role to make the robot look at balls or goals when reque
 ## Dependencies
 
 - The coordinates utility
+
 # DiveToBall
 
 ## Description
@@ -123,6 +127,7 @@ Add this module to the role to dive when the ball is close enough.
 ## Dependencies
 
 - Needs the ball location to know when to dive
+
 # Ready
 
 ## Description
@@ -145,6 +150,7 @@ Add this module to walk onto the field in the READY state.
 ## Dependencies
 
 - The walk engine
+
 # StartSafely
 
 ## Description
@@ -165,6 +171,7 @@ Emit the Task on Startup at the root of the Director tree.
 - `message::actuation::Body` to move the whole body to the stand position.
 
 ## Dependencies
+
 # WalkToFieldPosition
 
 ## Description
@@ -184,6 +191,7 @@ Add this module to walk to a position on the field.
 - `message::planning::WalkTo` Task requesting to walk to a point
 
 ## Dependencies
+
 # AlignBallToGoal
 
 ## Description
@@ -206,6 +214,7 @@ Add this module to align the ball to the goal.
 - `message::planning::PivotAroundPoint` Task requesting to rotate around the ball.
 
 ## Dependencies
+
 # StandStill
 
 ## Description
@@ -230,6 +239,7 @@ Add this module and emit a `message::strategy::StandStill` Task to make the robo
 
 - The script utility
 - The walk engine
+
 # FindObject
 
 ## Description
@@ -250,6 +260,7 @@ Include this module and request a FindBall Task when needing to find the ball.
 - `message::planning::LookAround` to move the head around to find the ball
 
 ## Dependencies
+
 # WalkToBall
 
 ## Description
