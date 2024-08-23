@@ -1,10 +1,28 @@
 ---
-section: Readmes
-chapter: Module
+section: System
+chapter: Modules
 title: Input
-description: README files for the input modules in the main NUbots codebase
-slug: /readmes/input/
+description: Documentation for each input module in the main NUbots codebase
+slug: /system/modules/input/
 ---
+
+## Camera
+
+### Description
+
+Reads Cameras: Which are GigE Vision or U3V (Usb3 Vision, via USB3 Cable).
+
+### Usage
+
+Settings are defined in the `config/Cameras`
+
+### Emits
+
+`message::input::Image`
+
+### Dependencies
+
+Aravis
 
 ## FakeCamera
 
@@ -49,44 +67,6 @@ Hoc: # Camera to observation plane (world) homogeneous transformation
 
 Eigen
 libjpeg-turbo
-
-## Game Controller
-
-### Description
-
-### Usage
-
-### Emits
-
-### Dependencies
-
-## NatNet
-
-### Description
-
-### Usage
-
-### Emits
-
-### Dependencies
-
-## Camera
-
-### Description
-
-Reads Cameras: Which are GigE Vision or U3V (Usb3 Vision, via USB3 Cable).
-
-### Usage
-
-Settings are defined in the `config/Cameras`
-
-### Emits
-
-`message::input::Image`
-
-### Dependencies
-
-Aravis
 
 ## ImageDecompressor
 

@@ -1,10 +1,24 @@
 ---
-section: Readmes
-chapter: Module
+section: System
+chapter: Modules
 title: Network
-description: README files for the network modules in the main NUbots codebase
-slug: /readmes/network/
+description: Documentation for each network module in the main NUbots codebase
+slug: /system/modules/network/
 ---
+
+## NetworkForwarder
+
+### Description
+
+This module forwards messages that are emitted in the system over NUClearNetwork.
+Messages that are emitted are sent to the target when they are enabled in the configuration file.
+The configuration file is able to set either `true` for a message type in which case it will attempt to send every single packet or you can set a number and it will rate limit that packet.
+
+The forwarder will split messages rate limiting by an id field if they have one
+
+### Emits
+
+Network emits every message that is in the configuration over NUClearNet to the target
 
 ## NUClearNet
 
@@ -52,7 +66,7 @@ To plot data from a role you're working on using PlotJuggler, do the following.
 1. [Download and install PlotJuggler](https://github.com/facontidavide/PlotJuggler#installation).
 2. Launch PlotJuggler and start the UDP server.
 
-   ![Screenshot of PlotJuggler showing UDP server details](./images/plotjuggler-udp-server.jpg)
+   ![Screenshot of PlotJuggler showing UDP server details](images/plotjuggler-udp-server.jpg)
 
    A. Under the **Streaming** section at the left of the PlotJuggler UI, select "UDP Server" and click "Start".
 
@@ -143,17 +157,3 @@ Add this module to get information about other robots.
 ### Dependencies
 
 - [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
-
-## NetworkForwarder
-
-### Description
-
-This module forwards messages that are emitted in the system over NUClearNetwork.
-Messages that are emitted are sent to the target when they are enabled in the configuration file.
-The configuration file is able to set either `true` for a message type in which case it will attempt to send every single packet or you can set a number and it will rate limit that packet.
-
-The forwarder will split messages rate limiting by an id field if they have one
-
-### Emits
-
-Network emits every message that is in the configuration over NUClearNet to the target

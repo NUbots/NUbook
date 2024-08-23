@@ -1,10 +1,36 @@
 ---
-section: Readmes
-chapter: Module
+section: System
+chapter: Modules
 title: Planning
-description: README files for the planning modules in the main NUbots codebase
-slug: /readmes/planning/
+description: Documentation for each planning module in the main NUbots codebase
+slug: /system/modules/planning/
 ---
+
+## FallingRelaxPlanner
+
+### Description
+
+The FallingRelaxPlanner module is used to detect when the robot is actively falling over and run a relax action to remove torque to the servos.
+This is done to prevent damage when the robot impacts the ground, hopefully saving many gear set changes
+The script to use for relaxing is configurable, for the case where simulations cannot handle the relax script and need something else, eg a stand script.
+
+### Usage
+
+Emit a `message::plan::RelaxWhenFalling` as a Task.
+Make sure that it has a lower challenge priority than the GetUp, otherwise it may trigger in the middle of the getup resulting in an infinite loop of falling and half getting up.
+
+### Consumes
+
+- `message::input::Sensors` to determine when the robot is actively falling over
+- `message::plan::RelaxWhenFalling` as a Task to activate this module allowing it to relax when the robot is falling over
+
+### Emits
+
+- `message::actuation::BodySequence` containing the script to use when relaxing
+
+### Dependencies
+
+- The Script extension
 
 ## GetUpPlanner
 
@@ -31,27 +57,6 @@ If relax has higher priority it may trigger mid getup
 ### Dependencies
 
 - A module that can provide GetUp
-
-## PlanLook
-
-### Description
-
-Plans how to look around. Follows a search pattern to find objects.
-
-### Usage
-
-Add this module to your role to make the robot look around when requested.
-
-### Consumes
-
-- `message::planning::LookAround` a Task requesting to run the search pattern to look around
-
-### Emits
-
-- `message::skill::Look` a Task requesting to look in a direction
-- `message::planning::LookAround` a Task requesting to run the search pattern to look around the environment
-
-### Dependencies
 
 ## PlanKick
 
@@ -89,31 +94,26 @@ Emit a KickTo Task with the position to kick to. The contents of the message (po
 
 - The reaction will not run without localisation ball messages.
 
-## FallingRelaxPlanner
+## PlanLook
 
 ### Description
 
-The FallingRelaxPlanner module is used to detect when the robot is actively falling over and run a relax action to remove torque to the servos.
-This is done to prevent damage when the robot impacts the ground, hopefully saving many gear set changes
-The script to use for relaxing is configurable, for the case where simulations cannot handle the relax script and need something else, eg a stand script.
+Plans how to look around. Follows a search pattern to find objects.
 
 ### Usage
 
-Emit a `message::plan::RelaxWhenFalling` as a Task.
-Make sure that it has a lower challenge priority than the GetUp, otherwise it may trigger in the middle of the getup resulting in an infinite loop of falling and half getting up.
+Add this module to your role to make the robot look around when requested.
 
 ### Consumes
 
-- `message::input::Sensors` to determine when the robot is actively falling over
-- `message::plan::RelaxWhenFalling` as a Task to activate this module allowing it to relax when the robot is falling over
+- `message::planning::LookAround` a Task requesting to run the search pattern to look around
 
 ### Emits
 
-- `message::actuation::BodySequence` containing the script to use when relaxing
+- `message::skill::Look` a Task requesting to look in a direction
+- `message::planning::LookAround` a Task requesting to run the search pattern to look around the environment
 
 ### Dependencies
-
-- The Script extension
 
 ## PlanWalkPath
 
