@@ -1,0 +1,225 @@
+---
+section: System
+chapter: Modules
+title: Skill
+description: Documentation for each skill module in the main NUbots codebase
+slug: /system/modules/skill/
+---
+
+## Dive
+
+### Description
+
+Executes a Dive action, intended to be used for a goalie to stop the ball.
+
+### Usage
+
+Add this module to the role and emit a Dive Task to execute a Dive.
+
+### Consumes
+
+- `message::skill::Dive` a Task requesting to Dive to the left or right
+
+### Emits
+
+- `message::actuation::BodySequence` a Task requesting to move the body in a sequence, used to run the Dive scripts
+
+### Dependencies
+
+- The script utility to load the Dive scripts
+
+## Getup
+
+### Description
+
+A Behaviour module that will run the appropriate getup script for the
+
+### Usage
+
+Include this module to allow the robot to get up after it has fallen over.
+
+### Consumes
+
+- `message::skill::GetUp` as a Task to trigger execution
+- `message::input::Sensors` to determine which get up script to execute
+
+### Emits
+
+- `message::behaviour::state::Stability` to update the stability when starting and finishing getting up
+- `message::actuation::BodySequence` as a Task containing the script sequence for getting up
+
+### Dependencies
+
+- The `Script` extension to convert scripts into BodySequences
+
+## GPT
+
+### Description
+
+A module that integrates with OpenAI's GPT-3.5 model to send text prompts and receive generated responses.
+
+### Usage
+
+Include this module to allow your system to interact with OpenAI's GPT for natural language processing tasks.
+
+### Consumes
+
+- `message::skill::GPTChatRequest`: A request containing text that needs to be processed by GPT.
+
+### Emits
+
+`message::skill::Say`: A Task requesting to speak using the output of the GPT model based on the input request.
+
+### Dependencies
+
+- **nlohmann::json**: For JSON data serialization and deserialization.
+- **utility::openai::openai**: A utility to interface with the OpenAI API.
+
+## Look
+
+### Description
+
+Moves the head so that the robot is looking in a given direction, with the option for smoothing.
+
+### Usage
+
+Include this module to make the robot look in the given direction.
+
+### Consumes
+
+- `message::skill::Look` a Task requesting to look in a direction
+- `message::input::Sensors` to get the current head angles for smoothing
+
+### Emits
+
+- `message::actuation::HeadIK` to calculate and request head joint angles
+
+### Dependencies
+
+- The coordinates utility
+
+## QuinticWalk
+
+### Description
+
+Open loop walk engine that uses quintic splines to create trajectories.
+
+### Usage
+
+Include this module to allow the robot to walk.
+
+### Consumes
+
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target.
+
+### Emits
+
+- `message::behaviour::state::Stability` to indicate when the robot is walking (dynamically stable) and standing.
+- `message::actuation::LeftLegIK` Task requesting the left leg is moved using Inverse Kinematics, containing left leg motion information.
+- `message::actuation::RightLegIK` Task requesting the right leg is moved using Inverse Kinematics, containing right leg motion information.
+- `message::actuation::LeftArm` Task requesting the left arm is moved using Inverse Kinematics, containing left arm servo commands.
+- `message::actuation::RightArm` Task requesting the right arm is moved using Inverse Kinematics, containing right arm servo commands.
+
+### Dependencies
+
+- Eigen
+- KinematicsModel
+- Sensors
+- `utility::motion::splines::*`
+
+## Say
+
+### Description
+
+Module that enables the robot to vocalize specified text using a text-to-speech tool and optionally perform a nodding gesture to indicate speaking.
+
+### Usage
+
+Include this module whenever the robot needs to vocalize or acknowledge messages via speech-like actions.
+
+### Consumes
+
+- `message::skill::Say`: A Task requesting to vocalize a text string. Contains the text to be spoken and an optional nod gesture request.
+
+### Emits
+
+- `message::actuation::HeadSequence`: A Task to instruct the robot's head to perform specific sequences, such as a nodding gesture.
+
+### Dependencies
+
+- **mimic3**: External python based command-line text-to-speech tool.
+- **aplay**: Command-line sound player for Linux.
+
+## ScriptKick
+
+### Description
+
+Executes a script for kicking.
+
+### Usage
+
+Emit a Kick message when wanting to kick.
+
+### Consumes
+
+`message::skill::Kick` the kick information to use when kicking.
+
+### Emits
+
+`message::actuation::LimbsSequence` through the Script extension, which populates the requested Script/s into LimbsSequences.
+
+### Dependencies
+
+- Script extension
+
+## SplineKick
+
+### Description
+
+SplineKick module executes a kicking motion using splines for smooth and accurate movement. Waypoints for the kicking
+foot and torso relative to the support foot are specified in the config and executed by this module.
+
+### Usage
+
+Add this module to allow the robot to kick.
+
+### Consumes
+
+- `message::skill::Kick` Task requesting the robot to kick
+
+### Emits
+
+- `message::actuation::ControlLeftFoot` Task requesting the left leg is moved to desired pose.
+- `message::actuation::ControlRightFoot` Task requesting the right leg is moved to desired pose.
+- `message::actuation::LeftArm` Task requesting the left arm is moved using Inverse Kinematics, containing left arm servo commands.
+- `message::actuation::RightArm` Task requesting the right arm is moved using Inverse Kinematics, containing right arm servo commands.
+
+### Dependencies
+
+- Eigen
+
+## Walk
+
+### Description
+
+Open loop walk engine that uses quintic splines to create swing foot and torso trajectories.
+
+### Usage
+
+Include this module to allow the robot to walk.
+
+### Consumes
+
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target.
+
+### Emits
+
+- `message::behaviour::state::Stability` to indicate when the robot is walking (dynamically stable) and standing.
+- `message::actuation::ControlLeftFoot` Task requesting the left leg is moved to desired pose.
+- `message::actuation::ControlRightFoot` Task requesting the right leg is moved to desired pose.
+- `message::actuation::LeftArm` Task requesting the left arm is moved using Inverse Kinematics, containing left arm servo commands.
+- `message::actuation::RightArm` Task requesting the right arm is moved using Inverse Kinematics, containing right arm servo commands.
+
+### Dependencies
+
+- Eigen
