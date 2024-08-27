@@ -1,0 +1,303 @@
+---
+section: System
+chapter: Modules
+title: Strategy
+description: Documentation for each strategy module in the main NUbots codebase
+slug: /system/modules/strategy/
+---
+
+## AlignBallToGoal
+
+### Description
+
+Strafes in a circle around the ball if the ball exists.
+
+### Usage
+
+Add this module to align the ball to the goal.
+
+### Consumes
+
+- `message::strategy::AlignBallToGoal` Task requesting to rotate around the ball.
+- `message::Localisation::Ball` Information on where the ball is.
+- `message::Localisation::Field` Information regarding the position of the field.
+- `message::support::FieldDescription` Information on the dimensions of the field, used to find the goal position to align to.
+
+### Emits
+
+- `message::planning::PivotAroundPoint` Task requesting to rotate around the ball.
+
+### Dependencies
+
+## DiveToBall
+
+### Description
+
+Dives when the ball is close enough on the x-axis, diving in the direction of the ball. Intended for use by a goalie to stop the ball.
+
+### Usage
+
+Add this module to the role to dive when the ball is close enough.
+
+### Consumes
+
+- `message::strategy::DiveToBall` a Task requesting to dive to the ball when it is close enough
+- `message::localisaton::Ball` with the position of the ball
+
+### Emits
+
+- `message::skill::Dive` a Task requesting to dive in a specified direction
+
+### Dependencies
+
+- Needs the ball location to know when to dive
+
+## FallRecovery
+
+### Description
+
+A strategy module that handles relaxing when falling and getting up when we hit the ground and have settled.
+Ensures that getting up has higher priority than falling planner so it doesn't try to relax while getting up.
+
+It is recommended that this task be given higher priority than any other running provider in the system so nothing can interrupt it.
+
+### Usage
+
+Emit a `message::strategy::FallRecovery` Task in order to activate this module's provider
+
+### Consumes
+
+- `message::strategy::FallRecovery` to activate the provider
+
+### Emits
+
+- `message::planning::GetUpWhenFalling` to activate the get up planner
+- `message::planning::RelaxWhenFalling` to activate a relax planner
+
+## FindObject
+
+### Description
+
+Provider reactions to find objects. Currently includes a FindBall Provider to find an ball when its location is unknown.
+
+### Usage
+
+Include this module and request a FindBall Task when needing to find the ball.
+
+### Consumes
+
+- `message::strategy::FindBall` a Task requesting to find the ball
+
+### Emits
+
+- `message::planning::TurnOnSpot` to turn around if the ball is not in view
+- `message::planning::LookAround` to move the head around to find the ball
+
+### Dependencies
+
+## KickToGoal
+
+### Description
+
+Kicks towards the goals.
+
+### Usage
+
+Add this module to kick towards the goals.
+
+### Consumes
+
+- `message::strategy::KickToGoal` The Task requesting to kick towards the goal.
+- `message::localisation::Field` Information on where the field is in the world.
+- `message::input::Sensors` Information on where the robot is in the world.
+- `message::support::FieldDescription` Information on the dimensions of the field, to get the goal position.
+
+### Emits
+
+- `message::planning::KickTo` a Task requesting to kick to the goals when applicable.
+
+### Dependencies
+
+## Ready
+
+### Description
+
+This module contains a Provider for the Ready Task, which aims to position the robots on the field in the RoboCup READY phase. The robot moves for a configured amount of time with a configured walk command and then stands still
+
+### Usage
+
+Add this module to walk onto the field in the READY state.
+
+### Consumes
+
+- `message::strategy::Ready` a Task requesting to walk to the ready position
+
+### Emits
+
+- `message::skill::Walk` a Task requesting to walk at a particular speed
+- `message::strategy::StandStill` a Task requesting to stand still
+
+### Dependencies
+
+- The walk engine
+
+## StandStill
+
+### Description
+
+Makes the robot stand still and not move. It emits a zero walk command until `Stability` is `STANDING` and then emits the Stand script.
+
+### Usage
+
+Add this module and emit a `message::strategy::StandStill` Task to make the robot stand still.
+
+### Consumes
+
+- `message::strategy::StandStill` a Task requesting the robot stands still
+- `message::behaviour::state::Stability` indicating the stability state of the robot, to check if it is standing
+
+### Emits
+
+- `message::skill::Walk` to make the walk engine stop cleanly
+- `message::actuation::LimbsSequence` with a Stand script loaded to make the robot stand still
+
+### Dependencies
+
+- The script utility
+- The walk engine
+
+## StartSafely
+
+### Description
+
+Use this module to make the robot move safely to a stand position.
+
+### Usage
+
+Emit the Task on Startup at the root of the Director tree.
+
+### Consumes
+
+- `message::strategy::StartSafely` Task to request the robot to start safely.
+- `message::input::Sensors` to determine the position of the motors.
+
+### Emits
+
+- `message::actuation::Body` to move the whole body to the stand position.
+
+### Dependencies
+
+## StrategiseLook
+
+### Description
+
+LookAtBall fixates on a ball if a recent one exists.
+LookAtGoals fixates on a goal if a recent goal exists.
+
+### Usage
+
+Add this module to your role to make the robot look at balls or goals when requested.
+
+### Consumes
+
+- `message::planning::LookAtBall` a Task requesting to look at the ball if there is a recent ball
+- `message::planning::LookAtGoals` a Task requesting to look at a goal if there is a recent goal
+- `message::localisation::Ball` with the position of the ball for fixation
+- `message::vision::Goals` with the position of the goals for fixation
+- `message::input::Sensors` for the world matrix to convert the goals measurement into the correct space
+
+### Emits
+
+- `message::skill::Look` a Task requesting to look in a direction (to the balls or goals)
+
+### Dependencies
+
+- The coordinates utility
+
+## WalkInsideBoundedBox
+
+### Description
+
+Keeps the robot clamped within bounded box area on the field. The bounded box is configurable.
+
+If ball is outside bounded box area and ball is in front of the bounding box, defender is clamped to the edge of bounding box closest to ball.
+
+If ball is outside the bounded box area and to the side of the bounding box, the robot is clamped to the edge of bounding box closest to ball and positions itself 1 meter behind the ball.
+
+### Usage
+
+Add this module to keep the robot within a bounding box on the field.
+
+### Consumes
+
+- `message::input::Sensors` To get sensor information for localisation
+- `message::localisation::Field` Localisation usage for keeping inside bounded box
+- `message::localisation::FilteredBall` Used for ball position
+- `message::strategy::WalkInsideBoundedBox` a Task requesting to stay within a bounding box on the field
+
+### Emits
+
+- `message::strategy::WalkToFieldPosition` a Task to walk to desired field position
+
+### Dependencies
+
+## WalkToBall
+
+### Description
+
+Walks to the ball if a filtered ball exists.
+
+### Usage
+
+Add this module to walk to the ball.
+
+### Consumes
+
+- `message::strategy::WalkToBall` Task requesting to walk to the ball
+- `message::localisation::Ball` information on where the ball is
+
+### Emits
+
+- `message::planning::WalkTo` Task requesting to walk to a location, in this case the ball
+
+### Dependencies
+
+## WalkToFieldPosition
+
+### Description
+
+Walks to the field position using localisation information.
+
+### Usage
+
+Add this module to walk to a position on the field.
+
+### Consumes
+
+- `message::strategy::WalkToFieldPosition` Task requesting to walk to position on field
+
+### Emits
+
+- `message::planning::WalkTo` Task requesting to walk to a point
+
+### Dependencies
+
+## WalkToFieldPosition
+
+### Description
+
+Walks to the field position using localisation information.
+
+### Usage
+
+Add this module to walk to a position on the field.
+
+### Consumes
+
+- `message::strategy::WalkToFieldPosition` Task requesting to walk to position on field
+
+### Emits
+
+- `message::planning::WalkTo` Task requesting to walk to a point
+
+### Dependencies
