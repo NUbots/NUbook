@@ -21,7 +21,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['add-nubots-readmes.js'],
+      files: ['add-readmes.js'],
       env: {
         node: true,
         es6: true,
