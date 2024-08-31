@@ -6,7 +6,7 @@ const axios = require('axios')
 // Recursively search for files matching the pattern in a directory
 const searchRecursive = (dir, pattern) => {
   let results = []
-  readdirSync(dir).forEach(dirInner => {
+  readdirSync(dir).forEach((dirInner) => {
     const resolvedPath = resolve(dir, dirInner)
     const stat = statSync(resolvedPath)
 
@@ -25,11 +25,11 @@ const externalLinksList = []
 
 // Loop through the mdx files to find all links
 let count = 0
-files.forEach(file => {
+files.forEach((file) => {
   const array = readFileSync(file).toString().split('\n')
   const reBrackets = /\((.*?)\)/g
 
-  array.forEach(line => {
+  array.forEach((line) => {
     let found
     while ((found = reBrackets.exec(line)) !== null) {
       const t = found[1].split(' ', 1)[0]
@@ -44,7 +44,7 @@ files.forEach(file => {
 })
 
 // Send HTTP HEAD request to check if the link exists
-const sendHTTPRequest = async linkURL => {
+const sendHTTPRequest = async (linkURL) => {
   try {
     const res = await axios.head(linkURL, { timeout: 30000 })
     return res.status.toString().startsWith(2)
