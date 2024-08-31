@@ -1,0 +1,334 @@
+---
+section: Guides
+chapter: Main Codebase
+title: Maintaining Subsystems
+description: How to maintain subsystems within the main codebase.
+slug: /guides/main/maintaining-subsystems
+authors:
+  - Ysobel Sims (@ysims)
+---
+
+This page details how to maintain various subsystems within the main codebase.
+
+## Odometry
+
+### Webots Live Error Tracking
+
+The `nugus_controller` in Webots has functionality to send live odometry ground truth data to the robot. To use this
+
+1. [Set up Webots and compile the NUWebots code](/guides/tools/webots-setup) (you do not need the RoboCup set up).
+2. Run the `kid.wbt` world in Webots.
+3. Run `webots/keyboardwalk` in NUbots. [See the Getting Started page to set up the NUbots codebase](/guides/main/getting-started).
+4. Run [NUsight](/guides/main/getting-started#get-build-and-run-nusight) or [PlotJuggler](https://github.com/NUbots/NUbots/tree/main/module/network/PlotJuggler/README.md) and observe the graphs for the robot's prediction, the ground truth and the error of the torso's real rotation and translation relative to world.
+
+## Vision
+
+The accuracy of the vision system is reliant on the accuracy of odometry and kinematics because they affect the placement of the mesh and green horizon. It is important that these systems work reasonable well otherwise the robot may have issues detecting objects.
+
+If you are using Webots, you can turn on odometry ground truth in the SensorFilter module. Go to the `SensorFilter.yaml` configuration file and set the `filtering_method` to `GROUND_TRUTH`. This will use the ground truth odometry from Webots instead of the odometry from the robot. This is useful for testing the vision system without having to worry about odometry errors.
+
+### Dataset Generation
+
+Synthetic and semi-synthetic training data for vision can be generated using [NUpbr](/system/tools/nupbr). Pre-generated datasets for training the Visual Mesh are on the <abbr title="Network-Attached Storage">NAS</abbr> in the lab.
+
+#### NUpbr
+
+NUpbr is a Physically Based Rendering tool created in Blender. It creates semi-synthetic images with corresponding [segmentation masks](https://paperswithcode.com/task/semantic-segmentation) for training.
+
+Information on NUpbr is available on the [NUbook page](/system/tools/nupbr), [NUbook guide](/guides/tools/nupbr-guide) and the [NUpbr GitHub repository](https://github.com/NUbots/NUpbr).
+
+#### Setting Up The Data
+
+The Visual Mesh requires raw images, segmentation masks and metadata, as outlined on the [Quick Start Guide](https://github.com/Fastcode/VisualMesh/blob/main/readme/quickstart.md#gathering-the-data). NUpbr can provide all of these as output, and premade data is available on the NAS. The data then needs to be converted to the tfrecord format using a script on the Visual Mesh repository. [The Quick Start Guide](https://github.com/Fastcode/VisualMesh/blob/main/readme/quickstart.md#building-the-dataset) describes how to use it.
+
+### The Visual Mesh
+
+#### Training and Testing
+
+Go to the [NUbook Visual Mesh Getting Started guide](/guides/tools/visualmesh) to find out how to train and test a network, with an example dummy dataset.
+
+#### Exporting Configuration
+
+The resulting network should be exported to a [yaml](https://yaml.org/) file and added to the NUbots codebase, by completing the following steps.
+
+1. Create a base configuration file. Example yaml files can be found [in the Visual Mesh repository](https://github.com/Fastcode/VisualMesh/blob/main/example/model.yaml) and [in the NUbots repository](https://github.com/NUbots/NUbots/blob/main/module/vision/VisualMesh/data/config/VisualMesh.yaml).
+
+2. Export the weights of your trained Mesh to this configuration file using the following command, where `<output_dir>` is the directory of the configuration file:
+
+   ```bash
+   ./mesh.py export <output_dir>
+   ```
+
+3. Add this configuration file to the NUbots repository in the [VisualMesh module](https://github.com/NUbots/NUbots/tree/main/module/vision/VisualMesh/data/config/networks). Replace or add a configuration file depending on the use case of the Mesh - `RobocupNetwork.yaml` is for soccer playing on the real robot and `WebotsNetwork` is for soccer playing in the Webots simulator. View the [Git Guide](/guides/general/git) for information on using Git and submitting this change in a pull request.
+
+### Camera Calibration
+
+The vision system cannot work optimally if the cameras are not calibrated correctly. [The input page](/system/subsystems/input) describes the camera parameters that can be calibrated.
+
+An automatic camera calibration tool is available in the NUbots repository. See the [camera calibration guide](/guides/main/camera-calibration) to find out how to use this tool.
+
+### Testing
+
+After updating the Visual Mesh in the NUbots repository, it should be tested before merging. Refer to the [Getting Started guide](/guides/main/getting-started) for assistance for the following steps.
+
+1. Build the code, ensuring `ROLE_test-visualmesh` is set to `ON` in `./b configure -i`, and install it to the robot. Ensure the new configuration file is installed by using the `-cu` or `-co` options when installing - check out the [Build System page](/system/foundations/build-system#install) to find out more about options when installing onto the robot.
+
+2. When your new Visual Mesh is installed onto the robot, connect to the robot using:
+
+   ```bash
+   ssh nubots@<address>
+   ```
+
+3. Ensure the robot is sending vision data:
+
+   ```bash
+   nano config/NetworkForwarder.yaml
+   ```
+
+   CompressedImage, Balls, Goals and GreenHorizon should be on. Run NUsight using `yarn prod` and navigate to the NUsight page in your browser. More on NUsight can be found on [the NUsight NUbook page](/system/tools/nusight). If you have not already set up and built NUsight, refer to the [Getting Started page](/guides/main/getting-started).
+
+4. Run the `test/visualmesh` role
+
+   ```bash
+   ./test/visualmesh
+   ```
+
+5. Wait for the cameras to load and then watch the Vision tab in NUsight. To determine if the output is correct, consult the [vision page](/system/subsystems/vision) for images of the expected output.
+
+To see the Visual Mesh itself in NUsight, you will need to enable the `message.vision.VisualMesh` message in the `NetworkForwarder.yaml` file. Most of the time the networking should work, but sometimes there may be issues since the Visual Mesh data is large. If there are issues with seeing the Visual Mesh output in NUsight, you will need to log the data and run it back in NUsight using DataPlayback. Use the steps in the [DataLogging and DataPlayback guide](/guides/main/data-recording-playback) to record and playback data. Adjust the instructions for our purpose using the following hints:
+
+- In step 1 of Recording Data, use the [`test/visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/test/visualmesh.role) role to record the data.
+- In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
+- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/playback.role) role to playback the data, without changes.
+
+### Tuning Detectors
+
+Potentially, the Visual Mesh had positive results after training, but when used on a robot it performed poorly. In this case, the detectors may need tuning.
+
+[BallDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/BallDetector/data/config/BallDetector.yaml) and [GoalDetector.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/GoalDetector/data/config/GoalDetector.yaml) contain the values for tuning the ball and goal detectors respectively.
+
+1. Build and install the `test/visualmesh` role to a robot.
+2. SSH onto the robot.
+3. Enable NUsight messages on the robot by running
+
+   ```bash
+   nano config/NetworkForwarder.yaml
+   ```
+
+   and set `message.vision.Balls` and `message.vision.Goals` to `true`.
+
+4. Run NUsight using `yarn prod` on a computer. Set up NUsight using the [Getting Started page](/guides/main/getting-started) if necessary.
+5. Run `./test/visualmesh` on the robot.
+6. Alter the configuration file for the detectors while simultaneously running the binary on the robot. In a new terminal, SSH onto the robot again and run:
+
+   ```bash
+   nano config/BallDetector.yaml
+   ```
+
+   Change the values and upon saving, the changes will be used immediately by the robot **without** needing to rebuild or rerun the `./test/visualmesh` binary.
+
+7. Repeat #6 for the goal detector by running
+
+   ```bash
+   nano config/GoalDetector.yaml
+   ```
+
+In general, it might be useful to adjust the `confidence_threshold` on both detectors to improve the results. Other variables may give better results with different values, except for `log_level` and the covariances (`goal_projection_covariance` and `ball_angular_cov`).
+
+## Benchmarks
+
+Benchmark results for various aspects of the vision system. These benchmarks tell us how well the system performs and if a new method improves the system. In general, benchmarks should be recalculated when there may be a change in the results. The benchmarks should be verified every six months if no changes have been made, to ensure unrelated changes did not cause issues.
+
+### Visual Mesh
+
+Test results from the Visual Mesh, broken down for each class with precision and recall values. The complete output from the Visual Mesh test can be found on the Google Drive, in the [Benchmarks folder](https://drive.google.com/drive/folders/1OKdhV-dKLGJXYNLWaIw9lQ_8xBJf0cfT) with a date. As well as the information provided on this page, the output contains graphs for each class for [F1](https://towardsdatascience.com/the-f1-score-bec2bbc38aa6), [Informedness, Markedness](https://rvprasad.medium.com/informedness-and-markedness-20e3f54d63bc), [MCC](https://en.wikipedia.org/wiki/Phi_coefficient), [MI](https://en.wikipedia.org/wiki/Mutual_information), [PR](https://medium.com/@douglaspsteen/precision-recall-curves-d32e5b290248), [Precision, Recall](https://en.wikipedia.org/wiki/Precision_and_recall), [ROC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc).
+
+Visual Mesh benchmarks should be updated when a network is trained and added to the NUbots codebase, or if the Visual Mesh code updates in a way that would effect these values.
+
+#### Real World
+
+Coming soon...
+
+#### Webots
+
+Full metrics can be found in the Benchmarks folder on the NUbots Google Drive. Test dataset can be found on the NAS device. Should be updated if a new Webots Visual Mesh network replaces the old network, or if the RoboCup environment in Webots changes (a new network should be trained in this case).
+
+<details>
+
+<summary>Ball</summary>
+
+Precision: 0.9552730904880183
+
+Recall: 0.9474011799668628
+
+Predicted Ball samples are really:
+
+- Ball: 95.527%
+- Goal: 0.198%
+- Line: 1.132%
+- Field: 2.163%
+- Robot: 0.902%
+- Environment: 0.078%
+
+Real Ball samples are predicted as:
+
+- Ball: 94.740%
+- Goal: 0.506%
+- Line: 1.528%
+- Field: 1.077%
+- Robot: 2.031%
+- Environment: 0.117%
+
+</details>
+
+<details>
+
+<summary>Goal</summary>
+
+Precision: 0.9744150403727407
+
+Recall: 0.9818396740798292
+
+Predicted Goal samples are really:
+
+- Ball: 0.006%
+- Goal: 97.442%
+- Line: 0.176%
+- Field: 0.462%
+- Robot: 0.100%
+- Environment: 1.814%
+
+Real Goal samples are predicted as:
+
+- Ball: 0.002%
+- Goal: 98.184%
+- Line: 0.146%
+- Field: 0.210%
+- Robot: 0.056%
+- Environment: 1.402%
+
+</details>
+
+<details>
+
+<summary>Line</summary>
+
+Precision: 0.9639229445906177
+
+Recall: 0.9643768381560178
+
+Predicted Line samples are really:
+
+- Ball: 0.036%
+- Goal: 0.280%
+- Line: 96.392%
+- Field: 2.885%
+- Robot: 0.365%
+- Environment: 0.042%
+
+Real Line samples are predicted as:
+
+- Ball: 0.026%
+- Goal: 0.341%
+- Line: 96.438%
+- Field: 2.910%
+- Robot: 0.283%
+- Environment: 0.002%
+
+</details>
+
+<details>
+
+<summary>Field</summary>
+
+Precision: 0.9970544868367878
+
+Recall: 0.9969097621584649
+
+Predicted Field samples are really:
+
+- Ball: 0.001%
+- Goal: 0.017%
+- Line: 0.120%
+- Field: 99.705%
+- Robot: 0.074%
+- Environment: 0.082%
+
+Real Field samples are predicted as:
+
+- Ball: 0.002%
+- Goal: 0.037%
+- Line: 0.119%
+- Field: 99.691%
+- Robot: 0.087%
+- Environment: 0.064%
+
+</details>
+
+<details>
+
+<summary>Robot</summary>
+
+Precision: 0.9772128370131125
+
+Recall: 0.9823020939044803
+
+Predicted Robot samples are really:
+
+- Ball: 0.006%
+- Goal: 0.015%
+- Line: 0.038%
+- Field: 0.283%
+- Robot: 97.721%
+- Environment: 1.936%
+
+Real Robot samples are predicted as:
+
+- Ball: 0.003%
+- Goal: 0.026%
+- Line: 0.050%
+- Field: 0.244%
+- Robot: 98.230%
+- Environment: 1.447%
+
+</details>
+
+<details>
+
+<summary>Environment</summary>
+
+Precision: 0.9977592789558581
+
+Recall: 0.9970136589036935
+
+Predicted Environment samples are really:
+
+- Ball: 0.000%
+- Goal: 0.040%
+- Line: 0.000%
+- Field: 0.023%
+- Robot: 0.160%
+- Environment: 99.776%
+
+Real Environment samples are predicted as:
+
+- Ball: 0.000%
+- Goal: 0.053%
+- Line: 0.001%
+- Field: 0.030%
+- Robot: 0.215%
+- Environment: 99.701%
+
+</details>
+
+### Object Positions
+
+Post-processing heuristics use Visual Mesh results to find the position of likely objects in the image. These benchmarks are the error between the real position and the calculated position in the three-dimensional world. This should be updated if the post-processing heuristics are updated, or if the Visual Mesh output changes.
+
+#### Real World
+
+Coming soon...
+
+#### Webots
+
+Coming soon...

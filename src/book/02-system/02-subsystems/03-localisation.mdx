@@ -5,3 +5,50 @@ title: Localisation
 description: Localisation and how it works in the NUbots codebase.
 slug: /system/subsystems/localisation
 ---
+
+Localisation is the process of estimating the position and orientation of the robot relative to the soccer field. The NUbots codebase uses a Particle Filter approach to estimate the robot's position and orientation relative to the soccer field.
+
+For a description of commonly used spaces relevant for localisation, see the [Mathematics Page](/system/foundations/mathematics#reference-frames).
+
+<Grid columns='1fr  1fr' rows="1fr">
+
+![Webots](./images/webots.png 'Webots')
+![NUsight](./images/nusight.png 'Localisation estimate')
+
+</Grid>
+
+### Particle Filter Localisation
+
+The `FieldLocalisation` module is a primary component of the NUbots localization system. It uses a Particle Filter approach to estimate the robot's position and orientation relative to the soccer field. See notebook [Particle Filter Localisation](https://colab.research.google.com/drive/1AoGZAFa_8mG1jQAniV1q8bGZsMQnErzl?usp=sharing) for more details on Monte-Carlo localization.
+
+#### Initialisation
+
+At initialisation, n particles are sampled from a multivariate normal distributions on either side of the field facing towards the centre, to produce initial hypothesis' of the robots starting position. For example, a visual illustration of 20 particles being initialized around the centre of the field is shown below.
+![Initialisation](./images/init.png 'Initialisation')
+
+Additionally, a discretized field line distance map is pre-computed at startup which encodes the minimum distance to an occupied cell (field line). An example of a field line map is shown below.
+
+![Field Line Map](./images/field_line_map.png 'Field Line Map')
+
+#### Measurement Update
+
+The measurement update involves weighting each particle. The general idea is to weight particles higher if field line point observations are closer to field lines. For each particle, the field line point observations are projected onto the field plane (using Odometry) and mapped into an index in the field line distance map. The weight of the particle is then calculated using simple inverse function:
+
+$$
+W_n = 1/(\delta + \epsilon)
+$$
+
+where $W_n$ is the weight of the $n$th particle, $\delta = \sum_{i=1}^{k} (\delta_i)^2$ is the total sum of distance values squared obtained from the map for all field line point observations, and $\epsilon$ is machine epsilon to prevent numerical issues.
+
+#### Time Update
+
+Since the latest Odometry information is used within the measurement update, the time update does not directly involve propagating particles forward in time using any motion model. Instead, the time update involves simply adding noise to the particles to simulate the uncertainty in the robot's motion and resampling the particles.
+
+Resampling refines the set of particles in Particle Filter localization based on their calculated weights.
+
+1. **Normalize Weights**: Particle weights are adjusted so their sum is 1, ensuring each represents its proportional likelihood.
+
+2. **Particle Selection**: Using the normalized weights, particles are probabilistically chosen. The original set of particles is replaced with the newly resampled set, now skewed towards more likely positions and orientations of the robot.
+
+Below is after a few iterations of the filter after the measurement update and resampling is shown below
+![After Measurement Update](./images/resample.png 'After Measurement Update and Resampling')

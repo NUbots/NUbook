@@ -4,11 +4,13 @@ chapter: General
 title: Glossary
 description: Description of common terms, notations and conventions we use.
 slug: /guides/general/glossary
+authors:
+  - Kip Hamiltons (@KipHamiltons)
 ---
 
 ## Conventions and Notations
 
-**For naming conventions of matrices and vectors see the [Mathematics Section](/system/foundations/mathematics).**
+**For naming conventions of matrices and vectors see the [Mathematics page](/system/foundations/mathematics).**
 
 **Coordinate Orientation**: Robot's local coordinate system is x forward, y to the left, z up. Global coordinates are also z up.
 
@@ -28,9 +30,9 @@ slug: /guides/general/glossary
 
 [**Bit-Bots**](https://bit-bots.de/): A RoboCup team from the University of Hamburg, which created the quintic walk NUbots uses.
 
-[**Buildkite**](https://buildkite.com/): A platform for running fast, secure, and scalable continuous integration pipelines, which NUbots runs on machines in the NUbots lab.
+[**Buildkite**](https://buildkite.com/): A platform for running fast, secure, and scalable continuous integration pipelines, which NUbots formerly used on machines in the NUbots lab. NUbots have migrated the CI/CD to GitHub Actions, using cloud-hosted runners for the builds.
 
-[**Calibration Tool**](https://github.com/NUbots/NUbots/blob/main/tools/nbs/calibrate_cameras.py): NUbots automatic tool for calibrating the cameras in the head which are used for the robot's vision.
+[**Camera Calibration Tool**](https://github.com/NUbots/NUbots/blob/main/tools/nbs/calibrate_cameras.py): NUbots automatic tool for calibrating the cameras in the head which are used for the robot's vision.
 
 [**Clang**](https://clang.llvm.org/): A compiler, frontend, and tooling infrastructure used for C and C++ which is part of the LLVM infrastructure.
 
@@ -40,23 +42,25 @@ slug: /guides/general/glossary
 
 [**Closed Loop Control**](https://en.wikipedia.org/wiki/Closed-loop_transfer_function): Control action which uses output from the system being controlled as input.
 
-[**CM740**](<http://support.robotis.com/en/product/robotis-op2/sub_controller(cm-740).htm>): A _Robotis_ sub-controller which gives the commands to the servos.
+[**CM740**](<http://support.robotis.com/en/product/robotis-op2/sub_controller(cm-740).htm>): A _Robotis_ sub-controller which gives the commands to the servos. Previously used on the NUgus.
 
 [**CMake**](https://cmake.org/): An open-source build system generator NUbots uses to configure and build the main codebase.
 
 [**Container**](https://cloud.google.com/containers): An isolated environment which decouples the environment an application runs in from the environment it's developed in.
 
-[**Continuous Integration**](https://www.atlassian.com/continuous-delivery/continuous-integration): A development practice whereby frequent updates to a codebase from multiple developers are automated and integrated.
+[**Continuous Integration**](https://www.atlassian.com/continuous-delivery/continuous-integration) (CI): A development practice whereby frequent updates to a codebase from multiple developers are automated and integrated. Continuous Delivery (CD) is closely related to CI, with both often being bundled together and referred to as CI/CD. See our [section about our CI/CD setup](/system/foundations/ci-system).
 
 [**Convolution**](https://en.wikipedia.org/wiki/Convolution): A function which transforms two functions into another. [Convolutional Neural Networks](https://en.wikipedia.org/wiki/Convolutional_neural_network) (CNNs) are very commonly used for image processing and computer vision, working by passing filters across the image and combining those outputs in further layers.
 
-[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before making the NUgus.
+[**Darwin**](https://robots.ieee.org/robots/darwin/): A _Robotis_ robot platform which was the platform NUbots used before making the NUgus. Currently used at outreach events.
 
 [**Deep Learning**](https://en.wikipedia.org/wiki/Deep_learning): Machine learning techniques which utilise artificial neural networks with many layers.
 
+[**Director**](/system/foundations/director): The tree-based behaviour framework that NUbots uses.
+
 [**Docker**](https://www.docker.com/): A software service for developing containers which enable standardised cross-platform development consistency.
 
-[**Dockerhub**](https://hub.docker.com/): A hosting service for docker container images.
+[**Docker Hub**](https://hub.docker.com/): A hosting service for docker container images.
 
 [**Doxygen**](https://www.doxygen.nl/index.html): Generates documentation from comments in the code.
 
@@ -77,6 +81,8 @@ slug: /guides/general/glossary
 [**Git**](https://git-scm.com/): A popular version control program used by NUbots.
 
 [**GitHub**](https://github.com/): A source code repository hosting service, which uses a git backend. NUbots uses GitHub to manage the source code.
+
+[**GitHub Actions**](https://docs.github.com/en/actions): A CI/CD cloud service and tools ecosystem with native integration with GitHub. NUbots uses GitHub Actions to run CI builds and perform CD deployments for each code change. See our [section about our CI/CD setup](/system/foundations/ci-system).
 
 [**Green Horizon**](/system/subsystems/vision#green-horizon-detector): The edge of the football field, as calculated by the vision system.
 
@@ -152,6 +158,8 @@ slug: /guides/general/glossary
 
 [**OpenCL**](https://www.khronos.org/opencl/): Open Computing Language is a framework NUbots uses to create programs which can run on graphics hardware.
 
+[**OpenCR**](https://emanual.robotis.com/docs/en/parts/controller/opencr10/): Open-source Control Module for ROS, a _Robotis_ sub-controller which gives the commands to the servos and contains an IMU.
+
 [**Particle Filter**](https://en.wikipedia.org/wiki/Particle_filter): A system which represents potential real-world-state estimates as _particles_ which are each assigned a probability.
 
 [**Protobuf**](https://developers.google.com/protocol-buffers): Protocol Buffers (Protobuf) is a method of serializing structured data, created by Google. Protobuf messages are the means of passing messages between NUClear reactors.
@@ -178,7 +186,7 @@ slug: /guides/general/glossary
 
 **Static Motion**: We tend to refer to motion which is fully controlled by scripts which do not change at run-time as _Static Motion_.
 
-**Subsumption**: The priority system that determines if a neutron gets access to the servos it wants to control.
+**Subsumption**: The priority system previously used by NUbots that determines if a neutron gets access to the servos it wants to control.
 
 [**Tensorboard**](https://www.tensorflow.org/tensorboard): Visualisation toolkit used to inspect the training performance of the visual mesh.
 
@@ -189,7 +197,7 @@ slug: /guides/general/glossary
 [**Transformation**](<https://en.wikipedia.org/wiki/Transformation_(function)>): A function which maps a set to itself (sometimes called an operator on that set). Often, it is used in the context of a spatial manipulation - regularly representated as a translation and a rotation.
 
 **Units**: [S.I. units](https://en.wikipedia.org/wiki/International_System_of_Units) are used for everything but time. Storage of values may have a different unit, e.g. [nbs and nbs index files](/system/foundations/nuclear#nbs-files).
-In c++ units are a templated parameter to [NUClear::clock::duration](https://en.cppreference.com/w/cpp/chrono/duration) and [NUClear::clock::time_point](https://en.cppreference.com/w/cpp/chrono/time_point) is unit agnostic.
+In C++ units are a templated parameter to [NUClear::clock::duration](https://en.cppreference.com/w/cpp/chrono/duration). [NUClear::clock::time_point](https://en.cppreference.com/w/cpp/chrono/time_point) is unit agnostic.
 
 [**TFRecord**](https://www.tensorflow.org/tutorials/load_data/tfrecord): Binary format used by the Visual Mesh to store input data - contains image, mask, and lens metadata records.
 
