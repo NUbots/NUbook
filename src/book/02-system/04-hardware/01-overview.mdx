@@ -31,7 +31,7 @@ The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanua
 
 There are custom made mounting brackets milled from aluminium for the [flywheels](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Flywheel_Bracket.stl), and servo-to-servo mounting brackets in the [neck](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Head_Bracket.stl), hip, and ankle. There are also 3D printed cable clamps on the back of the [knees](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Servo_cable_holder.stl), [ankle and hip blocks](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Cable_Holder.stl).
 
-The MX servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor. X series servos do not need a TranZorb.
+The MX servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor.
 This is done to prevent induced EMF from overloading the electronics in the servo.
 EMF can be induced when the servos are manually moved without power being applied (i.e. grabbing the robot's leg and forcing the knee to bend).
 
@@ -43,6 +43,7 @@ EMF can be induced when the servos are manually moved without power being applie
 </Grid>
 
 The TranZorb is soldered directly on to the terminals of the servo motor. Hot glue is applied to stabilise the TranZorb against shocks and vibrations.
+X series servos do not need a TranZorb.
 
 ## Cameras
 
@@ -50,10 +51,7 @@ The NUgus robot uses two [FLIR Blackfly S](https://www.flir.com/products/blackfl
 
 ## Computing
 
-The NUgus robot uses the [Intel NUC12WSHi7](https://www.intel.com/content/www/us/en/products/sku/121640/intel-nuc-12-pro-kit-nuc12wshi7/specifications.html)
-
-
-It has 32GB of RAM, a 1TB SSD, and a [Robotis OpenCR Sub Controller](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
+The NUgus robot uses the [Intel NUC12WSHi7](https://www.intel.com/content/www/us/en/products/sku/121640/intel-nuc-12-pro-kit-nuc12wshi7/specifications.html). It has 32GB of RAM, a 1TB SSD, and a [Robotis OpenCR Sub Controller](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
 
 ## Networking
 
