@@ -10,11 +10,9 @@ authors:
   - Dexter Konijn (@dex-k)
 ---
 
-The onboarding task aims to teach new members about [NUClear](https://nuclear.readthedocs.io/en/latest/). New members will be asked to engage in coding with C++. Prerequisites such as Git, VS code, etc. must be set up first before moving forward with this task. See [NUbook: Getting Started](https://nubook.nubots.net/guides/main/getting-started#page-content) for more details.
+The onboarding task aims to teach new members about [NUClear](https://nuclear.readthedocs.io/en/latest/). New members will be asked to engage in coding with C++. Prerequisites such as Git, VS code, etc. must be set up first before moving forward with this task. See the [Getting Started](guides/main/getting-started#page-content) page for more details.
 
-![NUClear - Message passing framework](images/onboarding_task/nuclear.png)
-
-## Terminologies
+## Terminology
 
 ### Role
 
@@ -146,21 +144,21 @@ The `log<NUClear::INFO>("Ping");` can be thought of as the equivalent of an `std
 
 ## Task: Git Branching
 
-Open a terminal and checkout the branch `montano/onboarding` by running the following:
+A branch is your own workspace where you can make changes and implement new features. It is a good practice to create a new branch for each new feature you are working on. This way, you can work on multiple features at the same time without affecting the main codebase.
 
-```bash
-git checkout montano/onboarding
-```
+1.  Open a terminal in your `NUbots` directory and checkout the branch `montano/onboarding` by running
 
-This branch has a role `onboarding.role` and module `Ping` already created for you.
+    ```bash
+    git checkout montano/onboarding
+    ```
 
-Now, we will create our own branch which extends from this:
+    This branch has a role `onboarding.role` and module `Ping` already created for you.
 
-```bash
-git checkout -b <your-last-name>/branching-task
-```
+2.  Now crate your own branch which extends from this by running
 
-This is your own workspace where you can make changes and implement new features.
+    ```bash
+    git checkout -b <your-last-name>/branching-task
+    ```
 
 <Alert type='info'>
 
@@ -182,106 +180,108 @@ You should see the `Ping` module already implemented in `NUbots/module/onboardin
 
 Currently, this code **will not compile** because a `Pong` message doesn't exist, so let's create it.
 
-Navigate to `NUbots/shared/message/onboarding`, duplicate `Ping.proto` and rename it and its contents to `Pong`. You should have a new file `Pong.proto` in folder `NUbots/shared/message/onboarding` with contents:
+1. Navigate to `NUbots/shared/message/onboarding`, duplicate `Ping.proto` and rename it and its contents to `Pong`.
 
-```protobuf
-syntax = "proto3";
+   You should have a new file `Pong.proto` in folder `NUbots/shared/message/onboarding` with contents:
 
-package message.onboarding;
+   ```protobuf
+   syntax = "proto3";
 
-message Pong{
-}
-```
+   package message.onboarding;
 
-Ensure that the code now compiles by running:
+   message Pong{
+   }
+   ```
 
-```bash
-./b configure --clean
-./b build
-```
+2. Ensure that the code now compiles by running:
 
-We will now create the `Pong` module which sends out a `Pong` message. Run the following script to generate a template module:
+   ```bash
+   ./b configure --clean
+   ./b build
+   ```
 
-```bash
-./b module generate onboarding/Pong
-```
+3. We will now create the `Pong` module which sends out a `Pong` message. Run the following script to generate a template module:
 
-Navigate to `NUbots/module/onboarding/Pong` and populate the `Pong.cpp` file with the following code and implement the TODO's:
+   ```bash
+   ./b module generate onboarding/Pong
+   ```
 
-```cpp
-#include "Pong.hpp"
+4. Navigate to `NUbots/module/onboarding/Pong` and populate the `Pong.cpp` file with the following code and implement the TODO's:
 
-#include "extension/Configuration.hpp"
+   ```cpp
+   #include "Pong.hpp"
 
-#include "message/onboarding/Ping.hpp"
-#include "message/onboarding/Pong.hpp"
+   #include "extension/Configuration.hpp"
 
-namespace module::onboarding {
+   #include "message/onboarding/Ping.hpp"
+   #include "message/onboarding/Pong.hpp"
 
-    using extension::Configuration;
+   namespace module::onboarding {
 
-    Pong::Pong(std::unique_ptr<NUClear::Environment> environment) : Reactor(std::move(environment)) {
+       using extension::Configuration;
 
-        using message::onboarding::Ping;
-        using message::onboarding::Pong;
+       Pong::Pong(std::unique_ptr<NUClear::Environment> environment) : Reactor(std::move(environment)) {
 
-        on<Configuration>("Pong.yaml").then([this](const Configuration& config) {
-            // Use configuration here from file Pong.yaml
-            this->log_level = config["log_level"].as<NUClear::LogLevel>();
-        });
+           using message::onboarding::Ping;
+           using message::onboarding::Pong;
 
-        on<Startup>().then([this] {
-            // Start the ping pong chain
-            auto pong_msg = std::make_unique<Pong>();
-            emit(pong_msg);
-        });
+           on<Configuration>("Pong.yaml").then([this](const Configuration& config) {
+               // Use configuration here from file Pong.yaml
+               this->log_level = config["log_level"].as<NUClear::LogLevel>();
+           });
 
-        on<Trigger<Ping>>().then([this](const Ping& ping_msg) {
-            // TODO: Log a INFO level message with the text "Pong"
+           on<Startup>().then([this] {
+               // Start the ping pong chain
+               auto pong_msg = std::make_unique<Pong>();
+               emit(pong_msg);
+           });
 
-            // TODO: Emit a Pong message
-        });
-    }
+           on<Trigger<Ping>>().then([this](const Ping& ping_msg) {
+               // TODO: Log a INFO level message with the text "Pong"
 
-}  // namespace module::onboarding
-```
+               // TODO: Emit a Pong message
+           });
+       }
 
-Now we need to add this module to the role file `onboarding.role` located in folder `NUbots/roles/test`. It's contents should then look like:
+   }  // namespace module::onboarding
+   ```
 
-```make
-nuclear_role(
-  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
-  # and without it many roles do not run
-  extension::FileWatcher
-  # support::SignalCatcher
-  support::logging::ConsoleLogHandler
-  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-  actuation::KinematicsConfiguration
-  platform::${SUBCONTROLLER}::HardwareIO
-  input::SensorFilter
-  extension::Director
-  actuation::Kinematics
-  actuation::Servos
-  onboarding::Ping
-  onboarding::Pong
-)
-```
+5. Add this module to the role file `onboarding.role` located in folder `NUbots/roles/test`. Its contents should then look like:
 
-Compile and run the program by running the following:
+   ```make
+   nuclear_role(
+   # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
+   # and without it many roles do not run
+   extension::FileWatcher
+   # support::SignalCatcher
+   support::logging::ConsoleLogHandler
+   # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
+   actuation::KinematicsConfiguration
+   platform::${SUBCONTROLLER}::HardwareIO
+   input::SensorFilter
+   extension::Director
+   actuation::Kinematics
+   actuation::Servos
+   onboarding::Ping
+   onboarding::Pong
+   )
+   ```
 
-```bash
-./b configure
-./b build
-./b run test/onboarding
-```
+6. Compile and run the program by running
 
-Once the code is compiling and you are happy with it, commit and push your changes to the cloud:
+   ```bash
+   ./b configure
+   ./b build
+   ./b run test/onboarding
+   ```
 
-```bash
-git add -A
-git commit -m "Add pong module"
-git push
-```
+7. Once the code is compiling and you are happy with it, commit and push your changes to the cloud by running
+
+   ```bash
+   git add -A                       # Add all changed files to the commit
+   git commit -m "Add pong module"  # Commit the changes with a message
+   git push                         # Push the changes to the cloud
+   ```
 
 <Alert type='warn'>
 
@@ -291,26 +291,32 @@ Reactors are started in the order that is stated in the role file. Suppose that 
 
 ## Task: Add property to a message
 
-At this point, we have a `Ping` and `Pong` module and their corresponding messages which communicate with one another, however the messages lack any information. Let's update the `Ping` message following the template below:
+At this point, we have a `Ping` and `Pong` module and their corresponding messages which communicate with one another, however the messages lack any information.
 
-```protobuf
-syntax = "proto3";
+1.  Update the `Ping` message following the template below:
 
-package message.onboarding;
+    ```protobuf
+    syntax = "proto3";
 
-message Ping{
-    // TODO: Fill this message with an int32 field named "count". What should its tag be?
-    // HINT: Look at the format of other proto messages in the code base for reference.
-}
-```
+    package message.onboarding;
+
+    message Ping{
+        // TODO: Fill this message with an int32 field named "count". What should its tag be?
+        // HINT: Look at the format of other proto messages in the code base for reference.
+    }
+    ```
 
 <Alert type='info'>
 
-Protocol Buffers (protobuf) is a sophisticated library for serialisation, deserialisation and compression of information. We cannot discuss its entirety here but do note that we treat protobufs as data that gets passed around in the system during run time.
+Protocol Buffers (protobuf) is a sophisticated library for serialisation, deserialisation and compression of information. We cannot discuss its entirety here but do note that we treat protobufs as data that gets passed around in the system during runtime.
 
 </Alert>
 
-Now, within the `Ping` module, increment the counter every time a `Pong` message is received. Emit this message with the incremented value and display this value using a `log` command within the `Pong` module. Below is a template of how you might structure the `Ping` module:
+2.  Update the `Ping` module to increment the counter every time a `Pong` message is received.
+
+3.  Emit this message with the incremented value and display this value using a `log` command within the `Pong` module.
+
+Below is a template of how you might structure the `Ping` module:
 
 ```cpp
 #include "Ping.hpp"
@@ -349,21 +355,52 @@ namespace module::onboarding {
 
 This section contains information about how to open a pull request. First, create your branch and name it. It should be in the format of `author(s)/this-code-does-this`. It is ideal to keep it intuitive and simple. Run `git checkout montano/onboarding` to push to this branch before doing anything else. Follow the images below to create a pull request that pushes to the `montano/onboarding` branch in `NUbots/NUbots`.
 
-Checkout to the branch that you have created (the one created from `montano/onboarding`. Once in the branch, click the cloud with an arrow pointing up on the bottom left hand side of VS code. If you hover over it, you should be able to see "Publish Branch". Click this and navigate to your Github account using your preferred browser. Go to the `NUbots/NUbots` repository. If you were not able to publish your branch successfully, then your write access will need to be given to you by an admin (usually the team leader).
+1. Checkout to the branch that you have created (the one created from `montano/onboarding`). Once in the branch, click the cloud with an arrow pointing up on the bottom left hand side of VS code. If you hover over it, you should be able to see "Publish Branch". Click on it.
 
-![Publish Branch](images/onboarding_task/pull_request/publish.png)
+   ![Publish Branch](images/onboarding_task/pull_request/publish.png)
 
-The "Compare and Pull request" tab should be visible after successful publishing.
+<Alert type='warn'>
 
-![Compare and Pull Request](images/onboarding_task/pull_request/cpr.png)
+If you were not able to publish your branch successfully, then your write access will need to be given to you by an admin (usually the team leader).
 
-After clicking on the "Compare and Pull request" button, the image below will follow. Make sure to assign a proper name to your pull request. They should be informative and describe exactly what the code aims to do. Add a description to provide more detailed information about the feature. You may assign people to review your code. When contributing to the code base, it is usually ideal to assign your mentors or the team leaders to review your code. Press the "Create Pull request" when ready. This pull request should now be visible in the pull requests tab in github if done successfully.
+</Alert>
 
-![Create Pull Request](images/onboarding_task/pull_request/fcpr.png)
+2. Go to the page for the `NUbots/NUbots` repository. A popup with a "Compare and Pull request" button should be visible after successful publishing. Click on it.
 
-When committing more changes such as new code or new files, navigate to the source control tab, hover over the files that you would like to commit the changes of, then click the `+` button to stage the changes. After adding all the desired changes, make sure to add an informative commit name and press the Commit button.
+   ![Compare and Pull Request](images/onboarding_task/pull_request/cpr.png)
 
-![Commit Changes](images/onboarding_task/pull_request/commits.png)
+3. Fill in the details to create a pulll request.
+
+   - Assign a proper name to your pull request. It should be informative and describe exactly what the code aims to do.
+   - Add a description to provide more detailed information about the feature.
+   - You may assign people to review your code. When contributing to the code base, it is usually ideal to assign your mentors or someone with experience in related features as a reviewer.
+
+   ![Create Pull Request](images/onboarding_task/pull_request/fcpr.png)
+
+4. Press the "Create Pull request" when ready. This pull request should now be visible in the pull requests tab in github if done successfully.
+
+5. If needed, you can still commit new changes after making a pull request.
+
+   When committing more changes such as new code or new files, navigate to the source control tab, hover over the files that you would like to commit the changes of, then click the `+` button to stage the changes. When you're ready, add an informative commit name and press the Commit button. Then click Sync to push the changes to the cloud.
+
+   ![Commit Changes](images/onboarding_task/pull_request/commits.png)
+
+<Alert type='info'>
+
+An easy way to commit and push all your changes to tracked files is to run the following commands in the terminal:
+
+    ```bash
+    git commit -am "Descriptive commit message"
+    git push
+    ```
+
+</Alert>
+
+<Alert type='warn'>
+
+Always remember to push your changes to the cloud after committing them. If you don't, your changes will only remain on your local machine and will not be visible to others.
+
+</Alert>
 
 ## Main task
 
@@ -398,4 +435,4 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 - Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command. Decoupling is very important for code reliability and robustness. Decouple code should also be very easy to read and review.
 - The nuclear role mentioned above will be the role for this task.
 
-Once the code writing activity is finished, ask an experienced team member for assistance in flashing the robot with your compiled binaries. This will require a `./b install n<nugus id>` followed by `ssh nubots@10.1.1.<nugus id>` and then running the binary by entering `./test/onboarding`.
+Once the code writing activity is finished, ask an experienced team member for assistance in [flashing the robot with your compiled binaries](guides/main/getting-started#running-on-a-real-robot). This will require a `./b install n<nugus id>` followed by `ssh nubots@10.1.1.<nugus id>` and then running the binary by entering `./test/onboarding`.
