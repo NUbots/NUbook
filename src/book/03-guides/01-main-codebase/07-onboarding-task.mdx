@@ -16,9 +16,11 @@ The onboarding task aims to teach new members about [NUClear](https://nuclear.re
 
 ### Role
 
-A **Role** is a file that defines the desired purpose or functionality of the binary/program we want to compile. A role file lists what modules we want included in our program/binary. An example of a role:
+A **Role** is a file that defines the desired purpose or functionality of the binary/program we want to compile. A role file lists what modules we want included in our program/binary.
 
-```cpp
+This is an example of a role file:
+
+```make
 nuclear_role(
   extension::FileWatcher
   support::logging::ConsoleLogHandler
@@ -36,7 +38,9 @@ nuclear_role(
 
 ### Messages
 
-A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file becomes imported as a `.hpp` file. For example, The `Ping.proto` file looks like:
+A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file becomes imported as a `.hpp` file.
+
+For example, the `Ping.proto` file looks like:
 
 ```protobuf
 syntax = "proto3";
@@ -53,7 +57,9 @@ It should be imported as `#include "message/onboarding/Ping.hpp"`. This message 
 
 ### Modules
 
-**Modules** respond to and send information into the system using **messages**. They use the `emit()` function to send messages and `on<DSL<message>>()` functions to respond to them. Consider the following example `Ping` module:
+**Modules** respond to and send information into the system using **messages**. They use the `emit()` function to send messages and `on<DSL<message>>()` functions to respond to them.
+
+Consider the following example `Ping` module:
 
 ```cpp
 #include "Ping.hpp"
@@ -420,29 +426,61 @@ $$
 \sum_{k=1}^{n} k
 $$
 
-where n is the number of iterations, and define it as $n:=10$. Note that evaluating this expression is trivial, as one can implement the shortcut by using $n(n+1)/2$ or using an iterative algorithm instead. As such, we will be introducing requirements and constraints.
+where n is the number of iterations, and define it as $n:=10$. Note that evaluating this expression is trivial, as one can implement the shortcut by using $n(n+1)/2$ or using an iterative algorithm instead, but that wouldn't help you to get familiar with the NUbots codebase! As such, we will be introducing requirements and constraints.
 
 **Requirements**
 
-- The code must be written in C++, using NUClear.
-- The code must be compiled and installed into a robot.
-- Once the right answer has been derived, one must emit that answer. If the correct answer was emitted, the robot should nod yes.
-- Members must use at least 3 modules to implement their solutions.
-- Members must make their own branch from the fork and submit their code as a pull request for review once finished.
+1. The code must be written in C++, using NUClear.
+
+2. The code must be compiled and installed into a robot.
+
+3. Once the right answer has been derived, one must emit that answer. If the correct answer was emitted, the robot should nod yes.
+
+4. You must use at least 3 modules to implement their solutions.
+
+   - Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command.
+   - Decoupling is very important for code reliability and robustness. It also helps to make your code easy to review.
+
+5. You must make your own branch and submit your code as a pull request for review once finished.
 
 **Constraints**
 
-- Members cannot use a `for` loop or a `while` loop to evaluate the expression.
-- Members cannot use the proposed $n(n+1)/2$ shortcut to evaluate the expression
-- Only `on<Trigger<...>>` and `emit()` statements can be used.
+1. You cannot use a `for` loop or a `while` loop to evaluate the expression.
+
+2. You cannot use the proposed $n(n+1)/2$ shortcut to evaluate the expression
+
+3. Only `on<Trigger<...>>` and `emit()` statements can be used.
 
 **Recommendations**
 
 - Use `./b module generate <absolute module path and name>` to generate your modules. A full path example could be something like `test/onboarding_task`.
+
+- Use the NUClear role from the start for this task and a starting point. It looks like
+
+  ```make
+  nuclear_role(
+  extension::FileWatcher
+  support::logging::ConsoleLogHandler
+  actuation::KinematicsConfiguration
+  platform::${SUBCONTROLLER}::HardwareIO
+  input::SensorFilter
+  extension::Director
+  actuation::Kinematics
+  actuation::Servos
+  onboarding::Ping
+  onboarding::Pong
+  onboarding::Judge
+  )
+  ```
+
 - They say that naming things is one of the hardest tasks in software engineering. What should the names of your modules be? Should they still be Ping and Pong? Can you think of more suitable names? What about your the names of your messages, i.e., your `.proto` files?
+
 - NUbook will have all the information you need, and then some. This task cannot explain NUClear in its full glory, but it should be enough to enable members to contribute to the code base as soon as possible. If you wish to know more, you must learn to read documentation and if you are still stuck, don't hesitate to ask questions.
-- When in VS code, press <kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `~/NUbots-onboarding/shared/messages/...` and modules should lie within `~/NUbots-onboarding/modules`.
-- Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command. Decoupling is very important for code reliability and robustness. Decouple code should also be very easy to read and review.
-- The nuclear role mentioned above will be the role for this task.
+
+<Alert type='info'>
+
+When in VS code, press <kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `~/NUbots/shared/messages/...` and modules should lie within `~/NUbots/modules`.
+
+</Alert>
 
 Once the code writing activity is finished, ask an experienced team member for assistance in [flashing the robot with your compiled binaries](guides/main/getting-started#running-on-a-real-robot). This will require a `./b install n<nugus id>` followed by `ssh nubots@10.1.1.<nugus id>` and then running the binary by entering `./test/onboarding`.
