@@ -38,7 +38,7 @@ nuclear_role(
 
 ### Messages
 
-A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file becomes imported as a `.hpp` file.
+A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file is compiled into C++, and so it is imported as a `.hpp` C++ header file.
 
 For example, the `Ping.proto` file looks like:
 
@@ -127,10 +127,6 @@ Let's dive into what's going on within this module:
         this->log_level = config["log_level"].as<NUClear::LogLevel>();
     });
 
-    on<Startup>().then([this] {
-        // Vibe
-    });
-
     on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
         auto ping_msg = std::make_unique<Ping>();
         log<NUClear::INFO>("Ping");
@@ -160,7 +156,7 @@ A branch is your own workspace where you can make changes and implement new feat
 
     This branch has a role `onboarding.role` and module `Ping` already created for you.
 
-2.  Now crate your own branch which extends from this by running
+2.  Now create your own branch which extends from this by running
 
     ```bash
     git checkout -b <your-last-name>/branching-task
@@ -172,13 +168,13 @@ Don't be afraid to break things in your own branch! It will not directly impact 
 
 </Alert>
 
-### VSCode Git Extension
+### VS Code Git Extension
 
-There exists many GUI tools for using Git which can make your life easier, for example VSCode, Github Desktop or Git Kraken.
+There exists many GUI tools for using Git which can make your life easier, for example VS Code, Github Desktop or GitKraken.
 
-In VScode, you can create your own branch by clicking on the button on the bottom left hand side, which is the name of the branch that you are currently on.
+In VS Code, you can create your own branch by clicking on the button on the bottom left hand side, which is the name of the branch that you are currently on.
 
-To create a new branch using the VSCode Git extension:
+To create a new branch using the VS Code Git extension:
 
 1.  Click on the button in the bottom left hand corner of the screen containing the name of the current branch.
 
@@ -205,7 +201,7 @@ Currently, this code **will not compile** because a `Pong` message doesn't exist
 
    package message.onboarding;
 
-   message Pong{
+   message Pong {
    }
    ```
 
@@ -213,7 +209,15 @@ Currently, this code **will not compile** because a `Pong` message doesn't exist
 
    ```bash
    ./b configure --clean
-   ./b build
+   ./b configure -i
+   ```
+
+   This opens the interactive configuration menu. Enable the roles you want to build and disable the ones you don't by highlighting them using the <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys and pressing the spacebar to toggle on and off. Limiting the roles to only the ones you are working on will speed up the build process significantly.
+
+   Press <kbd>c</kbd> to configure. Once configuration has finished, press <kbd>g</kbd> to generate the build list. Press <kbd>e</kbd> to exit if it has not automatically returned you to the terminal. Now complete the build by running
+
+   ```bash
+    ./b build
    ```
 
 3. We will now create the `Pong` module which sends out a `Pong` message. Run the following script to generate a template module:
@@ -269,7 +273,7 @@ Currently, this code **will not compile** because a `Pong` message doesn't exist
    # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
    # and without it many roles do not run
    extension::FileWatcher
-   # support::SignalCatcher
+   support::SignalCatcher
    support::logging::ConsoleLogHandler
    # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
    actuation::KinematicsConfiguration
@@ -371,7 +375,7 @@ namespace module::onboarding {
 
 This section contains information about how to open a pull request. First, create your branch and name it. It should be in the format of `author(s)/this-code-does-this`. It is ideal to keep it intuitive and simple. Run `git checkout montano/onboarding` to push to this branch before doing anything else. Follow the images below to create a pull request that pushes to the `montano/onboarding` branch in `NUbots/NUbots`.
 
-1. Checkout to the branch that you have created (the one created from `montano/onboarding`). Once in the branch, click the cloud with an arrow pointing up on the bottom left hand side of VS code. If you hover over it, you should be able to see "Publish Branch". Click on it.
+1. Checkout to the branch that you have created (the one created from `montano/onboarding`). Once in the branch, click the cloud with an arrow pointing up on the bottom left hand side of VS Code. If you hover over it, you should be able to see "Publish Branch". Click on it.
 
    ![Publish Branch](images/onboarding_task/pull_request/publish.png)
 
@@ -385,7 +389,7 @@ If you were not able to publish your branch successfully, then your write access
 
    ![Compare and Pull Request](images/onboarding_task/pull_request/cpr.png)
 
-3. Fill in the details to create a pulll request.
+3. Fill in the details to create a pull request.
 
    - Assign a proper name to your pull request. It should be informative and describe exactly what the code aims to do.
    - Add a description to provide more detailed information about the feature.
@@ -393,7 +397,7 @@ If you were not able to publish your branch successfully, then your write access
 
    ![Create Pull Request](images/onboarding_task/pull_request/fcpr.png)
 
-4. Press the "Create Pull request" when ready. This pull request should now be visible in the pull requests tab in github if done successfully.
+4. Press the "Create Pull request" when ready. This pull request should now be visible in the pull requests tab in GitHub if done successfully.
 
 5. If needed, you can still commit new changes after making a pull request.
 
@@ -479,7 +483,7 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 
 <Alert type='info'>
 
-When in VS code, press <kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `~/NUbots/shared/messages/...` and modules should lie within `~/NUbots/modules`.
+When in VS Code, press <kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `shared/messages/...` and modules should lie within `modules`.
 
 </Alert>
 
