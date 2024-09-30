@@ -138,7 +138,11 @@ Within the Pong module are the `on` functions that were mentioned earlier:
 - `on<Startup>()` runs just once when the module starts
 - `on<Trigger<Ping>>()` runs when `Ping` message is received and prints "Ping"
 
-> **Info**: The `log<NUClear::INFO>("Ping");` can be thought of as the equivalent of an `std::cout` in normal C++ or a `print` in python. There are various types that can be used for logging information. See NUbook for more information.
+<Alert type='info'>
+
+The `log<NUClear::INFO>("Ping");` can be thought of as the equivalent of an `std::cout` in normal C++ or a `print` in python. There are various types that can be used for logging information. See NUbook for more information.
+
+</Alert>
 
 ## Task: Git Branching
 
@@ -158,7 +162,11 @@ git checkout -b <your-last-name>/branching-task
 
 This is your own workspace where you can make changes and implement new features.
 
-> **Info**: Don't be afraid to break things in your own branch! It will not directly impact the `main` branch.
+<Alert type='info'>
+
+Don't be afraid to break things in your own branch! It will not directly impact the `main` branch.
+
+</Alert>
 
 ### VSCode Git Extension
 
@@ -275,7 +283,11 @@ git commit -m "Add pong module"
 git push
 ```
 
-> **Warning**: Reactors are started in the order that is stated in the role file. Suppose that the startup function within Ping contains the initial emit message but it goes before Pong in the role document, the initial message can be emitted before the reactor Pong is initialised.
+<Alert type='warn'>
+
+Reactors are started in the order that is stated in the role file. Suppose that the startup function within Ping contains the initial emit message but it goes before Pong in the role document, the initial message can be emitted before the reactor Pong is initialised.
+
+</Alert>
 
 ## Task: Add property to a message
 
@@ -292,7 +304,11 @@ message Ping{
 }
 ```
 
-> **Info**: Protocol Buffers (protobuf) is a sophisticated library for serialisation, deserialisation and compression of information. We cannot discuss its entirety here but do note that we treat protobufs as data that gets passed around in the system during run time.
+<Alert type='info'>
+
+Protocol Buffers (protobuf) is a sophisticated library for serialisation, deserialisation and compression of information. We cannot discuss its entirety here but do note that we treat protobufs as data that gets passed around in the system during run time.
+
+</Alert>
 
 Now, within the `Ping` module, increment the counter every time a `Pong` message is received. Emit this message with the incremented value and display this value using a `log` command within the `Pong` module. Below is a template of how you might structure the `Ping` module:
 
