@@ -440,9 +440,9 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 
 3. Once the right answer has been derived, one must emit that answer. If the correct answer was emitted, the robot should nod yes.
 
-4. You must use at least 3 modules to implement their solutions.
+4. You must use at least 3 modules to implement their solutions. Why?
 
-   - Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command.
+   - One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command.
    - Decoupling is very important for code reliability and robustness. It also helps to make your code easy to review.
 
 5. You must make your own branch and submit your code as a pull request for review once finished.
@@ -453,7 +453,7 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 
 2. You cannot use the proposed $n(n+1)/2$ shortcut to evaluate the expression
 
-3. Only `on<Trigger<...>>` and `emit()` statements can be used.
+3. Only `on<Trigger<...>>` and `emit()` statements should be used.
 
 **Recommendations**
 
@@ -463,17 +463,17 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 
   ```make
   nuclear_role(
-  extension::FileWatcher
-  support::logging::ConsoleLogHandler
-  actuation::KinematicsConfiguration
-  platform::${SUBCONTROLLER}::HardwareIO
-  input::SensorFilter
-  extension::Director
-  actuation::Kinematics
-  actuation::Servos
-  onboarding::Ping
-  onboarding::Pong
-  onboarding::Judge
+    extension::FileWatcher
+    support::logging::ConsoleLogHandler
+    actuation::KinematicsConfiguration
+    platform::${SUBCONTROLLER}::HardwareIO
+    input::SensorFilter
+    extension::Director
+    actuation::Kinematics
+    actuation::Servos
+    onboarding::Ping
+    onboarding::Pong
+    onboarding::Judge
   )
   ```
 
