@@ -398,4 +398,4 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 - Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command. Decoupling is very important for code reliability and robustness. Decouple code should also be very easy to read and review.
 - The nuclear role mentioned above will be the role for this task.
 
-Once the code writing activity is finished, ask your supervisor for assistance in flashing the robot with your compiled binaries. This will require a `./b install <nugus id>` followed by `ssh nubots@10.1.1.<nugus id>` and then running the binary by entering `./test/onboarding`.
+Once the code writing activity is finished, ask an experienced team member for assistance in flashing the robot with your compiled binaries. This will require a `./b install n<nugus id>` followed by `ssh nubots@10.1.1.<nugus id>` and then running the binary by entering `./test/onboarding`.
