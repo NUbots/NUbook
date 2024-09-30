@@ -38,7 +38,7 @@ nuclear_role(
 
 ### Messages
 
-A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file becomes imported as a .hpp file. For example, The Ping.proto file looks like:
+A message is called a neutron. It is essentially a `.proto` file. When a role is built, the proto file becomes imported as a `.hpp` file. For example, The `Ping.proto` file looks like:
 
 ```protobuf
 syntax = "proto3";
@@ -55,7 +55,7 @@ It should be imported as `#include "message/onboarding/Ping.hpp"`. This message 
 
 ### Modules
 
-**Modules** respond to and send information into the system using **messages**. They use the `emit()` function to send messages and `on<<DSL> message>()` functions to respond to them. Consider the following example `Ping` module:
+**Modules** respond to and send information into the system using **messages**. They use the `emit()` function to send messages and `on<DSL<message>>()` functions to respond to them. Consider the following example `Ping` module:
 
 ```cpp
 #include "Ping.hpp"
@@ -118,20 +118,20 @@ namespace module::onboarding {
 Within the Pong module are the `on` functions that were mentioned earlier:
 
 ```cpp
-        on<Configuration>("Ping.yaml").then([this](const Configuration& config) {
-            // Use configuration here from file Ping.yaml
-            this->log_level = config["log_level"].as<NUClear::LogLevel>();
-        });
+on<Configuration>("Ping.yaml").then([this](const Configuration& config) {
+    // Use configuration here from file Ping.yaml
+    this->log_level = config["log_level"].as<NUClear::LogLevel>();
+});
 
-        on<Startup>().then([this] {
-            // Vibe
-        });
+on<Startup>().then([this] {
+    // Vibe
+});
 
-        on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
-            auto ping_msg = std::make_unique<Ping>();
-            log<NUClear::INFO>("Ping");
-            emit(ping_msg);
-        });
+on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
+    auto ping_msg = std::make_unique<Ping>();
+    log<NUClear::INFO>("Ping");
+    emit(ping_msg);
+});
 ```
 
 - `on<Configuration>` is used to load in configuration values from file `Pong.yaml`
@@ -248,7 +248,7 @@ namespace module::onboarding {
 
 Now we need to add this module to the role file `onboarding.role` located in folder `NUbots/roles/test`. It's contents should then look like:
 
-```cpp
+```make
 nuclear_role(
   # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
   # and without it many roles do not run
@@ -392,9 +392,9 @@ where n is the number of iterations, and define it as $n:=10$. Note that evaluat
 **Recommendations**
 
 - Use `./b module generate <absolute module path and name>` to generate your modules. A full path example could be something like `test/onboarding_task`.
-- They say that naming things is one of the hardest tasks in software engineering. What should the names of your modules be? Should they still be Ping and Pong? Can you think of more suitable names? What about your the names of your messages, i.e., your .proto files?
+- They say that naming things is one of the hardest tasks in software engineering. What should the names of your modules be? Should they still be Ping and Pong? Can you think of more suitable names? What about your the names of your messages, i.e., your `.proto` files?
 - NUbook will have all the information you need, and then some. This task cannot explain NUClear in its full glory, but it should be enough to enable members to contribute to the code base as soon as possible. If you wish to know more, you must learn to read documentation and if you are still stuck, don't hesitate to ask questions.
-- When in VS code, press `Ctrl + shift + f` to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `~/NUbots-onboarding/shared/messages/...` and modules should lie within `~/NUbots-onboarding/modules`.
+- When in VS code, press <kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> to find code snippets. This is particularly useful if members want to know how a specific bit of code should be used or how it is implemented. This will be specifically useful when looking at where to put your files in. For example, proto messages should lie in `~/NUbots-onboarding/shared/messages/...` and modules should lie within `~/NUbots-onboarding/modules`.
 - Why at least 3 modules? One will start the reaction, one will determine when to stop sending the message to the other reactor and start emitting the final answer, and one will process the final answer and send the NodYes command. Decoupling is very important for code reliability and robustness. Decouple code should also be very easy to read and review.
 - The nuclear role mentioned above will be the role for this task.
 
