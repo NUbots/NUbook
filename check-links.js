@@ -3,11 +3,6 @@ const { resolve } = require('path')
 const http = require('http')
 const https = require('https')
 
-// Mapping of HTTP status codes to their descriptions
-const statusDescriptions = {
-  404: 'Not Found',
-}
-
 // Recursively search for files matching the pattern in a directory
 const searchRecursive = async (dir, pattern) => {
   let results = []
