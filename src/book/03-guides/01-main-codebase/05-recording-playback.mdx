@@ -8,7 +8,7 @@ authors:
   - Ysobel Sims (@ysims)
 ---
 
-The NUbots system is based on [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
+The NUbots system utilises [NUClear's message passing architecture](/system/foundations/nuclear). Any [messages](https://github.com/NUbots/NUbots/tree/main/shared/message) that are emitted when the system is running can be recorded and saved as [NUClear Binary Stream (NBS) files](/system/foundations/nuclear#nbs-files). These NBS files can later be filtered, played back (to simulate the running system), analysed, and converted to alternative formats for further processing.
 
 ## Recording Data
 
@@ -19,7 +19,7 @@ The following steps detail how to record data. An example will be given througho
    - The role must contain the module/s which emit the message/s you want to record.
    - The role must contain the module `support::logging::DataLogging`.
 
-   For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto) messages. You could use the existing [test_sensor](https://github.com/NUbots/NUbots/blob/main/roles/test_sensor.role) role and add `support::logging::DataLogging` to it.
+   For example, you may want to record [Sensors](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto) messages. You could use the existing [test/sensor](https://github.com/NUbots/NUbots/blob/main/roles/test/sensor.role) role and add `support::logging::DataLogging` to it.
 
 2. Set up the data logging configuration file. This involves making changes to [`DataLogging.yaml`](https://github.com/NUbots/NUbots/tree/main/module/support/logging/DataLogging/data/config).
 
@@ -27,7 +27,7 @@ The following steps detail how to record data. An example will be given througho
 
      In this example, the sensors message already exists in the file (`message.input.Sensors`). Set the boolean to `true` next to this message.
 
-     If you would like to log a different message, do the following:
+     If you would like to log a different message and it doesn't already have a corresponding line in the DataLogging configuration file, do the following:
 
      1. Find the `.proto` file that defines that message, such as [`Sensors.proto`](https://github.com/NUbots/NUbots/blob/main/shared/message/input/Sensors.proto).
      2. Find what the `package` is. For `Sensor.proto`, it is `package message.input`.
@@ -36,18 +36,13 @@ The following steps detail how to record data. An example will be given througho
 
      You can enable multiple messages at once, and they will all be recorded.
 
-   - **If** you are **not** running on a real robot, e.g. you are logging data from a simulator, change the output directory of the logs.
-
-     1. Find the line `directory: log` in the configuration file.
-     2. Change `log` to `recordings`.
-
 3. Build the code and install it to a robot. To find out how to do this, visit the [Getting Started](/guides/main/getting-started) page.
 
 4. Run the binary for the role you want to record.
 
    **Locally in Docker:** In the same location you built the code, run the binary using the command `./b run <role_name>`.
 
-   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./test_sensor`.
+   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./test/sensor`.
 
 5. Stop the binary when you have finished recording by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 
@@ -55,20 +50,20 @@ The following steps detail how to record data. An example will be given througho
 
    **Locally in Docker:** The log file will be in your NUbots directory under `/recordings/<role_name>`.
 
-   **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else installs to the robot any recordings will be lost, so immediately copy them to another computer.
+   **On a real robot:** You will need to move the file off the robot so that it is not lost and so that it can be used. Note that when someone else uses the robot any recordings may be lost, so immediately copy them to another computer.
 
-   1. The NBS file will be located on the robot in the `log/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `log/test_sensor/18072020T082100.nbs`.
+   1. The NBS file will be located on the robot in the `recordings/role_name/` folder. The name will correspond to the time and date it was created, according to the robot's clock. Make note of the name. In our example, this may be `recordings/test/sensor/18072020T082100.nbs`.
    2. Copy the file across. On the destination computer, run:
 
       ```bash
-      scp nubots@<address>:log/role_name/file_name path/to/destination
+      scp nubots@<address>:recordings/rolename/file_name path/to/destination
       ```
 
       For our example, you could run:
 
       ```bash
       # Replace <address> with the robot's IP address
-      scp nubots@<address>:log/test_sensor/18072020T082100.nbs .
+      scp nubots@<address>:recordings/test/sensor/18072020T082100.nbs .
       ```
 
       The file will be copied from the robot to the folder you ran the command in. The [`scp`](https://linux.die.net/man/1/scp) command is like the regular [`cp`](https://linux.die.net/man/1/cp) command, but it copies to or from another computer over SSH. The first path in the command points to the file we are copying and the second path points to where we want to copy that file to.
@@ -159,18 +154,18 @@ Trains a foot down network using sensor data from the legs.
 
 Messages recorded to an NBS file can be played back to the system. When an NBS file is played back, the messages in it are emitted into the system at the same (relative) times they were recorded.
 
-Following on from the previous example, lets now run `test_sensor.role` with recorded sensor data to analyse the results more closely without using the robot.
+Following on from the previous example, lets now run `test/sensor.role` with recorded sensor data to analyse the results more closely without using the robot.
 
-1. Remove any modules that emit the message/s you recorded. In this example, remove the SensorFilter module, since it emits `Sensors`. To do so, remove `platform::darwin::SensorFilter` from the role.
+1. Remove any modules that emit the message/s you recorded. In this example, remove the SensorFilter module, since it emits `Sensors`. To do so, remove `input::SensorFilter` from the role.
 2. Add `support::logging::DataPlayback` to the role.
 3. Add in the path to the NBS file in `DataPlayback.yaml`. If the file is in the `recordings` directory, then just add in the file name.
 4. Add in the messages you are playing back in `DataPlayback.yaml`, in the same way it was done in `DataLogging.yaml`. In the example, change `message.input.Sensors` to `true`.
-5. Recompile and run the role you are playing back the data with. In the example, rerun `./b configure` and `./b build`, then run `./b run test_sensor` to locally run the role.
+5. Recompile and run the role you are playing back the data with. In the example, rerun `./b configure` and `./b build`, then run `./b run test/sensor` to locally run the role.
 6. For this example, it makes sense to view the robot in NUsight. Find out how to set up NUsight on the [NUbook Getting Started page](/guides/main/getting-started#get-build-and-run-nusight).
 
 Playing back recorded data is useful when:
 
-- Working remotely, where the data is previously recorded or recorded by another team member
+- Working remotely, where the data was previously recorded or recorded by another team member
 - Testing a system with the same input data
 - Not wanting to run the real robot continuously, where it is possible to use the same data
 - Viewing the Visual Mesh in NUsight, due to bandwidth issues in sending it over the network

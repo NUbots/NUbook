@@ -1,35 +1,31 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import '@docsearch/css'
+import './search.module.css'
+import { DocSearch } from '@docsearch/react'
 
-import SearchIcon from './search-icon.svg'
-import * as style from './search.module.css'
-
-import { initialiseAlgolia } from './algolia-search'
-
-const Search = ({ background }) => {
-  useEffect(() => {
-    initialiseAlgolia()
-  }, [])
-
+const Search = () => {
   return (
-    <div
-      className={`${style.search} ${
-        background === 'solid'
-          ? style.backgroundSolid
-          : style.backgroundTransparent
-      }`}
-    >
-      <input
-        id='search'
-        placeholder='Search NUbook...'
-        title='Keyboard shortcut: /'
-        autoComplete='off'
-        className={`${style.searchInput} h-10 w-full pl-10 md:pl-14 pr-3 md:pr-4 rounded appearance-none text-lg outline-none`}
-      />
-      <SearchIcon
-        className={`${style.searchIcon} absolute top-0 left-0 w-5 md:w-6 h-6 ml-3 md:ml-4 mt-2 pointer-events-none`}
-      />
-    </div>
+    // <div className={style.search}>
+    <DocSearch
+      appId='BH4D9OD16A'
+      apiKey='be16e460d9d03fa711df82d525dec3c1'
+      indexName='nubots'
+      placeholder='Search NUbook...'
+      transformItems={(items) => {
+        return items.map((item) => {
+          // Get the origin (domain + port, if any) from the result URL
+          const { origin } = new URL(item.url)
+          return {
+            ...item,
+            // Replace the origin in the result URL with our current origin,
+            // so the links work for local development and deploy previews
+            url: item.url.replace(origin, window.location.origin),
+          }
+        })
+      }}
+    />
+    // </div>
   )
 }
 

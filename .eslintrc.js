@@ -19,4 +19,13 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['add-readmes.js'],
+      env: {
+        node: true,
+        es6: true,
+      },
+    },
+  ],
 }

@@ -48,7 +48,7 @@ Role files define which modules should be grouped together in order to form a si
 
 Role files live in the `roles` folder and have a `.role` extension.
 
-Every role file must call the `nuclear_role()` function. Each argument to the `nuclear_role()` function is a C++ namespaced path to a module that should be included in the role. For example, if the `KinematicsConfiguration` module in `module/motion/KinematicsConfiguration` should be included in the role then `motion::KinematicsConfiguration` should appear as an argument to `nuclear_role()`.
+Every role file must call the `nuclear_role()` function. Each argument to the `nuclear_role()` function is a C++ namespaced path to a module that should be included in the role. For example, if the `KinematicsConfiguration` module in `module/actuation/KinematicsConfiguration` should be included in the role then `actuation::KinematicsConfiguration` should appear as an argument to `nuclear_role()`.
 
 <Alert type="info">
 
@@ -61,7 +61,7 @@ Ideally, all modules should be independent of each other and, as such, it should
 - `extension::FileWatcher`: Needed before all other modules so that the configuration and script systems can work properly
 - `support::SignalCatcher`: Catches exceptions to print out useful stack traces. Needs to come before all other modules to allow debugging during module installation
 - `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`: Install before other modules so that log messages will get printed during module installation
-- `motion::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
+- `actuation::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
 
 Below is an example of a role file. Any line preceded by a `#` is a comment and will be ignored.
 
@@ -73,12 +73,14 @@ nuclear_role(
   support::SignalCatcher
   support::logging::ConsoleLogHandler
   # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-  motion::KinematicsConfiguration
+  actuation::KinematicsConfiguration
   support::configuration::GlobalConfig
-  network::NUClearNetwork
-  platform::darwin::HardwareIO
-  platform::darwin::SensorFilter
-  support::NUsight
+  # Networking
+  network::NetworkForwarder
+  network::NUClearNet
+  # Sensors
+  platform::${SUBCONTROLLER}::HardwareIO
+  input::SensorFilter
 )
 ```
 
@@ -86,7 +88,7 @@ nuclear_role(
 
 [Extensions](https://nuclear.readthedocs.io/en/latest/extension.html) add new keywords to NUClear's dictionary, allowing you to be more expressive in writing [reactions](https://nuclear.readthedocs.io/en/latest/components.html#reactions).
 
-Two common extensions are `Configuration` and `Script`. `Configuration` allows modules to monitor their configuration file(s) and apply updates in real-time. `Script` provides similar functionality, but for script files.
+Two common extensions are `Configuration` and `Director`. `Configuration` allows modules to monitor their configuration file(s) and apply updates in real-time. `Director` contains our behaviour algorithm and framework.
 
 #### Messages
 
@@ -131,10 +133,10 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 
 ##### Build
 
-As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test_sensor`) then use the command
+As one might expect, `./b build` will build all enabled roles and required dependencies using `ninja`. If you only wish to build a single role (e.g. `test/sensor`) then use the command
 
 ```bash
-./b build test_sensor
+./b build test/sensor
 ```
 
 If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
@@ -149,11 +151,10 @@ It is possible to specify extra arguments to `cmake` to control the configuratio
 ./b configure -- -DBUILD_TESTS=ON
 ```
 
-Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Debug`, while this is good while you are in active development of a module, you will get very poor (slow) runtime performance.
-To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and then rebuild your code using the following commands
+Another good argument to specify is `CMAKE_BUILD_TYPE`. By default, `CMAKE_BUILD_TYPE` is set to `Release`, which has better performance than `Debug` but does not include debug symbols. If you would like to debug your code with debugging tools, such as GDB or ASan, then you should set `CMAKE_BUILD_TYPE` to `Debug`.
 
 ```bash
-./b configure -- -DCMAKE_BUILD_TYPE=Release
+./b configure -- -DCMAKE_BUILD_TYPE=Debug
 ./b build
 ```
 
@@ -165,13 +166,27 @@ To get better runtime performance change `CMAKE_BUILD_TYPE` to `Release` and the
 
 Passing `-i` to `./b configure` will open up an interactive window with `ccmake` so that you may modify the CMake configuration.
 
+You can also set and unset roles by passing `--set_roles` or `--unset_roles` followed the roles you want to toggle (this supports globbing patterns). For example, you can disable all roles ending in `walk`, then enable keyboardwalk and all roles starting with `script` using the following command.
+
+```bash
+  ./b configure --unset_all_roles "*walk" --set_roles keyboardwalk "script*"
+```
+
+Roles selected with `--unset` flags will always be disabled before roles selected with `--set` flags are enabled.
+
+You can also toggle groups of roles with `--set_<group>_roles` and `--unset_<group>_roles`. Currently there is a role group for each subdirectory in `roles` and a group containing all roles. For example, you can clean all docker build volumes and enable only roles in the `roles/webots` directory using the following command.
+
+```bash
+  ./b configure --clean --unset_all_roles --set_webots_roles
+```
+
 ##### Edit
 
 If you are running roles on your local machine and you need to edit the configuration or data files for the modules in the role then the preferred method is to edit the file in the source tree and then rebuild the code using `./b build` to copy the edited file into the build folder.
 
-However, some modules generate their configuration file at build-time, making it impossible to edit the file in the source tree. In this situation, you can use `./b edit` to open an interactive window with a text editor allowing you to edit the configuration file in the build tree.
+However, it is possible to edit the configuration file in the build tree directly. This may be useful if you want to change the configuration file during runtime. To do this, run `./b edit <path/to/config_file>` to open an interactive window with a text editor.
 
-One module that generates it configuration file at build time is `support::logging::DataLogging`, to edit the configuration file for `DataLogging` run
+For example, to edit the DataLogging configuration file run
 
 ```bash
 ./b edit config/DataLogging.yaml
@@ -190,6 +205,7 @@ NUbots uses several different code formatters.
 - `clang-format` is used to format C++ and protobuf files,
 - `black` and `isort` are used to format python files, and
 - `cmake-format` is used to format CMake files.
+- `eslint` and `prettier` are used to format NUsight's TypeScript files
 
 If you want to ensure that all files in the codebase are formatted according to our defined style run
 
@@ -267,7 +283,7 @@ To run roles locally on your system use the `run` command of `b` as follows
 
 Important things to note when using the `run` command
 
-- Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 7th generation Core i7 that the robots are currently using).
+- Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 12th generation Core i7 that the robots are currently using).
 - When using the debugging utilities you should recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` (`./b configure -i`) otherwise you will not get file or line number information in your stack traces.
 
 </Alert>
@@ -287,10 +303,10 @@ Be sure to set `USE_ASAN` to `OFF` and `CMAKE_BUILD_TYPE` to `MinSizeRel` once y
 
 </Alert>
 
-When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
+When `USE_ASAN=ON` an environment variable is added that will direct ASan to log all of its output to a file. This is done to ensure that even when you are running a curses-enabled role (e.g. `fake/keyboardwalk`) you will always be able to recover the output from ASan (and it will also be clean from other log messages). There are a number of other run-time options you could set to tune the behaviour of ASan, they can be found [here](https://github.com/google/sanitizers/wiki/AddressSanitizerFlags). Just run your role as follows
 
 ```bash
-ASAN_OPTIONS=option1=value1:option2=value ./b run keyboardwalk
+ASAN_OPTIONS=option1=value1:option2=value ./b run fake/keyboardwalk
 ```
 
 <Alert type="info">
@@ -344,11 +360,12 @@ Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build
 
 ##### Target
 
-The `target` command of `b` allows you to build code for a different target. Currently, only two targets are supported: `generic` and `nuc7i7bnh`.
+The `target` command of `b` allows you to build code for a different target. Support targets are
 
-The `generic` target is useful if you would like to build and run code on your local machine.
-
-The `nuc7i7bnh` target should be used for building and running code on the robots.
+- `generic`: Useful if you would like to build and run code on your local machine.
+- `nuc7i7bnh`: For use with the old nuc7i7bnh computer. This is no longer used on the robots.
+- `nuc8i7beh`: For use with the nuc8i7beh computer. This is not used on the robots.
+- `nuc12wshi7`: The current target for the robots, which use the nuc12wshi7 computer.
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
 
@@ -410,12 +427,12 @@ eval "$(register-python-argcomplete b)"
 ## Docker Images
 
 The NUbots codebase uses Docker images to containerise the build process.
-Two images are created, one intended for running code on your local machine, named `generic`, and another intended for running code on the robots named `nuc7i7bnh`.
+Two images are created, one intended for running code on your local machine, named `generic`, and another intended for running code on the robots named `nuc12wshi7`.
 Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
 
 <Alert type="info">
 
-`nuc7i7bnh` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
+`nuc12wshi7` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
 
 </Alert>
 
@@ -497,9 +514,9 @@ Docker also ensures that all of the dependencies for the built libraries are eit
 To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile).
 
 In order to improve runtime performance on the robots, all libraries that are built as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
-A list of the currently used compiler flags for the `nuc7i7bnh` can be seen in [generate_nuc7i7bnh_toolchain.py](https://github.com/NUbots/NUbots/blob/main/docker/usr/local/toolchain/generate_nuc7i7bnh_toolchain.py).
+A list of the currently used compiler flags for the `nuc12wshi7` can be seen in [generate_nuc12wshi7_toolchain.py](https://github.com/NUbots/NUbots/blob/main/docker/usr/local/toolchain/generate_nuc12wshi7_toolchain.py).
 
-If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc7i7bnh`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
+If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc12wshi7`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
 
 ```bash
 target=$(gcc -march=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)

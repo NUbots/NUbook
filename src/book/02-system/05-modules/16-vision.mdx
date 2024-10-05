@@ -1,0 +1,232 @@
+---
+section: System
+chapter: Modules
+title: Vision
+description: Documentation for each vision module in the main NUbots codebase
+slug: /system/modules/vision/
+---
+
+## BallDetector
+
+### Description
+
+The BallDetector module performs post-processing on the output of the VisualMesh to determine where balls are in the image, if any. If there are no balls, it will emit an empty `Balls` message.
+
+The BallDetector first tries to create balls, and then removes candidate balls if they fail to pass a set of checks.
+
+Balls are created by clustering neighbouring Visual Mesh points that have a high enough confidence that they are a ball point and are not surrounded by ball points. That is, clusters are made up of ball edge points.
+
+Each cluster is checked to see if
+
+1. It is below the green horizon
+2. It has a high enough degree of fit to a circle
+3. It's angular and projection based distances are close enough
+4. It is not too close to the robot
+5. It is closer or equal to the length of the field
+
+If it doesn't meet any of these criterion, the cluster is not considered to be a ball.
+
+If a cluster passes the checks, it is added to a Balls message.
+
+Zero or many balls could be detected and emitted in a Balls message.
+
+### Usage
+
+Add this module to get information about balls, given the required messages are present.
+
+### Consumes
+
+- `message::vision::GreenHorizon` which contains points that represent the green horizon, and the Visual Mesh output. The Visual Mesh output is used to create the ball clusters and the green horizon is used to remove balls above the horizon.
+- `message::support::FieldDescription` which contains parameters that define the structure of the field and size of the ball. This is used in the checks mentioned above, to determine if the ball candidate is likely to be a ball.
+
+### Emits
+
+- `message::vision::Balls` which contains an array of `message::vision::Ball` messages, which contains information such as position and covariance of the ball. Can be empty.
+
+### Dependencies
+
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+
+## FieldLineDetector
+
+### Description
+
+The FieldLineDetector module performs post-processing on the output of the VisualMesh to determine where field lines are in the image, if any. If there are no field lines, it will emit an empty `FieldLines` message.
+
+Each FieldLine detection is checked to see if it is below the green horizon. Zero or many FieldLines could be detected and emitted in a FieldLines message.
+
+### Usage
+
+Add this module to get information about FieldLines, given the required messages are present.
+
+### Consumes
+
+- `message::vision::GreenHorizon` which contains points that represent the green horizon, and the Visual Mesh output. The Visual Mesh output is used to extract the field line detections and the green horizon is used to remove field line detections above the horizon.
+
+### Emits
+
+- `message::vision::FieldLines` which contains information such as transform to the camera from world, and the unit vectors of field line detections in world space.
+
+### Dependencies
+
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+
+## GreenHorizonDetector
+
+### Description
+
+Calculates a convex hull of the field from the Visual Mesh points.
+
+1. Finds all the points that are on the field (ie high confidence of field or field line)
+2. Clusters the points into groups of points next to each other
+3. Finds the cluster that is closest to the robot, which is used in the remainder of the algorithm
+4. Gets only the points that are on the boundary of the cluster, ie the boundary of the field
+5. Calculates a convex hull (ie a minimal polygon) from that boundary
+
+### Usage
+
+Add this module to the role and when it gets a Visual Mesh message it will create a convex hull.
+This convex hull is used in vision object detectors to exclude detections outside of the field.
+
+### Consumes
+
+- `message::vision::VisualMesh` a message containing classification of points on the ground plane of an image.
+
+### Emits
+
+- `message::vision::GreenHorizon` a message containing the Visual Mesh data and its associated convex hull of the field.
+
+### Dependencies
+
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+
+## RobotDetector
+
+### Description
+
+This module uses segmentation information from an image to determine where other robots are in the world.
+
+Clusters of robot detections are each checked to see if they are below or over the field convex hull, if enough points make up the cluster, and if the cluster is fair enough away (as we might classify our own legs/arms and don't want to consider that). Position is determined very basically by taking the closest point to the camera.
+
+### Usage
+
+Use this module to get raw positions of robots.
+
+### Consumes
+
+- `message::vision::GreenHorizon` containing the convex hull and Visual Mesh information used to find robots.
+
+### Emits
+
+- `message::vision::Robots` containing the positions of robots, if any.
+
+### Dependencies
+
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+
+## VisualMesh
+
+### Description
+
+Runs a Visual Mesh over a given image and emits the result.
+
+### Usage
+
+This module requires the following configuration files to be set:
+
+- `data/config/networks` should include a `yaml` file with Visual Mesh network configuration, which can be obtained from tools in the [Visual Mesh](https://github.com/Fastcode/VisualMesh) repository after training. A guide on updating this can be found on [NUbook](https://nubook.nubots.net/guides/main/maintaining-subsystems#vision).
+- `data/config/VisualMesh.yaml` should include information on what cameras and network configuration to use.
+
+Once these are set appropriately, this module will trigger on any `message::input::Image` emitted in the system.
+
+The module uses the `./visualmesh/VisualMeshRunner` to run the Visual Mesh.
+
+`VisualMeshRunner` gets a `LoadedModel` from `./visualmesh/load_model`, which uses the network configuration specified in `./data/config/VisualMesh.yaml` to create a network model through the `VisualMesh` library. This `LoadedModel` is the Visual Mesh model that the `Image` will be run on, and is only updated if the configuration changes.
+
+This `LoadedModel` is then used in the `VisualMeshRunner` anytime an `Image` needs to be processed. The `VisualMeshRunner` takes the `Image` and `Hcw` [(world to camera homogenous transformation)](https://nubook.nubots.net/system/foundations/mathematics#homogeneous-transformations), gets the lens and height data from these and passes it through to the `VisualMesh` itself to get the results. The `VisualMeshRunner` then returns the results and the module emits those results as a `message::vision::VisualMesh` message. This will rerun every time a new `Image` message is received.
+
+Note that this module does not receive a `message::input::Sensors` message. It uses the `Hcw` matrix from the `Image` message, as this will capture the robot's orientation at the time the `Image` is first processed to reduce error.
+
+### Consumes
+
+- `message::input::Image` the image to run the Visual Mesh on.
+
+### Emits
+
+- `message::vision::VisualMesh` the mesh results for the given image. The result is in the form of points on the field, arranged into multiple matrices that represent the coordinate values, neighbour points and classification for each point.
+
+### Dependencies
+
+- [Visual Mesh](https://github.com/Fastcode/VisualMesh)
+
+## Yolo
+
+### Description
+
+This module integrates a YOLO (You Only Look Once) model to identify and classify objects within images. The classes for the model are:
+
+- Balls
+- Goals
+- Robots
+- Field Line Intersections (L,T,X)
+
+Confidence thresholds for each class can be specified in the config.
+
+Inference can be ran on either the CPU or GPU using OpenVino (https://github.com/openvinotoolkit/openvino).
+
+### Usage
+
+Include this module to detect balls, goals, robots and field line intersections in images.
+
+If the GreenHorizon is included in the program, balls, field line intersections and robots outside of the GreenHorizon will be discarded.
+
+To run with GPU device in docker you need to include the following flags `./b run {binary} --gpus all`
+
+### Consumes
+
+- `message::input::Image` the image to run the YOLO on.
+
+### Emits
+
+- `message::vision::Balls` ball detections
+- `message::vision::Goals` goal detections
+- `message::vision::Robots` robot detections
+- `message::vision::FieldIntersections` field line intersections
+
+### Dependencies
+
+- [OpenVino](https://github.com/openvinotoolkit/openvino)
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+- [OpenCV](https://opencv.org/)
+
+## YoloCoco
+
+### Description
+
+This module integrates a YOLO (You Only Look Once) model to identify and classify objects within images.
+
+The classes for the model are from COCO (https://docs.ultralytics.com/datasets/detect/coco/#dataset-structure)
+
+Confidence thresholds for each class can be specified in the config.
+
+Inference can be ran on either the CPU or GPU using OpenVino (https://github.com/openvinotoolkit/openvino).
+
+### Usage
+
+Include this module to detect balls, goals, robots and field line intersections in images.
+
+To run with GPU device in docker you need to include the following flags `./b run {binary} --gpus all`
+
+### Consumes
+
+- `message::input::Image` the image to run the YOLO on.
+
+### Emits
+
+- `message::vision::BoundingBoxes` bounding boxes of the detections
+
+### Dependencies
+
+- [OpenVino](https://github.com/openvinotoolkit/openvino)
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)
+- [OpenCV](https://opencv.org/)
