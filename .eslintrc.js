@@ -21,7 +21,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['add-readmes.js'],
+      files: ['add-readmes.js', 'check-links.js'],
       env: {
         node: true,
         es6: true,
