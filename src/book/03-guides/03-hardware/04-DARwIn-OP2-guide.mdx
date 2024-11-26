@@ -4,7 +4,7 @@ chapter: Hardware
 title: DARwIn OP2 Robot Restoration and Calibration Guide
 description: How to use the provided instructions for setting up, restoring, and calibrating the DARwIn OP2 robot system.
 slug: /guides/hardware/DARwIn-OP2-guide
-authors: 
+authors:
   - Corah Oliver (@yippyy)
 ---
 
@@ -12,24 +12,24 @@ authors:
 
 ### DARwIN OP2 Specifications
 
-  - Mainboard: PICO-CV01
-  - Cpu: Intel Atom N2600 @1.6GHz single core
-  - Ram: Up to 4GB DDR3/240-ping SO-DIMM module (user replaceable)
-  - Storage: Half-size mSATA module (32GB) (user replaceable)
-  - Sub controller: CM-740
-  - Linux mint 17.3 'Rosa' installed on PICO-CV01 board 
+- Mainboard: PICO-CV01
+- Cpu: Intel Atom N2600 @1.6GHz single core
+- Ram: Up to 4GB DDR3/240-ping SO-DIMM module (user replaceable)
+- Storage: Half-size mSATA module (32GB) (user replaceable)
+- Sub controller: CM-740
+- Linux mint 17.3 'Rosa' installed on PICO-CV01 board
 
 ### Creating the recovery USB
 
 1. Download Tuxboot from the [SourceForge website](https://sourceforge.net/projects/tuxboot/files/0.6/). For this demonstration we will be downloading the Linux version.
-![Downloading Tuxboot 1](./images/DARwIn_OP2_guide/Tuxboot1.jpg)
-![Downloading Tuxboot 2](./images/DARwIn_OP2_guide/Tuxboot2.jpg)
+   ![Downloading Tuxboot 1](./images/DARwIn_OP2_guide/Tuxboot1.jpg)
+   ![Downloading Tuxboot 2](./images/DARwIn_OP2_guide/Tuxboot2.jpg)
 
 2. When the first step is complete, run Tuxboot 0.6
-![Running Tuxboot](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis')
+   ![Running Tuxboot](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis')
 
 3. Using this [Link](https://sourceforge.net/projects/clonezilla/) will take you to the following screen
-![Clonezilla 1](./images/DARwIn_OP2_guide/Tuxboot4.jpg)
+   ![Clonezilla 1](./images/DARwIn_OP2_guide/Tuxboot4.jpg)
 
 Click onto the 'Files' tab, then select 'clonezilla_live_stable'.
 ![Clonezilla 2](./images/DARwIn_OP2_guide/Tuxboot8.jpg)
@@ -44,8 +44,8 @@ In this folder, we need to download 'clonezilla-live-2.0.1-5-i486.iso' (in the f
 ![Clonezilla 5](./images/DARwIn_OP2_guide/Tuxboot7.jpg)
 
 4. When you have successfully downloaded Clonezilla, reopen Tuxboot. The select the 'pre=downloaded' option on screen.
-Select the 'clonezilla-live-2.0.1-5-i486.iso' from your files. Make sure you have ISO selected in the drop-down menu, for the 'Type' selection, pick USB and tick the MD5 check box.
-![Clonezilla 6](https://emanual.robotis.com/assets/images/platform/op/op_041.jpg 'Photo from Robotis')
+   Select the 'clonezilla-live-2.0.1-5-i486.iso' from your files. Make sure you have ISO selected in the drop-down menu, for the 'Type' selection, pick USB and tick the MD5 check box.
+   ![Clonezilla 6](https://emanual.robotis.com/assets/images/platform/op/op_041.jpg 'Photo from Robotis')
 
 After you have done this step, press 'OK' and let the program run.
 ![Clonezilla 7](https://emanual.robotis.com/assets/images/platform/op/op_043.jpg 'Photo from Robotis')
@@ -58,9 +58,9 @@ This completes the Clonezilla portion of this recovery USB.
 **Now that you have successfully created a Clonezilla USB, we now need to put the recovery software onto it. This is done by following the instructions below**
 
 5. Open your USB in your files but leave this for now and following the following [Link](https://sourceforge.net/projects/darwinop/files/Software/Main%20Controller/Recovery%20USB/)
-We now need to download the DARwIn recovery files. For this example, we are downloading the 'ROBOTIS-OP2_Recovery_20150326.zip'
-(for the following picture, it is the middle option)
-![Recovery 1](./images/DARwIn_OP2_guide/Recovery1.jpg)
+   We now need to download the DARwIn recovery files. For this example, we are downloading the 'ROBOTIS-OP2_Recovery_20150326.zip'
+   (for the following picture, it is the middle option)
+   ![Recovery 1](./images/DARwIn_OP2_guide/Recovery1.jpg)
 
 After this has finished downloading, we need to create a 'home' folder in our USB. When you have created such folder, click into it and create another folder called 'partimag', then click into it.
 Leave this for the time being.
@@ -74,56 +74,70 @@ Select all these files and move them into your 'partimag' folder.
 
 **You have now completed the ‘creating the recovery USB’ section successfully!**
 
-### Running the recovery USB through the BIOS 
+### Running the recovery USB through the BIOS
 
 Now that we have a recovery USB created with all the right files placed upon it, it is now time to run it on the PICO-CV01 board.
 
 1. Boot up your PICO-CV01 in the BIOS menu (this is usually done by pressing either f12 or delete), locate the 'boot' tab and search for 'boot sequence'.
-Select the Clonezilla USB as the first selection for the sequence, save the changes and restart.
-Once this restarts, Clonezilla should boot up straight away.
+   Select the Clonezilla USB as the first selection for the sequence, save the changes and restart.
+   Once this restarts, Clonezilla should boot up straight away.
 
 2. When Clonezilla boots, a menu screen will appear, the following instructions show be followed:
-      1. Clonezilla
-          - Select te default option **'Clonezilla live (default settings. VGA 800x600)'**
 
-      2. Language
-          - Choose language **'Whichever is your preferred language'**
-      
-      3. Configuring Console-data
-          - Select default option **'Don't touch keymap'**
+   1. Clonezilla
 
-      4. Start Clonezilla
-          - **'Start_Clonezilla Start Clonezilla'**
+      - Select te default option **'Clonezilla live (default settings. VGA 800x600)'**
 
-      5. Clonezilla
-          - Select default option **'device-image work with disks or partitions using images'**
-      
-      6. Mount Clonezilla Image Directory 
-          - Select the following **'skip Use existing/home/partimag (Writable device. E.g. hard disk/USB drive)'**
+   2. Language
 
-      7. Clonezilla - OpenSource Clone System (OCS)
-          - Select the following **'Beginner Beginner mode'** then **'Accept the default options'**
+      - Choose language **'Whichever is your preferred language'**
 
-      8. Clonezilla Select mode
-          - Select the following **'restoredisk Restore_an_image_to_local_disk'**
+   3. Configuring Console-data
 
-      9. Clonezilla - OpenSource Clone System (OCS)
-          - Choose the image file to restore **'this will be your recovery image'**
-      
-      10. Clonezilla - OpenSource Clone System (OCS)
-          - Choose the target disk **'this will be your SSD (make sure to check your SSD capacity to see if the recovery files will fit!)'** 
+      - Select default option **'Don't touch keymap'**
 
-      11. Starting to Restore Image to Device
-          - Wait until this is complete.
+   4. Start Clonezilla
 
-      12. Completed Restoration
-          - Press enter to continue
+      - **'Start_Clonezilla Start Clonezilla'**
 
-      13. Power Off or Reboot
-          - Select one of the following options **'(0) Power Off, (1) Reboot'**
+   5. Clonezilla
 
-      14. When the power off have successfully shut the DARwIn down, remove the USB and reboot the robot.
-  
+      - Select default option **'device-image work with disks or partitions using images'**
+
+   6. Mount Clonezilla Image Directory
+
+      - Select the following **'skip Use existing/home/partimag (Writable device. E.g. hard disk/USB drive)'**
+
+   7. Clonezilla - OpenSource Clone System (OCS)
+
+      - Select the following **'Beginner Beginner mode'** then **'Accept the default options'**
+
+   8. Clonezilla Select mode
+
+      - Select the following **'restoredisk Restore_an_image_to_local_disk'**
+
+   9. Clonezilla - OpenSource Clone System (OCS)
+
+      - Choose the image file to restore **'this will be your recovery image'**
+
+   10. Clonezilla - OpenSource Clone System (OCS)
+
+       - Choose the target disk **'this will be your SSD (make sure to check your SSD capacity to see if the recovery files will fit!)'**
+
+   11. Starting to Restore Image to Device
+
+       - Wait until this is complete.
+
+   12. Completed Restoration
+
+       - Press enter to continue
+
+   13. Power Off or Reboot
+
+       - Select one of the following options **'(0) Power Off, (1) Reboot'**
+
+   14. When the power off have successfully shut the DARwIn down, remove the USB and reboot the robot.
+
 For more information about this process check out [Robotis's Clonezilla recovery page](https://emanual.robotis.com/docs/en/platform/op/maintenance/).
 
 ### Calibrating the DARwIn OP2 (Ball Calibration)
@@ -141,10 +155,10 @@ For more information about this process check out [Robotis's Clonezilla recovery
 6. While on this web address you should see the camera's live feed, with camera parameters on the side and bottom of image.
 
 7. The important parameter is the ball (you will find this is the Darwin transport case. It is orange in colour).
-You will see the section of the camera view highlight pixels in orange, this is showing you an output of its applied color look up table for the ball. You don't want too many of these random 
-pixels around if there is no ball in front of the robot, but once you place a ball in front of the robot, it should see it with the orange applied over the ball.
+   You will see the section of the camera view highlight pixels in orange, this is showing you an output of its applied color look up table for the ball. You don't want too many of these random
+   pixels around if there is no ball in front of the robot, but once you place a ball in front of the robot, it should see it with the orange applied over the ball.
 
-8. Once you are happy with the calibration, press save and exit the program. 
+8. Once you are happy with the calibration, press save and exit the program.
 
 For more information on camera Calibration follow this [Link](https://emanual.robotis.com/docs/en/platform/op2/getting_started/#camera-calibration)
 
@@ -161,9 +175,9 @@ For more information on camera Calibration follow this [Link](https://emanual.ro
 5. While on this terminal, a prompt will ask for the user to press any key to start the tuner. After this, a browser will be needed to access the parameters to tune: (http://192.168.123.1:8080/)
 
 6. Once on this browser, you will see different options to tune. You can change these until you are happy with the walk.
-<Alert> 
-  Some of the important options that have been used previously are gains, PID controller, step height, DSP ratio, and duty cycle.
-</Alert>
+   <Alert>
+   Some of the important options that have been used previously are gains, PID controller, step height, DSP ratio, and duty cycle.
+   </Alert>
 
 7. Once you are happy, press save and exit the program.
 
