@@ -99,7 +99,7 @@ To see the Visual Mesh itself in NUsight, you will need to enable the `message.v
 
 - In step 1 of Recording Data, use the [`test/visualmesh`](https://github.com/NUbots/NUbots/blob/main/roles/test/visualmesh.role) role to record the data.
 - In step 2 of Recording Data and step 4 of Playing Back Data, set `message.output.CompressedImage` to `true` and add `message.vision.VisualMesh: true` in both [DataLogging.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataLogging/data/config/DataLogging.yaml) and [DataPlayback.yaml](https://github.com/NUbots/NUbots/blob/main/module/support/logging/DataPlayback/data/config/DataPlayback.yaml).
-- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/playback.role) role to playback the data, without changes.
+- In steps 1, 2 and 5 of Playing Back Data, use the [`playback`](https://github.com/NUbots/NUbots/blob/main/roles/data/playback.role) role to playback the data, without changes.
 
 ### Tuning Detectors
 
