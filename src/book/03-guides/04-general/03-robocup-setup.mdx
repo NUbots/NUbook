@@ -100,20 +100,19 @@ The networking on the robot needs to be changed from the default NUbots laborato
 
 2.  Rename `default/etc/systemd/30-wlp58s0.network` to `default/etc/systemd/40-wlp58s0-robocup.network`. Note that this is locally within the codebase, not on the robot.
 
-3.  Run `wpa_passphrase SSID PASSWORD`, where `SSID` is the name of the wireless network and `PASSWORD` is the password for the network. Copy the output.
-
-4.  Open `default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf` and add the copied output from the previous step to the end of the file. Within the braces, add `priority=3` on a new line. The block should look like this, where `HASHED_PASSWORD` is a long string of letters and numbers:
+3.  Open `default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf` and add the following block to the end of the file:
 
     ```sh
     network={
         ssid="SSID"
-        #psk="PASSWORD"
-        psk=HASHED_PASSWORD
+        psk="PASSWORD"
         priority=3
     }
     ```
 
-5.  For each robot `X` do:
+    `SSID` is the name of the wireless network and `PASSWORD` is the password for the network. `priority` should be the highest number priority in the file.
+
+4.  For each robot `X` do:
 
     1. Rename `nugusX/etc/systemd/network/40-wlp58s0-robocup.network` to `nugusX/etc/systemd/network/30-wlp58s0.network`.
 
