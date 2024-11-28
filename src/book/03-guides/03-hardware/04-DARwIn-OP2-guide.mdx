@@ -1,16 +1,62 @@
 ---
 section: Guides
 chapter: Hardware
-title: DARwIn OP2 Robot Restoration and Calibration Guide
-description: How to use the provided instructions for setting up, restoring, and calibrating the DARwIn OP2 robot system.
-slug: /guides/hardware/DARwIn-OP2-guide
+title: Darwin Op2 Robot Restoration and Calibration Guide
+description: How to use the provided instructions for setting up, restoring, and calibrating the Darwin Op2 robot system.
+slug: /guides/hardware/darwin-op2-guide
 authors:
   - Corah Oliver (@yippyy)
 ---
 
-## DARwIn OP2 Guide
+## Darwin Op2 Guide
 
-### DARwIN OP2 Specifications
+The Darwin Op2 robot is a small humanoid robot that was originally developed by RoMeLa (Robotics and Mechanisms Laboratory) in collaboration with a South Korean robotics company called Robotis.
+![A photo of Darwin Op's and a Darwin Op2](./images/darwin_op2_guide/Darwins.jpg 'Darwin Op (dark grey), Darwin Op2 (white)')
+
+Some of the main aspects in which a Darwin op2 can be used are:
+
+- Education
+- Outreach purposes
+- Research
+  The current NUbots team uses the Darwin op2's for outreach events and education by providing in-depth talks and demonstration's at local schools, university events and more.
+  As time passed, the original Darwin robot, called the Darwin Op, was later replaced with the Darwin Op2 to keep up with advancements in robotics technology and to help improve the limitations of the Op.
+
+Some limitations of the Darwin Op include:
+
+- Limited Hardware Capabilities
+
+  - Battery life
+  - Processor power
+  - Computational power
+  - Actuators (Dynamixel AX Series)
+
+- Motion and Balance
+
+  - Speed of motion
+  - Stability concerns
+
+- Software and AI
+  - Vision
+  - Perception
+
+Compared to the Darwin Op2:
+
+- Hardware Capabilities
+
+  - Improved battery life
+  - Upgraded to Intel Atom N2600, faster and efficient
+  - Upgraded to Dynamixel MX Series, higher torque, better durability and control
+
+- Motion and Balance
+
+  - Better Balance
+  - More stable
+
+- Software and AI
+  - Enhanced vision processing software
+  - More accurate ball detection
+
+### Darwin OP2 Specifications
 
 - Mainboard: PICO-CV01
 - Cpu: Intel Atom N2600 @1.6GHz single core
@@ -21,27 +67,39 @@ authors:
 
 ### Creating the recovery USB
 
+Creating a recovery USB is helpful in many ways.
+The ways that we are focussing on are:
+
+- Completely flashing a Darwin Op2 robot
+- For first time flashing for the demo.
+
 1. Download Tuxboot from the [SourceForge website](https://sourceforge.net/projects/tuxboot/files/0.6/). For this demonstration we will be downloading the Linux version.
-   ![Downloading Tuxboot 1](./images/DARwIn_OP2_guide/Tuxboot1.jpg)
-   ![Downloading Tuxboot 2](./images/DARwIn_OP2_guide/Tuxboot2.jpg)
+   ![The SourceForge Tuxboot page showing the Home/0.6 directory](./images/darwin_op2_guide/Tuxboot1.jpg 'navigate into the 0.6 folder')
+   ![The SourceForge Tuxboot page showing the Home/0.6/Linux directory](./images/darwin_op2_guide/Tuxboot2.jpg 'navigate into the Linux folder')
 
-2. When the first step is complete, run Tuxboot 0.6
-   ![Running Tuxboot](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis')
+Tuxboot is a very helpful tool that creates bootable USB drives. By downloading Tuxboot from SourceForge, we can prepare a USB for recovery.
 
-3. Using this [Link](https://sourceforge.net/projects/clonezilla/) will take you to the following screen
-   ![Clonezilla 1](./images/DARwIn_OP2_guide/Tuxboot4.jpg)
+2. When the first step is complete, run Tuxboot 0.6.
+   ![The Robotis page showing the usage of Tuxboot 0.6](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis')
+
+Running Tuxboot helps prepare the USB drive for the Clonezilla software.
+
+3. Visit SourceForge for the [Clonezilla download](https://sourceforge.net/projects/clonezilla/).
+   ![The SourceForge Clonezilla download page](./images/darwin_op2_guide/Tuxboot4.jpg 'Tuxboot 0.6')
 
 Click onto the 'Files' tab, then select 'clonezilla_live_stable'.
-![Clonezilla 2](./images/DARwIn_OP2_guide/Tuxboot8.jpg)
+![The SourceForge Clonezilla page showing the files tab, along with folders](./images/darwin_op2_guide/Tuxboot8.jpg 'navigate into the files tab')
 
 This will then direct you to a tab filled with different clonezilla versions. What we are looking for is the 'OldFiles' section.
-![Clonezilla 3](./images/DARwIn_OP2_guide/Tuxboot5.jpg)
+![The SourceForge Clonezilla page showing clonezilla versions](./images/darwin_op2_guide/Tuxboot5.jpg 'navigate into the the old files folder')
 
-Clicking into this, we now need to look for the section called '2.0.1-5' (in the following picture, it is the middle option)
-![Clonezilla 4](./images/DARwIn_OP2_guide/Tuxboot6.jpg)
+Clicking into this, we now need to look for the section called '2.0.1-5' (in the following picture, it is the middle option).
+![The SourceForge Clonezilla page showing version folders](./images/darwin_op2_guide/Tuxboot6.jpg 'navigate into the folder 2.0.1-5')
 
-In this folder, we need to download 'clonezilla-live-2.0.1-5-i486.iso' (in the following picture, it is the middle option)
-![Clonezilla 5](./images/DARwIn_OP2_guide/Tuxboot7.jpg)
+In this folder, we need to download 'clonezilla-live-2.0.1-5-i486.iso'.
+![The SourceForge Clonezilla page showing iso files](./images/darwin_op2_guide/Tuxboot7.jpg 'in the following picture, it is the middle option')
+
+Clonezilla is a recovery tool which allows the user to create or restore disk images. This software is essential for recovering the Darwin Op2 system.
 
 4. When you have successfully downloaded Clonezilla, reopen Tuxboot. The select the 'pre=downloaded' option on screen.
    Select the 'clonezilla-live-2.0.1-5-i486.iso' from your files. Make sure you have ISO selected in the drop-down menu, for the 'Type' selection, pick USB and tick the MD5 check box.
@@ -53,24 +111,26 @@ After you have done this step, press 'OK' and let the program run.
 Once this is complete press 'Exit'.
 ![Clonezilla 8](https://emanual.robotis.com/assets/images/platform/op/op_044.jpg 'Photo from Robotis')
 
+Using Tuxboot and selecting the Clonezilla iso, the user has now created a bootable USB drive which is ready for the recovery files.
+
 This completes the Clonezilla portion of this recovery USB.
 
-**Now that you have successfully created a Clonezilla USB, we now need to put the recovery software onto it. This is done by following the instructions below**
+**Now that you have successfully created a Clonezilla USB, we now need to put the recovery software onto it. This is done by following the instructions below.**
 
-5. Open your USB in your files but leave this for now and following the following [Link](https://sourceforge.net/projects/darwinop/files/Software/Main%20Controller/Recovery%20USB/)
-   We now need to download the DARwIn recovery files. For this example, we are downloading the 'ROBOTIS-OP2_Recovery_20150326.zip'
-   (for the following picture, it is the middle option)
-   ![Recovery 1](./images/DARwIn_OP2_guide/Recovery1.jpg)
+5. Open your USB in your files but leave this for now and [go to SourceForge](https://sourceforge.net/projects/darwinop/files/Software/Main%20Controller/Recovery%20USB/)
+   We now need to download the Darwin recovery files. For this example, we are downloading the `ROBOTIS-OP2_Recovery_20150326.zip`.
+   ![The SourceForge Darwin recovery page showing recovery files](./images/darwin_op2_guide/Recovery1.jpg 'for the following picture, it is the middle option')
 
-After this has finished downloading, we need to create a 'home' folder in our USB. When you have created such folder, click into it and create another folder called 'partimag', then click into it.
+After this has finished downloading, we need to create a `home` folder in our USB. When you have created such folder, click into it and create another folder called `partimag`, then click into it.
 Leave this for the time being.
 
-Now, go into your downloads and locate your 'ROBOTIS-OP2_Recovery_20150326.zip', unzip the file and click into it.
-(it should look like this)
-![Recovery 2](./images/DARwIn_OP2_guide/Recovery2.jpg)
+Now, go into your downloads and locate your `ROBOTIS-OP2_Recovery_20150326.zip`, unzip the file and click into it.
+![The unzipped file of the darwin recovery folder](./images/darwin_op2_guide/Recovery2.jpg 'it should look like this')
 
-Select all these files and move them into your 'partimag' folder.
+Select all these files and move them into your `partimag` folder.
 `USB / home / partimag`
+
+The user must download the recovery files from SourceForge and move them into the correct places before flashing the Darwin Op2.
 
 **You have now completed the ‘creating the recovery USB’ section successfully!**
 
@@ -86,7 +146,7 @@ Now that we have a recovery USB created with all the right files placed upon it,
 
    1. Clonezilla
 
-      - Select te default option **'Clonezilla live (default settings. VGA 800x600)'**
+      - Select the default option **'Clonezilla live (default settings. VGA 800x600)'**
 
    2. Language
 
@@ -136,21 +196,21 @@ Now that we have a recovery USB created with all the right files placed upon it,
 
        - Select one of the following options **'(0) Power Off, (1) Reboot'**
 
-   14. When the power off have successfully shut the DARwIn down, remove the USB and reboot the robot.
+   14. When the power off have successfully shut the Darwin Op2 down, remove the USB and reboot the robot.
 
 For more information about this process check out [Robotis's Clonezilla recovery page](https://emanual.robotis.com/docs/en/platform/op/maintenance/).
 
-### Calibrating the DARwIn OP2 (Ball Calibration)
+### Calibrating the Darwin OP2 (Ball Calibration)
 
-1. Connect the Darwin via ethernet onto a laptop on the same internet.
+1. Connect the Darwin Op2 via ethernet onto a laptop on the same internet.
 
-2. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the Darwin, normal HDMI being connected to the monitor).
+2. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the Darwin Op2, normal HDMI being connected to the monitor).
 
-3. Start the Darwin so the standard demo program is running. Once booted, and in the initial pose, sitting.
+3. Start the Darwin Op2 so the standard demo program is running. Once booted, and in the initial pose, sitting.
 
-4. Connect a keyboard and mouse to the Darwin and use them to connect to the robot via SSH in the terminal: `SSH robotis@192.168.123.1`, **with password "111111" (six ones, no quotation marks)**
+4. Connect a keyboard and mouse to the Darwin Op2 and use them to connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password "111111" (six ones, no quotation marks)**.
 
-5. Once you are connected to the Darwin, use a browser (either chrome or firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/)
+5. Once you are connected to the Darwin Op2, use a browser (either chrome or firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/).
 
 6. While on this web address you should see the camera's live feed, with camera parameters on the side and bottom of image.
 
@@ -160,19 +220,19 @@ For more information about this process check out [Robotis's Clonezilla recovery
 
 8. Once you are happy with the calibration, press save and exit the program.
 
-For more information on camera Calibration follow this [Link](https://emanual.robotis.com/docs/en/platform/op2/getting_started/#camera-calibration)
+For more information on camera Calibration visit the [Robotis website camera calibration page](https://emanual.robotis.com/docs/en/platform/op2/getting_started/#camera-calibration).
 
 ### Calibrating the DARwIn OP2 (Walk Tuner)
 
-1. Connect to the robot via ssh in the terminal: `SSH robotis@192.168.123.1`, **with password "111111"**.
+1. Connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password "111111"**.
 
 2. While in the terminal, stop the demo binary (as it boots from the start) by using sudo pkill demo.
 
 3. Change the current directory to the walk tuner directory: `cd/robotis/Linux/project/walk_tuner/`
 
-4. Run this walk tuner by: `./walk_tuner`
+4. Run the walk tuner by running the command: `./walk_tuner`
 
-5. While on this terminal, a prompt will ask for the user to press any key to start the tuner. After this, a browser will be needed to access the parameters to tune: (http://192.168.123.1:8080/)
+5. While on this terminal, a prompt will ask for the user to press any key to start the tuner. After this, a browser will be needed to access the parameters to tune: (http://192.168.123.1:8080/).
 
 6. Once on this browser, you will see different options to tune. You can change these until you are happy with the walk.
    <Alert>
@@ -181,4 +241,4 @@ For more information on camera Calibration follow this [Link](https://emanual.ro
 
 7. Once you are happy, press save and exit the program.
 
-For more information on parameters follow this [Link](https://emanual.robotis.com/docs/en/platform/op/development/)
+For more information on parameters visit the [Robotis website development page](https://emanual.robotis.com/docs/en/platform/op/development/).
