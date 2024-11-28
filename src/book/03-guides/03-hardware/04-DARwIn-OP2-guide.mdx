@@ -13,15 +13,17 @@ authors:
 The Darwin Op2 robot is a small humanoid robot that was originally developed by RoMeLa (Robotics and Mechanisms Laboratory) in collaboration with a South Korean robotics company called Robotis.
 ![A photo of Darwin Op's and a Darwin Op2](./images/darwin_op2_guide/Darwins.jpg 'Darwin Op (dark grey), Darwin Op2 (white)')
 
-Some of the main aspects in which a Darwin Op2 can be used are:
+### Some of the main aspects in which a Darwin Op2 can be used are:
 
 - Education
 - Outreach purposes
 - Research
-  The current NUbots team uses the Darwin op2's for outreach events and education by providing in-depth talks and demonstration's at local schools, university events and more.
-  As time passed, the original Darwin robot, called the Darwin Op, was later replaced with the Darwin Op2 to keep up with advancements in robotics technology and to help improve the limitations of the Op.
 
-Some limitations of the Darwin Op include:
+The current NUbots team uses the Darwin op2's for outreach events and education by providing in-depth talks and demonstration's at local schools, university events and more.
+
+As time passed, the original Darwin robot, called the Darwin Op, was later replaced with the Darwin Op2 to keep up with advancements in robotics technology and to help improve the limitations of the Op.
+
+### Some limitations of the Darwin Op include:
 
 - Limited Hardware Capabilities
 
@@ -39,7 +41,7 @@ Some limitations of the Darwin Op include:
   - Vision
   - Perception
 
-Compared to the Darwin Op2:
+### Compared to the Darwin Op2:
 
 - Hardware Capabilities
 
@@ -74,13 +76,13 @@ The ways that we are focussing on are:
 - For first time flashing for the demo.
 
 1. Download Tuxboot from the [SourceForge website](https://sourceforge.net/projects/tuxboot/files/0.6/). For this demonstration we will be downloading the Linux version.
-   ![The SourceForge Tuxboot page showing the Home/0.6 directory](./images/darwin_op2_guide/Tuxboot1.jpg 'navigate into the 0.6 folder')
-   ![The SourceForge Tuxboot page showing the Home/0.6/Linux directory](./images/darwin_op2_guide/Tuxboot2.jpg 'navigate into the Linux folder')
+   ![The SourceForge Tuxboot page showing the Home/0.6 directory](./images/darwin_op2_guide/Tuxboot1.jpg 'Navigate into the 0.6 folder.')
+   ![The SourceForge Tuxboot page showing the Home/0.6/Linux directory](./images/darwin_op2_guide/Tuxboot2.jpg 'Navigate into the Linux folder.')
 
 Tuxboot is a very helpful tool that creates bootable USB drives. By downloading Tuxboot from SourceForge, we can prepare a USB for recovery.
 
 2. When the first step is complete, run Tuxboot 0.6.
-   ![The Robotis page showing the usage of Tuxboot 0.6](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis')
+   ![The Robotis page showing the usage of Tuxboot 0.6](https://emanual.robotis.com/assets/images/platform/op/op_039.jpg 'Photo from Robotis of the Tuxboot application.')
 
 Running Tuxboot helps prepare the USB drive for the Clonezilla software.
 
@@ -88,28 +90,28 @@ Running Tuxboot helps prepare the USB drive for the Clonezilla software.
    ![The SourceForge Clonezilla download page](./images/darwin_op2_guide/Tuxboot4.jpg 'Tuxboot 0.6')
 
 Click onto the 'Files' tab, then select 'clonezilla_live_stable'.
-![The SourceForge Clonezilla page showing the files tab, along with folders](./images/darwin_op2_guide/Tuxboot8.jpg 'navigate into the files tab')
+![The SourceForge Clonezilla page showing the files tab, along with folders](./images/darwin_op2_guide/Tuxboot8.jpg 'Navigate into the files tab.')
 
 This will then direct you to a tab filled with different clonezilla versions. What we are looking for is the 'OldFiles' section.
-![The SourceForge Clonezilla page showing clonezilla versions](./images/darwin_op2_guide/Tuxboot5.jpg 'navigate into the the old files folder')
+![The SourceForge Clonezilla page showing clonezilla versions](./images/darwin_op2_guide/Tuxboot5.jpg 'Navigate into the the old files folder.')
 
 Clicking into this, we now need to look for the section called '2.0.1-5' (in the following picture, it is the middle option).
-![The SourceForge Clonezilla page showing version folders](./images/darwin_op2_guide/Tuxboot6.jpg 'navigate into the folder 2.0.1-5')
+![The SourceForge Clonezilla page showing version folders](./images/darwin_op2_guide/Tuxboot6.jpg 'Navigate into the folder 2.0.1-5.')
 
 In this folder, we need to download 'clonezilla-live-2.0.1-5-i486.iso'.
-![The SourceForge Clonezilla page showing iso files](./images/darwin_op2_guide/Tuxboot7.jpg 'in the following picture, it is the middle option')
+![The SourceForge Clonezilla page showing iso files](./images/darwin_op2_guide/Tuxboot7.jpg 'In the following picture, it is the middle option.')
 
 Clonezilla is a recovery tool which allows the user to create or restore disk images. This software is essential for recovering the Darwin Op2 system.
 
 4. When you have successfully downloaded Clonezilla, reopen Tuxboot. The select the 'pre=downloaded' option on screen.
    Select the 'clonezilla-live-2.0.1-5-i486.iso' from your files. Make sure you have ISO selected in the drop-down menu, for the 'Type' selection, pick USB and tick the MD5 check box.
-   ![Clonezilla 6](https://emanual.robotis.com/assets/images/platform/op/op_041.jpg 'Photo from Robotis')
+   ![Clonezilla 6](https://emanual.robotis.com/assets/images/platform/op/op_041.jpg 'Photo from Robotis of the Tuxboot application.')
 
 After you have done this step, press 'OK' and let the program run.
-![Clonezilla 7](https://emanual.robotis.com/assets/images/platform/op/op_043.jpg 'Photo from Robotis')
+![Clonezilla 7](https://emanual.robotis.com/assets/images/platform/op/op_043.jpg 'Photo from Robotis of Tuxboot downloading the necessary files.')
 
 Once this is complete press 'Exit'.
-![Clonezilla 8](https://emanual.robotis.com/assets/images/platform/op/op_044.jpg 'Photo from Robotis')
+![Clonezilla 8](https://emanual.robotis.com/assets/images/platform/op/op_044.jpg 'Photo from Robotis of the completed process.')
 
 Using Tuxboot and selecting the Clonezilla iso, the user has now created a bootable USB drive which is ready for the recovery files.
 
@@ -119,13 +121,13 @@ This completes the Clonezilla portion of this recovery USB.
 
 5. Open your USB in your files but leave this for now and [go to SourceForge](https://sourceforge.net/projects/darwinop/files/Software/Main%20Controller/Recovery%20USB/)
    We now need to download the Darwin recovery files. For this example, we are downloading the `ROBOTIS-OP2_Recovery_20150326.zip`.
-   ![The SourceForge Darwin recovery page showing recovery files](./images/darwin_op2_guide/Recovery1.jpg 'for the following picture, it is the middle option')
+   ![The SourceForge Darwin recovery page showing recovery files](./images/darwin_op2_guide/Recovery1.jpg 'for the following picture, it is the middle option.')
 
 After this has finished downloading, we need to create a `home` folder in our USB. When you have created such folder, click into it and create another folder called `partimag`, then click into it.
 Leave this for the time being.
 
 Now, go into your downloads and locate your `ROBOTIS-OP2_Recovery_20150326.zip`, unzip the file and click into it.
-![The unzipped file of the darwin recovery folder](./images/darwin_op2_guide/Recovery2.jpg 'it should look like this')
+![The unzipped file of the darwin recovery folder](./images/darwin_op2_guide/Recovery2.jpg 'it should look like this.')
 
 Select all these files and move them into your `partimag` folder.
 `USB / home / partimag`
