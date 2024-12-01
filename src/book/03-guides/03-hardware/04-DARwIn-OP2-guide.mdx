@@ -8,22 +8,22 @@ authors:
   - Corah Oliver (@yippyy)
 ---
 
-## Darwin Op2 Guide
+## DARwIn-OP2 Guide
 
-The Darwin Op2 robot is a small humanoid robot that was originally developed by RoMeLa (Robotics and Mechanisms Laboratory) in collaboration with a South Korean robotics company called Robotis.
-![A photo of Darwin Op's and a Darwin Op2](./images/darwin_op2_guide/Darwins.jpg 'Darwin Op (dark grey), Darwin Op2 (white)')
+The DARwIn-OP2 robot is a small humanoid robot that was originally developed by RoMeLa (Robotics and Mechanisms Laboratory) in collaboration with a South Korean robotics company called Robotis.
+![A photo of DARwIn-OP's and a DARwIn-OP2](./images/darwin_op2_guide/Darwins.jpg 'DARwIn-OP (dark grey), DARwIn-OP2 (white)')
 
-### Some of the main aspects in which a Darwin Op2 can be used are:
+### Some of the main aspects in which a DARwIn-OP2 can be used are:
 
 - Education
 - Outreach purposes
 - Research
 
-The current NUbots team uses the Darwin op2's for outreach events and education by providing in-depth talks and demonstration's at local schools, university events and more.
+The current NUbots team uses the DARwIn-OP2's for outreach events and education by providing in-depth talks and demonstration's at local schools, university events and more.
 
-As time passed, the original Darwin robot, called the Darwin Op, was later replaced with the Darwin Op2 to keep up with advancements in robotics technology and to help improve the limitations of the Op.
+As time passed, the original DARwIn robot, called the DARwIn-OP, was later replaced with the DARwIn-OP2 to keep up with advancements in robotics technology and to help improve the limitations of the original OP.
 
-### Some limitations of the Darwin Op include:
+### Some limitations of the DARwIn-OP include:
 
 - Limited Hardware Capabilities
 
@@ -41,7 +41,7 @@ As time passed, the original Darwin robot, called the Darwin Op, was later repla
   - Vision
   - Perception
 
-### Compared to the Darwin Op2:
+### Compared to the DARwIn-OP2:
 
 - Hardware Capabilities
 
@@ -58,7 +58,7 @@ As time passed, the original Darwin robot, called the Darwin Op, was later repla
   - Enhanced vision processing software
   - More accurate ball detection
 
-### Darwin OP2 Specifications
+### DARwIn-OP2 Specifications
 
 - Mainboard: PICO-CV01
 - Cpu: Intel Atom N2600 @1.6GHz single core
@@ -72,7 +72,7 @@ As time passed, the original Darwin robot, called the Darwin Op, was later repla
 Creating a recovery USB is helpful in many ways.
 The ways that we are focussing on are:
 
-- Completely flashing a Darwin Op2 robot
+- Completely flashing a DARwIn-OP2 robot
 - For first time flashing for the demo.
 
 1. Download Tuxboot from the [SourceForge website](https://sourceforge.net/projects/tuxboot/files/0.6/). For this demonstration we will be downloading the Linux version.
@@ -101,7 +101,7 @@ Clicking into this, we now need to look for the section called '2.0.1-5' (in the
 In this folder, we need to download 'clonezilla-live-2.0.1-5-i486.iso'.
 ![The SourceForge Clonezilla page showing iso files](./images/darwin_op2_guide/Tuxboot7.jpg 'In the following picture, it is the middle option.')
 
-Clonezilla is a recovery tool which allows the user to create or restore disk images. This software is essential for recovering the Darwin Op2 system.
+Clonezilla is a recovery tool which allows the user to create or restore disk images. This software is essential for recovering the DARwIn-OP2 system.
 
 4. When you have successfully downloaded Clonezilla, reopen Tuxboot. The select the 'pre=downloaded' option on screen.
    Select the 'clonezilla-live-2.0.1-5-i486.iso' from your files. Make sure you have ISO selected in the drop-down menu, for the 'Type' selection, pick USB and tick the MD5 check box.
@@ -115,26 +115,30 @@ Once this is complete press 'Exit'.
 
 Using Tuxboot and selecting the Clonezilla iso, the user has now created a bootable USB drive which is ready for the recovery files.
 
-This completes the Clonezilla portion of this recovery USB.
+<Alert>
+   This completes the Clonezilla portion of this recovery USB.
+</Alert>
 
-**Now that you have successfully created a Clonezilla USB, we now need to put the recovery software onto it. This is done by following the instructions below.**
+Now that you have successfully created a Clonezilla USB, we now need to put the recovery software onto it. This is done by following the instructions below.
 
 5. Open your USB in your files but leave this for now and [go to SourceForge](https://sourceforge.net/projects/darwinop/files/Software/Main%20Controller/Recovery%20USB/)
-   We now need to download the Darwin recovery files. For this example, we are downloading the `ROBOTIS-OP2_Recovery_20150326.zip`.
-   ![The SourceForge Darwin recovery page showing recovery files](./images/darwin_op2_guide/Recovery1.jpg 'For the following picture, it is the middle option.')
+   We now need to download the DARwIn recovery files. For this example, we are downloading the `ROBOTIS-OP2_Recovery_20150326.zip`.
+   ![The SourceForge DARwIn recovery page showing recovery files](./images/darwin_op2_guide/Recovery1.jpg 'For the following picture, it is the middle option.')
 
 After this has finished downloading, we need to create a `home` folder in our USB. When you have created such folder, click into it and create another folder called `partimag`, then click into it.
 Leave this for the time being.
 
 Now, go into your downloads and locate your `ROBOTIS-OP2_Recovery_20150326.zip`, unzip the file and click into it.
-![The unzipped file of the darwin recovery folder](./images/darwin_op2_guide/Recovery2.jpg 'The process should look like this.')
+![The unzipped file of the DARwIn recovery folder](./images/darwin_op2_guide/Recovery2.jpg 'The process should look like this.')
 
 Select all these files and move them into your `partimag` folder.
 `USB / home / partimag`
 
-The user must download the recovery files from SourceForge and move them into the correct places before flashing the Darwin Op2.
+The user must download the recovery files from SourceForge and move them into the correct places before flashing the DARwIn-OP2.
 
-**You have now completed the ‘creating the recovery USB’ section successfully!**
+<Alert>
+   You have now completed the ‘creating the recovery USB’ section successfully!
+</Alert>
 
 ### Running the recovery USB through the BIOS
 
@@ -198,25 +202,25 @@ Now that we have a recovery USB created with all the right files placed upon it,
 
        - Select one of the following options **'(0) Power Off, (1) Reboot'**
 
-   14. When the power off have successfully shut the Darwin Op2 down, remove the USB and reboot the robot.
+   14. When the power off have successfully shut the DARwIn-OP2 down, remove the USB and reboot the robot.
 
 For more information about this process check out [Robotis's Clonezilla recovery page](https://emanual.robotis.com/docs/en/platform/op/maintenance/).
 
-### Calibrating the Darwin OP2 (Ball Calibration)
+### Calibrating the DARwIn-OP2 (Ball Calibration)
 
-1. Connect the Darwin Op2 via ethernet onto a laptop on the same internet.
+1. Connect the DARwIn-OP2 via ethernet onto a laptop on the same internet.
 
-2. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the Darwin Op2, normal HDMI being connected to the monitor).
+2. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the DARwIn-OP2, normal HDMI being connected to the monitor).
 
-3. Start the Darwin Op2 so the standard demo program is running. Once booted, and in the initial pose, sitting.
+3. Start the DARwIn-OP2 so the standard demo program is running. Once booted, and in the initial pose, sitting.
 
-4. Connect a keyboard and mouse to the Darwin Op2 and use them to connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password "111111" (six ones, no quotation marks)**.
+4. Connect a keyboard and mouse to the DARwIn-OP2 and use them to connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password "111111" (six ones, no quotation marks)**.
 
-5. Once you are connected to the Darwin Op2, use a browser (either chrome or firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/).
+5. Once you are connected to the DARwIn-OP2, use a browser (either chrome or firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/).
 
 6. While on this web address you should see the camera's live feed, with camera parameters on the side and bottom of image.
 
-7. The important parameter is the ball (you will find this is the Darwin transport case. It is orange in colour).
+7. The important parameter is the ball (you will find this is the DARwIn transport case. It is orange in colour).
    You will see the section of the camera view highlight pixels in orange, this is showing you an output of its applied color look up table for the ball. You don't want too many of these random
    pixels around if there is no ball in front of the robot, but once you place a ball in front of the robot, it should see it with the orange applied over the ball.
 
@@ -224,7 +228,7 @@ For more information about this process check out [Robotis's Clonezilla recovery
 
 For more information on camera Calibration visit the [Robotis website camera calibration page](https://emanual.robotis.com/docs/en/platform/op2/getting_started/#camera-calibration).
 
-### Calibrating the DARwIn OP2 (Walk Tuner)
+### Calibrating the DARwIn-OP2 (Walk Tuner)
 
 1. Connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password "111111"**.
 
