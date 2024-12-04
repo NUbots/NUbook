@@ -19,7 +19,9 @@ To run the RoboCup configuration tool, run `./b configure -i` and turn on `ROLE_
 
 It is possible to run `./b run robocupconfiguration` locally to see the tool, but it is best used on a robot.
 
-Install the files to robot number `X` with `./b install -co nX`. On the robot, run `sudo ./robocupconfiguration`. `sudo` is required if changing any network settings.
+Install the files to robot number `X` with `./b install -co nX`. Alternatively, `./b install -co -u nubots <robot's IP address>` if `X` is unknown.
+
+On the robot, run `sudo ./robocupconfiguration`. `sudo` is required if changing any network settings.
 
 The following code snippit shows what the ncurses terminal interface used in the RoboCup configuration tool looks like.
 
