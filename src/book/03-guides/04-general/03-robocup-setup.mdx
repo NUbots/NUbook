@@ -15,7 +15,7 @@ This guide details the steps required to set up the robot for RoboCup games. It 
 
 The RoboCup configuration tool involves an ncurses interface for easy set up of the robot in a game. It contains sections for network settings and general game configuration.
 
-To run the RoboCup configuration tool, run `./b configure -i` and turn on `ROLE_robocupconfiguration`. Run `./b build` to build the binary.
+To run the RoboCup configuration tool, run `./b configure -i` and turn on `ROLE_robocupconfiguration`. Press `c` to configure and `g` to generate. Run `./b build` to build the binary.
 
 It is possible to run `./b run robocupconfiguration` locally to see the tool, but it is best used on a robot.
 
@@ -146,8 +146,7 @@ The networking on the robot needs to be changed from the default NUbots laborato
 
        ```bash
        sudo systemctl daemon-reload
-       sudo systemctl restart systemd-networkd
-       sudo systemctl restart wpa_supplicant@wlp58s0
+       sudo systemctl restart systemd-networkd wpa_supplicant@wlp58s0
        ```
 
 To change back to the NUbots laboratory network:
@@ -162,8 +161,7 @@ To change back to the NUbots laboratory network:
 
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl restart systemd-networkd
-   sudo systemctl restart wpa_supplicant@wlp58s0
+   sudo systemctl restart systemd-networkd wpa_supplicant@wlp58s0
    ```
 
 ### Troubleshooting
