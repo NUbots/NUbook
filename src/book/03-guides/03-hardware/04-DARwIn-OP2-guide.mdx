@@ -67,6 +67,80 @@ As time passed, the original DARwIn robot, called the DARwIn-OP, was later repla
 - Sub controller: CM-740
 - Linux mint 17.3 'Rosa' installed on PICO-CV01 board
 
+### Powering on the DARwIn-OP2
+
+To power the DARwIn-OP2, following these steps:
+
+1. Position the DARwIn-OP2 into the ready position.
+   ![The Robotis page showing the ready position of the DARwIn-OP2](./images/darwin_op2_guide/startingPosition.jpg 'Photo from Robotis of the ready position.')
+   <Alert>
+   Make sure you have put the DARwIn into this starting position. Any other position may result in major damage to the robot.
+   </Alert>
+
+2. Connect the 12V DC power supply connector into the DC jack located at the back of the robot.
+   ![The Robotis page showing where the DC connector should go](./images/darwin_op2_guide/dcConnector.jpg 'Photo from Robotis of the location where the DC connector belongs.')
+   <Alert>
+   Make sure the power supply you are using is exactly 12V. Any other power supply may result in major damage to the robot.
+   </Alert>
+
+3. Plug the power supply into the wall socket and flip the switch to on. After this, turn the DARwIn-OP2 power switch on. This is located to the right of the DC jack.
+   ![The Robotis page showing the power switch located on the DARwIn-OP2](./images/darwin_op2_guide/powerSwitch.jpg 'Photo from Robotis of the power switch.')
+
+4. Once the DARwIn-OP2 has booted, the starting position will go stiff and the back panel will light up with different LED colours.
+   ![The Robotis page showing the boot sequence](https://emanual.robotis.com/assets/images/platform/op2/op2_010.png 'Photo from Robotis of the boot sequence.')
+
+### Running the demonstration programs on the DARwIn-OP2
+
+There are different types of operation modes for the DARwIn-OP2.
+
+1. Demonstration-ready mode
+
+   This is the default mode when the DARwIn-OP2 is fully booted and is in the seated position.
+
+   The LEDs on the back panel will light up in the sequence: LED 1 (red), LED 2 (blue), and LED 3 (green).
+   ![The Robotis page showing the demonstration-ready mode LEDs](./images/darwin_op2_guide/demonstrationMode.jpg 'Photo from Robotis of the demonstration-ready mode LEDs.')
+
+2. Autonomous soccer mode
+
+   This mode allows the DARwIn-OP2 the ability to follow and kick a soccer ball. The head camera will follow the ball while the legs move along to follow.
+   While in this mode, the robot may fall. This is not an issue due to the DARwIn-OP2 is programmed to recover by pulling itself from the floor.
+
+   To check if the DARwIn-OP2 is in this mode. The LEDs on the back will light up in the sequence: LED 1 (red).
+   ![The Robotis page showing the autonomous soccer mode LEDs](./images/darwin_op2_guide/soccerMode.jpg 'Photo from Robotis of the autonomous soccer mode LEDs.')
+
+3. Interactive motion mode
+
+   This mode allows the DARwIn-OP2 to perform pre-programmed motions.
+   ![The Robotis page showing the pre-programmed motions](./images/darwin_op2_guide/motions.jpg 'Photo from Robotis of the pre-programmed motions.')
+
+   To check if the DARwIn-OP2 is in this mode. The LEDs on the back panel will light up in the sequence: LED 2 (blue).
+   ![The Robotis page showing the interactive motion mode LEDs](./images/darwin_op2_guide/interactiveMode.jpg 'Photo from Robotis of the interactive motion mode LEDs.')
+
+4. Vision processing mode
+
+   This mode allows the DARwIn-OP2 to observe coloured cards to perform motions based upon them.
+   ![The Robotis page showing the coloured cards](./images/darwin_op2_guide/motionCards.jpg 'Photo from Robotis of the coloured cards.')
+   These coloured cards can be downloaded at the [SourceForge website](https://sourceforge.net/projects/darwinop/files/etc/ColorCards.ppt/download).
+
+   To check if the DARwIn-OP2 is in this mode. The LEDs on the back panel will light up in the sequence: LED 3 (green).
+   ![The Robotis page showing the vision processing mode LEDs](./images/darwin_op2_guide/visionProcessing.jpg 'Photo from Robotis of the vision processing mode LEDs.')
+
+<Alert>
+
+To switch between modes: press the **MODE** button.
+
+To start each mode: press the **START** button.
+
+To reset the actuators and sub-controller, press the **RESET** button.
+
+</Alert>
+<Alert>
+
+WARNING: Upon pressing the **RESET** button, torque will be released on ALL of the actuators causing the DARwIn-OP2 to go limp.
+Be careful when handling.
+
+</Alert>
+
 ### Creating the recovery USB
 
 Creating a recovery USB is helpful in many ways.
