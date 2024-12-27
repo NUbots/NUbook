@@ -284,23 +284,25 @@ For more information about this process check out the [Robotis Clonezilla recove
 
 If the DARwIn-OP2 is unable to track the ball well, then vision needs calibrating.
 
-1. Connect the DARwIn-OP2 via ethernet onto a laptop on the same internet.
+1. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the DARwIn-OP2, normal HDMI being connected to the monitor).
 
-2. Using a portable monitor, plug in a HDMI to mini HDMI cable (mini is to be connect to the DARwIn-OP2, normal HDMI being connected to the monitor).
+   <Alert>
+      Do not power the monitor from the DARwIn-OP2.
+   </Alert>
 
-3. Start the DARwIn-OP2 so the standard demo program is running. Once booted, it should be in the initial sitting pose.
+2. Start the DARwIn-OP2 so the standard demo program is running. Once booted, it should be in the initial sitting pose.
 
-4. Connect a keyboard and mouse to the DARwIn-OP2 and use them to connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password `111111` (six ones)**.
+3. Connect a keyboard and mouse to the DARwIn-OP2 and use them to connect to the robot via ssh in the terminal: `ssh robotis@192.168.123.1`, **with password `111111` (six ones)**.
 
-5. Once you are connected to the DARwIn-OP2, use a browser (e.g. Chrome or Firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/).
+4. Once you are connected to the DARwIn-OP2, use a browser (e.g. Chrome or Firefox) to talk to the robot. The web address should be (http://192.168.123.1:8080/).
 
-6. While on this web address you should see the camera's live feed, with camera parameters on the side and bottom of image.
+5. While on this web address you should see the camera's live feed, with camera parameters on the side and bottom of image.
 
-7. The important parameter is the orange ball, which can be found in the DARwIn transport case.
+6. The important parameter is the orange ball, which can be found in the DARwIn transport case.
    You will see the section of the camera view highlight pixels in orange, this is showing you an output of its applied color look up table for the ball. You don't want too many of these random
    pixels around if there is no ball in front of the robot, but once you place a ball in front of the robot, it should see it with the orange applied over the ball.
 
-8. Once you are happy with the calibration, press save and exit the program.
+7. Once you are happy with the calibration, press save and exit the program.
 
 For more information on camera calibration visit the [Robotis website camera calibration page](https://emanual.robotis.com/docs/en/platform/op2/getting_started/#camera-calibration).
 
