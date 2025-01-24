@@ -233,7 +233,7 @@ emit<Task>(std::make_unique<Continue>());
 
 ### Wait Tasks
 
-A Wait Task is a special Task that can be emitted by a Provider to request the Provider to be rerun at a given time. If the Provider runs again for any other reason before the Wait elapses, the Wait is cancelled. For example, if a servo Provider requests the servo to move it can emit a Wait Task so that it reruns after the servo has finished moving, so that it can emit a Done Task. If another servo Task is requested, this cancels the Wait.
+A Wait Task is a special Task that can be emitted by a Provider to request the Provider to be rerun at a given time. If the Provider runs again for any other reason before the Wait elapses, the Wait is cancelled unless a Continue Task is emitted. For example, if a servo Provider requests the servo to move it can emit a Wait Task so that it reruns after the servo has finished moving, so that it can emit a Done Task. If another servo Task is requested with a new Wait, this cancels the original Wait.
 
 ```cpp
 emit<Task>(std::make_unique<Wait>(NUClear::clock::now() + std::chrono::seconds(5)));
