@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Nbs
-description: ReadMe files for the nbs modules in the main NuBots codebase
-slug: /readmes/module/nbs
+description: .
+slug: /readmes/Module/nbs
 ---
 
 # Player

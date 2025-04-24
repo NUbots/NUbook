@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Localisation
-description: ReadMe files for the localisation modules in the main NuBots codebase
-slug: /readmes/module/localisation
+description: .
+slug: /readmes/Module/localisation
 ---
 
 # FieldLocalisationNLopt

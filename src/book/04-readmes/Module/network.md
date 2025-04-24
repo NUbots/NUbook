@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Network
-description: ReadMe files for the network modules in the main NuBots codebase
-slug: /readmes/module/network
+description: .
+slug: /readmes/Module/network
 ---
 
 # RobotCommunication

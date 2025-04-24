@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Motion
-description: ReadMe files for the motion modules in the main NuBots codebase
-slug: /readmes/module/motion
+description: .
+slug: /readmes/Module/motion
 ---
 
 # IKKick

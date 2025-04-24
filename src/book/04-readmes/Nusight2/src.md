@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Nusight2
 title: Client
-description: ReadMe files for the client nusight2 modules in the main NuBots codebase
-slug: /readmes/nusight2/src
+description: .
+slug: /readmes/Nusight2/src
 ---
 
 # NUsight client networking

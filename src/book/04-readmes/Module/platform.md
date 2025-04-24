@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Nusense
-description: ReadMe files for the NUSense modules in the main NuBots codebase
-slug: /readmes/module/platform
+description: .
+slug: /readmes/Module/platform
 ---
 
 # NUSense HardwareIO

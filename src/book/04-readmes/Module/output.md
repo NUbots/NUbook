@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Output
-description: ReadMe files for the output modules in the main NuBots codebase
-slug: /readmes/module/output
+description: .
+slug: /readmes/Module/output
 ---
 
 # Overview

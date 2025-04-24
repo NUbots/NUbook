@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Extension
-description: ReadMe files for the extension modules in the main NuBots codebase
-slug: /readmes/module/extension
+description: .
+slug: /readmes/Module/extension
 ---
 
 # Director

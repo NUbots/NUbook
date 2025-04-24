@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Planning
-description: ReadMe files for the planning modules in the main NuBots codebase
-slug: /readmes/module/planning
+description: .
+slug: /readmes/Module/planning
 ---
 
 # PlanLook

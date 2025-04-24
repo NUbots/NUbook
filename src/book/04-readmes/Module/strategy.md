@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Strategy
-description: ReadMe files for the strategy modules in the main NuBots codebase
-slug: /readmes/module/strategy
+description: .
+slug: /readmes/Module/strategy
 ---
 
 # WalkInsideBoundedBox

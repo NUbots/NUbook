@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Actuation
-description: ReadMe files for the actuation modules in the main NuBots codebase
-slug: /readmes/module/actuation
+description: .
+slug: /readmes/Module/actuation
 ---
 
 # Kinematics

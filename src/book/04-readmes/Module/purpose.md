@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Purpose
-description: ReadMe files for the purpose modules in the main NuBots codebase
-slug: /readmes/module/purpose
+description: .
+slug: /readmes/Module/purpose
 ---
 
 # PS3Walk

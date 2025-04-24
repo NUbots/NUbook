@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Nuclear
 title: Nubots
-description: ReadMe files for the NUbots nuclear modules in the main NuBots codebase
-slug: /readmes/nuclear/README.md
+description: .
+slug: /readmes/Nuclear/README.md
 ---
 
 # NUClear Roles

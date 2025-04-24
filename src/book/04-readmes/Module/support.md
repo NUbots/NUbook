@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Logging
-description: ReadMe files for the logging modules in the main NuBots codebase
-slug: /readmes/module/support
+description: .
+slug: /readmes/Module/support
 ---
 
 # DataLogging

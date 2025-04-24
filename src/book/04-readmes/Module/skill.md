@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Skill
-description: ReadMe files for the skill modules in the main NuBots codebase
-slug: /readmes/module/skill
+description: .
+slug: /readmes/Module/skill
 ---
 
 # ScriptKick

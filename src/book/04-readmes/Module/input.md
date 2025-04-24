@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Input
-description: ReadMe files for the input modules in the main NuBots codebase
-slug: /readmes/module/input
+description: .
+slug: /readmes/Module/input
 ---
 
 # NatNet

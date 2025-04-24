@@ -2,8 +2,8 @@
 section: Readmes
 chapter: Module
 title: Vision
-description: ReadMe files for the vision modules in the main NuBots codebase
-slug: /readmes/module/vision
+description: .
+slug: /readmes/Module/vision
 ---
 
 # GoalDetector
