@@ -13,7 +13,6 @@ const iconMap = {
   Team: IconTeam,
   System: IconSystem,
   Guides: IconGuides,
-  Readmes: IconGuides,
   ['Kitchen Sink']: IconTools,
 }
 
