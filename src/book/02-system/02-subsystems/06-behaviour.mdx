@@ -55,7 +55,7 @@ The Soccer purpose uses GameController information to determine how to act. If i
 
 ### Keyboard Walk
 
-The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/KeyboardWalk) is a purpose-level module used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase, and acts as an interface for any one of them.
+The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/purpose/KeyboardWalk) is a purpose-level module used for **testing** and **demonstration** purposes. Keyboard walk can use any of the walk engines in the codebase, and acts as an interface for any one of them.
 
 Keyboard walk uses **keyboard inputs** to control the robot. The inputs available are detailed in the following table.
 
@@ -92,7 +92,7 @@ The [**fake/keyboardwalk** role](https://github.com/NUbots/NUbots/blob/main/role
 
 ### PS3 Walk
 
-The [PS3 walk module](https://github.com/NUbots/NUbots/tree/main/module/behaviour/strategy/PS3Walk) is an interface for **testing** and **demonstrating** the walk and other functionalities using a **PS3 controller**.
+The [PS3 walk module](https://github.com/NUbots/NUbots/tree/main/module/purpose/PS3Walk) is an interface for **testing** and **demonstrating** the walk and other functionalities using a **PS3 controller**.
 
 The module connects to the PS3 controller using USB or bluetooth and reacts based on joystick or button input.
 
@@ -115,9 +115,101 @@ The module connects to the PS3 controller using USB or bluetooth and reacts base
 | Cross                     | Perform Crouch move.                       |
 | Square                    | Perform Wave move.                         |
 
-To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and run the binary. Plug the PS3 controller into the robot using a USB cable. The lights above the plug on the controller should then start blinking, indicating it is attempting to pair with the robot. When this happens press the PS/home button and the controller will pair with the robot.
+To use this module, build the [PS3Walk role](https://github.com/NUbots/NUbots/blob/main/roles/ps3walk.role) and install it on the robot. Ensure the PS3 controller is paired and connected to the right robot. You can set up bluetooth on the robot and pair the controller using the steps below. Once these have been run once, the robot should automatically connect to the controller when both the robot and controller are powered. When you are ready, run `./ps3walk` on the robot to begin controlling it.
 
 The robot will initially not perform any action. If you want the robot to stand, pick up the robot and press the start button. It will then move to its standing position and begin looking for walk inputs.
+
+#### Setup
+
+1. Install `bluez`, `bluez-utils`, and `bluez-plugins` if they have not already been installed:
+   ```
+   pacman -S --needed bluez bluez-utils bluez-plugins
+   ```
+2. Restart the system:
+   ```
+   reboot now
+   ```
+   This is only necessary if the packages were not previously installed.
+3. Start the bluetooth service:
+   ```
+   systemctl start bluetooth.service
+   ```
+
+<details>
+<summary> Start bluetooth automatically </summary>
+
+Bluetooth can be powered on automatically when the system starts. This enables the controllers to
+connect without having to run `systemctl start bluetooth.service` and `bluetoothctl power on`. This
+is not currently enable by default in the existing installation. Some robots might have this enabled.
+
+1. Run
+   ```
+   systemctl enable bluetooth.service
+   ```
+2. Set `AutoEnable=true` in `/etc/bluetooth/main.conf`:
+   ```
+   [Policy]
+   AutoEnable=true
+   ```
+
+Now, after restarting the robot, and having previously paired the PS3 controller (see below), the PS3 controller
+will connect to the robot automatically.
+
+<Alert type='info'>
+
+`ps3walk` still needs to be started in order to control the robot.
+
+</Alert>
+
+</details>
+
+#### Pairing the PS3 Controller via Bluetooth
+
+1. Unplug and power off the PS3 controller.
+2. Run the interactive program `bluetoothctl`, and type the following commands:
+   ```
+   power on
+   scan on
+   discoverable on
+   ```
+   If bluetooth is working correctly, you might see other devices appear and disappear.
+3. Turn on the PS3 controller by pressing the middle PS button. The four LEDS should start flashing quickly.
+4. Plug the PS3 controller into the computer with a USB cable.
+5. Type `yes` when the following prompt appears:
+   ```
+   Authorize service 00001124-0000-1000-8000-00805f9b34fb (yes/no)
+   ```
+
+The PS3 controller is now paired. You can unplug it and it will remain connected.
+
+<Alert type='warning'>
+The controllers are extremely finicky. Placing them on a table or shaking them can trigger multiple buttons to be pressed!
+</Alert>
+
+<Alert type='info'>
+The steps are based on the <a href="https://wiki.archlinux.org/title/Gamepad#Pairing_via_Bluetooth">Arch Linux controller pairing guide</a>. If you are having trouble or are connecting a different controller try using their guide as a starting point.
+</Alert>
+
+#### Verifying the PS3 Controller is functioning correctly.
+
+Verifying the PS3 controller is connected and sending messages is useful for debugging the range, interference, event codes, and making sure the controller is connect to the right robot.
+
+1. Install `joyutils`:
+   ```
+   pacman -S --needed joyutils
+   ```
+2. If you are connected via ssh run:
+   ```
+   jstest --event /dev/input/js0
+   ```
+   Otherwise, if you're connected to a virtual console:
+   ```
+   jstest /dev/input/js0
+   ```
+3. Move controller inputs, and press <kbd>Ctrl</kbd> + <kbd>C</kbd> to exit.
+
+Connecting multiple PS3 controllers is possible. The first PS3 controller that connects is located at `/dev/input/js0`. The second controller that connects is then located at `/dev/input/js1`.
+Additionally, the LEDs on the controllers show which number they are. This holds true regardless of whether the controller is connected over Bluetooth or USB.
 
 ### Script Runner
 
