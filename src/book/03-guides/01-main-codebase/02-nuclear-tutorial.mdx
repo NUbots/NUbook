@@ -123,12 +123,12 @@ Open `module/TestModule/src/TestModule.cpp`. There is one `on` statement here, t
 Inside this statement, after the `log_level` is set, add the following code
 
 ```cpp
-log<NUClear::TRACE>("This is a TRACE log.");
-log<NUClear::DEBUG>("This is a DEBUG log.");
-log<NUClear::INFO>("This is a INFO log.");
-log<NUClear::WARN>("This is a WARN log.");
-log<NUClear::ERROR>("This is a ERROR log.");
-log<NUClear::FATAL>("This is a FATAL log.");
+log<TRACE>("This is a TRACE log.");
+log<DEBUG>("This is a DEBUG log.");
+log<INFO>("This is a INFO log.");
+log<WARN>("This is a WARN log.");
+log<ERROR>("This is a ERROR log.");
+log<FATAL>("This is a FATAL log.");
 ```
 
 `log` will print to the terminal. The log level set from the configuration file determines what level logs are printed. The log level is currently on `INFO`. Let's compile and run the program again.
@@ -163,8 +163,8 @@ Always initialise your variables and add [documentation directives](/guides/gene
 Save and go to `TestModule.cpp`. Add in the following lines to read the configuration value and print a message to let the user know the increment size.
 
 ```cpp
-config.increment = cfg["increment"].as<int>();
-log<NUClear::INFO>("Increment is of size", config.increment);
+cfg.increment = config["increment"].as<int>();
+log<INFO>("Increment is of size", cfg.increment);
 ```
 
 Save, recompile and check that the program prints the message.
@@ -218,7 +218,14 @@ If this works, you can move onto the next section where we make our reactions.
 
 Reactions are chunks of code that will run given certain conditions are true. We will make two reactions, one that runs tasks whenever it gets a `Pong` message, and the other when it gets a `Ping` message.
 
-Head back to `TestModule.cpp`. Underneath the Configuration reactor, add in the following reaction
+Head back to `TestModule.cpp`. Add using statements after the namepace declaration
+
+```cpp
+using message::Ping;
+using message::Pong;
+```
+
+Underneath the Configuration reactor, add in the following reaction
 
 ```cpp
 on<Trigger<Ping>>().then([this](const Ping& ping) {
@@ -240,11 +247,11 @@ Next, we want to get the count from the `Ping` or `Pong` message, increment it, 
 
 ```cpp
 // Print the Ping message!
-log<NUClear::INFO>("Ping count", ping.count);
+log<INFO>("Ping count", ping.count);
 
 // Make a Pong message to send
 auto pong = std::make_unique<Pong>();
-pong->count = ping.count + config.increment;
+pong->count = ping.count + cfg.increment;
 
 // Send the message
 emit(pong);
@@ -254,11 +261,11 @@ And for the second reaction
 
 ```cpp
 // Print the Pong message!
-log<NUClear::INFO>("Pong count", pong.count);
+log<INFO>("Pong count", pong.count);
 
 // Make a Ping message to send
 auto ping = std::make_unique<Ping>();
-ping->count = pong.count + config.increment;
+ping->count = pong.count + cfg.increment;
 
 // Send the message
 emit(ping);
