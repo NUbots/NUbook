@@ -9,6 +9,7 @@ authors:
   - Kip Hamiltons (@KipHamiltons)
   - Josephus Paye II (@JosephusPaye)
   - Mikyla Peters (@miikyla)
+  - Thomas O'Brien (@Tom0brien)
 ---
 
 [Webots](https://cyberbotics.com/) is a physics environment created by Cyberbotics. This guide details how to set up Webots. It gives instructions on setting up Ubuntu (WSL) inside Windows for Windows users, and the rest of the guide is aimed at Ubuntu users (including Windows WSL Ubuntu users). If you would like to learn more about Webots itself, refer to [the Webots User Guide](https://cyberbotics.com/doc/guide/index).
@@ -99,6 +100,80 @@ sudo apt-get install cmake-curses-gui libprotobuf-dev protobuf-compiler libeigen
    Note that if webots is somewhere else, find it and use that path instead.
 
    Alternatively you can run `echo export WEBOTS_HOME=/usr/local/webots >> ~/.bashrc` to append the line to the `bashrc` file.
+
+## Running a NUbots Environment
+
+Follow these steps to set up a NUbots developed environment.
+
+1. Clone the NUWebots repository:
+
+   ```bash
+   cd ~
+   git clone https://github.com/NUbots/NUWebots.git
+   ```
+
+2. Move to the `NUWebots` folder:
+
+   ```bash
+   cd NUWebots
+   ```
+
+3. Install the python dependencies:
+
+   ```bash
+   pip3 install -r requirements.txt
+   ```
+
+4. Configure the codebase by running:
+
+   ```bash
+   ./b configure
+   ```
+
+   <Alert type="warning">
+
+   [You must have `WEBOTS_HOME` set or this will fail](webots-setup#install-webots).
+
+   </Alert>
+
+   <details>
+
+   <summary> Optional Flags </summary>
+   We can configure with several optional flags as follows:
+
+   ```bash
+   ./b configure [-i] [-- <flags>]
+   ```
+
+   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
+
+   | Flag                              | Effect                                                                                                         | Default             |
+   | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
+   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
+   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
+   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
+   | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
+   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
+
+   </details>
+
+5. Build the codebase by running
+
+   ```bash
+   ./b build
+   ```
+
+6. Launch Webots by running
+
+   ```bash
+   webots
+   ```
+
+7. Open a NUbots world file inside Webots.
+
+   1. Click on `File->Open World...`.
+
+   2. In the pop-up, navigate to the [~/NUWebots/worlds](https://github.com/NUbots/NUWebots/tree/main/worlds) folder on your computer and open the world you would like to run.
 
 ## Running the Official RoboCup Simulation in Webots
 
@@ -285,80 +360,6 @@ If you're running more than one robot, you will need to set up a Docker containe
    docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=2 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10022 robocup-vhsc-nubots:robocup webots/robocup
    docker container run --rm --network=host -e ROBOCUP_ROBOT_ID=3 -e ROBOCUP_TEAM_COLOR=blue -e ROBOCUP_SIMULATOR_ADDR=127.0.1.1:10023 robocup-vhsc-nubots:robocup webots/robocup
    ```
-
-## Running a NUbots Environment
-
-Follow these steps to set up a NUbots developed environment rather than the RoboCup environment.
-
-1. Clone the NUWebots repository:
-
-   ```bash
-   cd ~
-   git clone https://github.com/NUbots/NUWebots.git
-   ```
-
-2. Move to the `NUWebots` folder:
-
-   ```bash
-   cd NUWebots
-   ```
-
-3. Install the python dependencies:
-
-   ```bash
-   pip3 install -r requirements.txt
-   ```
-
-4. Configure the codebase by running:
-
-   ```bash
-   ./b configure
-   ```
-
-   <Alert type="warning">
-
-   [You must have `WEBOTS_HOME` set or this will fail](webots-setup#install-webots).
-
-   </Alert>
-
-   <details>
-
-   <summary> Optional Flags </summary>
-   We can configure with several optional flags as follows:
-
-   ```bash
-   ./b configure [-i] [-- <flags>]
-   ```
-
-   where `-i` runs an interactive configuration with `ccmake`, and `<flags>` can be any valid cmake command line flag. Some useful cmake flags are:
-
-   | Flag                              | Effect                                                                                                         | Default             |
-   | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
-   | `-DUSE_ASAN=ON`                   | Compile with [address sanitizer](https://clang.llvm.org/docs/AddressSanitizer.html)                            | `OFF`               |
-   | `-DUSE_UBSAN=ON`                  | Compile with [undefined behaviour sanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)      | `OFF`               |
-   | `-DENABLE_CLANG_TIDY=ON`          | Analyse the code being compiled with [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)                    | `OFF`               |
-   | `-DWEBOTS_HOME=path/to/webots`    | Tells the compiler where webots is (usually implicitly set by environment variable)                            | `/usr/local/webots` |
-   | `-DCMAKE_BUILD_TYPE=<build type>` | Tells the compiler what type of build type to use, out of {`Release`, `Debug`, `MinSizeRel`, `RelWithDebInfo`} | `Release`           |
-
-   </details>
-
-5. Build the codebase by running
-
-   ```bash
-   ./b build
-   ```
-
-6. Launch Webots by running
-
-   ```bash
-   webots
-   ```
-
-7. Open a NUbots world file inside Webots.
-
-   1. Click on `File->Open World...`.
-
-   2. In the pop-up, navigate to the [~/NUWebots/worlds](https://github.com/NUbots/NUWebots/tree/main/worlds) folder on your computer and open the world you would like to run.
 
 ## Creating a New Controller
 
