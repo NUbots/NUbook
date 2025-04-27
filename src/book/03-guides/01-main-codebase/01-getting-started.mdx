@@ -10,6 +10,7 @@ authors:
   - Mikyla Peters (@miikyla)
   - Lachlan Court (@LachlanCourt)
   - Corah Oliver (@yippyy)
+  - Thomas O'Brien (@Tom0brien)
 ---
 
 Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the `fake/keyboardwalk` binary (which uses simulated hardware) and seeing the robot move in NUsight.
@@ -181,18 +182,18 @@ Another useful tool for editing NUbots code in Visual Studio Code is the Remote 
 
 With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and run the code. This is an important step in our example.
 
-1. Clone the repo by running the following command in a terminal.
+1. Clone the repo and change into the cloned directory.
 
    ```bash
    git clone --recursive https://github.com/NUbots/NUbots.git
+   cd NUbots
    ```
 
    The repo will be cloned into a `NUbots` directory in the current working directory.
 
-2. Change into the cloned directory. We use [Poetry](https://python-poetry.org/) to manage Python dependencies. Install Poetry using the official installer:
+2. We use [Poetry](https://python-poetry.org/) to manage Python dependencies. Install Poetry using the official installer:
 
    ```bash
-   cd NUbots
    curl -sSL https://install.python-poetry.org | python3 -
    ```
    This command downloads and executes the official installation script for Poetry. For more details on installing Poetry, see the [official documentation](https://python-poetry.org/docs/#installing-with-the-official-installer). Once Poetry is installed, the build system (`./b`) will use it to handle Python dependencies specified in the project.
