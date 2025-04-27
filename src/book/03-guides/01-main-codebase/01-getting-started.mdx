@@ -189,18 +189,13 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
    The repo will be cloned into a `NUbots` directory in the current working directory.
 
-2. Change into the cloned directory and install the required Python dependencies.
+2. Change into the cloned directory. We use [Poetry](https://python-poetry.org/) to manage Python dependencies. Install Poetry using the official installer:
 
    ```bash
    cd NUbots
-   sudo -H pip3 install -r tools/requirements.txt
+   curl -sSL https://install.python-poetry.org | python3 -
    ```
-
-<Alert type='info'>
-
-If this fails, run `sudo apt-get update && sudo apt-get upgrade`.
-
-</Alert>
+   This command downloads and executes the official installation script for Poetry. For more details on installing Poetry, see the [official documentation](https://python-poetry.org/docs/#installing-with-the-official-installer). Once Poetry is installed, the build system (`./b`) will use it to handle Python dependencies specified in the project.
 
 ## Building the Code
 
