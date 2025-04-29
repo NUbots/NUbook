@@ -223,12 +223,20 @@ The Task will not be removed from the Director tree, unless it is a root Task. I
 emit<Task>(std::make_unique<Done>());
 ```
 
-### Idle Tasks
+### Continue Tasks
 
-An Idle Task is a special Task that can be emitted by a Provider to signal to continue running the Tasks it previously requested. For example, if a Provider is running a walk Task, it can emit an Idle Task to continue running the walk Task.
+A Continue Task is a special Task that can be emitted by a Provider to signal to continue running the Tasks it previously requested. For example, if a Provider is running a walk Task, it can emit a Continue Task to continue running the walk Task.
 
 ```cpp
-emit<Task>(std::make_unique<Idle>());
+emit<Task>(std::make_unique<Continue>());
+```
+
+### Wait Tasks
+
+A Wait Task is a special Task that can be emitted by a Provider to request the Provider to be rerun at a given time. If the Provider runs again for any other reason before the Wait elapses, the Wait is cancelled unless a Continue Task is emitted. For example, if a servo Provider requests the servo to move it can emit a Wait Task so that it reruns after the servo has finished moving, so that it can emit a Done Task. If another servo Task is requested with a new Wait, this cancels the original Wait.
+
+```cpp
+emit<Task>(std::make_unique<Wait>(NUClear::clock::now() + std::chrono::seconds(5)));
 ```
 
 ## Data
@@ -244,7 +252,7 @@ The `done` field is a boolean that is true if the subtask is Done, regardless of
 ```cpp
 on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
     if (leg_ik.done) {
-        log<NUClear::INFO>("Leg IK is done");
+        log<INFO>("Leg IK is done");
     }
 });
 ```
@@ -254,13 +262,13 @@ The `run_state` field is a `RunState` enum that indicates the current run state 
 ```cpp
 on<Provides<Walk>, Uses<LegIK>>().then([this] (const Uses<LegIK>& leg_ik) {
     if (leg_ik.run_state == GroupInfo::RunState::RUNNING) {
-        log<NUClear::INFO>("The LegIK task is running");
+        log<INFO>("The LegIK task is running");
     }
     else if (leg_ik.run_state == GroupInfo::RunState::QUEUED) {
-        log<NUClear::INFO>("The LegIK task is queued");
+        log<INFO>("The LegIK task is queued");
     }
     else if (leg_ik.run_state == GroupInfo::RunState::NO_TASK) {
-        log<NUClear::INFO>("The LegIK task has not been emitted");
+        log<INFO>("The LegIK task has not been emitted");
     }
 });
 ```
@@ -272,7 +280,7 @@ The `RunReason` DSL word is used to find out information about why a Provider wa
 ```cpp
 on<Provides<Walk>>().then([this] (const Walk& walk, const RunReason& reason) {
     if (reason == RunReason::NEW_TASK) {
-        log<NUClear::INFO>("A new Walk Task triggered this reaction");
+        log<INFO>("A new Walk Task triggered this reaction");
     }
 });
 ```
