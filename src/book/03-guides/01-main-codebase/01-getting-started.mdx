@@ -191,13 +191,13 @@ With all the prerequisites in place, you can now clone the NUbots repository fro
 
    The repo will be cloned into a `NUbots` directory in the current working directory.
 
-2. We use [Poetry](https://python-poetry.org/) to manage Python dependencies. Install Poetry using the official installer:
+2. We use [UV](https://docs.astral.sh/uv/) to manage Python dependencies. Install UV using the official installer:
 
    ```bash
-   curl -sSL https://install.python-poetry.org | python3 -
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-   This command downloads and executes the official installation script for Poetry. For more details on installing Poetry, see the [official documentation](https://python-poetry.org/docs/#installing-with-the-official-installer). Once Poetry is installed, the build system (`./b`) will use it to handle Python dependencies specified in the project.
+   This command downloads and executes the official installation script for UV. For more details on installing, see the [official documentation](https://docs.astral.sh/uv/getting-started/installation/). Once UV is installed, the build system (`./b`) will use it to handle Python dependencies specified in the project.
 
 ## Building the Code
 
