@@ -10,6 +10,7 @@ authors:
   - Mikyla Peters (@miikyla)
   - Lachlan Court (@LachlanCourt)
   - Corah Oliver (@yippyy)
+  - Thomas O'Brien (@Tom0brien)
 ---
 
 Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the `fake/keyboardwalk` binary (which uses simulated hardware) and seeing the robot move in NUsight.
@@ -181,26 +182,22 @@ Another useful tool for editing NUbots code in Visual Studio Code is the Remote 
 
 With all the prerequisites in place, you can now clone the NUbots repository from GitHub to build it and run the code. This is an important step in our example.
 
-1. Clone the repo by running the following command in a terminal.
+1. Clone the repo and change into the cloned directory.
 
    ```bash
    git clone --recursive https://github.com/NUbots/NUbots.git
+   cd NUbots
    ```
 
    The repo will be cloned into a `NUbots` directory in the current working directory.
 
-2. Change into the cloned directory and install the required Python dependencies.
+2. We use [UV](https://docs.astral.sh/uv/) to manage Python dependencies. Install UV using the official installer:
 
    ```bash
-   cd NUbots
-   sudo -H pip3 install -r tools/requirements.txt
+   curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-<Alert type='info'>
-
-If this fails, run `sudo apt-get update && sudo apt-get upgrade`.
-
-</Alert>
+   This command downloads and executes the official installation script for UV. For more details on installing, see the [official documentation](https://docs.astral.sh/uv/getting-started/installation/). Once UV is installed, the build system (`./b`) will use it to handle Python dependencies specified in the project.
 
 ## Building the Code
 
