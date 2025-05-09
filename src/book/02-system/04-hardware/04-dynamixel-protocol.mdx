@@ -10,19 +10,19 @@ authors:
 
 ## Introduction
 
-A [Dynamixel](https://www.robotis.us/dynamixel/) is an off-the-shelf servo with integrated control that are controlled by commands over a digital interface. There are three protocols for such an interface: Modbus RTU, Dynamixel v1, and Dynamixel v2. We will only consider Dynamixel v2, which will be simply referred to as the Dynamixel protocol. However, before we do so, we must look at the lower-level electrical system.
+A [Dynamixel](https://www.robotis.us/dynamixel/) is an off-the-shelf servo with integrated control that is controlled by commands over a digital interface. There are three protocols for such an interface: Modbus RTU, Dynamixel v1, and Dynamixel v2. We will only consider Dynamixel v2, which will be simply referred to as the Dynamixel protocol. However, before we do so, we must look at the lower-level electrical system.
 
 This page provides an overview of the Dynamixel communication. It is not an exhaustive list of what is already in the [Robotis manual](https://emanual.robotis.com/docs/en/dxl/protocol2/) but gives further insight into things left out of the manual, such as the low-level electrical side and some peculiarities. The Robotis manual should be read after the reader has read this page.
 
-The target-audience is somewhat broad and can be anywhere between
+<Alert type="warn">
 
-- a team-member who is experienced with the Dynamixel system but wants to cross-reference something,
-- a new electrical, computer, or mechatronics engineering student who has had some experience with some of these concepts such as UART in ELEC2720 but may want to refresh some of the basics and needs to learn some new things such as RS485 and the Dynamixel protocol,
-- and a computer-science student who has some experience with telecommunications such as Ethernet but may have no experience at all with UART and RS485.
+The target-audience is somewhat broad and can be anywhere between an experienced team-member wanting to cross-reference something, or a new member with some electrical or networking knowledge.
+
+</Alert>
 
 ## Universal Asynchronous Receiver-Transmitter
 
-A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or baudrate. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C), there is no signal for the clock, and both devices on either end have to know the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
+A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or *baudrate*. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C), there is no signal for the clock, and both devices on either end have to agree upon the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
 
 <Alert type="info">
 
@@ -34,7 +34,7 @@ A UART has two pins, an input called RX, and an output called TX.
 
 ![Two abstract UARTs](./images/dynamixel_protocol/pure_uart.drawio.png 'Two abstract UARTs have their RX-pins and TX-pins connected each way.')
 
-The term UART can also refer to the way how data is framed. If one will, it can almost be informally thought of as a very low-level and very basic protocol. Here, UART can refer to the special bits that are needed to frame data, all of which need to be agreed upon between both devices on either end.
+The term UART can also refer to the way how data is framed, thought informally almost as a very low-level and basic protocol. Here, UART can refer to the special bits that are needed to frame data, all of which need to be agreed upon between both devices on either end.
 
 ![An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.](./images/dynamixel_protocol/uart_frame.drawio.png 'An 8N1 frame has one start-bit as always, eight bits of data, no parity-bit, and one stop-bit.')
 
@@ -46,15 +46,13 @@ The term UART can also refer to the way how data is framed. If one will, it can 
 | Parity-bits | ?           | tell whether there has been any corruption of the data during transmission. | yes      |
 | Stop-bit    | 1           | is the end of the data.                                                     | yes      |
 
-The receiver looks for the start-bit's falling edge. When it has found the edge, it begins to time and to sample each bit thereforth based on the agreed upon bitrate. Most setups are written by three symbols, e.g. 8N1 means that there are eight data-bits, no parity bits, and one stop-bit. Both Dynamixel protocols and many other serial ones are 8N1. Henceforth in this guide, this is the assumed framing.
+The receiver looks for the start-bit's falling edge. When it has found the edge, it begins to time and to sample each bit thenceforth based on the agreed upon bitrate. Most setups are written by three symbols, e.g. 8N1 means that there are eight data-bits, no parity bits, and one stop-bit. Both Dynamixel protocols and many other serial ones are 8N1. Henceforth in this guide, this is the assumed framing.
 
 <Alert type="warn">
 
 Two UARTs must agree on the baudrate, framing (e.g. 8N1), and the signal-levels in order to communicate.
 
 </Alert>
-
-However, pure UART often only refers to abstract bits or logic levels, not voltages. Signalling techniques such as RS485, RS232, and TTL are what are further needed for a complete system to define the electrical behaviour as well as maybe flow-control (e.g. RS232).
 
 ## Duplexity
 
@@ -86,6 +84,8 @@ Often, a Dynamixel device's microcontroller has a UART to communicate on the bus
 
 ## Signal-levels
 
+However, pure UART often only refers to abstract bits or logic levels, not voltages. Signalling techniques such as RS485, RS232, and TTL are what are further needed for a complete system to define the electrical behaviour as well as the flow-control (e.g. RS232).
+
 ### Transistor-Transistor-Logic
 
 Transistor-Transistor-Logic (TTL) is a family of logical interfaces mainly for logical circuits. Its name refers to the transistors inside the chip used to control the voltage-level. It also refers to signal-levels for many UARTs and protocols. There are only three wires for a TTL setup for a servo, namely ground, power, and data. The [NC7WZ241](https://www.onsemi.com/pdf/datasheet/nc7wz241-d.pdf) chip is an example of a TTL transceiver that is found on the [OpenCR](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
@@ -102,7 +102,7 @@ Some Dynamixel servos use TTL, seen by their three-pinned headers. Such servos a
 
 #### Transceiver
 
-RS485 is an electrical standard that defines the signal-levels for many serial devices; it does not define a protocol but is instead used for many protocols. Unlike TTL, this has two wires for the data, here called positive and negative, but sometimes under different names such as either plus and minus or A and B. These two wires make up a differential signal. The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&ref_url=https%253A%252F%252Fwww.google.com%252F) chip is an example of an RS485 transceiver that is found on NUSense.
+RS485 is an electrical standard that defines the signal-levels for many serial devices; it does not define a protocol but is instead used for many protocols. Unlike TTL, this has two wires for the data, here called positive and negative, but sometimes under different names such as either plus and minus or A and B. These two wires make up a *differential* signal. The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&ref_url=https%253A%252F%252Fwww.google.com%252F) chip is an example of an RS485 transceiver that is found on NUSense.
 
 ![An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.](./images/dynamixel_protocol/rs485.drawio.png 'An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.')
 
@@ -140,9 +140,21 @@ Further to RS485 are terminating resistors which are often important to minimise
 
 ### Asymmetry
 
-The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a controller and a device, analoguous to SPI, I2C, and Modbus for example. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of 'instruction' and 'status' in their documentation, but the reader may also see 'request' and 'response' in other places. Only the controller can iniate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
+The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a *controller* and a *device*, analoguous to SPI, I2C, and Modbus for example. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of 'instruction' and 'status' in their documentation, but the reader may also see 'request' and 'response' in other places. Only the controller can initiate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
 
 ![The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.](./images/dynamixel_protocol/asymmetric.drawio.png 'The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.')
+
+<Alert type="info">
+
+In our case, the controller is a subcontroller, e.g. NUSense, CM740, and the devices are often servos, but in some cases other peripherals such as the NUFSR.
+
+</Alert>
+
+<Alert type="warn">
+
+Although it is often called a *subcontroller*, the OpenCR is not a *controller* but rather another *device* - often with an ID of 200 - that responds to instructions with IMU data. In this setup, the *controller* is actually the USB serial-converter.
+
+</Alert>
 
 ### Packets
 
@@ -177,7 +189,7 @@ The data is in little-endian format.
 
 ### Cyclic Redundancy Check
 
-The cyclic redundancy check (CRC) is a value that is appended at the end which helps tell whether there has been any corruption in the received packet. Firstly, the sender computes the CRC of the whole packet soon to be sent - excluding the CRC of course - and appends it on the end. When the receiver has received this packet, it computes its own version of the CRC and compares it to the appended CRC. If the two CRCs are different, then there has been an error. One can learn more [here](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) about how the CRC works mathematically.
+The cyclic redundancy check (CRC) is a value that is appended at the end. It helps tell whether there has been any corruption in the received packet. Firstly, the sender computes the CRC of the whole packet soon to be sent - excluding the CRC of course - and appends it on the end. When the receiver has received this packet, it computes its own version of the CRC and compares it to the appended CRC. If the two CRCs are different, then there has been an error. One can learn more [here](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) about how the CRC works mathematically.
 
 There are different ways to calculate the CRC depending on the polynomial. The Dynamixel protocol uses CRC-16-IBM which has $x^{16} + x^{15} + x^{2} + 1$ as the polynomial, otherwise wrtten as 0x8005. An algorithm for the specific CRC that the Dynamixel protocol uses as well as a look-up-table can be found [here](https://emanual.robotis.com/docs/en/dxl/crc/).
 
