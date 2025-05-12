@@ -22,7 +22,7 @@ The target-audience is somewhat broad and can be anywhere between an experienced
 
 ## Universal Asynchronous Receiver-Transmitter
 
-A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or *baudrate*. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C), there is no signal for the clock, and both devices on either end have to agree upon the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
+A universal asynchronous receiver-transmitter (UART) is an electrical device that sends data at an agreed upon bitrate or _baudrate_. Unlike [Serial Peripheral Interface (SPI)](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) and [Inter-Integrated Circuit (I2C)](https://en.wikipedia.org/wiki/I%C2%B2C), there is no signal for the clock, and both devices on either end have to agree upon the common baudrate beforehand. It is common with UART to have to set a baudrate at the very beginning externally either by rewriting firmware or configuring a peripheral.
 
 <Alert type="info">
 
@@ -102,7 +102,7 @@ Some Dynamixel servos use TTL, seen by their three-pinned headers. Such servos a
 
 #### Transceiver
 
-RS485 is an electrical standard that defines the signal-levels for many serial devices; it does not define a protocol but is instead used for many protocols. Unlike TTL, this has two wires for the data, here called positive and negative, but sometimes under different names such as either plus and minus or A and B. These two wires make up a *differential* signal. The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&ref_url=https%253A%252F%252Fwww.google.com%252F) chip is an example of an RS485 transceiver that is found on NUSense.
+RS485 is an electrical standard that defines the signal-levels for many serial devices; it does not define a protocol but is instead used for many protocols. Unlike TTL, this has two wires for the data, here called positive and negative, but sometimes under different names such as either plus and minus or A and B. These two wires make up a _differential_ signal. The [THVD1550](https://www.ti.com/lit/ds/symlink/thvd1551.pdf?ts=1714816845862&ref_url=https%253A%252F%252Fwww.google.com%252F) chip is an example of an RS485 transceiver that is found on NUSense.
 
 ![An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.](./images/dynamixel_protocol/rs485.drawio.png 'An RS485 transceiver has both a difference-amplifier and a differential driver and switches between the two based on TX-enable.')
 
@@ -140,7 +140,7 @@ Further to RS485 are terminating resistors which are often important to minimise
 
 ### Asymmetry
 
-The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a *controller* and a *device*, analoguous to SPI, I2C, and Modbus for example. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of 'instruction' and 'status' in their documentation, but the reader may also see 'request' and 'response' in other places. Only the controller can initiate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
+The Dynamixel v2 protocol is a basic serial protocol much like Modbus. The most important thing to understand is that the Dynamixel protocol is fundamentally asymmetric and works with two classes, a _controller_ and a _device_, analoguous to SPI, I2C, and Modbus for example. The controller only sends an instruction or a request, only to which a device responds with a status or a response. Robotis specifically use the terminology of 'instruction' and 'status' in their documentation, but the reader may also see 'request' and 'response' in other places. Only the controller can initiate an instruction-status exchange. There can be many devices - at most 253 -, but to avoid collisions, there can only be one controller on a bus at a time. One must remember this when connecting the Dynamixel wizard externally to a robot while it is running.
 
 ![The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.](./images/dynamixel_protocol/asymmetric.drawio.png 'The Dynamixel protocol has instructions only in one direction and statuses only in the other direction.')
 
@@ -152,7 +152,7 @@ In our case, the controller is a subcontroller, e.g. NUSense, CM740, and the dev
 
 <Alert type="warn">
 
-Although it is often called a *subcontroller*, the OpenCR is not a *controller* but rather another *device* - often with an ID of 200 - that responds to instructions with IMU data. In this setup, the *controller* is actually the USB serial-converter.
+Although it is often called a _subcontroller_, the OpenCR is not a _controller_ but rather another _device_ - often with an ID of 200 - that responds to instructions with IMU data. In this setup, the _controller_ is actually the USB serial-converter.
 
 </Alert>
 
