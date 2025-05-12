@@ -9,11 +9,51 @@ authors:
   - Josephus Paye II (@JosephusPaye)
 ---
 
-## General
-
 If this page does not solve your problem, ask for help on Slack by messaging a channel or asking a senior team member directly.
 
 ## NUbots
+
+### Why is `./b target generic` taking so long?
+
+If `./b target generic` (or `./b target nuc...`) is taking more than ~10 minutes and you haven't modified the Dockerfile, then something is wrong. You should see it downloading layers from DockerHub, not building everything from scratch.
+
+A simple fix is to remove your BuildKit container.
+
+1. Run `docker container ls`
+   You should see an entry like
+
+   ```
+   a07fa40e50f2   moby/buildkit:buildx-stable-1   "buildkitd --allow-i…"   4 days ago   Up 2 hours             buildx_buildkit_nubots0
+   ```
+
+   The first column is the `CONTAINER_ID`.
+
+2. Run `docker stop <CONTAINER_ID>`, replacing `<CONTAINER_ID>` with your BuildKit container ID from the previous step.
+
+3. Run `docker rm <CONTAINER_ID>`, replacing `<CONTAINER_ID>` with your BuildKit container ID.
+
+4. Run `./b target <target>`, where `<target>` is the desired target, such as `generic`. The command should pull from DockerHub rather than build from scratch.
+
+Another fix is to reinstall Docker.
+
+1. Completely uninstall everything and delete images, containers, volumes and configuration files. From [Ask Ubuntu Stack Exchange](https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker).
+
+   ```
+   sudo apt-get purge -y docker-engine docker docker.io docker-ce docker-ce-cli docker-compose-plugin
+   sudo apt-get autoremove -y --purge docker-engine docker docker.io docker-ce docker-compose-plugin
+   sudo rm -rf /var/lib/docker /etc/docker
+   sudo rm /etc/apparmor.d/docker
+   sudo groupdel docker
+   sudo rm -rf /var/run/docker.sock
+   sudo rm -rf /var/lib/containerd
+   sudo rm -r ~/.docker
+   ```
+
+2. Follow the Docker install instructions on [the Getting Started page](https://nubook.nubots.net/guides/main/getting-started#docker).
+
+3. Run `./b target <target>`, where `<target>` is the desired target, such as `generic`. The command should pull from DockerHub rather than build from scratch.
+
+If you're still having issues, make sure your local Dockerfile in the `NUbots/NUbots` repository is the same as on [GitHub](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile). You may need to merge main into your branch. If you are making modifications to the Dockerfile, you will have to build the image yourself. Layers are cached, so anything before your modification in the Dockerfile should not rebuild.
 
 ### Why am I having no such file errors?
 
