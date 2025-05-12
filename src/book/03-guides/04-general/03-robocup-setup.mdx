@@ -1,0 +1,179 @@
+---
+section: Guides
+chapter: General
+title: RoboCup Setup
+description: Setting up the robot for RoboCup Games
+slug: /guides/general/robocup-setup
+authors:
+  - Cameron Murtagh (@CMurtagh-LGTM)
+  - Ysobel Sims (@ysims)
+---
+
+This guide details the steps required to set up the robot for RoboCup games. It assumes you are familiar with the normal codebase and robot set up, as per the [Getting Started page](/guides/main/getting-started). The main way to set up the robot involves using the RoboCup configuration tool in the main codebase. Manual set up is also detailed on this page.
+
+## RoboCup Configuration Tool
+
+The RoboCup configuration tool involves an ncurses interface for easy set up of the robot in a game. It contains sections for network settings and general game configuration.
+
+To run the RoboCup configuration tool, run `./b configure -i` and turn on `ROLE_robocupconfiguration`. Press `c` to configure and `g` to generate. Run `./b build` to build the binary.
+
+It is possible to run `./b run robocupconfiguration` locally to see the tool, but it is best used on a robot.
+
+Install the files to robot number `X` with `./b install -co nX`. Alternatively, `./b install -co -u nubots <robot's IP address>` if `X` is unknown.
+
+On the robot, run `sudo ./robocupconfiguration`. `sudo` is required if changing any network settings.
+
+The following code snippit shows what the ncurses terminal interface used in the RoboCup configuration tool looks like.
+
+```
+┌─────────────────────────────────────── RoboCup Configuration ──────────────────────────────────────┐
+│                                                                                                    │
+│ Networking                            Game Configuration                                           │
+│                                                                                                    │
+│ Hostname        : nugus4                                                                           │
+│ Robot Name      : frankie             Player ID: 4                                                 │
+│ Wifi Interface  : wlp4s0              Team ID  : 1                                                 │
+│ IP Address      : 10.1.1.4            Position : DYNAMIC                                           │
+│ SSID            : epsilon-x                                                                        │
+│ Password        :                                                                                  │
+│                                                                                                    │
+│                                                                                                    │
+│ Commands                                                                                           │
+│ ENTER Edit       F Refresh        C Configure      S Start RoboCup  E Enable Wifi    X Shutdown    │
+│ SPACE Toggle     R Reset          N Network        D Stop RoboCup   W Disable Wifi                 │
+│                                                                                                    │
+└────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+| Entry          | Description                                                                                                                                                                                                                                                                                                                                   |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hostname       | This is non-configurable and displays the hostname of the system.                                                                                                                                                                                                                                                                             |
+| Robot name     | Displays the robot name according to the system. The space bar can be used to toggle through known robot names. The robot name is important for loading in the correct configuration.                                                                                                                                                         |
+| Wifi interface | This is automatically detected and shouldn't be changed.                                                                                                                                                                                                                                                                                      |
+| IP Address     | The current IP address of the robot/computer. It can be toggled with space bar through different common IPs, using the player ID as the last number. For RoboCup, this should be set to `192.168.1.X` for normal games, `192.168.31.X` for drop-in games where we are on Team A, and `192.168.32.X` for drop-in games where we are on Team B. |
+| SSID           | This is the name of the wifi we are connected to. This field can be toggled with the space bar to go through each RoboCup field SSID, and automatically add in the associated password for that field. `RobocupConfiguration.yaml` contains the list of SSIDs and passwords, to be updated at the competition.                                |
+| Password       | This should be set before configuring the network and is the password for the wifi.                                                                                                                                                                                                                                                           |
+| Player ID      | This is the ID of the robot, and should correspond to the number displayed on the front of the robot. It is important that there are no duplicate IDs, as this information is used in robot-to-robot communication to identify robots. The player ID should be the last number in the IP address.                                             |
+| Team ID        | The team ID must correspond to the ID specified in the GameController configuration for NUbots. In drop-in games this is 31 for Team A and 32 for Team B. The third number in the IP address must correspond to the team ID.                                                                                                                  |
+| Position       | The soccer position of the robot when it plays. This can be toggled through striker, defender, goalie and dynamic. Typically, field players are dynamic and goalies are manually set.                                                                                                                                                         |
+
+| Command       | Key              | Functionality                                                                                                                                                                                                                                                                            |
+| ------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Edit          | <kbd>ENTER</kbd> | Edit the field currently highlighted. Press <kbd>ENTER</kbd> again when finished.                                                                                                                                                                                                        |
+| Toggle        | <kbd>SPACE</kbd> | Toggle between pre-determined fields, where applicable.                                                                                                                                                                                                                                  |
+| Refresh       | <kbd>F</kbd>     | Refreshes the ncurses UI.                                                                                                                                                                                                                                                                |
+| Reset         | <kbd>R</kbd>     | Resets to the current values on the system. Useful if you haven't saved yet and want to start over.                                                                                                                                                                                      |
+| Configure     | <kbd>C</kbd>     | Writes to the configuration files.                                                                                                                                                                                                                                                       |
+| Network       | <kbd>N</kbd>     | Writes to the configuration files and restarts the network services.                                                                                                                                                                                                                     |
+| Start RoboCup | <kbd>S</kbd>     | Starts the RoboCup service, which runs the `robocup` binary, including on restart.                                                                                                                                                                                                       |
+| Stop RoboCup  | <kbd>D</kbd>     | Stops the RoboCup service, and should be done when a robot is finished with a game. If this is not done then the next time someone uses the robot it will move. This can also cause robots out of the game to interfere with other robots behaviour due to robot-to-robot communication. |
+| Enable Wifi   | <kbd>E</kbd>     | Enables the wifi service, allowing a robot to connect to a RoboCup field.                                                                                                                                                                                                                |
+| Disable Wifi  | <kbd>W</kbd>     | Disables the wifi service, to prevent a robot connecting to a RoboCup field.                                                                                                                                                                                                             |
+| Shutdown      | <kbd>X</kbd>     | Shuts down the RoboCup configuration tool.                                                                                                                                                                                                                                               |
+
+During RoboCup set up days check that the entries in `RobocupConfiguration.yaml` match the information provided by the TC/OC of the league.
+
+- Set up the SSID and password entries for easy toggle of each field.
+- If our [team ID changes](https://github.com/RoboCup-Humanoid-TC/GameController/blob/master/resources/config/hl_kid/teams.cfg), both the team ID in `GlobalConfig.yaml` and the IP addresses in `RobocupConfiguration.yaml` must be updated.
+
+The IP addresses should follow the schema `192.168.<team_id>.<robot_id>`. In the configuration file, `X` is used to represent the robot number, so that it can be dynamically set.
+
+When setting up for a game:
+
+- Connect to the robot using the portable monitor and keyboard and run `sudo ./robocupconfiguration`.
+- Check that the robot name and player ID match what is on the front of the robot. For drop-in games, the player ID is given by the TC/OC.
+- If the player should be a goalie, toggle the position field to goalie.
+- Toggle the IP address to either `192.168.1.X` for a normal game, `192.168.31.X` for a drop-in on Team A, and `192.168.32.X` for a drop-in on Team B.
+- Toggle the SSID to the correct field, usually denoted by A, B, C or D.
+- Configure (<kbd>C</kbd>) and set up the network (<kbd>N</kbd>).
+- This should work without a reboot. Check using `wpa_cli status` in the command line to check connectivity to the correct wifi network.
+- Use the `gamecontroller` program to check if the robot connects to GameController.
+- Start the RoboCup service. At the end of a game, stop it.
+
+## Manual Method
+
+The manual method without the tool is detailed here in case a more in depth understanding is needed.
+
+## Networking
+
+The networking on the robot needs to be changed from the default NUbots laboratory network to the RoboCup field network, or to a secondary router in the laboratory for practise games. These steps involve changing configuration files locally on a computer and then installing them to to the robot and running the `systemconfiguration` program.
+
+1.  Checkout the RoboCup branch and open `modules/tools/SystemConfiguration/data/system`. If there is no RoboCup branch yet then you will need to create one. If you are running a practise game in the laboratory, you can make the changes locally or in a practise game branch.
+
+2.  Rename `default/etc/systemd/30-wlp58s0.network` to `default/etc/systemd/40-wlp58s0-robocup.network`. Note that this is locally within the codebase, not on the robot.
+
+3.  Open `default/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf` and add the following block to the end of the file:
+
+    ```sh
+    network={
+        ssid="SSID"
+        psk="PASSWORD"
+        priority=3
+    }
+    ```
+
+    `SSID` is the name of the wireless network and `PASSWORD` is the password for the network. `priority` should be the highest number priority in the file.
+
+4.  For each robot `X` do:
+
+    1. Rename `nugusX/etc/systemd/network/40-wlp58s0-robocup.network` to `nugusX/etc/systemd/network/30-wlp58s0.network`.
+
+    2. Edit this to match the network information for the secondary router. At RoboCup, you will need to edit this to match the networking information given to you by the Technical Committee.
+
+       `Address` is the address of the robot. When SSHing to the robot, this is the address you will use. It is defined by the subnet, the team number, and the robot number. Usually the subnet mask is `255.255.0.0`, which indicates that the first two numbers define the subnet. The full address will be `192.168.TEAM_NUMBER.ROBOT_NUMBER` or `10.1.TEAM_NUMBER.ROBOT_NUMBER`.
+
+       Normally, `Gateway` and `DNS` are not needed for RoboCup so you can remove them from the file.
+
+    3. Copy the settings under `[Network]` from the file in the previous step and replace them in `nugusX/etc/systemd/network/10-bond0.network`. This is important if the `bond0` network is `UP` on the robot.
+
+    4. In a terminal in the root of the NUbots repo, build and install the configuration files with
+
+    ```
+    ./b configure && ./b build && ./b install -co <ADDRESS>
+    ```
+
+    Where `<ADDRESS>` is the robot address from the previous step.
+
+    5. `ssh` onto the robot using `ssh nubots@<ADDRESS>`.
+
+       <Alert type='info'>
+
+       When running via `ssh` make sure that you have a monitor and keyboard nearby to handle any mistakes.
+
+       </Alert>
+
+    6. Run `sudo ./systemconfiguration` on the robot.
+
+    7. Restart the network services on the robot:
+
+       ```bash
+       sudo systemctl daemon-reload
+       sudo systemctl restart systemd-networkd wpa_supplicant@wlp58s0
+       ```
+
+To change back to the NUbots laboratory network:
+
+1. Reset the configuration files locally to the same as the main branch.
+
+2. Run `./b build`.
+
+3. For each robot, run `./b install -co <ADDRESS>`.
+
+4. On each robot, run `sudo ./systemconfiguration` and restart the network services.
+
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl restart systemd-networkd wpa_supplicant@wlp58s0
+   ```
+
+### Troubleshooting
+
+If you are experiencing problems, it may be beneficial to reset any changes and start again. If you cannot connect to the robot wirelessly, you can connect to the robot via ethernet. If you cannot connect to the robot via ethernet, you can plug in a monitor and keyboard to directly run commands on the robot.
+
+The following general information may be useful in understanding the networking set up if anything goes wrong.
+
+The robot will default to using the first alphanumeric network configuration file. If you have multiple network configuration files, you can change the priority of the network configuration files by changing the number in the filename. For example, `30-wlp58s0.network` will be used before `40-wlp58s0.network`.
+
+`eno1` refers to ethernet. `wlp58s0` refers to wireless. `bond0` refers to the bonded network interface. This abstracts the ethernet and wireless configurations so it is easier to switch between them.
+
+The network configuration files on the robot are found in `/etc/systemd/network`. The wireless network settings are found in `/etc/wpa_supplicant/wpa_supplicant-wlp58s0.conf`.
