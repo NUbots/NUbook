@@ -95,3 +95,45 @@ If Blender is not using the GPU, then you may need to edit your Blender settings
    ```bash
    blender -b --python pbr/pbr.py
    ```
+
+## Adding New HDRs
+
+HDRs are high dynamic range images. Each robot soccer field we encounter should be added to our HDR library for diversity and variety! However, it is not straightforwards.
+
+### Capture the HDR
+
+The Ricoh Theta is a 360 degree camera capable of capture the data needed to create HDR images. 
+
+- Download an app (todo add info).
+- Place the Ricoh Theta on a camera stand roughly at the height of the robot.
+- Place it somewhere on the field.
+- The app should allow remote capture. Move off the field and capture the HDR.
+- Repeat across the field in multiple locations. This provides variety.
+
+Ensure that the theta camera contains images of varying brightness for each capture. This collection of images for the same capture will be converted into a HDR.
+
+### Converting the Images to a HDR
+
+If you have Adobe Lightroom, this is simple to do.
+
+Otherwise, on Linux, use [Luminance HDR](https://sourceforge.net/projects/qtpfsgui/).
+
+Good luck I'm moving to Windows tomorrow to get Lightroom. Free 7 day trial!
+
+### Segment the HDR
+
+Drag the HDR into an empty instance of GIMP. It will appear as a later. Make a new layer and segment (colour in) each object class.
+
+- Red (255,0,0) for balls
+- Blue for robots (0,0,255)
+- Yellow for goal posts (255,255,0)
+- Green for field (0,255,0)
+- White for field lines (255,255,255)
+- Black for background (0,0,0)
+
+Colours have to be exact. Use the pencil tool without antialiasing.
+
+### Position in the world
+
+Manually done. You may be able to get the data from the original images from the theta. Otherwise copy a json file from an existing HDR and modify the rotation until it looks alright when generated in NUpbr. Position is moving the vertical axis (y in Blender) until its at about the right height.
+Good luck.
