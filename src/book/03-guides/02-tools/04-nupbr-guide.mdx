@@ -98,42 +98,46 @@ If Blender is not using the GPU, then you may need to edit your Blender settings
 
 ## Adding New HDRs
 
-HDRs are high dynamic range images. Each robot soccer field we encounter should be added to our HDR library for diversity and variety! However, it is not straightforwards.
+HDRs are high dynamic range images. Each robot soccer field we encounter should be added to our HDR library for diversity and variety! However, it is not straightforward and it is easy to end up with normal JPGs rather than true HDR images.
 
 ### Capture the HDR
 
 The Ricoh Theta is a 360 degree camera capable of capture the data needed to create HDR images. 
 
-- Download an app (todo add info).
+- Download the app (todo add info). This is only available on the Apple Store.
 - Place the Ricoh Theta on a camera stand roughly at the height of the robot.
-- Place it somewhere on the field.
-- The app should allow remote capture. Move off the field and capture the HDR.
-- Repeat across the field in multiple locations. This provides variety.
+- Place the camera and stand configuration on the soccer field.
+- The app should allow remote capture. Move off the field and capture the HDR. This will take a while, since the camera is collecting multiple images at various exposures. Refrain from movements and anyone walking onto the field, as this will result in ghosting effects on the end HDR. 
+- Repeat across the field in multiple locations for variety. 
 
-Ensure that the theta camera contains images of varying brightness for each capture. This collection of images for the same capture will be converted into a HDR.
+Ensure that the theta camera contains images of varying brightness for each capture. There should be about 6-7 images ranging from very dark to very bright. This collection of images for the same capture will be converted into a HDR.
 
 ### Converting the Images to a HDR
 
-If you have Adobe Lightroom, this is simple to do.
+The easiest method is to use Adobe Lightroom on Windows. A free 7-day trial is available at the time of writing, which includes Lightroom and Photoshop. Download both locally.
 
-Otherwise, on Linux, use [Luminance HDR](https://sourceforge.net/projects/qtpfsgui/).
+- Import the images for one HDR into Lightroom
+- Select all images, right click on the selection and go to "Photo > Photo Merge > HDR". You shouldn't need to adjust any parameters. 
+- Do not save the resulting HDR image. It will not save as a true HDR. Instead, right click and choose "Edit in Photoshop".
+- In Photoshop, there is a 'remove object tool' that does not use AI credits. Use this tool to remove the camera stand in the image.
+- Save the image as a HDR. The image will be several MB if it is a HDR, as opposed to less than a MB if it has incorrectly saved as a normal JPG. 
+- Delete the images in Lightroom and repeat the steps for the next HDR image set.
 
-Good luck I'm moving to Windows tomorrow to get Lightroom. Free 7 day trial!
+On Linux, use [Luminance HDR](https://sourceforge.net/projects/qtpfsgui/). GIMP may be used to manually remove the camera stand using the heal tool.
 
 ### Segment the HDR
 
-Drag the HDR into an empty instance of GIMP. It will appear as a later. Make a new layer and segment (colour in) each object class.
+Drag the HDR into an empty instance of GIMP. It will appear as a layer. Make a new layer and segment (colour in) each object class.
 
-- Red (255,0,0) for balls
+- Red (255, 0, 0) for balls
 - Blue for robots (0,0,255)
 - Yellow for goal posts (255,255,0)
 - Green for field (0,255,0)
 - White for field lines (255,255,255)
 - Black for background (0,0,0)
 
-Colours have to be exact. Use the pencil tool without antialiasing.
+Colours have to be exact. Configure both the lasso and pencil tool to not use antialiasing.
 
 ### Position in the world
 
-Manually done. You may be able to get the data from the original images from the theta. Otherwise copy a json file from an existing HDR and modify the rotation until it looks alright when generated in NUpbr. Position is moving the vertical axis (y in Blender) until its at about the right height.
-Good luck.
+This is done manually. You may be able to get the IMU data from the original images from the theta. Otherwise copy a JSON file from an existing NUpbr HDR and modify the rotation until it looks reasonable when generated in NUpbr. Modify the the vertical axis (y-axis in Blender) until the height looks reasonable.
