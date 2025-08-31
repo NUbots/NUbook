@@ -1,0 +1,29 @@
+---
+section: Guides
+chapter: Tools
+title: Visual Mesh with Webots
+description: Getting Data from webots to train the Visual Mesh.
+slug: /guides/tools/visualmesh
+---
+
+This guide walks through the process of generating a training dataset using Webots and using that dataset to train the Visual Mesh.
+
+<Alert type='info'>
+
+This guide assumes you have already installed everything required to run Webots, the Visual Mesh, NUWebots and the main NUbots codebase.
+
+</Alert>
+
+## Creating the dataset
+
+The Webots simulator provides all the tools required to generate the image, segmentation mask and lens files required to make a training dataset for the Visual Mesh.
+
+If you're not familiar with Webots, this is accomplished by adding a recognition Node to the camera in the Robot's model. This then allows the controller to obtain images and segmentation masks from the camera. The lens file must be generated dynamically, as `Hoc` can be only determined at runtime. `Hoc` is the homogeneous transformation matrix that transforms from the `observation plane` to the `camera` (see the [Mathematics](/system/foundations/mathematics) page for a more detailed explanation). A Webots world is created that contains the relevant robot robot with the vision collection controller set to be on that robot.
+
+Load up the vision collection world, and let it run for long enough to generate a decent size training dataset (for the purposes of following the exercise, ~2000 images should be enough).
+
+Next, split the data into train/validation/test sets. This is left as an exercise for the reader (e.g. write a Python script). 
+
+Train the visual mesh. Observe the training progress in TensorBoard.
+
+Take an image and run it through NUsight.
