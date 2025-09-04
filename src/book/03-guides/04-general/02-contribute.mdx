@@ -1,16 +1,29 @@
 ---
 section: Guides
 chapter: General
-title: Git and PR Workflow
-description: How to contribute to a NUbots project using Git and GitHub PRs.
-slug: /guides/general/git
+title: Contribution Workflow
+description: How to contribute to a NUbots project using Jira, Git and GitHub PRs.
+slug: /guides/general/contribute
 authors:
   - Kip Hamiltons (@KipHamiltons)
   - Cameron Murtagh (@CMurtagh-LGTM)
   - Trent Houliston (@TrentHouliston)
+  - Ysobel Sims (@ysims)
 ---
 
-## Prerequisites
+## Jira for Project Management
+
+Jira is a project management tool that has an emphasis on agile development. NUbots use Jira to document issues and projects, plan which tasks to prioritise, manage who is responsible for tasks, and keep track of the progress of tasks. You should ask the team leader or a senior team member to add you to the Jira site if you do not have access.
+
+Each subgroup at NUbots has its own Kanban-style Jira board. While most tasks fit neatly in one project board, some may be harder to place - in this case, the most relevant board is used. Each board contains tasks that are grouped within Epics - an Epic is a particular theme, such as 'reinforcement learning' or 'subcontroller design'. Not all tasks live within an Epic, but organising related tasks under a single Epic can aid in visualisation and organisation. The Epic-Task paradigm also encourages breaking a larger project down into actionable and manageable chunks, particularly when multiple people are working on the same project.
+
+A subgroup Kanban board has five columns: the backlog for tasks that have been identified but are not prioritised to do yet; 'selected for development' for tasks to be worked on next; 'in progress' for tasks that someone is actively working on; 'in review' for tasks that are waiting on GitHub approval for or hardware approval by a senior member; and 'done' for tasks that have been completed. The 'done' column is automatically cleaned up after two weeks. Each board is visualised with swimlanes - distinct rows separated by Epics. A 'no Epic' swimlane can be found at the bottom for tasks that don't fit inside any Epics.
+
+Tasks are typically assigned by the team leader or a senior team member during planning and meetings, however team members can also volunteer for tasks by assigning themselves to the task in Jura if no one else is working on it. Team members are encouraged to move their own tasks through the columns, however this is also done by the main project managers on the team.
+
+If you identify an issue or a good project to include in Jira, add it to the backlog column in the relevant Kanban board and Epic (or the 'no Epic' swimlane if nothing fits).
+
+## Prerequisites for Git
 
 This guide assumes you know the basics of using a command line (also called a terminal). Specifically, it assumes you know how to navigate around the filesystem and run commands. You can [learn how to use the command line in this article](https://www.freecodecamp.org/news/conquering-the-command-line-f85f5e46c07c/). If you are on Windows, you should [install WSL to use the Bash terminal](https://docs.microsoft.com/en-us/windows/wsl/install-win10), since many of the commands you will be using are not available in the default Command Prompt.
 
