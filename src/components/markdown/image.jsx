@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { StaticQuery, graphql } from 'gatsby'
 import { GatsbyImage } from 'gatsby-plugin-image'
+import ExpandableImage from './expandable-image'
 
 /**
  * This components works by keeping a list of all images in NUbook (using a GraphQL static query)
@@ -18,6 +19,7 @@ const Image = (props) => (
         ) {
           nodes {
             absolutePath
+            publicURL
             childImageSharp {
               original {
                 width
@@ -36,6 +38,7 @@ const Image = (props) => (
     render={(data) => {
       const src = props.src
       let Img
+      let expandableSrc = src // Source for the expandable image
 
       // Render all remote images with a plain <img> tag
       if (/^https?:\/\//i.test(src)) {
@@ -69,6 +72,9 @@ const Image = (props) => (
           throw new Error(`Image not found: ${src}.`)
         }
 
+        // For expandable image, we'll use the public URL
+        expandableSrc = imageNode.publicURL
+
         Img = (
           <GatsbyImage
             image={imageNode.childImageSharp.gatsbyImageData}
@@ -85,7 +91,9 @@ const Image = (props) => (
 
       return (
         <figure className='p-2 bg-gray-100 dark:bg-gray-900 leading-none rounded-sm'>
-          {Img}
+          <ExpandableImage src={expandableSrc} alt={props.alt}>
+            {Img}
+          </ExpandableImage>
           {props.children && (
             <figcaption className='pt-2 italic text-base'>
               {props.children}
