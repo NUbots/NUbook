@@ -17,14 +17,15 @@ Jira is a project management tool that has an emphasis on agile development. NUb
 
 Each subgroup at NUbots has its own Kanban-style Jira board. While most tasks fit neatly in one project board, some may be harder to place - in this case, the most relevant board is used. Each board contains tasks that are grouped within Epics - an Epic is a particular theme, such as 'reinforcement learning' or 'subcontroller design'. Not all tasks live within an Epic, but organising related tasks under a single Epic can aid in visualisation and organisation. The Epic-Task paradigm also encourages breaking a larger project down into actionable and manageable chunks, particularly when multiple people are working on the same project.
 
-A subgroup Kanban board has five columns:
+A NUbots Kanban board has five columns:
 
-- **Backlog**: for tasks that have been identified but are not prioritised to do yet
-- **Selected For Development**: for tasks to be worked on next
-- **In Progress**: for tasks that someone is actively working on
-- **In Review**: for tasks that are waiting on GitHub approval for or hardware approval by a senior member
-- **Done**: for tasks that have been completed.
-  The 'done' column is automatically cleaned up after two weeks. Each board is visualised with swimlanes - distinct rows separated by Epics. A 'no Epic' swimlane can be found at the bottom for tasks that don't fit inside any Epics.
+- **Backlog**: Tasks that have been identified, but are not currently a priority.
+- **Selected For Development**: The next tasks to work on.
+- **In Progress**: Tasks that are being actively worked on.
+- **In Review**: Tasks that are in a GitHub PR and awaiting approval, or awaiting hardware approval by a senior member.
+- **Done**: Tasks that have been completed. Tasks in this column are automatically cleaned up after two weeks.
+
+Each board is visualised with swimlanes - distinct rows separated by Epics. A 'no Epic' swimlane can be found at the bottom for tasks that don't fit inside any Epics.
 
 Tasks are typically assigned by the team leader or a senior team member during planning and meetings, however team members can also volunteer for tasks by assigning themselves to the task in Jira if no one else is working on it. Team members are encouraged to move their own tasks through the columns, but this can also be done by the main project managers on the team.
 
