@@ -45,16 +45,6 @@ If Motive does not detect all cameras, confirm that the laptop and cameras are o
 
 ---
 
-<Alert type="warning">
-
-In order to succesfully record a dataset using our Motion Capture System, is it assumed you are familiar with:
-- Running a binary on the robot.
-- Using the `Data Logging` module t
-
-</Alert>
-
-</details>
-
 ## Connecting the Isolated Network
 
 > *Note: This step may not need to be repeated every time. If the motion capture network is already configured, skip to the next section.*
@@ -128,9 +118,11 @@ Following Camera Calibration, you may notice that the 3D view of the cameras wit
 
 The calibration process is now complete.
 
+---
+
 ## Creating a Rigid Body
 
-Now that we have completed the necessary steps to ensure we recieve accurate data, we are now ready to create our first **rigid body**. In our case, we can define a rigid body as *a physical object with fixed markers whose relative distances remain constant, ensuring it doesn't change shape during movement*. 
+We are now ready to create our first **rigid body**. In our case, we can define a rigid body as *a physical object with fixed markers whose relative distances remain constant, ensuring it doesn't change shape during movement*. 
 
 We need to obtain a robot and some OptiTrack reflective markers to create a rigid body. 
 
@@ -146,10 +138,52 @@ We need to obtain a robot and some OptiTrack reflective markers to create a rigi
 2. Place the robot in the centre of the field, and run `keyboardwalk`.
 3. Once the robot is standing, we can create a rigid body in Motive. To do so, highlight the markers that are visible on the robot, right click, hover over `Rigid Body` and select `Create From Selected Markers`.
 
-    <Alert type="warning">
+   <Alert type="warning">
 
-    Because we don't have 'optimal' lighting conditions in the laboratory, you may notice some *fake* markers displayed in Motive. This may be caused by the reflections from the robot's metal components. To differentiate between markers that are *real* or *fake*, you should move the robot in a way that minimises the reflections, or until the *fake* markers disappear.
+   Because we don't have 'optimal' lighting conditions in the laboratory, you may notice some *fake* markers displayed in Motive. This may be caused by the reflections from the robot's metal components. To differentiate between markers that are *real* or *fake*, you should move the robot in a way that minimises the reflections, or until the *fake* markers disappear.
 
-    </Alert>
+   </Alert>
 
-4. 
+You have now succesfully created a rigid body. You can alter the settings of the rigid body by highlighting all the markers encompassing the rigid body and view the tab that appears in the bottom right of the screen labelled `General Settings`. Ensure that the `Streaming ID` is set to 1, and leave the others as default.
+
+---
+
+## IP Configuration
+
+**TODO - PRINCE MONTANO** 
+
+---
+
+## Recording a Ground Truth dataset
+
+Before we can record our ground truth dataset, we must ensure that we are receiving messages from our Motion Capture system. 
+
+1. Navigate to `NatNet.yaml` and ensure the multicast_address is set to `239.255.42.99`. Ensure `dump_packets: false` otherwise we will dump every packet onto the robot during recording **(we don't want this)**.
+2. Navigate to `SensorFilter.yaml` and change `use_ground_truth: true`.
+2. Configure with `natnet`, build the code and install onto the robot.
+3. Run the `natnet` role and view the console. If everything was successful, you should see `Connected to X.X.X.X (Motive 2.3.1.1) over NatNet 3.1`. 
+
+   <Alert type="warning">
+
+   If you see `No ground truth data received, but use_ground_truth is true` see the troubleshooting section.
+
+   </Alert>
+
+We are now ready to record a ground truth dataset!
+
+1. Navigate to `SensorFilter.yaml` and change `use_ground_truth: false`.
+2. Navigate to `DataLogging.yaml` and add `message.localisation.RobotPoseGroundTruth: true`.
+
+   <Alert type="info">
+
+   If you want to record a dataset that compares ground truth to another module, you must set the messages to `true` that your module requires.
+
+   </Alert>
+
+4. Navigate to the role you will be running, and add `input::NatNet`, `localisation::Mocap` and `support::logging::DataLogging`.
+5. Configure your role, build and install on the robot.
+6. Run the binary and extract the generated nbs file that appears in the `logging` folder using `scp`.
+
+And that's it!
+
+## Troubleshooting
