@@ -65,6 +65,10 @@ If Motive does not detect all cameras, confirm that the laptop and cameras are o
 4. In the Motive interface, check the **camera list**. You should see **10 connected cameras**.  
    - If cameras are missing, revisit the **Connecting the Isolated Network** step.  
 
+The initial view of the software should look something like the figure below. You can toggle between camera view vs perspective view via the highlighted red box. 
+   ![Motive](./images/mocap_view.PNG 'Initial view of Motive')
+
+
 ---
 
 ## Camera Calibration
@@ -74,17 +78,24 @@ Before recording any datasets, the camera system must be calibrated to ensure ac
 - Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.  
 
 1. Clear the capture field of all objects.  
-2. In Motive, go to **Camera View** if not already visible, and click **Mask Visible**.  
+2. In Motive, go to **Camera View**, and click **Mask Visible**.  
    - This masks out static background reflections.  
    - Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask.  
-3. Power on the **calibration wand** (switch on the back).  
-4. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.  
+3. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.  
    - The 3D viewport will highlight red.  
    - A calibration table will appear, showing the number of samples collected per camera. Aim for roughly equal counts across all cameras.  
+4. Power on the **calibration wand** (switch on the back) once you are on the field.  
 5. Move the wand smoothly through the capture volume.  
    - Refer to [this tutorial video (at 1:26)](https://www.youtube.com/watch?v=TZrhw9SoeEI) for demonstration.  
-6. Once all cameras have adequate coverage, stop the wanding process.  
-7. In Motive, click **Calculate** to finalise calibration.  
+6. Once all cameras have adequate coverage, stop the wanding process by powering off the wand before leaving the field. This ensures that the cameras don't track the wand outside our desired capture volume.  
+
+    <Alert type="info">
+
+    While you are performing the calibration, look at each camera and notice that when it detects the calibration wand, it will begin to glow a green ring around the LEDs. The completeness of this ring indicates how many unique samples the camera has recieved, which is important for calibration. This can be used as an indicator when to stop the calibration.
+
+    </Alert>
+
+7. Click **Calculate** to finalise calibration.  
    - Watch the result message carefully:  
      - Aim for **Exceptional** calibration quality (green status) as shown in the image below.  
      ![Camera Calibration](./images/calibration_result.PNG 'Exceptional Result')
