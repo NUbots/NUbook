@@ -45,6 +45,16 @@ If Motive does not detect all cameras, confirm that the laptop and cameras are o
 
 ---
 
+<Alert type="warning">
+
+In order to succesfully record a dataset using our Motion Capture System, is it assumed you are familiar with:
+- Running a binary on the robot.
+- Using the `Data Logging` module t
+
+</Alert>
+
+</details>
+
 ## Connecting the Isolated Network
 
 > *Note: This step may not need to be repeated every time. If the motion capture network is already configured, skip to the next section.*
@@ -110,12 +120,36 @@ If calibration quality is below *Exceptional*, repeat the wanding process with s
 
 Following Camera Calibration, you may notice that the 3D view of the cameras within Motive is skewed. This is because the system does not know where to reference our ground plane. To fix this, we must use the calibration square to set our ground plane.
 
-1. Obtain the calibration square and place in the middle of the field, setting the Z direction to face the carpark 8 side of the ES building as shown in the figure below.
+1. Obtain the calibration square and place in the middle of the field, setting the Z direction to face the carpark 8 side of the ES building as shown in the below.
 
-    ![Ground Plane](./images/ground_plane.png'Positioning of Calibration Square')
+    ![Camera Calibration](./images/ground_plane.png 'Setting the Calibration Square')
 
-
-2. In motive, select **Set Ground Plane**. Upon selecting this, you will be prompted to save the calibration file. Ensure that the directory is `Desktop->calibration` and hit save. You should see the 3D view update so that the cameras are now referenced from this plane. 
+2. Select **Set Ground Plane**. You will be prompted to save the calibration file. Ensure that the directory is `Desktop->calibration` and hit save. You should see the 3D view update so that the cameras are now referenced from this plane. 
 
 The calibration process is now complete.
 
+## Creating a Rigid Body
+
+Now that we have completed the necessary steps to ensure we recieve accurate data, we are now ready to create our first **rigid body**. In our case, we can define a rigid body as *a physical object with fixed markers whose relative distances remain constant, ensuring it doesn't change shape during movement*. 
+
+We need to obtain a robot and some OptiTrack reflective markers to create a rigid body. 
+
+1. Place the reflective markers on the **torso** of the robot. When placing these markers it is recommended you place 4 on the **front** of the robot's torso, and two at the **back**. Ensure they are **not** symmetrically placed and are reasonably spread apart. 
+
+    <Alert type="info">
+
+    The torso is our key reference frame, since we express the torso’s pose in the world as **H**<sup>t</sup><sub>w</sub> (torso in the world frame).  
+    By tracking the torso, we ensure all motion data is consistently expressed in the robot’s primary body frame.
+
+    </Alert>
+
+2. Place the robot in the centre of the field, and run `keyboardwalk`.
+3. Once the robot is standing, we can create a rigid body in Motive. To do so, highlight the markers that are visible on the robot, right click, hover over `Rigid Body` and select `Create From Selected Markers`.
+
+    <Alert type="warning">
+
+    Because we don't have 'optimal' lighting conditions in the laboratory, you may notice some *fake* markers displayed in Motive. This may be caused by the reflections from the robot's metal components. To differentiate between markers that are *real* or *fake*, you should move the robot in a way that minimises the reflections, or until the *fake* markers disappear.
+
+    </Alert>
+
+4. 
