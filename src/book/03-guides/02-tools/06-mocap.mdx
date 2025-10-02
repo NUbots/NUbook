@@ -8,7 +8,9 @@ authors:
   - Will Burgin (@willburgin)
 ---
 
-[Motive](https://optitrack.com/software/motive/) is the software package used to run our OptiTrack motion capture system. This guide details how to set up **Motive 2.3.1** and use it with the hardware we currently have in the lab. It covers prerequisites, installation, calibration, and recording workflows. If you would like to learn more about Motive itself, refer to the [Motive Documentation](https://docs.optitrack.com/).
+[Motive](https://optitrack.com/software/motive/) is the software package used to run our OptiTrack motion capture system. This guide explains how to set up and operate the system using **Motive 2.3.1**. It covers prerequisites, network setup, Motive configuration, and calibration.
+
+---
 
 ## Prerequisites
 
@@ -16,93 +18,89 @@ authors:
 
 <summary>Hardware</summary>
 
-1. Motion capture cameras connected via PoE (Power over Ethernet) switch.  
-2. Synchronisation hub and cabling.  
-3. Calibration tools:
-   - Wand
-   - Calibration square  
-   - Reflective markers / rigid bodies  
-4. A Windows workstation with sufficient GPU for live capture.  
-
-<Alert type='info'>
-
-The motion capture system is intended to be set up in the lab space with a clear capture volume. Ensure that no reflective objects (mirrors, shiny metal) are present inside the capture space.
-
-</Alert>
+- **MSI Laptop** (Windows 10, Motive 2.3.1 pre-installed)  
+- **Motive License USB dongle** (must be plugged into the MSI laptop for Motive to launch)  
+- **Motion capture cameras** (10 units, connected via PoE switch/modem)  
+- **Calibration wand**  
+- **Calibration square**  
+- **Reflective markers**  
 
 </details>
 
 <details>
 
-<summary>Software</summary>
+<summary>Network</summary>
 
-1. Windows 10/11 with administrator access.  
-2. [Motive 2.3.1 installer](https://optitrack.com/software/motive/).  
-3. OptiTrack License Manager (bundled with the installer).  
+- **Dedicated modem/router** for the motion capture system (isolated network)  
+- Ethernet cables for connecting cameras, modem, and laptop  
+
+<Alert type="info">
+
+If Motive does not detect all cameras, confirm that the laptop and cameras are on the isolated network (see next section).  
+
+</Alert>
 
 </details>
 
-## Install Motive 2.3.1
 
-1. Download the **Motive 2.3.1** installer from the OptiTrack website.  
-2. Run the installer with administrator privileges.  
-3. Ensure that the **OptiTrack License Manager** is running after installation.  
-4. Reboot the computer if prompted.  
+---
 
-## Hardware Setup
+## Connecting the Isolated Network
 
-1. Mount the cameras securely around the capture volume.  
-2. Connect all cameras to the PoE switch.  
-3. Connect the PoE switch to the capture PC.  
-4. If using a sync hub, ensure it is powered and connected to the PC.  
-5. Verify that all status LEDs on the cameras are on.  
+> *Note: This step may not need to be repeated every time. If the motion capture network is already configured, skip to the next section.*
 
-<Alert type='info'>
+1. Connect the **motion capture modem/router** to the ethernet wall ports.  
+2. Connect the **MSI laptop** to this modem via ethernet.  
+3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**.  
+   - **Important:** Doing this temporarily removes ethernet access from the main lab network. Double-check that no one else is relying on the main network before switching.  
+4. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.  
 
-If cameras do not appear in Motive, check Ethernet cabling and ensure the network adapter is set to the same subnet as the PoE switch.
-
-</Alert>
+---
 
 ## Configuring Motive
 
-1. Launch **Motive 2.3.1**.  
-2. Open the **Devices** tab to confirm that all cameras are detected.  
-3. Update firmware if prompted.  
-4. Assign IDs to cameras and confirm their positioning in the software view.  
-5. Save the configuration.  
+1. Open the **MSI laptop** and boot into **Windows 10**.  
+2. Insert the **Motive USB license dongle**.  
+3. Launch **Motive 2.3.1** (allow a few seconds for the license to be detected).  
+4. In the Motive interface, check the **camera list**. You should see **10 connected cameras**.  
+   - If cameras are missing, revisit the **Connecting the Isolated Network** step.  
 
-## Calibration
+---
 
-1. Select **Calibration → Start Calibration** from the toolbar.  
-2. Wave the calibration wand through the capture volume in smooth motions.  
-3. When complete, check the error estimate displayed in Motive.  
-4. Place the calibration square on the floor in the capture space.  
-5. Finalise calibration and save the profile.  
+## Camera Calibration
+
+Before recording any datasets, the camera system must be calibrated to ensure accurate tracking.  
+- Recalibrate **whenever a camera is moved or bumped**, even slightly.  
+- Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.  
+
+1. Clear the capture field of all objects.  
+2. In Motive, go to **Camera View** if not already visible, and click **Mask Visible**.  
+   - This masks out static background reflections.  
+   - Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask.  
+3. Power on the **calibration wand** (switch on the back).  
+4. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.  
+   - The 3D viewport will highlight red.  
+   - A calibration table will appear, showing the number of samples collected per camera. Aim for roughly equal counts across all cameras.  
+5. Move the wand smoothly through the capture volume.  
+   - Refer to [this tutorial video (at 1:26)](https://www.youtube.com/watch?v=TZrhw9SoeEI) for demonstration.  
+6. Once all cameras have adequate coverage, stop the wanding process.  
+7. In Motive, click **Calculate** to finalise calibration.  
+   - Watch the result message carefully:  
+     - Aim for **Exceptional** calibration quality (green status) as shown in the image below.  
+     ![Camera Calibration](./images/calibration_result.png 'Exceptional Result')
 
 <Alert type="warning">
 
-Calibration error values above 1.0 mm may indicate poor coverage or occluded cameras. Try recalibrating with slower, wider wand passes.
+If calibration quality is below *Exceptional*, repeat the wanding process with slower and wider coverage.
 
 </Alert>
 
-## Capturing Data
+### Setting The Ground Plane
 
-1. Create a new project within Motive and choose a save location.  
-2. Define rigid bodies:
-   - Select a set of reflective markers.
-   - Right-click and choose **Create Rigid Body**.  
-3. Verify that the rigid body tracks stably and has the correct orientation.  
-4. Begin recording by pressing the **Record** button.  
-5. Export data in `.tak` (native Motive) or `.csv` format for later processing.  
+Following Camera Calibration, you may notice that the 3D view of the cameras within Motive is skewed. This is because the system does not know where to reference our ground plane. To fix this, we must use the calibration square to set our ground plane.
 
-## Troubleshooting
+1. Obtain the calibration square and place in the middle of the field, setting the Z direction to face *blank*
+2. In motive, select **Set Ground Plane**. Upon selecting this, you will be prompted to save the calibration file. Ensure that the directory is `Desktop->calibration` and hit save. You should see the 3D view update so that the cameras are now referenced from this plane. 
 
-- **No cameras detected** → Check PoE switch power and Ethernet connections.  
-- **High calibration error** → Remove reflective clutter and recalibrate.  
-- **Markers not tracking** → Ensure markers are clean, facing cameras, and not occluded.  
-- **Software crash** → Confirm version is **2.3.1** and update GPU drivers.  
+The calibration process is now complete.
 
-## References
-
-- [Motive 2.3.1 Documentation](https://docs.optitrack.com/)  
-- [OptiTrack Support](https://optitrack.com/support/)  
