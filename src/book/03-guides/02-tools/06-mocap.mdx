@@ -1,0 +1,108 @@
+---
+section: Guides
+chapter: Tools
+title: Setting Up Motion Capture
+description: Setup instructions for Motive 2.3.1
+slug: /guides/tools/mocap-setup
+authors:
+  - Will Burgin (@willburgin)
+---
+
+[Motive](https://optitrack.com/software/motive/) is the software package used to run our OptiTrack motion capture system. This guide details how to set up **Motive 2.3.1** and use it with the hardware we currently have in the lab. It covers prerequisites, installation, calibration, and recording workflows. If you would like to learn more about Motive itself, refer to the [Motive Documentation](https://docs.optitrack.com/).
+
+## Prerequisites
+
+<details>
+
+<summary>Hardware</summary>
+
+1. Motion capture cameras connected via PoE (Power over Ethernet) switch.  
+2. Synchronisation hub and cabling.  
+3. Calibration tools:
+   - Wand
+   - Calibration square  
+   - Reflective markers / rigid bodies  
+4. A Windows workstation with sufficient GPU for live capture.  
+
+<Alert type='info'>
+
+The motion capture system is intended to be set up in the lab space with a clear capture volume. Ensure that no reflective objects (mirrors, shiny metal) are present inside the capture space.
+
+</Alert>
+
+</details>
+
+<details>
+
+<summary>Software</summary>
+
+1. Windows 10/11 with administrator access.  
+2. [Motive 2.3.1 installer](https://optitrack.com/software/motive/).  
+3. OptiTrack License Manager (bundled with the installer).  
+
+</details>
+
+## Install Motive 2.3.1
+
+1. Download the **Motive 2.3.1** installer from the OptiTrack website.  
+2. Run the installer with administrator privileges.  
+3. Ensure that the **OptiTrack License Manager** is running after installation.  
+4. Reboot the computer if prompted.  
+
+## Hardware Setup
+
+1. Mount the cameras securely around the capture volume.  
+2. Connect all cameras to the PoE switch.  
+3. Connect the PoE switch to the capture PC.  
+4. If using a sync hub, ensure it is powered and connected to the PC.  
+5. Verify that all status LEDs on the cameras are on.  
+
+<Alert type='info'>
+
+If cameras do not appear in Motive, check Ethernet cabling and ensure the network adapter is set to the same subnet as the PoE switch.
+
+</Alert>
+
+## Configuring Motive
+
+1. Launch **Motive 2.3.1**.  
+2. Open the **Devices** tab to confirm that all cameras are detected.  
+3. Update firmware if prompted.  
+4. Assign IDs to cameras and confirm their positioning in the software view.  
+5. Save the configuration.  
+
+## Calibration
+
+1. Select **Calibration → Start Calibration** from the toolbar.  
+2. Wave the calibration wand through the capture volume in smooth motions.  
+3. When complete, check the error estimate displayed in Motive.  
+4. Place the calibration square on the floor in the capture space.  
+5. Finalise calibration and save the profile.  
+
+<Alert type="warning">
+
+Calibration error values above 1.0 mm may indicate poor coverage or occluded cameras. Try recalibrating with slower, wider wand passes.
+
+</Alert>
+
+## Capturing Data
+
+1. Create a new project within Motive and choose a save location.  
+2. Define rigid bodies:
+   - Select a set of reflective markers.
+   - Right-click and choose **Create Rigid Body**.  
+3. Verify that the rigid body tracks stably and has the correct orientation.  
+4. Begin recording by pressing the **Record** button.  
+5. Export data in `.tak` (native Motive) or `.csv` format for later processing.  
+
+## Troubleshooting
+
+- **No cameras detected** → Check PoE switch power and Ethernet connections.  
+- **High calibration error** → Remove reflective clutter and recalibrate.  
+- **Markers not tracking** → Ensure markers are clean, facing cameras, and not occluded.  
+- **Software crash** → Confirm version is **2.3.1** and update GPU drivers.  
+
+## References
+
+- [Motive 2.3.1 Documentation](https://docs.optitrack.com/)  
+- [OptiTrack Support](https://optitrack.com/support/)  
