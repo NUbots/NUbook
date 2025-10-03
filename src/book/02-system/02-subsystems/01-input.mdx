@@ -19,32 +19,39 @@ The [Spinnaker SDK](https://www.flir.com/support-center/iis/machine-vision/downl
 
 The cameras have the following parameters that are used by the object detection algorithm.
 
-| Parameter           | Type                 | Description                                                                                                                                           |
-| ------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `serial_number`     | string               | The serial number of the camera. This is used to identify the camera and distinguish it from other cameras in the robot.                              |
-| `lens.projection`   | string               | The lens projection type. Can be rectilinear, equidistant or equisold.                                                                                |
-| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. The focal length is the angle of view and magnification. |
-| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width                |
-| `k`                 | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                                 |
-| `fov`               | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                    |
-| `Hpc`               | 4x4 matrix           | Homogeneous transform from the rigid platform this camera is attached to (pitch servo) to the camera's virtual focal point.                           |
+| Parameter           | Type                 | Description                                                                                                                                                    |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serial_number`     | string               | The serial number of the camera. This is used to identify the camera and distinguish it from other cameras in the robot.                                       |
+| `lens.projection`   | string               | The lens projection type. Can be rectilinear, equidistant or equisold.                                                                                         |
+| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. The focal length is the angle of view and magnification.          |
+| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width                         |
+| `lens.k`            | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                                          |
+| `lens.fov`          | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                             |
+| `roll_offset`       | float (radians)      | Roll of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point.  |
+| `pitch_offset`      | float (radians)      | Pitch of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point. |
 
 The following settings are applied to the cameras on startup. (Note: These are the camera settings we currently use, but there are many more. See the full <a href="#settings_list">list</a> at the bottom of this page.)
 
-| Parameter                    | Type        | Description                                                                                                  |
-| ---------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |
-| `PixelFormat`                | Enumeration | Format of the pixel provided by the camera                                                                   |
-| `Width`                      | Integer     | Width of the source image                                                                                    |
-| `Height`                     | Integer     | Height of the source image                                                                                   |
-| `OffsetX`                    | Integer     | Horizontal offset from the origin to the ROI (in pixels)                                                     |
-| `OffsetY`                    | Integer     | Vertical offset from the origin to the ROI (in pixels)                                                       |
-| `ExposureAuto`               | Enumeration | Sets the automatic exposure mode                                                                             |
-| `GainAuto`                   | Enumeration | Sets the automatic gain mode. In automatic modes, the camera adjusts the gain to maximize the dynamic range. |
-| `BalanceWhiteAuto`           | Enumeration | Compensates for colour shifts caused by different lighting conditions.                                       |
-| `AcquisitionFrameRateEnable` | Boolean     | Allows manual control of the frame rate                                                                      |
-| `AcquisitionFrameRate`       | Float       | User controlled acquisition frame rate in hertz                                                              |
+| Parameter                            | Type        | Description                                                                                                  |
+| ------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------ |
+| `PixelFormat`                        | Enumeration | Format of the pixel provided by the camera                                                                   |
+| `Width`                              | Integer     | Width of the source image                                                                                    |
+| `Height`                             | Integer     | Height of the source image                                                                                   |
+| `OffsetX`                            | Integer     | Horizontal offset from the origin to the ROI (in pixels)                                                     |
+| `OffsetY`                            | Integer     | Vertical offset from the origin to the ROI (in pixels)                                                       |
+| `ExposureAuto`                       | Enumeration | Sets the automatic exposure mode                                                                             |
+| `AutoExposureExposureTimeUpperLimit` | Float       | The largest exposure time that auto exposure can set                                                         |
+| `AutoExposureTargetGreyValueAuto`    | Enumeration | Whether or not the target image grey level is automatically set by the camera.                               |
+| `AutoExposureTargetGreyValue`        | Enumeration | Manual target grey level applied to the camera to compensate for light level.                                |
+| `BalanceWhiteAuto`                   | Enumeration | Compensates for colour shifts caused by different lighting conditions.                                       |
+| `BalanceRatioSelector`               | Enumeration | Set whether to balance red or blue.                                                                          |
+| `BalanceRatio`                       | Float       | The ratio the camera will use for red or blue (set above) to balance for accurate colours.                   |
+| `GainAuto`                           | Enumeration | Sets the automatic gain mode. In automatic modes, the camera adjusts the gain to maximize the dynamic range. |
+| `AcquisitionFrameRateEnable`         | Boolean     | Allows manual control of the frame rate                                                                      |
+| `AcquisitionFrameRate`               | Float       | User controlled acquisition frame rate in hertz                                                              |
+| `DeviceLinkThroughputLimit`          | Integer     | Limits the maximum bandwidth on the USB bus. Can limit the framerate.                                        |
 
-These parameters are set for each camera as **configuration values** in the [Camera module](https://github.com/NUbots/NUbots/tree/main/module/input/Camera/data/config). Configuration files stored in the [config/Cameras](https://github.com/NUbots/NUbots/tree/main/module/input/Camera/data/config/Cameras) directory are common to all robots, and configs that are specific to a particular robot are located in that robot's respective directory. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`.
+These parameters are set for each camera as **configuration values** in the [Camera module](https://github.com/NUbots/NUbots/tree/main/module/input/Camera/data/config). Configuration files stored in the [config/Cameras](https://github.com/NUbots/NUbots/tree/main/module/input/Camera/data/config/Cameras) directory are common to all robots, and configs that are specific to a particular robot are located in that robot's respective directory. The values for the left camera on the robot will be stored in `Left.yaml`. The values for the right camera on the robot will be stored in `Right.yaml`, however this is currently not used.
 
 The parameters are used in the **Camera module** to find and set up the cameras. The Camera module emits [Image messages](https://github.com/NUbots/NUbots/tree/main/shared/message/input/Image.proto).
 
