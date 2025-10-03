@@ -19,16 +19,16 @@ The [Spinnaker SDK](https://www.flir.com/support-center/iis/machine-vision/downl
 
 The cameras have the following parameters that are used by the object detection algorithm.
 
-| Parameter           | Type                 | Description                                                                                                                                                       |
-| ------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `serial_number`     | string               | The serial number of the camera. This is used to identify the camera and distinguish it from other cameras in the robot.                                          |
-| `lens.projection`   | string               | The lens projection type. Can be rectilinear, equidistant or equisold.                                                                                            |
-| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. The focal length is the angle of view and magnification.             |
-| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width                            |
-| `lens.k`            | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                                             |
-| `lens.fov`          | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                                |
-| `roll_offset`       | float (radians)      | Roll of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point.     |
-| `pitch_offset`      | float (radians)      | Pitch of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point.    |
+| Parameter           | Type                 | Description                                                                                                                                                    |
+| ------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serial_number`     | string               | The serial number of the camera. This is used to identify the camera and distinguish it from other cameras in the robot.                                       |
+| `lens.projection`   | string               | The lens projection type. Can be rectilinear, equidistant or equisold.                                                                                         |
+| `lens.focal_length` | float                | The normalised focal length. It is defined as focal length in pixels divided by image width. The focal length is the angle of view and magnification.          |
+| `lens.center`       | 2-dimensional vector | The normalised image centre offset. Represents the pixels from the centre of the image to the optical axis, divided by the image width                         |
+| `lens.k`            | 2-dimensional vector | The polynomial distortion coefficients for the length                                                                                                          |
+| `lens.fov`          | float (radians)      | Field of view. The angular diameter that the lens covers (the area that light hits on the sensor).                                                             |
+| `roll_offset`       | float (radians)      | Roll of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point.  |
+| `pitch_offset`      | float (radians)      | Pitch of the camera in radians to account for physical differences from NUgus print manufacturing and assembly to align with the camera's virtual focal point. |
 
 The following settings are applied to the cameras on startup. (Note: These are the camera settings we currently use, but there are many more. See the full <a href="#settings_list">list</a> at the bottom of this page.)
 
