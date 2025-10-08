@@ -18,12 +18,12 @@ authors:
 
 <summary>Hardware</summary>
 
-- **Dedicated MSI Laptop** (Windows 10, Motive 2.3.1 pre-installed)  
-- **Motive License USB dongle** (must be plugged into the MSI laptop for Motive to launch)  
-- **Motion capture cameras** (10 units, connected via PoE switch/modem)  
-- **Calibration wand**  
-- **Calibration square**  
-- **Reflective markers**  
+- **Dedicated MSI Laptop** (Windows 10, Motive 2.3.1 pre-installed)
+- **Motive License USB dongle** (must be plugged into the MSI laptop for Motive to launch)
+- **Motion capture cameras** (10 units, connected via PoE switch/modem)
+- **Calibration wand**
+- **Calibration square**
+- **Reflective markers**
 
 </details>
 
@@ -31,88 +31,87 @@ authors:
 
 <summary>Network</summary>
 
-- **Dedicated modem/router** for the motion capture system (isolated network)  
-- Ethernet cables for connecting cameras, modem, and laptop  
+- **Dedicated modem/router** for the motion capture system (isolated network)
+- Ethernet cables for connecting cameras, modem, and laptop
 
 </details>
-
 
 ---
 
 ## Connecting the Isolated Network
 
-> *Note: This step may not need to be repeated every time. If the motion capture network is already configured, skip to the next section.*
+> _Note: This step may not need to be repeated every time. If the motion capture network is already configured, skip to the next section._
 
-1. Connect the **motion capture modem/router** to the ethernet wall ports.  
-2. Connect the **MSI laptop** to this modem via ethernet.  
-3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**. 
+1. Connect the **motion capture modem/router** to the ethernet wall ports.
+2. Connect the **MSI laptop** to this modem via ethernet.
+3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**.
 
    <Alert type="warning">
 
    Doing this temporarily removes ethernet access from the main lab network. Double-check that no one else is relying on the main network via ethernet before switching.
-   
-   </Alert>   
 
-4. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.  
+   </Alert>
+
+4. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.
 
 ---
 
 ## Configuring Motive
 
-1. Open the **MSI laptop** and boot into **Windows 10**.  
-2. Insert the **Motive USB license dongle** (if not already inserted).  
-3. Launch **Motive 2.3.1** (allow a few seconds for the license to be detected).  
-4. In the Motive interface, check the **camera list**. You should see **10 connected cameras**.  
-   - If cameras are missing, revisit the **Connecting the Isolated Network** step.  
+1. Open the **MSI laptop** and boot into **Windows 10**.
+2. Insert the **Motive USB license dongle** (if not already inserted).
+3. Launch **Motive 2.3.1** (allow a few seconds for the license to be detected).
+4. In the Motive interface, check the **camera list**. You should see **10 connected cameras**.
+   - If cameras are missing, revisit the **Connecting the Isolated Network** step.
 
-The initial view of the software should look something like the figure below. You can toggle between camera view vs perspective view via the highlighted red box. 
-   ![Motive](./images/mocap_view.PNG 'Initial view of Motive')
-
+The initial view of the software should look something like the figure below. You can toggle between camera view vs perspective view via the highlighted red box.
+![Motive](./images/mocap_view.PNG 'Initial view of Motive')
 
 ---
 
 ## Camera Calibration
 
-Before recording any datasets, the camera system must be calibrated to ensure accurate tracking.  
+Before recording any datasets, the camera system must be calibrated to ensure accurate tracking.
 
    <Alert type="info">
 
-   Recalibrate **whenever a camera is moved or bumped**, even slightly.  
-   Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.  
-   
-   </Alert>   
+Recalibrate **whenever a camera is moved or bumped**, even slightly.  
+ Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.
 
-1. Clear the capture field of all objects.  
-2. In Motive, go to **Camera View**, and click **Mask Visible**.  
-   - This masks out static background reflections.  
+   </Alert>
+
+1. Clear the capture field of all objects.
+2. In Motive, go to **Camera View**, and click **Mask Visible**.
+
+   - This masks out static background reflections.
 
    <Alert type="warning">
 
-   Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask. 
-   
+   Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask.
+
    </Alert>
- 
-3. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.  
-   - The 3D viewport will highlight red.  
-   - A calibration table will appear, showing the number of samples collected per camera. Aim for roughly equal counts across all cameras.  
-4. Power on the **calibration wand** (switch on the back) once you are on the field.  
-5. Move the wand smoothly through the capture volume.  
-   - Refer to [this tutorial video (at 1:26)](https://www.youtube.com/watch?v=TZrhw9SoeEI) for demonstration.  
-6. Once all cameras have adequate coverage, stop the wanding process by powering off the wand before leaving the field. This ensures that the cameras don't track the wand outside our desired capture volume.  
 
-    <Alert type="info">
+3. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.
+   - The 3D viewport will highlight red.
+   - A calibration table will appear, showing the number of samples collected per camera. Aim for roughly equal counts across all cameras.
+4. Power on the **calibration wand** (switch on the back) once you are on the field.
+5. Move the wand smoothly through the capture volume.
+   - Refer to [this tutorial video (at 1:26)](https://www.youtube.com/watch?v=TZrhw9SoeEI) for demonstration.
+6. Once all cameras have adequate coverage, stop the wanding process by powering off the wand before leaving the field. This ensures that the cameras don't track the wand outside our desired capture volume.
 
-    While you are performing the calibration, look at each camera and notice that when it detects the calibration wand, it will begin to glow a green ring around the LEDs. The completeness of this ring indicates how many unique samples the camera has recieved, which is important for calibration. This can be used as an indicator when to stop the calibration.
+   <Alert type="info">
 
-    </Alert>
+   While you are performing the calibration, look at each camera and notice that when it detects the calibration wand, it will begin to glow a green ring around the LEDs. The completeness of this ring indicates how many unique samples the camera has recieved, which is important for calibration. This can be used as an indicator when to stop the calibration.
 
-7. Click **Calculate** to finalise calibration.  
+   </Alert>
+
+7. Click **Calculate** to finalise calibration.
    - Watch the result message carefully. Aim for **Exceptional** calibration quality (green status) as shown in the image below.  
-   ![Camera Calibration](./images/calibration_result.PNG 'Exceptional Result')
+     ![Camera Calibration](./images/calibration_result.PNG 'Exceptional Result')
 
 <Alert type="warning">
 
-If calibration quality is below *Exceptional*, repeat the wanding process with slower and wider coverage.
+If calibration quality is below _Exceptional_, repeat the wanding process with slower and wider coverage.
 
 </Alert>
 
@@ -122,9 +121,9 @@ Following Camera Calibration, you may notice that the 3D view of the cameras wit
 
 1. Obtain the calibration square and place in the middle of the field, setting the Z direction to face the carpark 8 side of the ES building as shown in the below.
 
-    ![Camera Calibration](./images/ground_plane.png 'Setting the Calibration Square')
+   ![Camera Calibration](./images/ground_plane.png 'Setting the Calibration Square')
 
-2. Select **Set Ground Plane**. You will be prompted to save the calibration file. Ensure that the directory is `Desktop->calibration` and hit save. You should see the 3D view update so that the cameras are now referenced from this plane. 
+2. Select **Set Ground Plane**. You will be prompted to save the calibration file. Ensure that the directory is `Desktop->calibration` and hit save. You should see the 3D view update so that the cameras are now referenced from this plane.
 
 The calibration process is now complete.
 
@@ -132,25 +131,25 @@ The calibration process is now complete.
 
 ## Creating a Rigid Body
 
-We are now ready to create our first **rigid body**. In our case, we can define a rigid body as *a physical object with fixed markers whose relative distances remain constant, ensuring it doesn't change shape during movement*. 
+We are now ready to create our first **rigid body**. In our case, we can define a rigid body as _a physical object with fixed markers whose relative distances remain constant, ensuring it doesn't change shape during movement_.
 
-We need to obtain a robot and some OptiTrack reflective markers to create a rigid body. 
+We need to obtain a robot and some OptiTrack reflective markers to create a rigid body.
 
-1. Place the reflective markers on the **torso** of the robot. When placing these markers it is recommended you place 4 on the **front** of the robot's torso, and two at the **back**. Ensure they are **not** symmetrically placed and are reasonably spread apart. 
+1. Place the reflective markers on the **torso** of the robot. When placing these markers it is recommended you place 4 on the **front** of the robot's torso, and two at the **back**. Ensure they are **not** symmetrically placed and are reasonably spread apart.
 
-    <Alert type="info">
+   <Alert type="info">
 
-    The torso is our key reference frame. We express the torso’s pose in the world as **H**<sup>t</sup><sub>w</sub> (torso in the world frame).  
-    By tracking the torso, we ensure all motion data is consistently expressed in the robot’s primary body frame.
+   The torso is our key reference frame. We express the torso’s pose in the world as **H**<sup>t</sup><sub>w</sub> (torso in the world frame).  
+   By tracking the torso, we ensure all motion data is consistently expressed in the robot’s primary body frame.
 
-    </Alert>
+   </Alert>
 
 2. Place the robot in the centre of the field, and run `keyboardwalk`.
 3. Once the robot is standing, we can create a rigid body in Motive. To do so, highlight the markers that are visible on the robot, right click, hover over `Rigid Body` and select `Create From Selected Markers`.
 
    <Alert type="warning">
 
-   Because we don't have 'optimal' lighting conditions in the laboratory, you may notice some *fake* markers displayed in Motive. This may be caused by the reflections from the robot's metal components. To differentiate between markers that are *real* or *fake*, you should move the robot in a way that minimises the reflections, or until the *fake* markers disappear.
+   Because we don't have 'optimal' lighting conditions in the laboratory, you may notice some _fake_ markers displayed in Motive. This may be caused by the reflections from the robot's metal components. To differentiate between markers that are _real_ or _fake_, you should move the robot in a way that minimises the reflections, or until the _fake_ markers disappear.
 
    </Alert>
 
@@ -160,7 +159,7 @@ You have now succesfully created a rigid body. You can alter the settings of the
 
 ## Recording a Ground Truth dataset
 
-Before we can record our ground truth dataset, we must ensure that we are receiving messages from our Motion Capture system. 
+Before we can record our ground truth dataset, we must ensure that we are receiving messages from our Motion Capture system.
 
 ### IP Configuration
 
@@ -168,18 +167,18 @@ Before we can record our ground truth dataset, we must ensure that we are receiv
 
 1. Navigate to `NatNet.yaml` and ensure the multicast_address is set to `239.255.42.99`. Ensure `dump_packets: false` otherwise we will dump every packet onto the robot during recording **(we don't want this)**.
 2. Navigate to `SensorFilter.yaml` and change `use_ground_truth: true`.
-2. Configure with `natnet`, build the code and install onto the robot.
-3. Run the `natnet` role and view the console. If everything was successful, you should see `Connected to X.X.X.X (Motive 2.3.1.1) over NatNet 3.1`. 
+3. Configure with `natnet`, build the code and install onto the robot.
+4. Run the `natnet` role and view the console. If everything was successful, you should see `Connected to X.X.X.X (Motive 2.3.1.1) over NatNet 3.1`.
 
    <Alert type="warning">
 
-   If you see `No ground truth data received, but use_ground_truth is true`, ensure the previous step was completed correctly. 
+   If you see `No ground truth data received, but use_ground_truth is true`, ensure the previous step was completed correctly.
 
    </Alert>
 
    <Alert type="info">
 
-   You should also test this within NUsight. Move the robot around and verify it is moving sensibly given that it should be using the ground truth data. 
+   You should also test this within NUsight. Move the robot around and verify it is moving sensibly given that it should be using the ground truth data.
 
    </Alert>
 
@@ -196,4 +195,3 @@ We are now ready to record a ground truth dataset!
 2. Navigate to the role you will be running, and add `input::NatNet`, `localisation::Mocap` and `support::logging::DataLogging`.
 3. Configure your role, build and install on the robot.
 4. Run the binary and extract the generated nbs file and it's `.idx` that appears in the `logging` folder using `scp`.
-
