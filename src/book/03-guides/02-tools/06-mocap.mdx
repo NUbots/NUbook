@@ -8,7 +8,7 @@ authors:
   - Will Burgin (@willburgin)
 ---
 
-[Motive](https://optitrack.com/software/motive/) is the software package used to run our OptiTrack motion capture system. This guide explains how to set up and operate the system using **Motive 2.3.1**. It covers prerequisites, network setup, Motive configuration, and calibration.
+[Motive](https://optitrack.com/software/motive/) is the software package used to run our OptiTrack motion capture system. This guide explains how to set up and operate the system using **Motive 2.3.1**. By the end of this guide, you should know how to use the Motion Capture System to obtain ground truth data.
 
 ---
 
@@ -18,7 +18,7 @@ authors:
 
 <summary>Hardware</summary>
 
-- **MSI Laptop** (Windows 10, Motive 2.3.1 pre-installed)  
+- **Dedicated MSI Laptop** (Windows 10, Motive 2.3.1 pre-installed)  
 - **Motive License USB dongle** (must be plugged into the MSI laptop for Motive to launch)  
 - **Motion capture cameras** (10 units, connected via PoE switch/modem)  
 - **Calibration wand**  
@@ -34,12 +34,6 @@ authors:
 - **Dedicated modem/router** for the motion capture system (isolated network)  
 - Ethernet cables for connecting cameras, modem, and laptop  
 
-<Alert type="info">
-
-If Motive does not detect all cameras, confirm that the laptop and cameras are on the isolated network (see next section).  
-
-</Alert>
-
 </details>
 
 
@@ -51,8 +45,14 @@ If Motive does not detect all cameras, confirm that the laptop and cameras are o
 
 1. Connect the **motion capture modem/router** to the ethernet wall ports.  
 2. Connect the **MSI laptop** to this modem via ethernet.  
-3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**.  
-   - **Important:** Doing this temporarily removes ethernet access from the main lab network. Double-check that no one else is relying on the main network before switching.  
+3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**. 
+
+   <Alert type="warning">
+
+   Doing this temporarily removes ethernet access from the main lab network. Double-check that no one else is relying on the main network via ethernet before switching.
+   
+   </Alert>   
+
 4. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.  
 
 ---
@@ -60,7 +60,7 @@ If Motive does not detect all cameras, confirm that the laptop and cameras are o
 ## Configuring Motive
 
 1. Open the **MSI laptop** and boot into **Windows 10**.  
-2. Insert the **Motive USB license dongle**.  
+2. Insert the **Motive USB license dongle** (if not already inserted).  
 3. Launch **Motive 2.3.1** (allow a few seconds for the license to be detected).  
 4. In the Motive interface, check the **camera list**. You should see **10 connected cameras**.  
    - If cameras are missing, revisit the **Connecting the Isolated Network** step.  
@@ -74,13 +74,24 @@ The initial view of the software should look something like the figure below. Yo
 ## Camera Calibration
 
 Before recording any datasets, the camera system must be calibrated to ensure accurate tracking.  
-- Recalibrate **whenever a camera is moved or bumped**, even slightly.  
-- Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.  
+
+   <Alert type="info">
+
+   Recalibrate **whenever a camera is moved or bumped**, even slightly.  
+   Best practice: **calibrate before every data recording session**, as the process only takes a few minutes.  
+   
+   </Alert>   
 
 1. Clear the capture field of all objects.  
 2. In Motive, go to **Camera View**, and click **Mask Visible**.  
    - This masks out static background reflections.  
-   - Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask.  
+
+   <Alert type="warning">
+
+   Ensure no reflective markers you intend to use (e.g., calibration wand) are visible before applying the mask. 
+   
+   </Alert>
+ 
 3. In Motive, select **all 10 cameras** in the camera pane and click **Start Wanding**.  
    - The 3D viewport will highlight red.  
    - A calibration table will appear, showing the number of samples collected per camera. Aim for roughly equal counts across all cameras.  
@@ -96,9 +107,8 @@ Before recording any datasets, the camera system must be calibrated to ensure ac
     </Alert>
 
 7. Click **Calculate** to finalise calibration.  
-   - Watch the result message carefully:  
-     - Aim for **Exceptional** calibration quality (green status) as shown in the image below.  
-     ![Camera Calibration](./images/calibration_result.PNG 'Exceptional Result')
+   - Watch the result message carefully. Aim for **Exceptional** calibration quality (green status) as shown in the image below.  
+   ![Camera Calibration](./images/calibration_result.PNG 'Exceptional Result')
 
 <Alert type="warning">
 
@@ -130,7 +140,7 @@ We need to obtain a robot and some OptiTrack reflective markers to create a rigi
 
     <Alert type="info">
 
-    The torso is our key reference frame, since we express the torso’s pose in the world as **H**<sup>t</sup><sub>w</sub> (torso in the world frame).  
+    The torso is our key reference frame. We express the torso’s pose in the world as **H**<sup>t</sup><sub>w</sub> (torso in the world frame).  
     By tracking the torso, we ensure all motion data is consistently expressed in the robot’s primary body frame.
 
     </Alert>
@@ -148,15 +158,13 @@ You have now succesfully created a rigid body. You can alter the settings of the
 
 ---
 
-## IP Configuration
-
-**TODO - PRINCE MONTANO** 
-
----
-
 ## Recording a Ground Truth dataset
 
 Before we can record our ground truth dataset, we must ensure that we are receiving messages from our Motion Capture system. 
+
+### IP Configuration
+
+### Recording a dataset
 
 1. Navigate to `NatNet.yaml` and ensure the multicast_address is set to `239.255.42.99`. Ensure `dump_packets: false` otherwise we will dump every packet onto the robot during recording **(we don't want this)**.
 2. Navigate to `SensorFilter.yaml` and change `use_ground_truth: true`.
@@ -165,25 +173,27 @@ Before we can record our ground truth dataset, we must ensure that we are receiv
 
    <Alert type="warning">
 
-   If you see `No ground truth data received, but use_ground_truth is true` see the troubleshooting section.
+   If you see `No ground truth data received, but use_ground_truth is true`, ensure the previous step was completed correctly. 
+
+   </Alert>
+
+   <Alert type="info">
+
+   You should also test this within NUsight. Move the robot around and verify it is moving sensibly given that it should be using the ground truth data. 
 
    </Alert>
 
 We are now ready to record a ground truth dataset!
 
-1. Navigate to `SensorFilter.yaml` and change `use_ground_truth: false`.
-2. Navigate to `DataLogging.yaml` and add `message.localisation.RobotPoseGroundTruth: true`.
+1. Navigate to `DataLogging.yaml` and add `message.localisation.RobotPoseGroundTruth: true`.
 
    <Alert type="info">
 
-   If you want to record a dataset that compares ground truth to another module, you must set the messages to `true` that your module requires.
+   If you want to record a dataset that compares ground truth to another module, you must set the messages to `true` that your module requires. You will also need change `use_ground_true: false` to ensure we don't override our odometry messages with ground truth data.
 
    </Alert>
 
-4. Navigate to the role you will be running, and add `input::NatNet`, `localisation::Mocap` and `support::logging::DataLogging`.
-5. Configure your role, build and install on the robot.
-6. Run the binary and extract the generated nbs file that appears in the `logging` folder using `scp`.
+2. Navigate to the role you will be running, and add `input::NatNet`, `localisation::Mocap` and `support::logging::DataLogging`.\
+3. Configure your role, build and install on the robot.
+4. Run the binary and extract the generated nbs file that appears in the `logging` folder using `scp`.
 
-And that's it!
-
-## Troubleshooting
