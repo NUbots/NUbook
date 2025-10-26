@@ -8,7 +8,170 @@ authors:
   - Ysobel Sims (@ysims)
   - Josephus Paye II (@JosephusPaye)
   - Lachlan Court (@LachlanCourt)
+  - Clayton Carlon (@Claegtun)
 ---
+
+## 2025: Salvador, Brazil
+
+### What went wrong
+
+#### Hardware
+
+- Necks broke often; screws would sometimes come out of the horn.
+- Frankie would brown out after falling.
+- Sarah's torso-pitch is significantly off during motions despite correct zero position.
+- Ethernet was inconsistent.
+- Head and neck often became loose.
+
+#### NUSense
+
+- USB connection would die and need power-cycle.
+- Baudrate had to be dropped from 3 Mbps to 1 Mbps.
+- Servos would sometimes move to the wrong positions.
+
+#### Architecture
+
+- Robot freezes because of network forwarding issues in NUClear, i.e. threads on network emits.
+
+#### Vision
+
+- Shoes were detected as balls.
+- There were many phantom balls.
+- Tuning camera extrinsics was tedious.
+
+#### Localisation
+
+- Often walked into the referee's table.
+- Localisation flipped a few times.
+- Odometry converged slowly.
+- Localisation was wildly off the field sometimes.
+
+#### Motion
+
+- Was often knocked over by smaller robots.
+- Could not strafe.
+- Kick was not stable enough.
+
+#### Behaviour
+
+- Director bugs.
+- Did not avoid the ball during throw-ins.
+- Unsure if goalie behaviour worked.
+- Avoidance was too wide.
+- Hysteresis on the ready position not triggering properly.
+- Not positioning or responding properly to kick-offs.
+
+#### Tools
+
+- NUsight didn't often work, maybe to do with connecting to the WAN port on the field's router.
+
+#### Organisational
+
+- Lack of practice-games, especially with teammates.
+- More consistency from teammembers.
+
+### What went well
+
+- We came third!
+- We won five games!
+
+#### Hardware
+
+- Bumpers were good.
+- Much space with the vertical NUC.
+- We didn't break any ports on the new NUC mount.
+
+#### NUSense
+
+- NUSense was better than OpenCR, more stable.
+
+#### Motion
+
+- Walk engine was stable; robot seldom fell because of nothing.
+
+#### Localisation
+
+- Localisation worked reasonably well most of the time.
+- Reset while playing worked well.
+
+#### Behaviour
+
+- Path planning was smooth.
+- Defensive behaviour was good.
+- Multi-robot behaviour worked.
+- Search for ball worked.
+
+#### Vision
+
+- YOLOv11 worked well.
+
+#### Tools
+
+- Director view was useful.
+
+#### Organisational
+
+- Great RoboCup team.
+- Everyone on the team had a part.
+- Consistent referees and handlers.
+- Publication and seminar at the symposium.
+- Liam PD and Angie worked well as referees.
+- Members showed initiative.
+
+### Next steps
+
+- New platform?
+- NUgus or Booster
+
+#### NUgus
+
+- May work well if there are weight-classes.
+- Allows multidisciplinary development.
+
+#### Booster
+
+- Offers an opportunity for new hardware.
+- Maybe one at first.
+- Works out of the box with an RL walk.
+- May work with RS485.
+
+#### Hardware
+
+- Doubled up knee?
+- Head redesigned, inner rigid support for cameras, but soft outer shell.
+- Develop hardware earlier.
+
+#### NUSense
+
+- Sell?
+- OpenSource, maybe?
+- Compatible with higher voltages.
+
+#### Motion
+
+- Reinforcement-learning, walk, getup, kick.
+- Semi-dynamic getups.
+
+#### Localisation
+
+- Improve kick-off.
+
+#### Behaviour
+
+- Reevaluate how we use the Director.
+
+#### Vision
+
+- Add shoes to dataset, NUpbr, etc.
+
+#### Tools
+
+- Add tuning to NUsight.
+
+#### Organisational
+
+- More FYPs, specifically ones that are interesting enough for members to take up.
+- Friction at the start for new members.
 
 ## 2024: Eindhoven, The Netherlands
 

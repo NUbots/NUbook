@@ -85,7 +85,7 @@ namespace module::onboarding {
 
         on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
             auto ping_msg = std::make_unique<Ping>();
-            log<NUClear::INFO>("Ping");
+            log<INFO>("Ping");
             emit(ping_msg);
         });
     }
@@ -129,7 +129,7 @@ Let's dive into what's going on within this module:
 
     on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
         auto ping_msg = std::make_unique<Ping>();
-        log<NUClear::INFO>("Ping");
+        log<INFO>("Ping");
         emit(ping_msg);
     });
     ```
@@ -140,7 +140,7 @@ Let's dive into what's going on within this module:
 
 <Alert type='info'>
 
-The `log<NUClear::INFO>("Ping");` can be thought of as the equivalent of an `std::cout` in normal C++ or a `print` in python. There are various types that can be used for logging information. See NUbook for more information.
+The `log<INFO>("Ping");` can be thought of as the equivalent of an `std::cout` in normal C++ or a `print` in python. There are various types that can be used for logging information. See NUbook for more information.
 
 </Alert>
 
@@ -363,7 +363,7 @@ namespace module::onboarding {
         on<Trigger<Pong>>().then([this](const Pong& pong_msg) {
             auto ping_msg = std::make_unique<Ping>();
             ping->count = ????; // TODO: Assign counter value.
-            log<NUClear::INFO>("Ping");
+            log<INFO>("Ping");
             emit(ping_msg);
         });
     }
