@@ -44,7 +44,8 @@ authors:
 
 1. Connect the **motion capture modem/router** to the ethernet wall ports.
 2. Connect the **MSI laptop** to this modem via ethernet.
-3. At the **main lab modem**, disconnect **[TBD: insert exact cable/port name]** and connect it to **[TBD: insert mocap port/cable]**.
+3. At the **main lab modem**, disconnect the **black ethernet cable** leading from the wall port, to the main modem, and the **cream coloured cable** to the wall port.
+4. Next, unplug the **green cable** that connects the modem to the network hub, and connect the other end of the **cream coloured cable** in it's place.
 
    <Alert type="warning">
 
@@ -52,7 +53,7 @@ authors:
 
    </Alert>
 
-4. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.
+5. Once complete, the motion capture system is on its own isolated network. The MSI laptop and all cameras should now communicate exclusively through this network.
 
 ---
 
@@ -162,6 +163,13 @@ You have now succesfully created a rigid body. You can alter the settings of the
 Before we can record our ground truth dataset, we must ensure that we are receiving messages from our Motion Capture system.
 
 ### IP Configuration
+
+We require the robot, our computer running the binary, and the mocap system to be on the same network. The desired network is **robocup-x**.
+
+1. Connect to the robot using the portable screen and keyboards available. 
+2. Run `sudo ./robocupconfiguration`
+3. Change the network IP address to ensure that the three systems are on the same subnet.
+4. Change the network to `robocup-x` and configure the network.
 
 ### Recording a dataset
 
