@@ -72,7 +72,13 @@ CubeIDE sometimes stores the serial numbers of past ST-Link devices. So, if you 
    - Optimise for size (`-Os`) — optimises with a focus on shrinking the amount of memory used;
    - Optimise for speed (`-Ofast`) — optimises with a focus on computation-time and was experimentally found to be the quickest for the NUSense firmware.
 
-The optimisation under _MCU GCC Compiler_ should always be set to `-Ofast` unless you wish to debug the generated C firmware in the Hardware Abstraction Library (HAL).
+   The optimisation under _MCU GCC Compiler_ should always be set to `-Ofast` unless you wish to debug the generated C firmware in the Hardware Abstraction Library (HAL).
+
+    <Alert type='warn'>
+
+   It is recommended to only ever use `-Og` or `-Ofast`, the former only for debugging, and the latter for all else, especially deployment. **Always** make sure that `-Ofast` is set for deployed firmware; `-Og` may seriously hamper the robot's performance.
+
+    </Alert>
 
 2. There are three actions for compiling and flashing firmware.
 
@@ -81,12 +87,6 @@ The optimisation under _MCU GCC Compiler_ should always be set to `-Ofast` unles
    - and _Debug_ which compiles the firmware, flashes the binary, and opens a debug session with the microcontroller; it is found as the green bug symbol or under _Run_.
 
 3. Cleaning the project is often useful for troubleshooting cached errors, etc. It clears the build cache. Go to _Project > Clean ..._ or right-click on the NUSense project under the _Project Explorer_ tab and click _Clean Project_.
-
-<Alert type='warn'>
-
-It is recommended to only ever use `-Og` or `-Ofast`, the former only for debugging, and the latter for all else, especially deployment. **Always** make sure that `-Ofast` is set for deployed firmware; `-Og` may seriously hamper the robot's performance.
-
-</Alert>
 
 <Alert type='info'>
 
