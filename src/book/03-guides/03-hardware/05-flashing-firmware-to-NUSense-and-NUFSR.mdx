@@ -1,0 +1,123 @@
+---
+section: Guides
+chapter: Hardware
+title: Flashing Firmware to NUSense and NUFSR
+description: How to install code to the NUSense subcontroller board
+slug: /guides/hardware/flashing-firmware-to-NUSense-and-NFSR
+authors:
+  - Clayton Carlon (@Claegtun)
+---
+
+## Flashing Firmware to NUSense and NUFSR
+
+NUSense is a subcontroller board custom-made together by Elby Designs and NUbots that communicates with the servo-motors through RS485. This guide shall take the reader through the process of installing or *flashing* firmware unto the microcontroller. It also applies to NUFSR.
+
+### Prerequisites
+
+The reader needs
+- a NUSense/NUFSR board with the appropriate components soldered, e.g. in the case of NUSense U101, JP101, etc.,
+- a tool to flash firmware to the board -- this guide will use the ST-Link dongle --,
+- and a computer with the latest STM32CubeIDE installed -- Linux versions can be found [here](https://www.st.com/en/development-tools/stm32cubeide.html#get-software).
+
+### Set-up
+
+1. Clone the NUbots/NUcontroller repository.
+
+    ```bash
+   git clone https://github.com/NUbots/NUcontroller.git
+   ```
+
+2. Start STM32CubeIDE up.
+
+3. It will ask to choose a workspace. Choose the local NUcontroller directory as the workspace and launch.
+
+4. Once the IDE has been launched, go to _File > Import... > Existing Projects into Workspace_.
+
+5. 
+
+### Connecting to the ST-Link
+
+1. Plug the ST-Link into the computer that is running STM32CubeIDE.
+
+<Alert type='info'>
+
+It is most convenient to use a short USB extension cable so that the ST-Link can be near to the NUSense board.
+
+</Alert>
+
+2. Plug the other end of the ST-Link into the NUSense board with a custom ribbon-cable.
+
+<Alert type='warn'>
+
+The ST-Link must connect to the NUSense board through a custom ribbon-cable, not just an ordinary one. It should have a few wires rearranged for the different pin-mapping of the ST-Link. Otherwise, one can connect the ST-Link through a few jumper wires as according to the pin-mapping printed on the ST-Link itself and the NUSense schematic. Along with 3.3 V and ground/0 V, SWDIO maps to TMS, and SWCLK maps to TCK.
+
+</Alert>
+
+3. In \[STM32\]CubeIDE, go to _Run > Debug Configurations_. Click on _NUSense Debug_ on the left-hand pane; if it is not there, then double-click on _STM32 C/C++ Application_. After that, go to the _Debugger_ tab. The default settings should be left as they are, but make sure that SWD is chosen under the _Interface_ section and check _ST-LINK S/N_. Then click _Scan_. This finds the serial number of the connected ST-Link; make sure that it is chosen in the dropdown. Click _Apply_ and _Close_.
+
+<Alert type='warn'>
+
+CubeIDE sometimes stores the serial numbers of past ST-Link devices. So, if you have used multiple ST-Links, then you may need to make sure that the right serial number is chosen. CubeIDE should keep this one set between sessions. Thus, it is best to stick with the same physical ST-Link as much as possible so that you need not to go to the configuration each time.
+
+</Alert>
+
+### Compiling and Flashing
+
+1. Before flashing, it is a good idea to see the optimiser flags. Go to _Project > Properties > C/C++ Build > Settings_. Depending on your local setup, the dropdown at the top would likely be set as _Debug \[Active\]_ as the _Configuration_; this would do for now. Under the _Tool Settings_ tab, go to _MCU G++ Compiler > Optimization_ and choose the dropdown to whichever optimisation-level that you wish. Here is a quick summary:
+
+    - None (`-O0`) -- runs without any optimisation, that is with the highest fidelity to the source;
+    - Optimise for Debug (`-Og`) -- runs with as little optimisation as not to get in the way of stepping line by line and accessing variables, watch-expressions, memory, etc. within the debug session -- from the perspective of the debugging, should more or less behave like -O0;
+    - Optimise (`-O1`), Optimise more (`-O2`), Optimise most (`-O3`) -- runs with general optimisation in increasing degrees;
+    - Optimise for size (`-Os`) -- optimises with a focus on shrinking the amount of memory used;
+    - Optimise for speed (`-Ofast`) -- optimises with a focus on computation-time and was experimentally found to be the quickest for the NUSense firmware.
+
+The optimisation under _MCU GCC Compiler_ should always be set to `-Ofast` unless you wish to debug the generated C firmware in the Hardware Abstraction Library (HAL).
+
+<Alert type='warn'>
+
+It is recommended to only ever use `-Og` or `-Ofast`, the former only for debugging, and the latter for all else, especially deployment. **Always** make sure that `-Ofast` is set for deployed firmware; `-Og` may seriously hamper the robot's performance.
+
+</Alert>
+
+2. There are three actions for compiling and flashing firmware.
+
+    - _Build_ which only compiles the firmware and is found as the hammer symbol or under _Project_,
+    - _Run_ which compiles the firmware and flashes the binary and is found as the green play symbol or under _Run_,
+    - and _Debug_ which compiles the firmware, flashes the binary, and opens a debug session with the microcontroller; it is found as the green bug symbol or under _Run_.
+
+<Alert type='info'>
+
+You may take notice that _Run_ and _Debug_ always attempts to compile the firmware as a first step even if it has been compiled before. Therefore, there is no need to _Build_ everytime before flashing. Often, _Run_ and _Debug_ will not actually recompile it but rather see whether a change in the firmware warrants a recompile. As a result, _Build_ is typically only used for checking for compiler-errors, etc. 
+
+Furthermore, running _Debug_ and then exiting the debug session has more of less the same effect as running _Run_. 
+
+</Alert>
+
+<Alert type='warn'>
+
+There are two things for which to watch out when flashing firmware for the first time. Firstly, depending on the physical ST-Link, it may ask to update the ST-Link's _firmware_ -- not to be confused with the NUSense _firmware_. To update the ST-Link,
+
+1. Click _Open in update mode_.
+
+2. If it says "ST-Link is not in DFU mode. Please restart it.", then
+
+    a. unplug and replug the ST-Link from and to the computer,
+
+    b. click _Refresh device list_,
+
+    c. and click _Open in update mode_ again.
+
+3. Lastly, click _Upgrade_.
+
+</Alert>
+
+<Alert type='warn'>
+
+Sometimes albeit rare, especially if it is the first ever time flashing to a particular chip, the microcontroller needs to be put into _boot_ mode. This is done when the _BOOT0_ pin of the microcontroller is pulled high when it is powered on. On some revisions of the NUSense board, there is a push-button labelled S101; on NUFSR and other revisions of NUSense, there is instead a two-pin header. In order to put the microcontroller into boot mode, either the push-button needs to be held or a jumper wire is connected across the two pins when power is supplied, more specifically 3.3 V. 
+
+Keep in mind that the ST-Link itself supplies 3.3 V, just enough to power the microcontroller and the IMU. So, if flashing with no other power supplied to the board, then unplugging and replugging the ST-Link counts as if power was cycled.
+
+</Alert>
+
+6. Cleaning the project is often useful for troubleshooting cached errors, etc. It clears the build cache. Go to _Project > Clean ..._ or right-click on the NUSense project under the _Project Explorer_ tab and click _Clean Project_.
+
