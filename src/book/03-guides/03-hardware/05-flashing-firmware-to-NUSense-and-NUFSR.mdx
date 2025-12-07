@@ -40,27 +40,27 @@ The reader needs
 
 1. Plug the ST-Link into the computer that is running STM32CubeIDE.
 
+   <Alert type='info'>
+
+   It is most convenient to use a short USB extension cable so that the ST-Link can be near to the NUSense board.
+
+   </Alert>
+
 2. Plug the other end of the ST-Link into the NUSense board with a custom ribbon-cable.
+
+   <Alert type='warn'>
+
+   The ST-Link must connect to the NUSense board through a custom ribbon-cable, not just an ordinary one. It should have a few wires rearranged for the different pin-mapping of the ST-Link. Otherwise, one can connect the ST-Link through a few jumper wires as according to the pin-mapping printed on the ST-Link itself and the NUSense schematic. Along with 3.3 V and ground/0 V, SWDIO maps to TMS, and SWCLK maps to TCK.
+
+   </Alert>
 
 3. In \[STM32\]CubeIDE, go to _Run > Debug Configurations_. Click on _NUSense Debug_ on the left-hand pane; if it is not there, then double-click on _STM32 C/C++ Application_. After that, go to the _Debugger_ tab. The default settings should be left as they are, but make sure that SWD is chosen under the _Interface_ section and check _ST-LINK S/N_. Then click _Scan_. This finds the serial number of the connected ST-Link; make sure that it is chosen in the dropdown. Click _Apply_ and _Close_.
 
-<Alert type='info'>
+   <Alert type='warn'>
 
-It is most convenient to use a short USB extension cable so that the ST-Link can be near to the NUSense board.
+   CubeIDE sometimes stores the serial numbers of past ST-Link devices. So, if you have used multiple ST-Links, then you may need to make sure that the right serial number is chosen. CubeIDE should keep this one set between sessions. Thus, it is best to stick with the same physical ST-Link as much as possible so that you need not to go to the configuration each time.
 
-</Alert>
-
-<Alert type='warn'>
-
-The ST-Link must connect to the NUSense board through a custom ribbon-cable, not just an ordinary one. It should have a few wires rearranged for the different pin-mapping of the ST-Link. Otherwise, one can connect the ST-Link through a few jumper wires as according to the pin-mapping printed on the ST-Link itself and the NUSense schematic. Along with 3.3 V and ground/0 V, SWDIO maps to TMS, and SWCLK maps to TCK.
-
-</Alert>
-
-<Alert type='warn'>
-
-CubeIDE sometimes stores the serial numbers of past ST-Link devices. So, if you have used multiple ST-Links, then you may need to make sure that the right serial number is chosen. CubeIDE should keep this one set between sessions. Thus, it is best to stick with the same physical ST-Link as much as possible so that you need not to go to the configuration each time.
-
-</Alert>
+   </Alert>
 
 ### Compiling and Flashing
 
@@ -86,15 +86,15 @@ CubeIDE sometimes stores the serial numbers of past ST-Link devices. So, if you 
    - _Run_ which compiles the firmware and flashes the binary and is found as the green play symbol or under _Run_,
    - and _Debug_ which compiles the firmware, flashes the binary, and opens a debug session with the microcontroller; it is found as the green bug symbol or under _Run_.
 
+   <Alert type='info'>
+
+   You may take notice that _Run_ and _Debug_ always attempts to compile the firmware as a first step even if it has been compiled before. Therefore, there is no need to _Build_ everytime before flashing. Often, _Run_ and _Debug_ will not actually recompile it but rather see whether a change in the firmware warrants a recompile. As a result, _Build_ is typically only used for checking for compiler-errors, etc.
+
+   Furthermore, running _Debug_ and then exiting the debug session has more or less the same effect as running _Run_.
+
+    </Alert>
+
 3. Cleaning the project is often useful for troubleshooting cached errors, etc. It clears the build cache. Go to _Project > Clean ..._ or right-click on the NUSense project under the _Project Explorer_ tab and click _Clean Project_.
-
-<Alert type='info'>
-
-You may take notice that _Run_ and _Debug_ always attempts to compile the firmware as a first step even if it has been compiled before. Therefore, there is no need to _Build_ everytime before flashing. Often, _Run_ and _Debug_ will not actually recompile it but rather see whether a change in the firmware warrants a recompile. As a result, _Build_ is typically only used for checking for compiler-errors, etc.
-
-Furthermore, running _Debug_ and then exiting the debug session has more or less the same effect as running _Run_.
-
-</Alert>
 
 <Alert type='warn'>
 
