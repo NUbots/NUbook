@@ -126,6 +126,6 @@ There are two things for which to watch out when flashing firmware for the first
 
 Sometimes albeit rare, especially if it is the first ever time flashing to a particular chip, the microcontroller needs to be put into _boot_ mode. This is done when the `BOOT0` pin of the microcontroller is pulled high when it is powered on. On some revisions of the NUSense board, there is a push-button labelled `S101`; on NUFSR and other revisions of NUSense, there is instead a two-pin header. In order to put the microcontroller into boot mode, either the push-button needs to be held or a jumper wire is connected across the two pins when power is supplied, more specifically 3.3&nbspV.
 
-Keep in mind that the ST-Link itself supplies 3.3&nbspV, just enough to power the microcontroller and the IMU. So, if flashing with no other power supplied to the board, then unplugging and replugging the ST-Link counts as if power was cycled.
+Keep in mind that the ST-Link itself supplies 3.3&nbspV, just enough to power the microcontroller and the IMU. So, if flashing with no other power supplied to the board, then unplugging and replugging the ST-Link counts as if power were cycled.
 
 </Alert>
