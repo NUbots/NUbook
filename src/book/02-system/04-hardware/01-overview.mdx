@@ -8,6 +8,7 @@ authors:
   - Ysobel Sims (@ysims)
   - Taylor Young (@tayloryoung6396)
   - Alex Biddulph (@Bidski)
+  - Corah Oliver (@yippyy)
 ---
 
 The NUbots team uses the NUgus hardware platform, a modification of the [igus® Humanoid Open Platform](http://www.nimbro.net/OP/). The NUgus robots are 3D printed using fused deposition modelling.
@@ -25,12 +26,41 @@ The following modifications were made to fit our specific requirements:
 - Added a 3d printed brace between the hip yaw servos to reduce flex. The brace also serves as a mount for power switches and the main power fuse.
 - Created custom draws for the computer (intel NUC) and subcontrollers (OpenCR, NUSense)
 - Designed a bearing housing for the hip yaw that takes a tapered roller bearing from a mountain bike head stock. This interfaces between the servo shaft and the hip pitch/roll block and takes the load of the servo shaft and spreads it over a wider area on the bottom of the torso.
+- 3d printed Onyx legs have now been replaced with 'L' angle machined aluminium.
+- The NUC drawer has been replaced with a vertical NUC assembly. These changes were made to utilise space within the torso which now provides extra working space. Features include:
+
+  - Rubber mounts.
+  - Lower mounts that double as a hip yaw motor brace. This addition stiffens the lower torso.
+  - Integrated power assembly.
+  - Subcontroller mount.
+
+- The back panel has been simplified as the old NUC placement was prone to breaking ports on the NUC board. The opportunity for improvements appeared when the new vertical NUC mount placement required cables to access data ports. New back panel features include:
+
+  - Replaceable keystone ports (usb-c, usb-3, and ethernet).
+  - Replaceable data cables to NUC.
+  - New bigger buttons.
+
+<Alert>
+
+The **RED** button relaxes the servos.
+
+The **BLUE** button starts behaviour.
+
+The **BLACK** button stops behaviour.
+
+</Alert>
 
 ## Servos
 
 The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-64/), with two in each shoulder, one in each elbow, and two in the neck. The legs use both [Dynamixel XH540-W270-R servo](https://emanual.robotis.com/docs/en/dxl/x/xh540-w270/) and [Dynamixel MX106 servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-106/), with two X series in each ankle, one in each knee, and two in each hip, with the two hip yaw servos remaining as MX-106.
 
-There are custom made mounting brackets milled from aluminium for the [flywheels](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Flywheel_Bracket.stl), and servo-to-servo mounting brackets in the [neck](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Head_Bracket.stl), hip, and ankle. There are also 3D printed cable clamps on the back of the [knees](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Servo_cable_holder.stl), [ankle and hip blocks](https://github.com/NUbots/NUware/blob/main/Igus/Current%20Design/stl_file/Cable_Holder.stl).
+Custom 3d printed Onyx mounts are now used, but over time it has been determined that parts such as the knee servo mounts and the idle wheel mounts may better to be printed from PETG filament.
+
+- Custom mounts that retain MX style idle wheels on x-series servos. MX style idle wheels are preferred due to being bolted rather than the clip-in design of the x-series idle wheels.
+
+- Under each idle wheel, flat needle bearings or flat stainless washers/bearings are used.
+
+The X-series servos use custom bolt in cable retainer clips.
 
 The MX servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor.
 This is done to prevent induced EMF from overloading the electronics in the servo.
@@ -52,7 +82,7 @@ The NUgus robot uses two [FLIR Blackfly S](https://www.flir.com/products/blackfl
 
 ## Computing
 
-The NUgus robot uses the [Intel NUC12WSHi7](https://www.intel.com/content/www/us/en/products/sku/121640/intel-nuc-12-pro-kit-nuc12wshi7/specifications.html). It has 32GB of RAM, a 1TB SSD, and a [Robotis OpenCR Sub Controller](https://emanual.robotis.com/docs/en/parts/controller/opencr10/).
+The NUgus robot uses the [Intel NUC12WSHi7](https://www.intel.com/content/www/us/en/products/sku/121640/intel-nuc-12-pro-kit-nuc12wshi7/specifications.html). It has 32GB of RAM, a 1TB SSD, and a NUsense subcontroller.
 
 ## Networking
 
@@ -60,7 +90,16 @@ The NUgus robot has an Ethernet port as well as WiFi capability. It has two cust
 
 ## Power
 
-The NUgus robot has a [Cosel AC/DC Power Supply](https://www.powerbox.com.au/ac-dc-power-supplies/ac-dc-power-supply-cosel-pbb20c). It uses a [4200mAh 4S LiPo Battery](https://www.auselectronicsdirect.com.au/14.8v-4200mah-lipo-4s-battery-pack-with-deans-conn) when not plugged into power. It uses a rebuilt Darwin power board and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
+The NUgus robot has a [Cosel AC/DC Power Supply](https://www.powerbox.com.au/ac-dc-power-supplies/ac-dc-power-supply-cosel-pbb20c). It uses a [4200mAh 4S LiPo Battery](https://www.campbelltownhobbies.com.au/nxe-14.8v-4200mah-40c-soft-case-with-deans-plug-42?srsltid=AfmBOopsSRXZSrXw4AsKhPQgUhmWyOqvFeGJkwsGQ3VU2ZQyUqlf4PYQ) when not plugged into power. It uses a custom power assembly and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
+
+<Alert>
+
+**DIMENSIONS**: 36x44x138mm
+
+**CAPACITY**: 4200 mAh x 14.8 V = 62.16 Wh
+
+</Alert>
+
 The NUgus robot uses custom cables to provide power to the fan, the NUC, and sense and speed control to the fan.
 
 ## Foot Studs
