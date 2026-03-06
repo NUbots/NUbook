@@ -4,6 +4,7 @@ import { StaticQuery, graphql } from 'gatsby'
 
 import EmailIcon from './email-icon.svg'
 import FacebookIcon from './facebook-icon.svg'
+import LinkedInIcon from './linkedin-icon.svg'
 import GithubIcon from './github-icon.svg'
 import SlackIcon from './slack-icon.svg'
 
@@ -40,13 +41,14 @@ const Links = ({ color }) => (
             githubUrl
             slackUrl
             facebookUrl
+            linkedinUrl
             email
           }
         }
       }
     `}
     render={(data) => {
-      const { githubUrl, slackUrl, facebookUrl, email } = data.site.siteMetadata
+      const { githubUrl, slackUrl, facebookUrl, linkedinUrl, email } = data.site.siteMetadata
       return (
         <>
           <Link
@@ -65,6 +67,12 @@ const Links = ({ color }) => (
             Icon={FacebookIcon}
             title='NUbots on Facebook'
             href={facebookUrl}
+            color={color}
+          />
+          <Link
+            Icon={LinkedInIcon}
+            title='NUbots on LinkedIn'
+            href={linkedinUrl}
             color={color}
           />
           <Link
