@@ -48,7 +48,8 @@ const Links = ({ color }) => (
       }
     `}
     render={(data) => {
-      const { githubUrl, slackUrl, facebookUrl, linkedinUrl, email } = data.site.siteMetadata
+      const { githubUrl, slackUrl, facebookUrl, linkedinUrl, email } =
+        data.site.siteMetadata
       return (
         <>
           <Link
