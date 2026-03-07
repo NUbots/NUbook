@@ -6,29 +6,6 @@ description: Documentation for each strategy module in the main NUbots codebase
 slug: /system/modules/strategy/
 ---
 
-## AlignBallToGoal
-
-### Description
-
-Strafes in a circle around the ball if the ball exists.
-
-### Usage
-
-Add this module to align the ball to the goal.
-
-### Consumes
-
-- `message::strategy::AlignBallToGoal` Task requesting to rotate around the ball.
-- `message::Localisation::Ball` Information on where the ball is.
-- `message::Localisation::Field` Information regarding the position of the field.
-- `message::support::FieldDescription` Information on the dimensions of the field, used to find the goal position to align to.
-
-### Emits
-
-- `message::planning::PivotAroundPoint` Task requesting to rotate around the ball.
-
-### Dependencies
-
 ## DiveToBall
 
 ### Description
@@ -94,52 +71,6 @@ Include this module and request a FindBall Task when needing to find the ball.
 - `message::planning::LookAround` to move the head around to find the ball
 
 ### Dependencies
-
-## KickToGoal
-
-### Description
-
-Kicks towards the goals.
-
-### Usage
-
-Add this module to kick towards the goals.
-
-### Consumes
-
-- `message::strategy::KickToGoal` The Task requesting to kick towards the goal.
-- `message::localisation::Field` Information on where the field is in the world.
-- `message::input::Sensors` Information on where the robot is in the world.
-- `message::support::FieldDescription` Information on the dimensions of the field, to get the goal position.
-
-### Emits
-
-- `message::planning::KickTo` a Task requesting to kick to the goals when applicable.
-
-### Dependencies
-
-## Ready
-
-### Description
-
-This module contains a Provider for the Ready Task, which aims to position the robots on the field in the RoboCup READY phase. The robot moves for a configured amount of time with a configured walk command and then stands still
-
-### Usage
-
-Add this module to walk onto the field in the READY state.
-
-### Consumes
-
-- `message::strategy::Ready` a Task requesting to walk to the ready position
-
-### Emits
-
-- `message::skill::Walk` a Task requesting to walk at a particular speed
-- `message::strategy::StandStill` a Task requesting to stand still
-
-### Dependencies
-
-- The walk engine
 
 ## StandStill
 
@@ -214,73 +145,44 @@ Add this module to your role to make the robot look at balls or goals when reque
 
 - The coordinates utility
 
-## WalkInsideBoundedBox
-
-### Description
-
-Keeps the robot clamped within bounded box area on the field. The bounded box is configurable.
-
-If ball is outside bounded box area and ball is in front of the bounding box, defender is clamped to the edge of bounding box closest to ball.
-
-If ball is outside the bounded box area and to the side of the bounding box, the robot is clamped to the edge of bounding box closest to ball and positions itself 1 meter behind the ball.
-
-### Usage
-
-Add this module to keep the robot within a bounding box on the field.
-
-### Consumes
-
-- `message::input::Sensors` To get sensor information for localisation
-- `message::localisation::Field` Localisation usage for keeping inside bounded box
-- `message::localisation::FilteredBall` Used for ball position
-- `message::strategy::WalkInsideBoundedBox` a Task requesting to stay within a bounding box on the field
-
-### Emits
-
-- `message::strategy::WalkToFieldPosition` a Task to walk to desired field position
-
-### Dependencies
-
 ## WalkToBall
 
 ### Description
 
-Walks to the ball if a filtered ball exists.
+Four types of walking to the ball exist in this module.
+
+`WalkToBall` is a very simple Provider directly walking to the ball without considering the goal position.
+
+`WalkToKickBall` walks the ball with the robot positioned such that it will move the ball towards the goals. It will move behind the ball first if the robot is positioned between the ball and goals.
+
+`TackleBall` will walk to the ball perpendicularly to the opponent robot closest to the ball, tackling it off them.
+
+`PositionBehindBall` will walk behind the ball, facing the goals, and stop behind the ball without touching it. This is for penalty positioning where the ball should not be touched yet.
 
 ### Usage
 
-Add this module to walk to the ball.
+Add this module and emit the Task for the desired type of walk to ball.
 
 ### Consumes
 
-- `message::strategy::WalkToBall` Task requesting to walk to the ball
+- `message::strategy::WalkToBall` Task requesting to walk to the ball directly
+- `message::strategy::WalkToKickBall` Task requesting to walk to the ball with the goals aligned
+- `message::strategy::TackleBall` Task requesting to tackle the ball off an opponent
+- `message::strategy::PositionBehindBall` Task requesting to position behind the ball without touching the ball, in line with the goals
 - `message::localisation::Ball` information on where the ball is
+- `message::support::FieldDescription` to know where the goals are
+- `message::input::Sensors` for transforming into robot space
+- `message::localisation::Field` for calculations in field space
+- `message::localisation::Robots` used by TackleBall to find the opponent robot to tackle off
 
 ### Emits
 
-- `message::planning::WalkTo` Task requesting to walk to a location, in this case the ball
+- `message::planning::WalkTo` Task requesting to walk to the ball directly
+- `message::strategy::WalkToFieldPosition` used by all except `WalkToBall` to position at the ball appropriately
 
 ### Dependencies
 
-## WalkToFieldPosition
-
-### Description
-
-Walks to the field position using localisation information.
-
-### Usage
-
-Add this module to walk to a position on the field.
-
-### Consumes
-
-- `message::strategy::WalkToFieldPosition` Task requesting to walk to position on field
-
-### Emits
-
-- `message::planning::WalkTo` Task requesting to walk to a point
-
-### Dependencies
+- `utility::math::euler::pos_rpy_to_transform` for creating the transform for `WalkToFieldPosition`
 
 ## WalkToFieldPosition
 

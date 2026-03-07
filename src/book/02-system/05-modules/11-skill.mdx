@@ -32,7 +32,7 @@ Add this module to the role and emit a Dive Task to execute a Dive.
 
 ### Description
 
-A Behaviour module that will run the appropriate getup script for the
+A Behaviour module that will run the appropriate getup script for the robot. First a StandStill task is emitted, then the getup task is delayed so that the robot can settle into it's final position to improve side detection accuracy. Additionally, if after the delay the robot detects that it is on its left/right side, another delay will be emitted.
 
 ### Usage
 
@@ -75,6 +75,27 @@ Include this module to allow your system to interact with OpenAI's GPT for natur
 - **nlohmann::json**: For JSON data serialization and deserialization.
 - **utility::openai::openai**: A utility to interface with the OpenAI API.
 
+## KickWalk
+
+### Description
+
+Allows the robot to perform kicks while walking. This module emits a modified walk command, making the walk engine take a single large step when a kick task is emitted. These kicks integrate seamlessly with the robot's regular walk.
+
+### Usage
+
+Include this module to allow the robot to kick while walking. This is useful for dynamic soccer gameplay where the robot needs to kick the ball while maintaining movement.
+
+### Consumes
+
+- `message::skill::Kick` Task requesting the robot to kick
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target, a boolean indicating whether to kick, and the leg to use when kicking.
+
+### Emits
+
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target, a boolean indicating whether to kick, and the leg to use when kicking.
+
+### Dependencies
+
 ## Look
 
 ### Description
@@ -97,35 +118,6 @@ Include this module to make the robot look in the given direction.
 ### Dependencies
 
 - The coordinates utility
-
-## QuinticWalk
-
-### Description
-
-Open loop walk engine that uses quintic splines to create trajectories.
-
-### Usage
-
-Include this module to allow the robot to walk.
-
-### Consumes
-
-- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target.
-
-### Emits
-
-- `message::behaviour::state::Stability` to indicate when the robot is walking (dynamically stable) and standing.
-- `message::actuation::LeftLegIK` Task requesting the left leg is moved using Inverse Kinematics, containing left leg motion information.
-- `message::actuation::RightLegIK` Task requesting the right leg is moved using Inverse Kinematics, containing right leg motion information.
-- `message::actuation::LeftArm` Task requesting the left arm is moved using Inverse Kinematics, containing left arm servo commands.
-- `message::actuation::RightArm` Task requesting the right arm is moved using Inverse Kinematics, containing right arm servo commands.
-
-### Dependencies
-
-- Eigen
-- KinematicsModel
-- Sensors
-- `utility::motion::splines::*`
 
 ## Say
 
