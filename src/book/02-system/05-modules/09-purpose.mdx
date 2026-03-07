@@ -148,8 +148,6 @@ Add this module to the role and emit a Goalie Task.
 - `message::purpose::FieldPlayer` a task telling the robot to be a field player, when there are no teammates.
 - `message::purpose::Purpose` information on the position the robot is playing (goalie), its ID and active state.
 
-### Dependencies
-
 ## KeyboardWalk
 
 ### Description
@@ -280,8 +278,6 @@ finished at which point it terminates the program.
 
 - `message::actuation::LimbsSequence` through the Script utility, which populates the requested Script/s into LimbsSequences.
 
-### Dependencies
-
 ## Script Tuner
 
 ### Description
@@ -339,14 +335,6 @@ This module deals with more of the running of a game rather than what the robot 
 goalie vs field player, and more general higher level tasks we always want running such as idle stand, idle look forward and fall recovery,
 and initial global state information.
 
-### Usage
-
-### Consumes
-
-### Emits
-
-### Dependencies
-
 ## Support
 
 ### Description
@@ -384,8 +372,6 @@ enabling the WalkToBal and KickTo tasks in the config.
 ### Usage
 
 Add this module and enable/disable strategies and planners in the config which you wish to test.
-
-### Consumes
 
 ### Emits
 
