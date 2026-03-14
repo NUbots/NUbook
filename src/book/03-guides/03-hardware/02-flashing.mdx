@@ -64,14 +64,14 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
 6. Execute the script and follow the instructions
 
    - ```bash
-     ./arch_install.sh
-     ```
-    <Alert type="warning">
+    ./arch_install.sh
+   ```
+   <Alert type="warning">
 
-    Due to the Arch Linux ISO's age, packages may fail to install as part of this install script due to an outdated keyring (you may see this as an invalidated or corrupted signature).
-    
-    To remedy this, update the Arch keyring by running `pacman -Sy archlinux-keyring` before running the install script.
-    
+   Due to the Arch Linux ISO's age, packages may fail to install as part of this install script due to an outdated keyring (you may see this as an invalidated or corrupted signature).
+
+   To remedy this, update the Arch keyring by running `pacman -Sy archlinux-keyring` before running the install script.
+
     </Alert>
 
 7. The installation script will end by downloading a secondary script and providing you with a command that you must run
@@ -118,7 +118,7 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
      <Alert type="warning">
 
      Remember to include the `-t` argument, as it installs the toolchain alongside the built binaries and configuration files (especially important here as these aren't installed as part of the install scripts).
-    
+
      </Alert>
 
    - Now ssh into the robot and run
