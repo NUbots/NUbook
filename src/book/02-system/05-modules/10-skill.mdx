@@ -26,6 +26,7 @@ Add this module to the role and emit a Dive Task to execute a Dive.
 
 ### Dependencies
 
+- Director
 - The script utility to load the Dive scripts
 
 ## Getup
@@ -50,6 +51,7 @@ Include this module to allow the robot to get up after it has fallen over.
 
 ### Dependencies
 
+- Director
 - The `Script` extension to convert scripts into BodySequences
 
 ## GPT
@@ -68,12 +70,59 @@ Include this module to allow your system to interact with OpenAI's GPT for natur
 
 ### Emits
 
-`message::skill::Say`: A Task requesting to speak using the output of the GPT model based on the input request.
+- `message::skill::Say`: A Task requesting to speak using the output of the GPT model based on the input request.
 
 ### Dependencies
 
-- **nlohmann::json**: For JSON data serialization and deserialization.
+- Director
+- **nlohmann::json**: For JSON data serialisation and deserialisation.
 - **utility::openai::openai**: A utility to interface with the OpenAI API.
+
+## IKKick
+
+### Description
+
+Performs a kick using inverse kinematics by balancing on one support foot and moving the other foot through a kick
+trajectory.
+
+The module:
+
+- Chooses support foot from the requested kick target (`y < 0` uses left support, otherwise right)
+- Transforms kick target/direction into support-foot coordinates
+- Runs a balancing phase and then a kick phase
+- Emits leg IK tasks each update until the kick sequence is complete
+
+### Usage
+
+Provide a `message::skill::Kick` task together with current `Sensors` and `KinematicsModel`.
+
+`IKKick` runs as a behaviour skill (`Provide<Kick>`) at 90 Hz and publishes `LeftLegIK`/`RightLegIK` tasks for the
+legs during the kick.
+
+Configuration is read from `IKKick.yaml`, including:
+
+- servo gain/torque
+- balancer timing/geometry settings
+- active-balance controller gains
+- kick trajectory parameters (`kick_velocity`, `follow_through`, `wind_up`, etc.)
+- kick frame templates (`lift_foot`, `kick`, `place_foot`)
+
+### Consumes
+
+- `extension::Configuration` from `IKKick.yaml`
+- `message::skill::Kick`
+- `message::input::Sensors`
+- `message::actuation::KinematicsModel`
+
+### Emits
+
+- `message::actuation::LeftLegIK`
+- `message::actuation::RightLegIK`
+- `extension::behaviour::Done` (when kick sequence has finished)
+
+### Dependencies
+
+- Director
 
 ## KickWalk
 
@@ -93,6 +142,10 @@ Include this module to allow the robot to kick while walking. This is useful for
 ### Emits
 
 - `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target, a boolean indicating whether to kick, and the leg to use when kicking.
+
+### Dependencies
+
+- Director
 
 ## Look
 
@@ -115,21 +168,22 @@ Include this module to make the robot look in the given direction.
 
 ### Dependencies
 
+- Director
 - The coordinates utility
 
 ## Say
 
 ### Description
 
-Module that enables the robot to vocalize specified text using a text-to-speech tool and optionally perform a nodding gesture to indicate speaking.
+Module that enables the robot to vocalise specified text using a text-to-speech tool and optionally perform a nodding gesture to indicate speaking.
 
 ### Usage
 
-Include this module whenever the robot needs to vocalize or acknowledge messages via speech-like actions.
+Include this module whenever the robot needs to vocalise or acknowledge messages via speech-like actions.
 
 ### Consumes
 
-- `message::skill::Say`: A Task requesting to vocalize a text string. Contains the text to be spoken and an optional nod gesture request.
+- `message::skill::Say`: A Task requesting to vocalise a text string. Contains the text to be spoken and an optional nod gesture request.
 
 ### Emits
 
@@ -137,6 +191,7 @@ Include this module whenever the robot needs to vocalize or acknowledge messages
 
 ### Dependencies
 
+- Director
 - **mimic3**: External python based command-line text-to-speech tool.
 - **aplay**: Command-line sound player for Linux.
 
@@ -152,14 +207,15 @@ Emit a Kick message when wanting to kick.
 
 ### Consumes
 
-`message::skill::Kick` the kick information to use when kicking.
+- `message::skill::Kick` the kick information to use when kicking.
 
 ### Emits
 
-`message::actuation::LimbsSequence` through the Script extension, which populates the requested Script/s into LimbsSequences.
+- `message::actuation::LimbsSequence` through the Script extension, which populates the requested Script/s into LimbsSequences.
 
 ### Dependencies
 
+- Director
 - Script extension
 
 ## SplineKick
@@ -186,6 +242,7 @@ Add this module to allow the robot to kick.
 
 ### Dependencies
 
+- Director
 - Eigen
 
 ## Walk
@@ -212,4 +269,5 @@ Include this module to allow the robot to walk.
 
 ### Dependencies
 
+- Director
 - Eigen

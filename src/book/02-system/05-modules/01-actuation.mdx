@@ -29,6 +29,7 @@ Include this module to allow the robot to control the feet of robot.
 
 ### Dependencies
 
+- Director
 - Eigen
 
 ## Kinematics
@@ -56,17 +57,18 @@ Emit the corresponding IK message as a task.
 
 ### Dependencies
 
+- Director
 - `utility/actuation/InverseKinematics.hpp` provides the IK functions
 
-## KinematicsModel
+## KinematicsConfiguration
 
 ### Description
 
-Populates a KinematicsModelmessage and ServoOffsets message using values in the configuration files for the rest of the system to use throughout the program. Only emits once at the start.
+Populates a `KinematicsModel` message and `ServoOffsets` message using values in the configuration files for the rest of the system to use throughout the program. Only emits once at the start.
 
 ### Usage
 
-Include this module to use messages KinematicsModel and ServoOffsets
+Include this module to use messages `KinematicsModel` and `ServoOffsets`.
 
 ### Emits
 
@@ -97,3 +99,7 @@ Emit a servo, limb or sequence task, with priority to run according to the Direc
 - `message::actuation::ServoTarget` the servo control information for the platform module.
 - Servo messages from `message/actuation/Servos.proto` when a `message/actuation/Limbs.proto` is received.
 - Limb messages from `message/actuation/Limbs.proto` when a Sequence message from `message/actuation/Limbs.proto` is received.
+
+### Dependencies
+
+- Director

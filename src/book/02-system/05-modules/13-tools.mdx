@@ -55,9 +55,22 @@ Provide `.nbs` file paths via the command line. For example `./b run <role> reco
 
 ### Dependencies
 
-Modules:
+- `nbs/Player` module
 
-- nbs/Player
+## Player
+
+### Description
+
+The Playback module enables fast playback of `.nbs` files by emitting messages and skipping idle times between
+them. It adjusts the NUClear clock to ensure the timing remains accurate.
+
+### Usage
+
+Emit `message.nbs.StartPlayback` elsewhere in system to playback NBS file
+
+### Emits
+
+- `message.nbs.FinishedPlayback` Emitted when playback is finished
 
 ## OdometryBenchmark
 
@@ -88,21 +101,6 @@ This module benchmarks the performance of the robot's odometry system (specifica
 - `message::platform::RawSensors` for ground truth odometry comparison.
 - `message::input::Sensors` for the estimated odometry.
 - NUbots playback system for NBS file handling.
-
-## Player
-
-### Description
-
-The Playback module enables fast playback of `.nbs` files by emitting messages and skipping idle times between
-them. It adjusts the NUClear clock to ensure the timing remains accurate.
-
-### Usage
-
-Emit `message.nbs.StartPlayback` elsewhere in system to playback NBS file
-
-### Emits
-
-- `message.nbs.FinishedPlayback` Emitted when playback is finished
 
 ## RoboCupConfiguration
 

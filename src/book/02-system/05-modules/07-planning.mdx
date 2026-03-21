@@ -30,6 +30,7 @@ Make sure that it has a lower challenge priority than the GetUp, otherwise it ma
 
 ### Dependencies
 
+- Director
 - The Script extension
 
 ## GetUpPlanner
@@ -56,6 +57,7 @@ If relax has higher priority it may trigger mid getup
 
 ### Dependencies
 
+- Director
 - A module that can provide GetUp
 
 ## PlanKick
@@ -92,6 +94,7 @@ Emit a KickTo Task with the position to kick to. The contents of the message (po
 
 ### Dependencies
 
+- Director
 - The reaction will not run without localisation ball messages.
 
 ## PlanLook
@@ -112,6 +115,10 @@ Add this module to your role to make the robot look around when requested.
 
 - `message::skill::Look` a Task requesting to look in a direction
 - `message::planning::LookAround` a Task requesting to run the search pattern to look around the environment
+
+### Dependencies
+
+- Director
 
 ## PlanWalkPath
 
@@ -143,6 +150,7 @@ Include this module in the role and emit the provide Task for either reaction. T
 
 ### Dependencies
 
+- Director
 - The walk engine
 - Mathematics comparison utility
 - Mathematics intersection utility

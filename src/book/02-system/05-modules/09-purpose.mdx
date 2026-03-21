@@ -29,7 +29,7 @@ Designed to be used by one robot as the main attacker.
 
 ### Dependencies
 
-- None
+- Director
 
 ## Defend
 
@@ -56,6 +56,7 @@ Designed for keeping the robot at the back in case the ball is taken towards our
 
 ### Dependencies
 
+- Director
 - `utility::math::euler::pos_rpy_to_transform` to change the position and orientation into a homogenous transformation matrix.
 
 ## FieldPlayer
@@ -104,6 +105,7 @@ Use this module by including it in the role and emitting a `message::purpose::Fi
 
 ### Dependencies
 
+- Director
 - `utility/strategy/positioning.hpp`
 - `utility/strategy/soccer_strategy.hpp`
 
@@ -147,6 +149,10 @@ Add this module to the role and emit a Goalie Task.
 - `message::strategy::ReadyAttack` tells the robot to get ready to attack, but something is preventing it from actually attacking (penalty positioning, kick off).
 - `message::purpose::FieldPlayer` a task telling the robot to be a field player, when there are no teammates.
 - `message::purpose::Purpose` information on the position the robot is playing (goalie), its ID and active state.
+
+### Dependencies
+
+- Director
 
 ## KeyboardWalk
 
@@ -192,6 +198,9 @@ Include this in your role to start the Director tree to run KeyboardWalk.
 
 ### Dependencies
 
+- Director
+- ncurses
+
 ## PenaltyShootout
 
 ### Description
@@ -225,6 +234,59 @@ Include this module in a role and execute during penalty shootout game phases. T
 - `message::localisation::PenaltyReset` for resetting robot position when middle button is pressed
 - `message::output::Buzzer` for audio feedback when middle button is released
 
+### Dependencies
+
+- Director
+
+## PS3Walk
+
+### Description
+
+Starts the Director graph for manual teleoperation using a PS3 controller.
+
+`PS3Walk` reads joystick events from `/dev/input/js0` and publishes walk, look, kick, and optional script tasks.
+It also applies acceleration limiting to walk commands for smoother velocity changes.
+
+### Usage
+
+Include this module in a role and connect a PS3-compatible joystick device.
+
+Key behaviour:
+
+- `START`: toggle walking on/off
+- Left stick: forward/back + rotation command
+- `SELECT`: toggle head lock/unlock
+- Right stick (when unlocked): control head yaw/pitch
+- Right stick button: toggle script execution on/off
+- Face/DPAD/L1/R1 buttons: run mapped scripts or configured kick actions (when scripts are enabled)
+
+Default script/kick mapping is configured in `PS3Walk.yaml` via `button_scripts`.
+
+#### Configuration
+
+- `maximum_forward_velocity`: max forward velocity command (m/s)
+- `maximum_rotational_velocity`: max rotational velocity command (rad/s)
+- `max_acceleration`: max change in velocity per second
+- `button_scripts`: map button names to script files or kick actions (`LEFT_LEG_KICK`, `RIGHT_LEG_KICK`)
+
+### Consumes
+
+- `extension::Configuration` from `PS3Walk.yaml`
+- Joystick device events from Linux input (`/dev/input/js0`)
+
+### Emits
+
+- `message::behaviour::state::Stability` (initialised to `UNKNOWN` on startup)
+- `message::behaviour::state::WalkState` (initialised to `STOPPED` on startup)
+- `message::skill::Look` (head control)
+- `message::skill::Walk` (teleoperation walk command)
+- `message::skill::Kick` (when `L1`/`R1` map to kick actions)
+- `message::actuation::LimbsSequence` (for configured button scripts)
+
+### Dependencies
+
+- Linux joystick device interface (`/dev/input/js*`)
+
 ## ReadyAttack
 
 An attacking player who can't attack yet, and must get ready.
@@ -256,6 +318,7 @@ Include this module and emit a ReadyAttack task if the robot cannot attack due t
 
 ### Dependencies
 
+- Director
 - `utility::math::euler::pos_rpy_to_transform` for field position matrix creation.
 
 ## Script Runner
@@ -277,6 +340,11 @@ finished at which point it terminates the program.
 ### Emits
 
 - `message::actuation::LimbsSequence` through the Script utility, which populates the requested Script/s into LimbsSequences.
+
+### Dependencies
+
+- Director
+- Script system
 
 ## Script Tuner
 
@@ -331,9 +399,66 @@ The keyboard controls are as follows:
 
 ### Description
 
-This module deals with more of the running of a game rather than what the robot is going to do. It deals with penalised robots, idle button presses,
-goalie vs field player, and more general higher level tasks we always want running such as idle stand, idle look forward and fall recovery,
-and initial global state information.
+Coordinates the high-level soccer behaviour state machine.
+
+This module manages when the robot should actively play, idle, or pause due to penalties, then starts the purpose-selection flow and persistent
+recovery behaviours.
+
+Key responsibilities:
+
+- Startup initialisation (`Stability`, `WalkState`, idle stand/look)
+- Starting purpose selection (`FindPurpose`) and always-on fall recovery
+- Selecting `Goalie` or `FieldPlayer` based on `GameState.self.goalie`
+- Handling self penalisation/unpenalisation transitions
+- Handling button-based idle enable/disable flow with configurable delay
+
+### Usage
+
+Include this module in a soccer role.
+
+Configuration is read from `Soccer.yaml`:
+
+- `force_playing`: if true, forces `GameState::Phase::PLAYING`
+- `disable_idle_delay`: delay (seconds) before exiting idle after middle button press
+- `startup_delay`: delay (seconds) before starting soccer behaviours after startup
+
+Control flow:
+
+- Left button (`ButtonLeftDown`) enables idle mode (pauses soccer tasks)
+- Middle button (`ButtonMiddleDown`) disables idle mode after `disable_idle_delay`
+- On penalisation (`GameEvents::Penalisation` for self), purpose tasks are cancelled and localisation/servo state is reset
+- On unpenalisation, purpose and fall-recovery tasks are restarted (unless idling)
+
+### Consumes
+
+- `extension::Configuration` from `Soccer.yaml`
+- `message::input::GameState`
+- `message::support::GlobalConfig`
+- `message::input::GameEvents::Penalisation`
+- `message::input::GameEvents::Unpenalisation`
+- `message::input::ButtonLeftDown`
+- `message::input::ButtonLeftUp`
+- `message::input::ButtonMiddleDown`
+- `message::input::ButtonMiddleUp`
+
+### Emits
+
+- `message::behaviour::state::Stability`
+- `message::behaviour::state::WalkState`
+- `message::skill::Walk`
+- `message::skill::Look`
+- `message::purpose::FindPurpose`
+- `message::purpose::FieldPlayer`
+- `message::purpose::Goalie`
+- `message::strategy::FallRecovery`
+- `message::purpose::Purpose`
+- `message::localisation::ResetFieldLocalisation`
+- `message::platform::ResetWebotsServos`
+- `message::output::Buzzer`
+
+### Dependencies
+
+- Director
 
 ## Support
 
@@ -359,6 +484,7 @@ Include this module and emit a Support Director task to have the robot act as a 
 
 ### Dependencies
 
+- Director
 - `utility::math::euler::pos_rpy_to_transform` to change the position and orientation into a homogenous transformation matrix.
 
 ## Tester
@@ -389,4 +515,5 @@ If enabled in the config the module emits the following.
 
 ### Dependencies
 
+- Director
 - Eigen

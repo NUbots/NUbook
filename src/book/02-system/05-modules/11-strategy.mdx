@@ -27,6 +27,7 @@ Add this module to the role to dive when the ball is close enough.
 
 ### Dependencies
 
+- Director
 - Needs the ball location to know when to dive
 
 ## FallRecovery
@@ -51,6 +52,10 @@ Emit a `message::strategy::FallRecovery` Task in order to activate this module's
 - `message::planning::GetUpWhenFalling` to activate the get up planner
 - `message::planning::RelaxWhenFalling` to activate a relax planner
 
+### Dependencies
+
+- Director
+
 ## FindObject
 
 ### Description
@@ -69,6 +74,10 @@ Include this module and request a FindBall Task when needing to find the ball.
 
 - `message::planning::TurnOnSpot` to turn around if the ball is not in view
 - `message::planning::LookAround` to move the head around to find the ball
+
+### Dependencies
+
+- Director
 
 ## StandStill
 
@@ -92,6 +101,7 @@ Add this module and emit a `message::strategy::StandStill` Task to make the robo
 
 ### Dependencies
 
+- Director
 - The script utility
 - The walk engine
 
@@ -113,6 +123,10 @@ Emit the Task on Startup at the root of the Director tree.
 ### Emits
 
 - `message::actuation::Body` to move the whole body to the stand position.
+
+### Dependencies
+
+- Director
 
 ## StrategiseLook
 
@@ -139,6 +153,7 @@ Add this module to your role to make the robot look at balls or goals when reque
 
 ### Dependencies
 
+- Director
 - The coordinates utility
 
 ## WalkToBall
@@ -178,6 +193,7 @@ Add this module and emit the Task for the desired type of walk to ball.
 
 ### Dependencies
 
+- Director
 - `utility::math::euler::pos_rpy_to_transform` for creating the transform for `WalkToFieldPosition`
 
 ## WalkToFieldPosition
@@ -197,3 +213,7 @@ Add this module to walk to a position on the field.
 ### Emits
 
 - `message::planning::WalkTo` Task requesting to walk to a point
+
+### Dependencies
+
+- Director
