@@ -6,6 +6,91 @@ description: Documentation for each support module in the main NUbots codebase
 slug: /system/modules/support/
 ---
 
+## GlobalConfig
+
+### Description
+
+Loads global robot identity configuration and publishes it as a message for other modules.
+
+This module provides a single source of truth for:
+
+- `player_id`
+- `team_id`
+
+Values are read from `GlobalConfig.yaml` and can be overridden by command-line arguments.
+
+### Usage
+
+Include this module early in your role so modules that depend on global robot identity can trigger correctly.
+
+Optional command-line overrides:
+
+- `--player_id <number>`
+- `--team_id <number>`
+
+If override values are invalid, the module logs an error and keeps the configured value.
+
+### Consumes
+
+- `extension::Configuration` from `GlobalConfig.yaml`
+- `NUClear::message::CommandLineArguments`
+
+### Emits
+
+- `message::support::GlobalConfig`
+
+## SoccerConfig
+
+### Description
+
+Loads soccer field dimensions from configuration and publishes a `FieldDescription` message used by localisation,
+vision, and behaviour modules.
+
+In addition to copying field constants from YAML, the module computes derived values such as goalpost positions and
+goalpost top height.
+
+### Usage
+
+Include this module in roles that require field geometry.
+
+The module listens to configuration updates for `FieldDescription.yaml` and re-emits an updated
+`message::support::FieldDescription` when the file changes.
+
+Configuration files are located at:
+
+- `module/support/configuration/SoccerConfig/data/config/FieldDescription.yaml`
+- `module/support/configuration/SoccerConfig/data/config/webots/FieldDescription.yaml`
+
+Key configured values include field size, line width, goal dimensions, penalty area dimensions, and ball radius.
+
+### Consumes
+
+- `extension::Configuration` from `FieldDescription.yaml`
+
+### Emits
+
+- `message::support::FieldDescription`
+
+## LocalisationSimulator
+
+### Description
+
+Utility module for inspecting localisation field transforms.
+
+It periodically logs the `Hfw` transform matrix from `message::localisation::Field`, which is useful for simulator
+debugging and sanity-checking localisation output.
+
+### Usage
+
+Include this module in a role when you want a simple heartbeat printout of the current field transform.
+
+Every 3 seconds, if a `message::localisation::Field` is available, logs `Field.Hfw`
+
+### Consumes
+
+- `extension::Configuration` from `LocalisationSimulator.yaml`
+- `message::localisation::Field`
+
 ## Console Log Handler
 
 ### Description
@@ -40,9 +125,21 @@ Filenames will be of the format year, month, day, T, hours, \_, minutes, \_, sec
 Files that are currently being written to will have an underscore prepended to the name, which will be removed when the
 file is closed.
 
+### Consumes
+
+- `extension::Configuration` from `DataLogging.yaml`
+- `NUClear::message::CommandLineArguments` (used to derive role/binary output folder)
+- Dynamically registered serialisable message types enabled in `messages` config
+
 ### Emits
 
+- `module::support::logging::DataLogging::DataLog` (internal sync message used by the logger pipeline)
+
 ### Dependencies
+
+- NBS encoder/index utilities (`utility::nbs::Encoder`, `utility::nbs::Index`)
+- `zstr` (compressed stream support)
+- Python 3 at build time (generates per-message recorder handles)
 
 ## DataPlayback
 
@@ -68,6 +165,37 @@ There is some weird behaviour that will occur when using this module that won't 
 - If there are any timestamp fields in the messages, these will not be updated. If you are comparing the timestamps in the messages to the current time they will be wrong.
 - When you are providing paths to `.nbs` files via a `./b run` command they are relative to the build directory in docker. There is a symlink to `recordings` that is placed there to make any nbs file in recordings easier to use but outside of this path you will need to provide the full path from dockers perspective.
 
+## FileLogHandler
+
+### Description
+
+Writes NUClear log output and reaction exceptions to a log file on disk.
+
+The module listens to runtime log messages and reaction statistics, formats them with source information and level, and
+appends them to the configured file.
+
+If a reaction reports an exception, it records exception details (and stack information in debug builds).
+
+### Usage
+
+Configure the output file path in `FileLogHandler.yaml`:
+
+- `log_file`: absolute or relative path to the log file
+
+Behavior:
+
+- Opens the configured file in append mode
+- Adds a separator line when configuration is (re)loaded
+- Serialises writes with a mutex
+- Closes the file on shutdown
+
+### Consumes
+
+- `extension::Configuration` from `FileLogHandler.yaml`
+- `NUClear::message::LogMessage`
+- `NUClear::message::ReactionStatistics`
+- `NUClear::Shutdown`
+
 ## MessageLogHandler
 
 ### Description
@@ -82,17 +210,13 @@ Include this module and configure NetworkForwarder or DataLogging to forward the
 
 ### Consumes
 
-- NUClear::message::LogMessage
-- NUClear::message::ReactionStatistics
+- `NUClear::message::LogMessage`
+- `NUClear::message::ReactionStatistics`
 
 ### Emits
 
-- message::nuclear::LogMessage
-- message::nuclear::ReactionStatistics
-
-### Dependencies
-
-None
+- `message::nuclear::LogMessage`
+- `message::nuclear::ReactionStatistics`
 
 ## NUsight
 
@@ -142,6 +266,7 @@ To implement the evaluator for a new optimisation scenario, extend from the Eval
 
 ### Dependencies
 
+- Director
 - `module::support::optimisation::NSGA2Optimiser` Optimises parameters based on the performance of individuals that are evaluated.
 
 ## NSGA2Optimiser
@@ -232,7 +357,28 @@ Include this module in role.
 
 - `ReactionProfiles` aggregated profiling data, including individual reaction profiles with statistics on execution times.
 
-### Dependencies
+## ReactionTimer
+
+### Description
+
+Logs execution duration for reactions using NUClear reaction statistics.
+
+For each `ReactionStatistics` message, it computes elapsed time from the reaction start and finish timestamps and logs
+the result in milliseconds.
+
+### Usage
+
+Include this module when profiling or debugging reaction performance.
+
+Configuration:
+
+- `module/support/ReactionTimer/config/ReactionTimer.yaml`
+- `log_level`
+
+### Consumes
+
+- `extension::Configuration` from `ReactionTimer.yaml`
+- `NUClear::message::ReactionStatistics`
 
 ## Signal Catcher
 
