@@ -1,0 +1,50 @@
+---
+section: Guides
+chapter: Tools
+title: Contributing to NUsight
+description: All you need to know to start contributing to NUsight.
+slug: /guides/tools/nusight-contribution
+---
+
+This is a guide for how to contribute to NUsight. To see what NUsight can do check out [here](/system/tools/nusight). This guide assumes you have NUsight built and are familar with using it.
+
+## Yarn Commands
+
+Yarn is the system that we use to build and run NUsight. There are a number of different sub commands that can be used
+
+| Command              | Use                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------- |
+| `./b yarn`           | Installs dependencies for NUsight                                                                        |
+| `./b yarn build`     | Build the NUsight codebase - Used when you make changes                                                  |
+| `./b yarn prod`      | Run NUsight on a local server to test changes (You will need to connect with your own NUbots image)      |
+| `./b yarn start`     | Combines the `build` and `prod` commands for a live update (Refresh browser)                             |
+| `./b yarn dev`       | Starts NUsight with some generic robots running a repeated pattern for some development testing          |
+| `./b yarn storybook` | Builds and starts a live updating debug environment for NUsight using Stories to perform component tests |
+
+## Creating a new tab in NUsight
+
+All components for NUsight live in the `src/client/components` directory. The process to create a new tab is as follows
+
+1. Copy one of the existing tab's subdirectories and rename it.
+
+2. Set up `network.ts` to determine the format of the data that you will be receiving from NUClear and passing to your subcomponents
+
+3. Create sub components for the tab
+
+4. Work on the top level `view.tsx`, `model.ts`, and `style.css` documents to finalise the entire tab
+
+5. Edit `src/client/main.tsx` to include both an `import` command and an `install` command
+
+## Creating a sub component for a tab
+
+1. Subcomponents work together in a tab to provide the full functionality. These should be subdirectories in the main tab's directory. It is recommended to copy an existing sub component to ensure you include everything
+
+2. A subcomponent is typically made up of 3 files. `model.ts` is a TypeScript file which handles the interpretation of one or more NUClear protos, and handles any calculations that goes along with preparing it for display. `view.tsx` is a React file which takes the data from `model.ts` and formats it ready for display. `style.css` is used to provide custom stylisation
+
+3. A subcomponent should also include Stories which allow for unit testing under different use cases. These are found in the `stories` directory of each subcomponent
+
+## Stories
+
+Creating stories allows you to run component tests as you work to ensure that everything is running as expected. Stories are created with the `.stories.tsx` extension. Running `./b yarn storybook` will automatically include any files with this extension.
+
+There are several different kinds of Stories in the NUsight codebase which you can learn from, and you can learn more about them [here](https://storybook.js.org/docs/react/get-started/introduction)
