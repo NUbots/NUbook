@@ -8,6 +8,7 @@ authors:
   - Alex Biddulph (@Bidski)
   - Cameron Murtagh (@CMurtagh-LGTM)
   - Kip Hamiltons (@KipHamiltons)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 ## Flashing a Robot
@@ -22,7 +23,7 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
    - Burn the Arch Linux ISO you just downloaded to the USB drive (in this example we are using `/dev/sdb`)
    - ```bash
-     sudo dd bs=4M if=~/Downloads/archlinux-2022.07.10-x86_64.iso of=/dev/sdb status=progress oflag=sync
+     sudo dd bs=4M if=~/Downloads/archlinux-2024.11.01-x86_64.iso of=/dev/sdb status=progress oflag=sync
      ```
 
 2. If you are using a brand new NUC, Boot into the BIOS on the NUC
@@ -66,6 +67,12 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
      ./arch_install.sh
      ```
 
+   <Alert type="warning">
+   Due to the Arch Linux ISO's age, packages may fail to install as part of this install script due to an outdated keyring (you may see this as an invalidated or corrupted signature).
+
+   To remedy this, update the Arch keyring by running `pacman -Sy archlinux-keyring` before running the install script.
+   </Alert>
+
 7. The installation script will end by downloading a secondary script and providing you with a command that you must run
 
    ```bash
@@ -102,10 +109,16 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
    - Make sure you have built the `system_configuration` role and run
 
      ```bash
-     ./b install n<N>
+     ./b install -t n<N>
      ```
 
      Where `<N>` is again replaced with the robot number.
+
+     <Alert type="warning">
+
+     Remember to include the `-t` argument, as it installs the toolchain alongside the built binaries and configuration files (especially important here as these aren't installed as part of the install scripts).
+
+     </Alert>
 
    - Now ssh into the robot and run
      ```bash
