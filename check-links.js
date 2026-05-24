@@ -62,10 +62,11 @@ const checkLinks = async () => {
         method: 'GET', // Changed from HEAD to GET
         timeout: 5000, // 5 second timeout on link connections
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        },
       }
-      
+
       const req = client.request(linkURL, options, (res) => {
         // Consume the response data to free up memory
         res.on('data', () => {})
@@ -73,7 +74,7 @@ const checkLinks = async () => {
           resolve(res.statusCode)
         })
       })
-      
+
       req.on('error', (err) => {
         // Only log non-timeout errors
         if (err.code !== 'ECONNRESET' && err.code !== 'ETIMEDOUT') {
@@ -81,12 +82,12 @@ const checkLinks = async () => {
         }
         resolve(null)
       })
-      
+
       req.on('timeout', () => {
         req.destroy()
         resolve(null)
       })
-      
+
       req.setTimeout(5000)
       req.end()
     })
@@ -105,12 +106,16 @@ const checkLinks = async () => {
         if (statusCode === 404) {
           console.log(`Error - Broken link: ${link}\n\tFound in file: ${file}`)
         } else if (statusCode === null) {
-          console.log(`Warning - Failed to check: ${link}\n\tFound in file: ${file}`)
+          console.log(
+            `Warning - Failed to check: ${link}\n\tFound in file: ${file}`
+          )
         }
         processed++
         // Show progress every 20 links to avoid spam
         if (processed % 20 === 0 || processed === externalLinksList.length) {
-          console.log(`Progress: ${processed}/${externalLinksList.length} links`)
+          console.log(
+            `Progress: ${processed}/${externalLinksList.length} links`
+          )
         }
       })
       .finally(() => {
@@ -120,16 +125,16 @@ const checkLinks = async () => {
           queue.splice(index, 1)
         }
       })
-    
+
     queue.push(promise)
 
     if (queue.length >= concurrency) {
       // Wait for any promise to complete (which will remove itself from queue)
       await Promise.race(queue)
     }
-    
+
     // Add a small delay between requests
-    await new Promise(resolve => setTimeout(resolve, 100))
+    await new Promise((resolve) => setTimeout(resolve, 100))
   }
 
   await Promise.all(queue)
