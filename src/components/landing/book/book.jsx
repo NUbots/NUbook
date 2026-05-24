@@ -1,19 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import IconTeam from './icons/icon-team.svg'
-import IconSystem from './icons/icon-system.svg'
-import IconGuides from './icons/icon-guides.svg'
-import IconTools from './icons/icon-tools.svg'
 import Section from './section'
 import Chapter from './chapter'
-
-const iconMap = {
-  Team: IconTeam,
-  System: IconSystem,
-  Guides: IconGuides,
-  ['Kitchen Sink']: IconTools,
-}
 
 const Book = ({ contents }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
@@ -28,7 +17,7 @@ const Book = ({ contents }) => {
           .map((section, i) => {
             return (
               <Section
-                Icon={iconMap[section.title]}
+                iconSvg={section.iconSvg}
                 active={currentSectionIndex === i}
                 key={section.slug}
                 onClick={() => {
