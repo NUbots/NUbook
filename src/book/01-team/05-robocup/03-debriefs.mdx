@@ -645,7 +645,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 
 #### Behaviour
 
-- All of our robots would stop when one robot was penalized in game
+- All of our robots would stop when one robot was penalised in game
 - Once we get in a stuck state, we don’t have a way to “reset”
 - Webots would teleport our robots when they were penalised which messes with our system. Lots of different components required flushing and not all were caught.
 - The walk engine was running faster than walk path planning which was running faster than soccer strategy. On a new state change from Game Controller, walk keeps running many times before soccer strategy executes. Only really an issue when the robot was teleported in Webots - related to above, need to keep everything flushed for a small amount of time until all the systems catch up
@@ -759,7 +759,7 @@ Due to COVID-19, the 2021 competition was held online using the simulation softw
 - We need the Director, a system that will improve our robots decision making when it comes to what behaviours run at a given time
 - Have a look at implementing ROS bridge, a system with a huge number of libraries that we can use if we can interface with it
 - Investigate PlotJuggler to be used as potential alternative to NUsight charts
-- Numerical optimization for Inverse Kinematics
+- Numerical optimisation for Inverse Kinematics
 - Highly accurate system identification so our model best translates from Webots to the real world
 - Path planning/tracking (vector fields that include obstacles or something similar)
 - Develop a simple program that uses sliders for tuning YAML files for our scripts
@@ -792,7 +792,7 @@ Due to COVID-19, the 2020 competition in France, Bordeaux was cancelled.
 - Green on the field wasn’t detected properly due to low saturation in the images.
 - Seg faults were found due to edge conditions with the goal post detection which caused instability/restarts in the walk
 - Visual Mesh
-  - Couldn’t detect field lines because we couldn’t detect the field (wrong green color, network didn’t have the right training data).
+  - Couldn’t detect field lines because we couldn’t detect the field (wrong green colour, network didn’t have the right training data).
   - Couldn’t see the goals though because they were thinner than what was in the training data.
   - Visual Mesh packets to NUsight were too big, there was lots of dropped packets.
 
@@ -826,7 +826,7 @@ Due to COVID-19, the 2020 competition in France, Bordeaux was cancelled.
 #### RoboCup competition and games
 
 - Team members didn’t go to see most of the games, was demotivating. Robot handling/computer operation during games should be shared or rostered - every team member should be trained on how to do this, to share the load. This year it was tough having just one/two people do it.
-- Wrong prioritization of tasks, could have focused more on immediately important things.
+- Wrong prioritisation of tasks, could have focused more on immediately important things.
 - Need a pre-RoboCup briefing/training for team members
   - Handling robots, during games - putting them on the field, when/where to touch, place remove robots, what to say to refs, etc.
   - How to fix robots correctly.
