@@ -82,7 +82,7 @@ module.exports = {
         'screen-xl': '1280px',
       },
       scale: {
-        '130': '1.3',
+        130: '1.3',
       },
     },
   },

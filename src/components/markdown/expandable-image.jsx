@@ -57,16 +57,16 @@ const ExpandableImage = ({ children, src, alt, className }) => {
     >
       <button
         onClick={handleClose}
-        className="absolute top-4 right-4 md:top-6 md:right-6 z-10 text-white hover:text-gray-300 
+        className='absolute top-4 right-4 md:top-6 md:right-6 z-10 text-white hover:text-gray-300 
           w-8 h-8 text-2xl 
           flex items-center justify-center bg-black bg-opacity-50 rounded-full 
-          transition-colors duration-200"
-        aria-label="Close expanded image"
+          transition-colors duration-200'
+        aria-label='Close expanded image'
       >
         ×
       </button>
 
-      <div className="flex max-w-full max-h-full items-center justify-center">
+      <div className='flex max-w-full max-h-full items-center justify-center'>
         <img
           onClick={handleClose}
           onKeyDown={(e) => {
@@ -77,12 +77,12 @@ const ExpandableImage = ({ children, src, alt, className }) => {
           }}
           src={src}
           alt={alt}
-          className="block w-auto h-auto object-contain"
+          className='block w-auto h-auto object-contain'
           style={{
             maxWidth: isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 4rem)',
             maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
           }}
-          role="button"
+          role='button'
           tabIndex={0}
         />
       </div>
@@ -94,15 +94,19 @@ const ExpandableImage = ({ children, src, alt, className }) => {
       <div
         onClick={handleClick}
         onKeyDown={handleKeyDown}
-        className={`cursor-pointer hover:opacity-90 transition-opacity duration-200 ${className || ''}`}
-        role="button"
+        className={`cursor-pointer hover:opacity-90 transition-opacity duration-200 ${
+          className || ''
+        }`}
+        role='button'
         tabIndex={0}
-        aria-label="Click to expand image"
+        aria-label='Click to expand image'
       >
         {children}
       </div>
 
-      {typeof window !== 'undefined' && modal && createPortal(modal, document.body)}
+      {typeof window !== 'undefined' &&
+        modal &&
+        createPortal(modal, document.body)}
     </>
   )
 }
