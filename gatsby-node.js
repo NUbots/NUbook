@@ -9,7 +9,13 @@ const nubookContributionsPlugin = require('./build-plugins/gatsby-transformer-nu
 
 const menu = []
 const createdPages = new Set()
-const defaultSectionIconPath = path.join(__dirname, 'src', 'components', 'sidebar', 'default-icon.svg')
+const defaultSectionIconPath = path.join(
+  __dirname,
+  'src',
+  'components',
+  'sidebar',
+  'default-icon.svg'
+)
 
 /**
  * Entry point for NUbook-specific GraphQL data extension and customisation.
