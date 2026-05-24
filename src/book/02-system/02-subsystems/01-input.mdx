@@ -13,9 +13,9 @@ Input to the system includes cameras, [Game Controller](https://github.com/RoboC
 
 ## Cameras
 
-The cameras used on the NUgus robot are [Flir Blackfly S USB3's](https://www.flir.com/support/products/blackfly-s-usb3/?vertical=machine+vision&segment=iis#Overview).
+The cameras used on the NUgus robot are [Flir Blackfly S USB3's](https://www.teledynevisionsolutions.com/en-au/products/blackfly-s-usb3).
 
-The [Spinnaker SDK](https://www.flir.com/support-center/iis/machine-vision/downloads/spinnaker-sdk-and-firmware-download/) is FLIR's Genicam API library which includes a GUI program called SpinView, used to operate the cameras from a PC, as well as extensive documentation.
+The [Spinnaker SDK](https://www.teledynevisionsolutions.com/en-au/products/spinnaker-sdk/) is FLIR's Genicam API library which includes a GUI program called SpinView, used to operate the cameras from a PC, as well as extensive documentation.
 
 The cameras have the following parameters that are used by the object detection algorithm.
 
@@ -46,7 +46,7 @@ The following settings are applied to the cameras on startup. (Note: These are t
 | `BalanceWhiteAuto`                   | Enumeration | Compensates for colour shifts caused by different lighting conditions.                                       |
 | `BalanceRatioSelector`               | Enumeration | Set whether to balance red or blue.                                                                          |
 | `BalanceRatio`                       | Float       | The ratio the camera will use for red or blue (set above) to balance for accurate colours.                   |
-| `GainAuto`                           | Enumeration | Sets the automatic gain mode. In automatic modes, the camera adjusts the gain to maximize the dynamic range. |
+| `GainAuto`                           | Enumeration | Sets the automatic gain mode. In automatic modes, the camera adjusts the gain to maximise the dynamic range. |
 | `AcquisitionFrameRateEnable`         | Boolean     | Allows manual control of the frame rate                                                                      |
 | `AcquisitionFrameRate`               | Float       | User controlled acquisition frame rate in hertz                                                              |
 | `DeviceLinkThroughputLimit`          | Integer     | Limits the maximum bandwidth on the USB bus. Can limit the framerate.                                        |
