@@ -1,0 +1,67 @@
+---
+section: System
+chapter: Modules
+title: Output
+description: Documentation for each output module in the main NUbots codebase
+slug: /system/modules/output/
+---
+
+## ImageCompressor
+
+### Description
+
+Compresses images into JPEG format of specified quality, using a variety of compressors including `VAAPI` and `TurboJPEG`.
+It will use compressors in order until it finds a free one to compress the image.
+In the event that no compressors are currently free it will drop the image.
+
+### Usage
+
+Triggers on `message::input::Image`
+Configuration from `ImageCompressor.yaml`
+
+### Emits
+
+- `message::output::CompressedImage`
+
+### Dependencies
+
+- TurboJPEG
+- libva (vaapi)
+- intel media driver
+
+## Overview
+
+### Description
+
+Builds a periodic high-level status packet for NUsight.
+
+The module combines localisation, game state, walk/kick intent, battery/voltage, and recent-vision timing into a
+single `Overview` message that can be forwarded to NUsight.
+
+### Usage
+
+Install this module together with the producers of the input messages below.
+
+The module:
+
+- Emits an overview every 2 seconds
+- Tracks most recent camera/ball/goal observation times from trigger events
+- Emits the message to NUsight through `NetworkForwarder`.
+
+### Consumes
+
+- `message::support::GlobalConfig` (optional): player id
+- `NUClear::message::CommandLineArguments` (optional): role/binary name
+- `message::input::Sensors` (optional): battery, voltage, robot transform
+- `message::localisation::Field` (optional): robot field transform and covariance
+- `message::localisation::Ball` (optional): ball field position and covariance
+- `message::skill::Kick` (optional): kick target
+- `message::input::GameState` (optional): game mode, phase, penalty reason
+- `message::skill::Walk` (optional): walk velocity command
+- `message::input::Image` (trigger): updates last camera image time
+- `message::vision::Balls` (trigger): updates last seen ball time when non-empty
+- `message::vision::Goals` (trigger): updates last seen goal time when non-empty
+
+### Emits
+
+- `message::support::nusight::Overview`

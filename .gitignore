@@ -65,5 +65,7 @@ public
 yarn-error.log
 .pnp/
 .pnp.js
+install-state.gz
+
 # Yarn Integrity file
 .yarn-integrity

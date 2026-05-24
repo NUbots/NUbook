@@ -13,6 +13,7 @@ module.exports = {
     githubUrl: 'https://github.com/NUbots/',
     slackUrl: 'https://nubotsteam.slack.com',
     facebookUrl: 'https://www.facebook.com/NubotsRobotics/',
+    linkedinUrl: 'https://www.linkedin.com/company/nubots/',
     email: 'nubots@newcastle.edu.au',
   },
   plugins: [
