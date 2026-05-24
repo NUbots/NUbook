@@ -358,4 +358,4 @@ emit<Scope::INITIALIZE>(std::make_unique<RegisterAction>(RegisterAction{
     [this](const std::set<ServoID>&) {}}));
 ```
 
-This tells the PowerPlant to emit something at system initialization. In this case, we are emitting a [`RegisterAction`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/shared/utility/behaviour/Action.h#L34) which registers the `ScriptTuner` module with the subsumption system.
+This tells the PowerPlant to emit something at system initialisation. In this case, we are emitting a [`RegisterAction`](https://github.com/NUbots/NUbots/blob/e7db7154a689ab076041375894b3baf1d53a2587/shared/utility/behaviour/Action.h#L34) which registers the `ScriptTuner` module with the subsumption system.
