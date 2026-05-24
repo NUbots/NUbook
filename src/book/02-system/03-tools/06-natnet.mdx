@@ -73,7 +73,7 @@ This is the default method for running NatNet. If you wish to output motive pack
 <details>
 <summary>From your computer</summary>
 
-This method may be useful to determine if Motive is outputting packets directly or debugging depacketization without the need of a robot.
+This method may be useful to determine if Motive is outputting packets directly or debugging depacketisation without the need of a robot.
 
 1. Ensure that the NatNet role has been installed locally.
 
@@ -94,9 +94,9 @@ NatNet may not always pick up motive packets immediately. This may be dependent 
 
 ## Development information
 
-Our NatNet implementation works using the concept of [Direct Depacketization](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-4.0#direct-depacketization). The way that motion tracking information is transmitted from Motive is in packets containing binary that is then decoded by the NatNet module. There are a several types of packets sent by Motive, a Ping and Response used for connections, a Model Defintions packet that is used for sending motive model definitions to NatNet, Frames of Data which contain the frame information from motive and Unrecognized request and message packets for error when errors occur.
+Our NatNet implementation works using the concept of [Direct Depacketisation](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-4.0#direct-depacketization). The way that motion tracking information is transmitted from Motive is in packets containing binary that is then decoded by the NatNet module. There are a several types of packets sent by Motive, a Ping and Response used for connections, a Model Defintions packet that is used for sending motive model definitions to NatNet, Frames of Data which contain the frame information from motive and Unrecognized request and message packets for error when errors occur.
 NatNet 4.0 handles 6 types of objects, a Marker set model, Rigidbodies, Skeleton models, Force Plate Models, Device Models and Camera Models. For more information on the purpose of these models and packets, refer to the [Motive documentation](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-data-types).
 
 Currently network configuration and model definition updating is done automatically based on model and network infomation packets recieved from Motive and Model updates are done automatically when NatNet recieves information from Motive that does not match NatNet's current model defintions.
 
-The best practice for updating to future versions of NatNet is by cross referencing the current code base with the sample depacketization clients provided by motive. These examples can be found at the [NatNet Samples](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-sample-projects) page and using the PacketClient example as a reference for the order of operations to correctly depacketize motive packets. Unfortunately, due to Motive's suggestion not to use direct depacketization there is no documentation beyond the code samples for a method for depacketization.
+The best practice for updating to future versions of NatNet is by cross referencing the current code base with the sample depacketisation clients provided by motive. These examples can be found at the [NatNet Samples](https://docs.optitrack.com/developer-tools/natnet-sdk/natnet-sample-projects) page and using the PacketClient example as a reference for the order of operations to correctly depacketize motive packets. Unfortunately, due to Motive's suggestion not to use direct depacketisation there is no documentation beyond the code samples for a method for depacketisation.
