@@ -10,7 +10,7 @@ const getLinkProps = () => {
   }
 }
 
-const SectionButton = ({ Icon, children, active, to }) => {
+const SectionButton = ({ Icon, iconSvg, children, active, to }) => {
   return (
     <Link to={to} getProps={getLinkProps}>
       <div
@@ -18,9 +18,18 @@ const SectionButton = ({ Icon, children, active, to }) => {
           active ? style.sectionButtonActive : ''
         }`}
       >
-        <div className='mr-3'>
-          <Icon className='w-6 h-6 fill-current' />
-        </div>
+        {(Icon || iconSvg) && (
+          <div className='mr-3 w-6 h-6 flex-shrink-0'>
+            {Icon ? (
+              <Icon className='w-6 h-6 fill-current' />
+            ) : (
+              <span
+                className='block w-6 h-6'
+                dangerouslySetInnerHTML={{ __html: iconSvg }}
+              />
+            )}
+          </div>
+        )}
         <div className='text-base font-semibold mr-2 leading-tight'>
           {children}
         </div>
@@ -31,6 +40,7 @@ const SectionButton = ({ Icon, children, active, to }) => {
 
 SectionButton.propTypes = {
   Icon: PropTypes.elementType,
+  iconSvg: PropTypes.string,
   children: PropTypes.node,
   active: PropTypes.bool,
   to: PropTypes.string,
