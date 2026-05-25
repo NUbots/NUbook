@@ -11,6 +11,7 @@ authors:
   - Lachlan Court (@LachlanCourt)
   - Corah Oliver (@yippyy)
   - Thomas O'Brien (@Tom0brien)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 Throughout this guide we will focus on completing a specific example task. This task will involve setting up the codebase, running the `fake/keyboardwalk` binary (which uses simulated hardware) and seeing the robot move in NUsight.
@@ -268,7 +269,7 @@ If you are following the example, run `./b run fake/keyboardwalk`.
 ### Running on a Real Robot
 
 <Alert type='warn'>
-   When running on a real robot, make sure you understand how to safely handle a robot. To make the robot's servos relax, hit the red button on the back of the robot. This is an emergency stop button to prevent harm. 
+   When running on a real robot, make sure you understand how to safely handle a robot. To make the robot's servos relax, hit the red button on the back of the robot. This is an emergency stop button to prevent harm.
 </Alert>
 
 You can skip this section if you are following the example.
@@ -351,6 +352,16 @@ Open up a new terminal to run NUsight and NUbots code side by side.
    ```bash
    ./b yarn prod --address <ADDRESS>
    ```
+
+   <Alert type='info'>
+
+   If you are running a NUbots binary on a port other than the default (usually by changing the `port` configuration value in config/NUClearNet.yaml), use the following command instead:
+
+   ```bash
+   ./b yarn prod --address <ADDRESS> --port <PORT>
+   ```
+
+   </Alert>
 
    <Alert type='info'>
 
