@@ -96,7 +96,7 @@ Every message in the NUbots codebase is a [protobuf](https://developers.google.c
 
 The general convention is to groups message files into folders based on the meta-module which introduces the message to the system. For instance, `module/input/Camera` introduces `Image` messages to the system, so `Image.proto` lives in `shared/message/input`.
 
-NUClear Roles provides special wrappers for certain types. Vector and matrix types are mapped to [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) types. To use these mappings simply use `import Vector.proto;` and `import Matrix.proto;`. Some examples of types that you can use are:
+NUClear Roles provides special wrappers for certain types. Vector and matrix types are mapped to [Eigen](https://libeigen.gitlab.io/eigen/docs-nightly/index.html) types. To use these mappings simply use `import Vector.proto;` and `import Matrix.proto;`. Some examples of types that you can use are:
 
 - `fvec3`: A vector with 3 components, maps to an `Eigen::Vector3f`
 - `vec3`: A vector with 3 components, maps to an `Eigen::Vector3d`
