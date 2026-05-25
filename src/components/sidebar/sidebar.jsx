@@ -3,18 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
 import SectionButton from './section-button'
-import IconTeam from './icons/icon-team.svg'
-import IconSystem from './icons/icon-system.svg'
-import IconGuides from './icons/icon-guides.svg'
-import IconTools from './icons/icon-tools.svg'
 import * as style from './sidebar.module.css'
-
-const iconMap = {
-  Team: IconTeam,
-  System: IconSystem,
-  Guides: IconGuides,
-  ['Kitchen Sink']: IconTools,
-}
 
 function elementInView(element, container) {
   const top = element.offsetTop
@@ -59,7 +48,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
           .map((section) => {
             return (
               <SectionButton
-                Icon={iconMap[section.title]}
+                iconSvg={section.iconSvg}
                 active={section.title === currentSection.title}
                 key={section.slug}
                 to={section.slug}

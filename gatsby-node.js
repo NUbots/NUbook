@@ -1,6 +1,7 @@
 /*eslint-env node */
 /*eslint-env es6 */
 
+const fs = require('fs')
 const path = require('path')
 
 const nubookBibliography = require('./build-plugins/gatsby-transformer-nubook-bibliography/transformer.js')
@@ -8,6 +9,13 @@ const nubookContributionsPlugin = require('./build-plugins/gatsby-transformer-nu
 
 const menu = []
 const createdPages = new Set()
+const defaultSectionIconPath = path.join(
+  __dirname,
+  'src',
+  'components',
+  'sidebar',
+  'default-icon.svg'
+)
 
 /**
  * Entry point for NUbook-specific GraphQL data extension and customisation.
@@ -254,15 +262,38 @@ function findOrCreateSection(menu, node) {
     return section
   }
 
+  const sectionRoot = getSectionRoot(node.fileAbsolutePath)
+  const sectionIconPath = path.join(sectionRoot, 'icon.svg')
+  const hasSectionIcon = fs.existsSync(sectionIconPath)
+  const fallbackIcon = fs.existsSync(defaultSectionIconPath)
+    ? fs.readFileSync(defaultSectionIconPath, 'utf8')
+    : null
+
   const newSection = {
     title: node.frontmatter.section,
     slug: node.frontmatter.slug,
     chapters: [],
+    iconSvg: hasSectionIcon
+      ? fs.readFileSync(sectionIconPath, 'utf8')
+      : fallbackIcon,
   }
 
   menu.push(newSection)
 
   return newSection
+}
+
+/**
+ * Get the top-level section directory for the given MDX file.
+ */
+function getSectionRoot(fileAbsolutePath) {
+  const relativePath = path.relative(
+    path.join(__dirname, 'src', 'book'),
+    fileAbsolutePath
+  )
+  const [sectionFolder] = relativePath.split(path.sep)
+
+  return path.join(__dirname, 'src', 'book', sectionFolder)
 }
 
 /**
