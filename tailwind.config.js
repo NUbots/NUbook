@@ -81,9 +81,6 @@ module.exports = {
       maxWidth: {
         'screen-xl': '1280px',
       },
-      scale: {
-        130: '1.3',
-      },
     },
   },
   variants: {
