@@ -7,7 +7,9 @@ const ExpandableImage = ({ children, src, alt, className }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [zoom, setZoom] = useState(1)
   const [imageBounds, setImageBounds] = useState({ width: 0, height: 0 })
+  const [transformOrigin, setTransformOrigin] = useState('50% 50%')
   const modalRef = useRef(null)
+  const imageRef = useRef(null)
 
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 768)
@@ -15,31 +17,6 @@ const ExpandableImage = ({ children, src, alt, className }) => {
     window.addEventListener('resize', checkIsMobile)
     return () => window.removeEventListener('resize', checkIsMobile)
   }, [])
-
-  useEffect(() => {
-    if (!isExpanded) return
-
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') handleClose()
-    }
-    const handleWheel = (e) => {
-      e.preventDefault()
-
-      const step = e.deltaY > 0 ? -0.15 : 0.15
-
-      setZoom((currentZoom) => clampZoom(currentZoom + step))
-    }
-
-    document.addEventListener('keydown', handleEscape)
-    modalRef.current?.addEventListener('wheel', handleWheel, { passive: false })
-    document.body.style.overflow = 'hidden'
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape)
-      modalRef.current?.removeEventListener('wheel', handleWheel)
-      document.body.style.overflow = 'auto'
-    }
-  }, [isExpanded, maxZoom])
 
   const viewportBounds =
     typeof window === 'undefined'
@@ -62,13 +39,56 @@ const ExpandableImage = ({ children, src, alt, className }) => {
 
   const clampZoom = (value) => Math.min(maxZoom, Math.max(1, value))
 
+  useEffect(() => {
+    if (!isExpanded) return
+
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') handleClose()
+    }
+    const handleWheel = (e) => {
+      const imageElement = imageRef.current
+
+      if (!imageElement) return
+
+      const rect = imageElement.getBoundingClientRect()
+      const isOverImage =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom
+
+      if (!isOverImage) return
+
+      e.preventDefault()
+
+      const step = e.deltaY > 0 ? -0.15 : 0.15
+      const originX = ((e.clientX - rect.left) / rect.width) * 100
+      const originY = ((e.clientY - rect.top) / rect.height) * 100
+
+      setTransformOrigin(`${Math.min(100, Math.max(0, originX))}% ${Math.min(100, Math.max(0, originY))}%`)
+      setZoom((currentZoom) => clampZoom(currentZoom + step))
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    modalRef.current?.addEventListener('wheel', handleWheel, { passive: false })
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      modalRef.current?.removeEventListener('wheel', handleWheel)
+      document.body.style.overflow = 'auto'
+    }
+  }, [isExpanded, maxZoom])
+
   const handleClick = () => {
     setZoom(1)
     setImageBounds({ width: 0, height: 0 })
+    setTransformOrigin('50% 50%')
     setIsExpanded(true)
   }
   const handleClose = () => {
     setZoom(1)
+    setTransformOrigin('50% 50%')
     setIsExpanded(false)
   }
   const handleKeyDown = (e) => {
@@ -105,6 +125,7 @@ const ExpandableImage = ({ children, src, alt, className }) => {
 
       <div className='flex max-w-full max-h-full items-center justify-center overflow-hidden'>
         <img
+          ref={imageRef}
           onClick={handleClose}
           src={src}
           alt={alt}
@@ -114,7 +135,7 @@ const ExpandableImage = ({ children, src, alt, className }) => {
             maxWidth: isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 4rem)',
             maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
             transform: `scale(${zoom})`,
-            transformOrigin: 'center center',
+            transformOrigin,
             transition: 'transform 120ms ease-out',
           }}
         />
