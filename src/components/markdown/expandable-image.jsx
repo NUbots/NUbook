@@ -5,6 +5,8 @@ import { createPortal } from 'react-dom'
 const ExpandableImage = ({ children, src, alt, className }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [zoom, setZoom] = useState(1)
+  const [imageBounds, setImageBounds] = useState({ width: 0, height: 0 })
 
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 768)
@@ -17,29 +19,47 @@ const ExpandableImage = ({ children, src, alt, className }) => {
     if (!isExpanded) return
 
     const handleEscape = (e) => {
-      if (e.key === 'Escape') setIsExpanded(false)
+      if (e.key === 'Escape') handleClose()
     }
-    const handleDismiss = () => setIsExpanded(false)
 
     document.addEventListener('keydown', handleEscape)
-    window.addEventListener('wheel', handleDismiss, { passive: true })
-    window.addEventListener('touchmove', handleDismiss, { passive: true })
     document.body.style.overflow = 'hidden'
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
-      window.removeEventListener('wheel', handleDismiss)
-      window.removeEventListener('touchmove', handleDismiss)
       document.body.style.overflow = 'auto'
     }
   }, [isExpanded])
 
-  const handleClick = () => setIsExpanded(true)
-  const handleClose = () => setIsExpanded(false)
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      setIsExpanded(false)
+  const viewportBounds =
+    typeof window === 'undefined'
+      ? null
+      : {
+          width: isMobile ? window.innerWidth - 32 : window.innerWidth - 64,
+          height: isMobile ? window.innerHeight - 32 : window.innerHeight - 64,
+        }
+
+  const maxZoom = (() => {
+    if (!viewportBounds || !imageBounds.width || !imageBounds.height) {
+      return 4
     }
+
+    const widthZoom = viewportBounds.width / imageBounds.width
+    const heightZoom = viewportBounds.height / imageBounds.height
+
+    return Math.max(1, Math.min(4, widthZoom, heightZoom))
+  })()
+
+  const clampZoom = (value) => Math.min(maxZoom, Math.max(1, value))
+
+  const handleClick = () => {
+    setZoom(1)
+    setImageBounds({ width: 0, height: 0 })
+    setIsExpanded(true)
+  }
+  const handleClose = () => {
+    setZoom(1)
+    setIsExpanded(false)
   }
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -47,13 +67,29 @@ const ExpandableImage = ({ children, src, alt, className }) => {
       handleClick()
     }
   }
+  const handleWheel = (e) => {
+    if (!isExpanded) return
+
+    e.preventDefault()
+
+    const step = e.deltaY > 0 ? -0.15 : 0.15
+
+    setZoom((currentZoom) => clampZoom(currentZoom + step))
+  }
+  const handleImageLoad = (e) => {
+    setImageBounds({
+      width: e.currentTarget.naturalWidth,
+      height: e.currentTarget.naturalHeight,
+    })
+  }
 
   const modal = isExpanded && (
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden ${
         isMobile ? 'bg-black' : 'bg-black bg-opacity-75'
       } p-4 md:p-8`}
-      onClick={handleBackdropClick}
+      onClick={handleClose}
+      onWheel={handleWheel}
     >
       <button
         onClick={handleClose}
@@ -66,24 +102,20 @@ const ExpandableImage = ({ children, src, alt, className }) => {
         ×
       </button>
 
-      <div className='flex max-w-full max-h-full items-center justify-center'>
+      <div className='flex max-w-full max-h-full items-center justify-center overflow-hidden'>
         <img
           onClick={handleClose}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              handleClose()
-            }
-          }}
           src={src}
           alt={alt}
-          className='block w-auto h-auto object-contain'
+          onLoad={handleImageLoad}
+          className='block w-auto h-auto object-contain select-none'
           style={{
             maxWidth: isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 4rem)',
             maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
+            transform: `scale(${zoom})`,
+            transformOrigin: 'center center',
+            transition: 'transform 120ms ease-out',
           }}
-          role='button'
-          tabIndex={0}
         />
       </div>
     </div>
