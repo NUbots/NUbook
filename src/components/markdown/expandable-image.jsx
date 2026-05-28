@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { createPortal } from 'react-dom'
 
@@ -7,6 +7,7 @@ const ExpandableImage = ({ children, src, alt, className }) => {
   const [isMobile, setIsMobile] = useState(false)
   const [zoom, setZoom] = useState(1)
   const [imageBounds, setImageBounds] = useState({ width: 0, height: 0 })
+  const modalRef = useRef(null)
 
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 768)
@@ -21,15 +22,24 @@ const ExpandableImage = ({ children, src, alt, className }) => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') handleClose()
     }
+    const handleWheel = (e) => {
+      e.preventDefault()
+
+      const step = e.deltaY > 0 ? -0.15 : 0.15
+
+      setZoom((currentZoom) => clampZoom(currentZoom + step))
+    }
 
     document.addEventListener('keydown', handleEscape)
+    modalRef.current?.addEventListener('wheel', handleWheel, { passive: false })
     document.body.style.overflow = 'hidden'
 
     return () => {
       document.removeEventListener('keydown', handleEscape)
+      modalRef.current?.removeEventListener('wheel', handleWheel)
       document.body.style.overflow = 'auto'
     }
-  }, [isExpanded])
+  }, [isExpanded, maxZoom])
 
   const viewportBounds =
     typeof window === 'undefined'
@@ -67,15 +77,6 @@ const ExpandableImage = ({ children, src, alt, className }) => {
       handleClick()
     }
   }
-  const handleWheel = (e) => {
-    if (!isExpanded) return
-
-    e.preventDefault()
-
-    const step = e.deltaY > 0 ? -0.15 : 0.15
-
-    setZoom((currentZoom) => clampZoom(currentZoom + step))
-  }
   const handleImageLoad = (e) => {
     setImageBounds({
       width: e.currentTarget.naturalWidth,
@@ -85,11 +86,11 @@ const ExpandableImage = ({ children, src, alt, className }) => {
 
   const modal = isExpanded && (
     <div
+      ref={modalRef}
       className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden ${
         isMobile ? 'bg-black' : 'bg-black bg-opacity-75'
       } p-4 md:p-8`}
       onClick={handleClose}
-      onWheel={handleWheel}
     >
       <button
         onClick={handleClose}
