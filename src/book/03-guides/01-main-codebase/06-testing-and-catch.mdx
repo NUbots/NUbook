@@ -1,0 +1,161 @@
+---
+section: Guides
+chapter: Main Codebase
+title: Testing and Catch
+description: How to write automated tests, with Catch examples in C++.
+slug: /guides/testing-and-catch
+---
+
+This page combines general testing guidance used by the project with concrete examples using the Catch (Catch2) framework. The first section considers the general testing philosophy and approach, while the second section guides the user on framework-specific examples and tips using Catch and C++.
+
+## Writing Tests
+
+This section contains general guidance about unit testing that applies regardless of the testing framework. For the concrete examples in this guide we use the `add` example in the "A Basic Example" section below.
+
+### What is a Unit Test?
+
+A unit test is a test of a small piece of a codebase — a unit. Unit tests should exercise a single piece of code to validate its correctness. This contrasts with integration tests, which exercise the interactions of pieces of code together.
+
+### Anatomy of a Unit Test
+
+Basic pieces you need to create a unit test for a function:
+
+1. A set of inputs for the function. These should match the function's parameters.
+2. The expected outputs for each input (the "ground truth").
+
+The process is simply calling the function with inputs and verifying the outputs match expectations. For small examples we often keep inputs inline; for larger datasets keep them separate from test logic and document how they were generated.
+
+#### Obtaining Expected Outputs
+
+For purely mathematical functions you can generate large input sets and verify expected outputs using a trusted implementation on another platform (for example using `numpy` in Python). For non-mathematical functions, enumerate categorical corner cases and cover them manually. Always document how generated data was produced and verified.
+
+### Testing Approach and Philosophy
+
+- Tests should be simple and readable enough to be correct on inspection.
+- Make test cases independent — one test's outcome should not affect another's.
+- Demonstrate how to use code via tests (they act as executable examples).
+- Tests should be deterministic — seed randomness and use multiple seeds where appropriate.
+- Follow the AAA structure: Arrange, Act, Assert.
+
+### General Approach
+
+Write easy tests first, then add edge cases. After basic correctness is established, consider error handling and overflow behaviours and add regression tests for fixed bugs.
+
+### Regression Tests
+
+When fixing bugs, add regression tests that would have failed before the fix. Label tests with comments referencing issues when relevant.
+
+### Black Box vs White Box Testing
+
+- Black box tests only consider inputs and outputs and are resilient to implementation changes.
+- White box tests depend on internals and are more fragile to refactors.
+- Grey box testing is a middle ground and can be useful for achieving coverage while remaining maintainable.
+
+### TDD and BDD
+
+Test-Driven Development (TDD) encourages writing tests first. Behaviour-Driven Development (BDD) uses `Given/When/Then` language to make tests readable by all stakeholders. A mix of readable BDD-style examples and focused unit tests is a good balance.
+
+## Catch
+
+[Catch](https://github.com/catchorg/Catch2) is the C++ testing framework which we use for our unit tests. In this guide we will go over the basics of Catch by completing a concrete example. This guide assumes familiarity with C++ and testing concepts.
+
+Note that the [Catch docs](https://github.com/catchorg/Catch2/tree/devel/docs) should be the first thing to look at if you're wondering about a specific Catch-ism.
+
+### A Basic Example
+
+Catch test cases have a few components. The most important is the `TEST_CASE(..)` macro, which wraps around groups of associated tests. Inside each `TEST_CASE` scope, you should follow the **AAA** structure, _Arranging_ the data first - both inputs and expected outputs - then _Acting_ by calling the function you're testing, then _Asserting_ that the results match the expected outputs. We'll make an example for the following toy utility function:
+
+```cpp
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+To test it, we'll need pairs of inputs and their expected outputs. Usually, if there's a lot of data, we'll want to keep it separate from the test logic, but for this example we'll keep it local. Also note that for utilities like this one, we would want a much more comprehensive set of test cases.
+
+```cpp
+using utility::math::add;
+
+TEST_CASE("Testing integer add utility", "[utility][math][add]") {
+    // Arrange
+    static constexpr int NUM_TESTS = 5;
+    std::array<std::pair<int, int>, NUM_TESTS> inputs = {{0, 0}, {1, 1}, {-1, -1}, {123000, 456}, {-1000, 1000}};
+    std::array<int, NUM_TESTS> expected_outputs = {0, 2, -2, 123456, 0};
+    std::array<int, NUM_TESTS> actual_outputs{};
+    // Act
+    for (int i = 0; i < NUM_TESTS; ++i) {
+        actual_outputs[i] = add(inputs[i].first, inputs[i].second);
+    }
+    // Assert
+    for (int i = 0; i < NUM_TESTS; ++i) {
+        INFO("In test case number " << i);
+        INFO("Inputs are (" << inputs[i].first << ", " << inputs[i].second << ")");
+        INFO("Expected output is " << expected_outputs[i]);
+        INFO("Actual output is " << actual_outputs[i]);
+        REQUIRE(actual_outputs[i] == expected_outputs[i]);
+    }
+}
+```
+
+#### Dissecting the Example
+
+As we can see in this example, inside the scope of the `TEST_CASE` is where it all happens. We use `INFO` macros to annotate exactly what is happening for each assertion. You shouldn't worry too much about creating huge, unwieldy logs with `INFO` macros, because by default Catch only prints the `INFO` for test cases which fail.
+
+The first argument for `TEST_CASE` is a string which is a name for the test. You can use the names to run the specific test. They should be specific. The second argument is a set of tags, which you can use to divide the tests into groups easily. We usually use each sub-namespace the function is located in as the tags. The Catch `TEST_CASE` has much more functionality than demonstrated here and you can find the documentation with the details [here](https://github.com/catchorg/Catch2/blob/devel/docs/test-cases-and-sections.md).
+
+The rest of the example is just going through the **AAA** process (the comments are for illustrative purposes). When writing tests we recommend following the Arrange-Act-Assert pattern: first Arrange the data, then Act by calling the code under test, and finally Assert the expected results.
+
+### Catch BDD-style Tests
+
+Catch also supports a Behavior-Driven Development (BDD) style using the `SCENARIO`, `GIVEN`, `WHEN`, and `THEN` macros. BDD-style tests read like specifications and are especially useful for describing behaviours or feature-level scenarios. Use BDD when you want tests to be easily readable by both engineers and non-engineers, or when you are encoding acceptance-style examples.
+
+Example (equivalent behaviour to the basic `add` example, expressed in BDD style):
+
+```cpp
+using utility::math::add;
+
+SCENARIO("Adding integers behaves correctly", "[utility][math][add]") {
+    GIVEN("Two integers") {
+        WHEN("they are small and positive") {
+            int a = 1;
+            int b = 1;
+            THEN("the sum is their arithmetic sum") {
+                REQUIRE(add(a, b) == 2);
+            }
+        }
+
+        WHEN("they include negative values") {
+            int a = -1;
+            int b = -1;
+            THEN("they add correctly") {
+                REQUIRE(add(a, b) == -2);
+            }
+        }
+
+        WHEN("they are large but within expected range") {
+            int a = 123000;
+            int b = 456;
+            THEN("the sum is computed correctly") {
+                REQUIRE(add(a, b) == 123456);
+            }
+        }
+    }
+}
+```
+
+Notes on using BDD-style tests:
+
+- Use `SCENARIO` to describe the behaviour being specified, and `GIVEN`/`WHEN`/`THEN` to structure the example. `AND_WHEN` and `AND_THEN` exist for clearer flow where needed.
+- Prefer BDD for behavioural or acceptance-style tests that benefit from readable narratives. For very small, focused unit tests the traditional `TEST_CASE` + AAA pattern remains compact and appropriate.
+- Tags work the same way as with `TEST_CASE` and are useful for grouping or selecting scenarios to run.
+- `INFO`, `REQUIRE`, and other assertion/diagnostic macros behave the same inside BDD blocks.
+
+### Floating Point Considerations
+
+Floating point arithmetic is imprecise by nature. Equality comparisons between distinct non-zero floating point numbers are assumed to be false because of this imprecision. Catch has features to deal with the errors from floating point operations. We recommend that if you're testing functions which compute floating point numbers that you [read about those features](https://github.com/catchorg/Catch2/blob/devel/docs/assertions.md#floating-point-comparisons).
+
+You'll need to define a margin of error — either relative or absolute — that you can tolerate and use that to define your `Approx` for each floating point `REQUIRE` assertion.
+
+### Conclusions
+
+Catch is concise and powerful. It has many more features than the basic example presented here — this is just enough to get you started. Now go and write some tests!
