@@ -5,11 +5,19 @@ import { createPortal } from 'react-dom'
 const ExpandableImage = ({ children, src, alt, className }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [zoom, setZoom] = useState(1)
-  const [imageBounds, setImageBounds] = useState({ width: 0, height: 0 })
+  const [scale, setScale] = useState(1)
+  const [imageDimensions, setImageDimensions] = useState({
+    width: 0,
+    height: 0,
+  })
   const [transformOrigin, setTransformOrigin] = useState('50% 50%')
   const modalRef = useRef(null)
   const imageRef = useRef(null)
+
+  const getViewportBounds = () => ({
+    width: isMobile ? window.innerWidth - 32 : window.innerWidth - 64,
+    height: isMobile ? window.innerHeight - 32 : window.innerHeight - 64,
+  })
 
   useEffect(() => {
     const checkIsMobile = () => setIsMobile(window.innerWidth < 768)
@@ -19,25 +27,23 @@ const ExpandableImage = ({ children, src, alt, className }) => {
   }, [])
 
   const viewportBounds =
-    typeof window === 'undefined'
-      ? null
-      : {
-          width: isMobile ? window.innerWidth - 32 : window.innerWidth - 64,
-          height: isMobile ? window.innerHeight - 32 : window.innerHeight - 64,
-        }
+    typeof window === 'undefined' ? null : getViewportBounds()
 
-  const maxZoom = (() => {
-    if (!viewportBounds || !imageBounds.width || !imageBounds.height) {
-      return 4
+  const fitScale = (() => {
+    if (!viewportBounds || !imageDimensions.width || !imageDimensions.height) {
+      return 1
     }
 
-    const widthZoom = viewportBounds.width / imageBounds.width
-    const heightZoom = viewportBounds.height / imageBounds.height
+    const widthScale = viewportBounds.width / imageDimensions.width
+    const heightScale = viewportBounds.height / imageDimensions.height
 
-    return Math.max(1, Math.min(4, widthZoom, heightZoom))
+    return Math.min(widthScale, heightScale)
   })()
 
-  const clampZoom = (value) => Math.min(maxZoom, Math.max(1, value))
+  const minScale = Math.min(1, fitScale)
+  const maxScale = Math.max(minScale, fitScale * 4)
+
+  const clampScale = (value) => Math.min(maxScale, Math.max(minScale, value))
 
   useEffect(() => {
     if (!isExpanded) return
@@ -65,8 +71,13 @@ const ExpandableImage = ({ children, src, alt, className }) => {
       const originX = ((e.clientX - rect.left) / rect.width) * 100
       const originY = ((e.clientY - rect.top) / rect.height) * 100
 
-      setTransformOrigin(`${Math.min(100, Math.max(0, originX))}% ${Math.min(100, Math.max(0, originY))}%`)
-      setZoom((currentZoom) => clampZoom(currentZoom + step))
+      setTransformOrigin(
+        `${Math.min(100, Math.max(0, originX))}% ${Math.min(
+          100,
+          Math.max(0, originY)
+        )}%`
+      )
+      setScale((currentScale) => clampScale(currentScale + step))
     }
 
     document.addEventListener('keydown', handleEscape)
@@ -78,16 +89,16 @@ const ExpandableImage = ({ children, src, alt, className }) => {
       modalRef.current?.removeEventListener('wheel', handleWheel)
       document.body.style.overflow = 'auto'
     }
-  }, [isExpanded, maxZoom])
+  }, [isExpanded, fitScale, maxScale, minScale])
 
   const handleClick = () => {
-    setZoom(1)
-    setImageBounds({ width: 0, height: 0 })
+    setScale(1)
+    setImageDimensions({ width: 0, height: 0 })
     setTransformOrigin('50% 50%')
     setIsExpanded(true)
   }
   const handleClose = () => {
-    setZoom(1)
+    setScale(1)
     setTransformOrigin('50% 50%')
     setIsExpanded(false)
   }
@@ -98,10 +109,22 @@ const ExpandableImage = ({ children, src, alt, className }) => {
     }
   }
   const handleImageLoad = (e) => {
-    setImageBounds({
-      width: e.currentTarget.naturalWidth,
-      height: e.currentTarget.naturalHeight,
+    const { naturalWidth, naturalHeight } = e.currentTarget
+    const nextViewportBounds =
+      typeof window === 'undefined' ? null : getViewportBounds()
+    const nextFitScale =
+      nextViewportBounds && naturalWidth && naturalHeight
+        ? Math.min(
+            nextViewportBounds.width / naturalWidth,
+            nextViewportBounds.height / naturalHeight
+          )
+        : 1
+
+    setImageDimensions({
+      width: naturalWidth,
+      height: naturalHeight,
     })
+    setScale(Math.min(1, nextFitScale))
   }
 
   const modal = isExpanded && (
@@ -132,9 +155,16 @@ const ExpandableImage = ({ children, src, alt, className }) => {
           onLoad={handleImageLoad}
           className='block w-auto h-auto object-contain select-none'
           style={{
-            maxWidth: isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 4rem)',
-            maxHeight: isMobile ? 'calc(100vh - 2rem)' : 'calc(100vh - 4rem)',
-            transform: `scale(${zoom})`,
+            width: imageDimensions.width
+              ? `${imageDimensions.width * Math.min(scale, fitScale)}px`
+              : 'auto',
+            height: imageDimensions.height
+              ? `${imageDimensions.height * Math.min(scale, fitScale)}px`
+              : 'auto',
+            maxWidth: 'none',
+            maxHeight: 'none',
+            transform:
+              scale > fitScale ? `scale(${scale / fitScale})` : 'scale(1)',
             transformOrigin,
             transition: 'transform 120ms ease-out',
           }}
