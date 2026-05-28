@@ -1,7 +1,10 @@
+/* eslint-env node */
+
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   env: {
     browser: true,
+    es6: true,
   },
   rules: {
     strict: 0,
@@ -16,4 +19,13 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['add-readmes.js', 'check-links.js'],
+      env: {
+        node: true,
+        es6: true,
+      },
+    },
+  ],
 }

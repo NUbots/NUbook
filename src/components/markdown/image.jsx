@@ -1,57 +1,43 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StaticQuery, graphql } from 'gatsby'
-import GatsbyImg from 'gatsby-image'
+import { GatsbyImage } from 'gatsby-plugin-image'
 
-// Ensures that images smaller than the viewport are not stretched to 100%
-const NonStretchedImage = props => {
-  let normalizedProps = props
-
-  if (props.fluid && props.fluid.presentationWidth) {
-    normalizedProps = {
-      ...props,
-      style: {
-        ...(props.style || {}),
-        maxWidth: props.fluid.presentationWidth,
-        margin: '0 auto', // center the image
-      },
-    }
-  }
-
-  return <GatsbyImg {...normalizedProps} />
-}
-
-NonStretchedImage.propTypes = {
-  fluid: PropTypes.shape({
-    presentationWidth: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]),
-  }),
-  style: PropTypes.object,
-  alt: PropTypes.string,
-}
-
-const Image = props => (
+/**
+ * This components works by keeping a list of all images in NUbook (using a GraphQL static query)
+ * and matching it's src prop (from Markdown) to one of those images. It then uses the data from
+ * the matched image to render the image using the GatsbyImage component. All of this matching
+ * is only applied for local, non-SVG images.
+ */
+const Image = (props) => (
   <StaticQuery
     query={graphql`
       query {
-        allImageSharp {
-          edges {
-            node {
-              fluid(maxWidth: 960, quality: 90) {
-                ...GatsbyImageSharpFluid
-                presentationWidth
+        allFile(
+          filter: { extension: { regex: "/jpg|jpeg|png|webp|tif|tiff$/" } }
+        ) {
+          nodes {
+            absolutePath
+            childImageSharp {
+              original {
+                width
               }
+              gatsbyImageData(
+                layout: CONSTRAINED
+                width: 960
+                quality: 90
+                placeholder: NONE
+              )
             }
           }
         }
       }
     `}
-    render={data => {
+    render={(data) => {
       const src = props.src
       let Img
 
+      // Render all remote images with a plain <img> tag
       if (/^https?:\/\//i.test(src)) {
         Img = (
           <img
@@ -60,7 +46,9 @@ const Image = props => (
             alt={props.alt}
           />
         )
-      } else if (/\.svg$/i.test(src)) {
+      }
+      // Render SVGs with a plain <img> tag
+      else if (/\.svg$/i.test(src)) {
         Img = (
           <img
             src={src}
@@ -68,17 +56,31 @@ const Image = props => (
             alt={props.alt}
           />
         )
-      } else {
-        const image = data.allImageSharp.edges.find(edge => {
-          const path = src.split('/').pop()
-          return edge.node.fluid.src.endsWith(`/${path}`)
+      }
+      // Otherwise match the image src against the list of all other images (JPG, PNG, WebP)
+      // in NUbook and render with GatsbyImage, which will handle resizing and responsiveness,
+      // picking the correct resolution appropriate for the client browser.
+      else {
+        const imageNode = data.allFile.nodes.find((node) => {
+          return node.absolutePath === src
         })
 
-        if (!image) {
+        if (!imageNode) {
           throw new Error(`Image not found: ${src}.`)
         }
 
-        Img = <NonStretchedImage fluid={image.node.fluid} alt={props.alt} />
+        Img = (
+          <GatsbyImage
+            image={imageNode.childImageSharp.gatsbyImageData}
+            alt={props.alt}
+            objectFit='contain'
+            style={{
+              display: 'block',
+              maxWidth: `${imageNode.childImageSharp.original.width}px`, // Don't stretch beyond the source image size
+              margin: '0 auto', // Center horizontally
+            }}
+          />
+        )
       }
 
       return (

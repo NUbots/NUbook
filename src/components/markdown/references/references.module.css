@@ -1,0 +1,8 @@
+.anchor {
+  position: absolute;
+  width: 1px;
+  height: 80px;
+  margin-top: -80px;
+  visibility: hidden;
+  pointer-events: none;
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import InfoIcon from './info-icon.svg'
-import style from './alert.module.css'
+import * as style from './alert.module.css'
 import WarningIcon from './warning-icon.svg'
 
 const Alert = ({ children, type, hideIcon }) => {

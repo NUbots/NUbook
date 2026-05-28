@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import style from './tabbed-images.module.css'
+import * as style from './tabbed-images.module.css'
 
 const TabbedImages = ({ children }) => {
   const [currentTab, setCurrentTab] = useState(0)

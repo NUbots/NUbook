@@ -1,0 +1,108 @@
+---
+section: System
+chapter: Hardware
+title: NUgus Specification
+description: Specification and overview for the NUgus robot used by NUbots.
+slug: /system/hardware/nugus
+authors:
+  - Ysobel Sims (@ysims)
+  - Taylor Young (@tayloryoung6396)
+  - Alex Biddulph (@Bidski)
+  - Corah Oliver (@yippyy)
+---
+
+The NUbots team uses the NUgus hardware platform, a modification of the [igus® Humanoid Open Platform](http://www.nimbro.net/OP/). The NUgus robots are 3D printed using fused deposition modelling.
+
+![Coronal and saggital images of the NUgus robot](./images/nugus.png 'Coronal and saggital images of the NUgus robot')
+
+## igus® Modifications
+
+The following modifications were made to fit our specific requirements:
+
+- Split components of the robot to fit the size of the printer bed and volume.
+- Modified the torso to have open shoulder covers for shoulder servo cable access.
+- Redesigned the legs with a simpler model made out of aluminium, with XH540-W270-R servos rather than MX-106 servos, onyx connectors for the hip and ankle blocks and onyx supports inside the legs.
+- Moved the buttons to the panel above the removable back panel to prevent issues with button cables when removing the back panel.
+- Added a 3d printed brace between the hip yaw servos to reduce flex. The brace also serves as a mount for power switches and the main power fuse.
+- Created custom draws for the computer (intel NUC) and subcontrollers (OpenCR, NUSense)
+- Designed a bearing housing for the hip yaw that takes a tapered roller bearing from a mountain bike head stock. This interfaces between the servo shaft and the hip pitch/roll block and takes the load of the servo shaft and spreads it over a wider area on the bottom of the torso.
+- 3d printed Onyx legs have now been replaced with 'L' angle machined aluminium.
+- The NUC drawer has been replaced with a vertical NUC assembly. These changes were made to utilise space within the torso which now provides extra working space. Features include:
+
+  - Rubber mounts.
+  - Lower mounts that double as a hip yaw motor brace. This addition stiffens the lower torso.
+  - Integrated power assembly.
+  - Subcontroller mount.
+
+- The back panel has been simplified as the old NUC placement was prone to breaking ports on the NUC board. The opportunity for improvements appeared when the new vertical NUC mount placement required cables to access data ports. New back panel features include:
+
+  - Replaceable keystone ports (usb-c, usb-3, and ethernet).
+  - Replaceable data cables to NUC.
+  - New bigger buttons.
+
+<Alert>
+
+The **RED** button relaxes the servos.
+
+The **BLUE** button starts behaviour.
+
+The **BLACK** button stops behaviour.
+
+</Alert>
+
+## Servos
+
+The arms and head of the NUgus robot use [Dynamixel MX64AR servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-64/), with two in each shoulder, one in each elbow, and two in the neck. The legs use both [Dynamixel XH540-W270-R servo](https://emanual.robotis.com/docs/en/dxl/x/xh540-w270/) and [Dynamixel MX106 servos](http://emanual.robotis.com/docs/en/dxl/mx/mx-106/), with two X series in each ankle, one in each knee, and two in each hip, with the two hip yaw servos remaining as MX-106.
+
+Custom 3d printed Onyx mounts are now used, but over time it has been determined that parts such as the knee servo mounts and the idle wheel mounts may better to be printed from PETG filament.
+
+- Custom mounts that retain MX style idle wheels on x-series servos. MX style idle wheels are preferred due to being bolted rather than the clip-in design of the x-series idle wheels.
+
+- Under each idle wheel, flat needle bearings or flat stainless washers/bearings are used.
+
+The X-series servos use custom bolt in cable retainer clips.
+
+The MX servos have been modified to include a [1.5KE18CA TranZorb](https://www.st.com/content/ccc/resource/technical/document/datasheet/03/7a/4e/3b/96/c3/4e/37/CD00000663.pdf/files/CD00000663.pdf/jcr:content/translations/en.CD00000663.pdf), formerly [1N6385 TranZorb](http://www.vishay.com/docs/88356/icte.pdf), connected in parallel to the servo motor.
+This is done to prevent induced EMF from overloading the electronics in the servo.
+EMF can be induced when the servos are manually moved without power being applied (i.e. grabbing the robot's leg and forcing the knee to bend).
+
+<Grid columns='1fr 2fr'>
+
+![Top view of the mounted TranZorb. The two arms of the TranZorb are soldered to the motor terminals. Hot glue is added to stabilise the TranZorb against shocks and vibrations.](./images/servo-tranzorb-1.png 'Top view of the mounted TranZorb. The two arms of the TranZorb are soldered to the motor terminals. Hot glue is added to stabilise the TranZorb against shocks and vibrations.')
+![Side view of the mounted TranZorb. TranZorb arm is soldered on to the motor terminal along with the already existing motor connection, which is a black cable](./images/servo-tranzorb-2.png 'Side view of the mounted TranZorb. TranZorb arm is soldered on to the motor terminal along with the already existing motor connection (black cable)')
+
+</Grid>
+
+The TranZorb is soldered directly on to the terminals of the servo motor. Hot glue is applied to stabilise the TranZorb against shocks and vibrations.
+X series servos do not need a TranZorb.
+
+## Cameras
+
+The NUgus robot uses two [FLIR Blackfly S](https://www.teledynevisionsolutions.com/en-au/products/blackfly-s-usb3) USB3 cameras with a C-Mount lens positioned in their head, producing images at up to 170FPS. Two custom-built S-Mount to C-Mount lens adaptors are used to attach two [Lensation 180° fisheye S-Mount lenses](https://www.lensation.de/product/BF10M19828S118C/). Two [20" USB3 micro USB to up angle USB A cables](https://www.angledcables.com/parts/rr-aums-xxgr.html#RR-AUMS-20GR) are used to connect the cameras to the robot's computer.
+
+## Computing
+
+The NUgus robot uses the [Intel NUC12WSHi7](https://www.intel.com/content/www/us/en/products/sku/121640/intel-nuc-12-pro-kit-nuc12wshi7/specifications.html). It has 32GB of RAM, a 1TB SSD, and a NUsense subcontroller.
+
+## Networking
+
+The NUgus robot has an Ethernet port as well as WiFi capability. It has two custom-ordered 15cm MHF.4 to RP-SMA wireless antenna cables from the [RFShop](https://rfshop.com.au/), with two [RP-SMA antennas](https://au.element14.com/microchip/rn-sma-s-rp/antenna-2-4ghz-1inch-w-rpsma/dp/2143323) which are around 1" long.
+
+## Power
+
+The NUgus robot has a [Cosel AC/DC Power Supply](https://www.powerbox.com.au/products/cosel-pbb20c-series). It uses a [4200mAh 4S LiPo Battery](https://www.campbelltownhobbies.com.au/nxe-14.8v-4200mah-40c-soft-case-with-deans-plug-42?srsltid=AfmBOopsSRXZSrXw4AsKhPQgUhmWyOqvFeGJkwsGQ3VU2ZQyUqlf4PYQ) when not plugged into power. It uses a custom power assembly and a custom 16A cylindrical fuse holder. The NUC power board which distributes power to the cooling fan and the NUC is also custom.
+
+<Alert>
+
+**DIMENSIONS**: 36x44x138mm
+
+**CAPACITY**: 4200 mAh x 14.8 V = 62.16 Wh
+
+</Alert>
+
+The NUgus robot uses custom cables to provide power to the fan, the NUC, and sense and speed control to the fan.
+
+## Foot Studs
+
+The studs attached to the feet have been purchased from [RS Online](https://au.rs-online.com/web/p/stud-mounts/1264940/?sra=pstk). The Prototyping Workshop in EC can shave the sides of these cylindrical rubber studs into a more conical shape. An M5 nut is needed for attaching the studs to the feet.
+An alternative foot stud can be purchased from [AliExpress](https://www.aliexpress.com/item/1005006840189285.html?spm=a2g0o.order_list.order_list_main.17.639c1802I3ZTXL). These are a screw in cleat used on golf shoes and provide excellent grip on synthetic grass. The thread for this style of stud is not long enough to be secured by a nut, so are threaded directly into the printed material and glued if necessary. They can also be sourced from most golf shops.

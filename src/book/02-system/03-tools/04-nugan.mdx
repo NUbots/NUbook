@@ -4,17 +4,20 @@ chapter: Tools
 title: NUgan
 description: A CycleGAN implementation for dataset generation.
 slug: /system/tools/nugan
+authors:
+  - Ysobel Sims (@ysims)
+references: references.bib
 ---
 
-The NUbots robots must be able to detect object in their environments so they are able to play soccer. We use machine learning to detect where objects are in the world. To find out more about our vision system, head over to [the vision page](/system/nubots/vision).
+The NUbots robots must be able to detect object in their environments so they are able to play soccer. We use machine learning to detect where objects are in the world. To find out more about our vision system, head over to [the vision page](/system/subsystems/vision).
 
-Machine learning often requires data to train on. Rather than take thousands of pictures and annotate them by hand, we use advanced techniques to generate the data. [NUpbr](/system/nupbr) is used to generate semi-synthetic images with corresponding segmentation masks. These datasets are limited by their synthetic nature. To try to bridge this gap, we use a modified version of CycleGAN to generate realistic images from NUpbr images.
+Machine learning often requires data to train on. Rather than take thousands of pictures and annotate them by hand, we use advanced techniques to generate the data. [NUpbr](/system/tools/nupbr) is used to generate semi-synthetic images with corresponding segmentation masks. These datasets are limited by their synthetic nature. To try to bridge this gap, we use a modified version of CycleGAN to generate realistic images from NUpbr images.
 
 ## GANs
 
-A [Generative Adversarial Network (GAN)](https://arxiv.org/abs/1406.2661) is a machine learning technique developed in 2014 which aims to create new data based on the given training data. A GAN consists of a generator and a discriminator. The generator creates fake data and the discriminator classifies the data as real or fake.
+A Generative Adversarial Network (GAN) <cite>Goodfellow2014</cite> is a machine learning technique developed in 2014 which aims to create new data based on the given training data. A GAN consists of a generator and a discriminator. The generator creates fake data and the discriminator classifies the data as real or fake.
 
-A [Cycle-Consistent Adversarial Network (CycleGAN)](https://arxiv.org/abs/1703.10593) performs unpaired image-to-image translation. CycleGAN is based on [image-to-image translation GAN (pix2pix)](https://arxiv.org/abs/1611.07004). The main difference between these two GAN models is that CycleGAN uses unpaired data while pix2pix uses paired data. CycleGANs translate some domain A to another domain B, and vice versa. It uses four networks.
+A Cycle-Consistent Adversarial Network (CycleGAN) <cite>CycleGAN2017</cite> performs unpaired image-to-image translation. CycleGAN is based on image-to-image translation GAN (pix2pix) <cite>Isola2017</cite>. The main difference between these two GAN models is that CycleGAN uses unpaired data while pix2pix uses paired data. CycleGANs translate some domain A to another domain B, and vice versa. It uses four networks.
 
 | Network         | Description                                            |
 | --------------- | ------------------------------------------------------ |
@@ -200,16 +203,12 @@ The output will be in `results/NAME/generate_latest`.
 
 ## Acknowledgements
 
-This code is based on [yhlleo's UAGGAN repository](https://github.com/yhlleo/uaggan), which is based on the TensorFlow implementation by [Mejjati et al.](https://github.com/AlamiMejjati/Unsupervised-Attention-guided-Image-to-Image-Translation). This code accompanies the paper by [Mejjati et al.](https://arxiv.org/pdf/1806.02311.pdf).
+This code is based on [yhlleo's UAGGAN repository](https://github.com/yhlleo/uaggan), which is based on the TensorFlow implementation by [Mejjati et al.](https://github.com/AlamiMejjati/Unsupervised-Attention-guided-Image-to-Image-Translation). This code accompanies the paper by Mejjati et al. <cite>Mejjati2018</cite>.
 
 This work is based on the work by [Zhu, Park, et al.](https://arxiv.org/pdf/1703.10593.pdf) along with the implementation at [junyanz's pytorch-CycleGAN-and-pix2pix](https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix).
 
-The pretrained base model was trained on public real images from [BitBots ImageTagger](https://github.com/bit-bots/imagetagger).
+The pretrained base model was trained on public real images from BitBots ImageTagger <cite>Fiedler2018</cite>.
 
 ## References
 
-1.  Ian J. Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio. Generative adversarial networks, 2014.
-2.  Phillip Isola, Jun-Yan Zhu, Tinghui Zhou, and Alexei A Efros. Image-to-image translation with conditional adversarial networks. In _IEEE Conference on Computer Vision and Pattern Recognition_, 2017.
-3.  Jun-Yan Zhu, Taesung Park, Phillip Isola, and Alexei A Efros. Unpaired image-to-image translation using cycle-consistent adversarial networks. In _Computer Vision (ICCV), 2017 IEEE International Conference on_, 2017.
-4.  Youssef A. Mejjati, Christian Richardt, James Tompkin, Darren Cosker, and Kwang In Kim. Unsupervised attention-guided image to image translation, 2018.
-5.  Fiedler, Niklas & Bestmann, Marc & Hendrich, N.. (2018). ImageTagger: An Open Source Online Platform for Collaborative Image Labeling.
+<References />

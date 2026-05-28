@@ -3,18 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
 import SectionButton from './section-button'
-import IconTeam from './icons/icon-team.svg'
-import IconSystem from './icons/icon-system.svg'
-import IconGuides from './icons/icon-guides.svg'
-import IconTools from './icons/icon-tools.svg'
-import style from './sidebar.module.css'
-
-const iconMap = {
-  Team: IconTeam,
-  System: IconSystem,
-  Guides: IconGuides,
-  ['Kitchen Sink']: IconTools,
-}
+import * as style from './sidebar.module.css'
 
 function elementInView(element, container) {
   const top = element.offsetTop
@@ -27,11 +16,12 @@ function elementInView(element, container) {
 
 const getLinkProps = ({ isCurrent }) => {
   return {
-    className: `${
+    'className': `${
       style.link
     } text-primary-muted dark:text-primary-muted-inverted ${
       isCurrent ? style.linkActive : ''
     }`,
+    'data-active-link': isCurrent ? true : null,
   }
 }
 
@@ -40,7 +30,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
 
   // Scroll to reveal the active link on mount
   useEffect(() => {
-    const activeLink = sidebarRef.current.querySelector(`.${style.linkActive}`)
+    const activeLink = sidebarRef.current.querySelector('[data-active-link]')
 
     if (activeLink && !elementInView(activeLink, wrapperRef.current)) {
       activeLink.scrollIntoView({ block: 'center', inline: 'nearest' })
@@ -52,13 +42,13 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
       <div className='mb-8'>
         {menu
           // Only show a section if it's currently selected or it's not hidden
-          .filter(section => {
+          .filter((section) => {
             return section.title === currentSection.title || !section.hidden
           })
-          .map(section => {
+          .map((section) => {
             return (
               <SectionButton
-                Icon={iconMap[section.title]}
+                iconSvg={section.iconSvg}
                 active={section.title === currentSection.title}
                 key={section.slug}
                 to={section.slug}
@@ -69,7 +59,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
           })}
       </div>
 
-      {currentSection.chapters.map(chapter => {
+      {currentSection.chapters.map((chapter) => {
         return (
           <div className='mb-8' key={chapter.title}>
             <div
@@ -77,7 +67,7 @@ const Sidebar = ({ menu, currentSection, wrapperRef }) => {
             >
               {chapter.title}
             </div>
-            {chapter.pages.map(page => (
+            {chapter.pages.map((page) => (
               <Link to={page.slug} key={page.slug} getProps={getLinkProps}>
                 {page.title}
               </Link>

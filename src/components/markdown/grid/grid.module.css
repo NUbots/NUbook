@@ -12,8 +12,31 @@
 
 .gridContent {
   display: grid;
+}
+
+.gridGapNone {
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+}
+
+.gridGapSmall {
   grid-column-gap: 8px;
   grid-row-gap: 8px;
+}
+
+.gridGapMedium {
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+}
+
+.gridGapLarge {
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
+}
+
+.gridGapExtraLarge {
+  grid-column-gap: 32px;
+  grid-row-gap: 32px;
 }
 
 .gridContent > * {

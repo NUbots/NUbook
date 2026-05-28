@@ -4,4 +4,4 @@
 
 NUbook is the handbook and high-level documentation for the NUbots team. You can read the latest version at <https://nubook.nubots.net/>
 
-If you want to add or update content go to <https://nubook.netlify.app/system/tools/nubook>.
+If you want to add or update content go to <https://nubook.nubots.net/system/tools/nubook>.

@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import style from './table-of-contents.module.css'
+import * as style from './table-of-contents.module.css'
 
 const Contents = ({ contents, level }) => {
-  return contents.items.map(item => (
+  return contents.items.map((item) => (
     <div className={level > 0 ? 'pl-4' : undefined} key={item.url}>
       <a
         href={item.url}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
 const ArticleHeader = ({ section, chapter, title, description }) => (
-  <div className='mb-8 article-header'>
+  <div className='mb-6 article-header'>
     {(chapter || section) && (
       <div>
         {section && (

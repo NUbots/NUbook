@@ -6,7 +6,7 @@ import Logo from './logo/logo'
 import Menu from './menu/menu'
 import MenuToggle from './menu-toggle/menu-toggle'
 import Search from './search/search'
-import style from './header.module.css'
+import * as style from './header.module.css'
 
 const Header = ({ menu, currentSection, background, height }) => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -24,7 +24,7 @@ const Header = ({ menu, currentSection, background, height }) => {
             </div>
             <div className='flex flex-grow items-center lg:w-3/4 xl:w-4/5'>
               <div className='w-full lg:px-6 xl:w-3/4 xl:px-12'>
-                <Search background={background} />
+                <Search />
               </div>
               <div className='px-6 lg:hidden'>
                 <MenuToggle menuOpen={menuOpen} setMenuOpen={setMenuOpen} />

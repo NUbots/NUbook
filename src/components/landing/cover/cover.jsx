@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import style from './cover.module.css'
+import * as style from './cover.module.css'
 
 const Cover = ({ title, children }) => {
   return (
