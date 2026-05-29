@@ -69,14 +69,19 @@ function checkFile(filePath, fix) {
     const atxHeading = line.match(/^(\s{0,3})(#{1,6})(?:\s+|$)(.*)$/)
     if (atxHeading) {
       const headingLevel = atxHeading[2].length
-      const desiredHeadingLevel = normalizeHeadingLevel(
+      const desiredHeadingLevel = normaliseHeadingLevel(
         headingLevel,
         headingState
       )
 
       if (!fix && desiredHeadingLevel !== headingLevel) {
         issues.push(
-          formatHeadingIssue(filePath, index + 1, headingLevel, desiredHeadingLevel)
+          formatHeadingIssue(
+            filePath,
+            index + 1,
+            headingLevel,
+            desiredHeadingLevel
+          )
         )
       }
 
@@ -96,14 +101,19 @@ function checkFile(filePath, fix) {
     if (setextMatch) {
       const underlineLine = lines[index + 1]
       const headingLevel = underlineLine.trim()[0] === '=' ? 1 : 2
-      const desiredHeadingLevel = normalizeHeadingLevel(
+      const desiredHeadingLevel = normaliseHeadingLevel(
         headingLevel,
         headingState
       )
 
       if (!fix && desiredHeadingLevel !== headingLevel) {
         issues.push(
-          formatHeadingIssue(filePath, index + 1, headingLevel, desiredHeadingLevel)
+          formatHeadingIssue(
+            filePath,
+            index + 1,
+            headingLevel,
+            desiredHeadingLevel
+          )
         )
       }
 
@@ -137,7 +147,7 @@ function checkFile(filePath, fix) {
   return issues
 }
 
-function normalizeHeadingLevel(originalHeadingLevel, headingState) {
+function normaliseHeadingLevel(originalHeadingLevel, headingState) {
   let desiredHeadingLevel = originalHeadingLevel - headingState.offset
 
   if (headingState.previousHeadingLevel === null) {
@@ -145,6 +155,15 @@ function normalizeHeadingLevel(originalHeadingLevel, headingState) {
     headingState.offset = originalHeadingLevel - desiredHeadingLevel
     headingState.previousHeadingLevel = desiredHeadingLevel
     return desiredHeadingLevel
+  }
+
+  if (
+    originalHeadingLevel >= 2 &&
+    originalHeadingLevel <= headingState.previousHeadingLevel
+  ) {
+    headingState.offset = 0
+    headingState.previousHeadingLevel = originalHeadingLevel
+    return originalHeadingLevel
   }
 
   if (desiredHeadingLevel < 2) {
@@ -169,7 +188,10 @@ function formatHeadingIssue(
   desiredHeadingLevel
 ) {
   if (headingLevel === 1) {
-    return `${formatFileLocation(filePath, lineNumber)} level 1 heading is not allowed`
+    return `${formatFileLocation(
+      filePath,
+      lineNumber
+    )} level 1 heading is not allowed`
   }
 
   if (headingLevel !== 2 && desiredHeadingLevel === 2) {
