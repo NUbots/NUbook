@@ -1,6 +1,13 @@
 .sectionButton {
   @apply inline-flex px-4 py-2 items-center justify-center flex-shrink-0 rounded-full border-2 mx-1 my-1;
   min-width: 180px;
+
+  & svg {
+    @apply fill-current;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
 }
 
 :global(.light) {
