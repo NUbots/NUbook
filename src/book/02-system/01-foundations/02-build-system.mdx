@@ -360,7 +360,7 @@ Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build
 
 ##### Target
 
-The `target` command of `b` allows you to build code for a different target. Support targets are
+The `target` command of `b` allows you to build code for a different target. Supported targets are
 
 - `generic`: Useful if you would like to build and run code on your local machine.
 - `nuc7i7bnh`: For use with the old nuc7i7bnh computer. This is no longer used on the robots.
@@ -368,6 +368,14 @@ The `target` command of `b` allows you to build code for a different target. Sup
 - `nuc12wshi7`: The current target for the robots, which use the nuc12wshi7 computer.
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
+
+<Alert type="info">
+
+If you do need to build the image from scratch, and you find you are running out of memory during the build process, you can set the maximum number of jobs the builder can run by adding the `-j` argument.
+
+For example, `./b target nuc12wshi7 -j8` will only run a maximum of eight jobs.
+
+</Alert>
 
 ##### Tests
 
