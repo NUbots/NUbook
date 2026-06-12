@@ -33,7 +33,7 @@ const Footer = () => (
         <div>
           <a
             className='hover:text-gray-800 focus:text-gray-800 dark:hover:text-gray-300 dark:focus:text-gray-300'
-            href='https://www.newcastle.edu.au/__data/assets/pdf_file/0003/85701/code-of-conduct.pdf'
+            href='https://policies.newcastle.edu.au/document/view-current.php?id=204&version=1'
             target='_blank'
             rel='noopener noreferrer'
             title='View Code of Conduct'
