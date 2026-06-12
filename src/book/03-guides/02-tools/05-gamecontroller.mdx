@@ -8,7 +8,7 @@ authors:
   - Kim Khang Hoang (@KimKhangHoang)
 ---
 
-GameController is the official match control software used in RoboCup competitions to manage robot soccer games — including timing, game phases, penalties, and more. This guide covers the setup of the **Rust + Tauri** version of the GameController, which replaces the older [Java-based version](https://github.com/RoboCup-SPL/GameController) previously used in SPL and the Humanoid League.
+GameController is the official match control software used in RoboCup competitions to manage robot soccer games — including timing, game phases, penalties, and more. This guide covers the setup of the Humanoid Soccer League GameController.
 
 ## Platform Notes
 
@@ -20,6 +20,7 @@ GameController is the official match control software used in RoboCup competitio
   - On **Windows 10**, or for more control, use tools like **XLaunch**, as described in the **Prerequisites** section from [here](/guides/tools/webots-setup).
 
 - For **macOS** users:
+
   - Install equivalent dependencies using **Homebrew**.
   - GUI behaviour and windowing may differ slightly from Linux.
 
@@ -32,21 +33,19 @@ GameController is the official match control software used in RoboCup competitio
    source $HOME/.cargo/env
    ```
 
-2. Install required system dependencies
+2. Install required system dependencies:
 
    ```bash
    sudo apt update
-   sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libsoup2.4-dev \
-   libpango1.0-dev libcairo2-dev libwebkit2gtk-4.0-dev libjavascriptcoregtk-4.0-dev \
-   clang libclang-dev llvm-dev
+   sudo apt install build-essential pkg-config libgtk-3-dev libglib2.0-dev libsoup-3.0-dev \
+     libpango1.0-dev libcairo2-dev libwebkit2gtk-4.1-dev libjavascriptcoregtk-4.1-dev \
+     clang libclang-dev llvm-dev
    ```
 
-3. (Optional) Install a modern Node.js version
+3. (Optional) Install a modern Node.js version:
 
    <Alert type='warning'>
-
-   Required if your system Node.js is missing or older than v18
-
+     Required if your system Node.js is missing or older than v18.
    </Alert>
 
    ```bash
@@ -65,15 +64,21 @@ GameController is the official match control software used in RoboCup competitio
 
 ## Building and Running GameController
 
-1. Clone the RoboCup TC GameController repo and move into the folder:
+1. Clone the RoboCup Humanoid Soccer League GameController repo:
 
    ```bash
    cd ~
-   git clone https://github.com/RoboCup-Humanoid-TC/GameController
+   git clone https://github.com/RoboCup-HumanoidSoccerLeague/GameController
    cd GameController
    ```
 
-2. Build the frontend:
+2. (Optional) If you want to use a specific branch or tag, check out the desired version:
+
+   ```bash
+   git checkout <branch-or-tag-name>
+   ```
+
+3. Build the frontend:
 
    ```bash
    cd frontend
@@ -82,18 +87,40 @@ GameController is the official match control software used in RoboCup competitio
    cd ..
    ```
 
-3. Build GameController:
+4. Build and run GameController:
 
    ```bash
-   cargo build --release
+   cargo run -r
    ```
 
-4. Run GameController:
+   (Optional) To run in debug mode:
+
    ```bash
-   ./target/release/game_controller_app
+   cargo run
    ```
+
+## Firewall
+
+The GameController communicates over several UDP ports. The host machine's firewall **needs to be disabled** for communication to work properly:
+
+```bash
+sudo ufw disable
+```
+
+Re-enable after the session if needed:
+
+```bash
+sudo ufw enable
+```
 
 ## Using GameController
 
-- After launching the application, a graphical interface should appear.
-- For more detailed usage instructions, refer to the [official README](https://github.com/RoboCup-Humanoid-TC/GameController).
+After launching, a graphical interface will appear:
+
+- **Interface**: Select the network interface connected to the robot network (e.g. `wlp1s0` in the NUbots lab).
+- **Competition settings**: Select division, teams, and other game settings.
+- Hit **Start** to begin the game.
+
+For full usage instructions and supported commands, refer to the [official README](https://github.com/RoboCup-HumanoidSoccerLeague/GameController).
+
+For competition-specific robot network configuration, refer to the [RoboCup Setup guide](/guides/general/robocup-setup).
