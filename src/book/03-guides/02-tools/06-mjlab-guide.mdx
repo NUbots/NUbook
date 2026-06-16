@@ -1,0 +1,262 @@
+---
+section: Guides
+chapter: Tools
+title: Training a walk policy with mjlab
+description: How to train, play back, and monitor a NUgus velocity (walking) policy using mjlab.
+slug: /guides/tools/mjlab
+authors:
+  - Vincent Tumminello
+---
+
+[mjlab](https://github.com/mujocolab/mjlab) is a GPU-accelerated reinforcement learning framework that combines [Isaac Lab](https://github.com/isaac-sim/IsaacLab)'s manager-based environment API with [MuJoCo Warp](https://github.com/google-deepmind/mujoco_warp). NUbots maintain a [fork](https://github.com/NUbots/mjlab) that adds the [NUgus robot](/system/hardware/nugus) and a set of NUgus-specific tasks.
+
+This guide focuses **only** on the NUgus _velocity_ task — training a policy that makes the NUgus walk by following commanded forward, sideways, and turning velocities. It covers sanity-checking the task, launching training, monitoring runs in Weights & Biases (W&B), playing policies back, and exporting a trained policy to ONNX. It does not cover writing new tasks or the framework internals; for those, see the [upstream mjlab documentation](https://mujocolab.github.io/mjlab/).
+
+## Prerequisites
+
+mjlab requires an **NVIDIA GPU with CUDA** for training. Evaluation (playback) can run on CPU, but training thousands of parallel environments is impractical without a GPU.
+
+### Getting mjlab
+
+Clone the NUbots fork and check out the branch containing the NUgus task. mjlab uses [`uv`](https://docs.astral.sh/uv/) to manage its Python environment, so you do not need to create a virtualenv yourself — `uv run` resolves and installs dependencies on first use.
+
+```bash
+# Install uv if you don't have it.
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone the NUbots fork.
+git clone https://github.com/NUbots/mjlab.git
+cd mjlab
+git checkout nugus
+```
+
+You can confirm the environment is working by listing the registered tasks:
+
+```bash
+uv run list-envs | grep Nugus
+```
+
+You should see the two NUgus velocity tasks described below.
+
+### Logging in to Weights & Biases
+
+By default, mjlab logs every training run to [Weights & Biases](https://wandb.ai/). You can create a Weights and Biases account and log into mjlab by providing the wandb api key should you choose to do so. mjlab also logs everything to tensorboard events files. To log in simply run:
+
+```bash
+uv run wandb login
+```
+or by starting a training run. 
+
+If you would rather not use W&B, you can switch to using only local TensorBoard logging per run with `--agent.logger tensorboard`. 
+
+## The NUgus velocity tasks
+
+The NUgus fork registers two velocity task IDs:
+
+| Task ID                             | Terrain                 | Description                                                                          |
+| ----------------------------------- | ----------------------- | ------------------------------------------------------------------------------------ |
+| `Mjlab-Velocity-Flat-Nubots-Nugus`  | Flat plane              | Walking on flat ground. Fastest to train; the best starting point.                   |
+| `Mjlab-Velocity-Rough-Nubots-Nugus` | Generated rough terrain | Walking over uneven terrain with a difficulty curriculum and terrain height sensing. |
+
+The flat task is derived from the rough task with terrain and the terrain-scanning sensors removed, so they share the same reward shaping, observations, and PPO hyperparameters. Start with the flat task — it is cheaper to run and easier to debug.
+
+The task ID is always the **first positional argument** to the `train` and `play` commands.
+
+## Sanity-checking with dummy agents
+
+Before training, it is worth checking that the environment, robot model, and viewer all behave as expected. mjlab provides two built-in dummy agents that bypass the policy network entirely:
+
+```bash
+# Send zero actions (the robot holds its default pose, then falls).
+uv run play Mjlab-Velocity-Flat-Nubots-Nugus --agent zero
+
+# Send uniform random actions (the robot flails — useful to confirm
+# actuation and joint ranges are wired up).
+uv run play Mjlab-Velocity-Flat-Nubots-Nugus --agent random
+```
+
+If the NUgus loads, stands at its initial keyframe, and responds to actions in the viewer, the task is set up correctly and you are ready to train.
+
+## Training a policy
+
+The simplest training command launches the flat task with a large batch of parallel environments:
+
+```bash
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus --env.scene.num-envs 4096
+```
+
+Training artifacts are written to:
+
+```text
+logs/rsl_rl/nugus_velocity/{timestamp}/
+    model_{iteration}.pt   # policy checkpoints, saved every 250 iterations
+    params/
+        env.yaml           # the full environment config used for this run
+        agent.yaml         # the full runner / PPO config used for this run
+```
+
+The experiment name is `nugus_velocity`, so every NUgus velocity run lands under `logs/rsl_rl/nugus_velocity/`. By default training runs for `7500` iterations and saves a checkpoint every `250` iterations.
+
+### Overriding configuration from the command line
+
+The entire configuration hierarchy is exposed as command-line flags through [tyro](https://brentyi.github.io/tyro/). Any field in the environment or runner config can be set with a dot-separated path:
+
+```bash
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus \
+  --env.scene.num-envs 4096 \
+  --agent.max-iterations 10000 \
+  --agent.algorithm.learning-rate 3e-4
+```
+
+Two things to keep in mind on this fork:
+
+<Alert type='info'>
+
+- **Hyphens, not underscores.** Python field names use underscores (`num_envs`), but the CLI uses hyphens (`--env.scene.num-envs`).
+- **Explicit booleans.** Boolean flags need an explicit value, e.g. `--agent.resume True`, not a bare `--agent.resume`. This keeps the CLI compatible with W&B sweep configs.
+
+</Alert>
+
+To discover the available flags, use `--help` and filter with `grep`:
+
+```bash
+# See every flag.
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus --help
+
+# Find a specific one.
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus --help | grep learning-rate
+```
+
+Some commonly used flags:
+
+| Flag                     | Purpose                                                                                                 |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `--env.scene.num-envs`   | Number of parallel simulated robots. Higher gives faster, more stable learning (GPU memory permitting). |
+| `--agent.max-iterations` | Number of PPO iterations to run.                                                                        |
+| `--gpu-ids`              | GPU indices to use, e.g. `"[0]"` or `"[0, 1]"` for multi-GPU.                                           |
+| `--video`                | Record rollout videos to `{log_dir}/videos/train/` during training.                                     |
+| `--agent.run-name`       | Append a human-readable suffix to the run directory and W&B run name.                                   |
+| `--agent.resume`         | Resume from a wandb or local run path or checkpoint. The default is the latest local run for that task. |
+
+### Multi-GPU training
+
+Pass more than one GPU index to scale training across GPUs on the same machine:
+
+```bash
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus \
+  --gpu-ids "[0, 1]" \
+  --env.scene.num-envs 4096
+```
+
+Each GPU runs the full batch of environments with a different random seed, and gradients are synchronised across processes.
+
+### Resuming a run
+
+To continue training from where a previous run left off:
+
+```bash
+uv run train Mjlab-Velocity-Flat-Nubots-Nugus \
+  --env.scene.num-envs 4096 \
+  --agent.resume True
+```
+
+By default this finds the most recent run directory under `logs/rsl_rl/nugus_velocity/` and loads its highest-numbered checkpoint. Narrow the search with `--agent.load-run` (a regex on run directory names) and `--agent.load-checkpoint` (a regex on checkpoint filenames).
+
+Note that `--agent.max-iterations` controls how many _additional_ iterations to run, not the absolute target. To resume from a W&B run instead of a local directory, add `--wandb-run-path your-entity/mjlab/run-id`. You can also optionally select a particular checkpoint within a run with `--wandb-checkpoint-name`.
+
+## Monitoring with Weights & Biases
+
+With the default logger, each run streams its metrics and checkpoints to W&B under the `mjlab` project. Open the run in the W&B web UI to watch reward terms, episode length, and policy statistics live.
+
+Useful things to know:
+
+- **Project.** Runs are logged to the `mjlab` project by default (`--agent.wandb-project` to change it).
+- **Run name.** The W&B run name matches the local run directory timestamp, plus any `--agent.run-name` suffix.
+- **Tags.** Add tags to organise runs with `--agent.wandb-tags "(nugus, flat, experiment-1)"`.
+- **Checkpoints.** Checkpoints are uploaded to W&B as artifacts, so you can play back or resume a run on a different machine using only its run path.
+
+A **W&B run path** has the form `your-entity/mjlab/run-id` (visible in the run's URL or overview page). You will use this run path to play back or resume training without needing the local checkpoint files.
+
+## Playing back a policy
+
+Use `play` to evaluate a trained policy in the interactive viewer. The play environment disables observation noise and domain randomisation and uses an effectively infinite episode length, so the policy runs continuously.
+
+From a W&B run (the latest checkpoint is fetched and cached automatically):
+
+```bash
+uv run play Mjlab-Velocity-Flat-Nubots-Nugus \
+  --wandb-run-path your-entity/mjlab/run-id
+```
+
+From a local checkpoint file:
+
+```bash
+uv run play Mjlab-Velocity-Flat-Nubots-Nugus \
+  --checkpoint-file logs/rsl_rl/nugus_velocity/2026-05-13_17-56-22/model_8500.pt
+```
+
+To pin a specific W&B checkpoint instead of the latest, add `--wandb-checkpoint-name model_4000.pt`.
+
+Some useful `play` flags:
+
+| Flag                | Purpose                                                                                |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| `--num-envs`        | Number of robots to show in the viewer (top-level flag for `play`, unlike `train`).    |
+| `--viewer`          | `native` for the desktop MuJoCo viewer, `viser` for a browser-based viewer, or `auto`. |
+| `--no-terminations` | Disable fall/termination conditions so the episode never resets.                       |
+| `--video`           | Record the playback to `{log_dir}/videos/play/`.                                       |
+
+When using `--viewer auto` (the default), mjlab picks the native viewer if a display is available and falls back to the browser-based viser viewer otherwise — handy for evaluating on a headless training server.
+
+The viser viewer also includes a checkpoint manager that lets you **hot-swap** between checkpoints of the same run (local or W&B) without restarting, which is useful for watching how the gait improves over training.
+
+## Understanding the NUgus configuration
+
+The NUgus velocity task is the upstream velocity task adapted to the real robot's hardware and morphology. You do not need to change any of this to train, but understanding the key choices helps when tuning. The configuration lives in `src/mjlab/tasks/velocity/config/nugus/`.
+
+### Observations tuned to real sensors
+
+- **No base linear velocity.** The policy never observes the robot's base linear velocity, because that quantity is not reliably available on the real NUgus. It is removed from the actor observations so the trained policy does not depend on it.
+- **Realistic sensor noise.** Gaussian noise on the gyroscope, projected gravity, joint positions, and joint velocities is set from real IMU and servo measurements (with a safety factor), rather than arbitrary defaults. This narrows the sim-to-real gap.
+- **Sensor delays.** Small observation delays (tens of milliseconds) are modelled on the IMU and joint sensors to match real bus latencies.
+
+### Motor joints versus backlash joints
+
+The NUgus model includes passive `*_backlash` sibling joints that represent servo gear play. Observations, rewards, and reset events are scoped to the **motor joints only** (via a regex that excludes the backlash joints) so the passive joints are never accidentally treated as actuated.
+
+### Small action scale
+
+The joint position action scale is deliberately small (around `0.245`). A smaller scale keeps early-training actions gentle, which empirically stops the NUgus from falling over immediately and gives PPO a stable starting point.
+
+### Reward shaping
+
+The reward configuration combines a target-pose term (with separate standing, walking, and running joint standard deviations per limb), foot clearance and slip penalties, a feet-distance term anchored to the keyframe stance width, gait-regularity and symmetry terms, and uprightness and angular-momentum penalties. These shape a stable, symmetric, upright walking gait rather than just "move forward at any cost".
+
+### Flat versus rough
+
+The rough task adds a generated terrain with a difficulty curriculum and a terrain-height sensor mounted on the torso, along with heavier contact-solver settings. The flat task strips all of that out and switches to a plane, which is why it is the recommended starting point.
+
+## Exporting a policy to ONNX
+
+To run a trained policy outside mjlab (for example, for deployment), you can export an actor checkpoint to ONNX. The fork includes a helper at `scripts/tools/pt_checkpoint_to_onnx.py`.
+
+<Alert type='warning'>
+
+This script is a rough utility, not a polished tool. The task ID and checkpoint path are hard-coded near the top of the file — you edit them in place rather than passing arguments. You typically will only want to use this script if the run was interrupted (as the onnx does not get exported until the run finishes) or if you want to use any checkpoint other than the final. 
+
+</Alert>
+
+Edit the `TASK_ID` and `CHECKPOINT` constants at the top of the script to point at your NUgus task and checkpoint:
+
+```python
+TASK_ID = "Mjlab-Velocity-Flat-Nubots-Nugus"
+CHECKPOINT = "logs/rsl_rl/nugus_velocity/2026-05-13_17-56-22/model_8500.pt"
+```
+
+Then run it:
+
+```bash
+uv run python scripts/tools/pt_checkpoint_to_onnx.py
+```
+
+The exported `.onnx` file is written next to the `.pt` checkpoint, with the same base name.
