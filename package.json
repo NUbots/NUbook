@@ -62,8 +62,9 @@
     "dev": "gatsby develop",
     "clean": "rimraf .cache/ public/",
     "lint": "eslint \"src/**/*.{jsx,js}\" \"*.js\" && stylelint \"src/**/*.css\"",
-    "format": "stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\"",
-    "format:check": "prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\"",
+    "check-headings": "node check-headings.js",
+    "format": "node check-headings.js --fix && stylelint \"src/**/*.css\" --fix && prettier --write \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\"",
+    "format:check": "node check-headings.js && prettier --check \"*.js\" \"src/**/*.{css,jsx,js,mdx}\" \"build-plugins/**/*.js\"",
     "generate-readmes": "node add-readmes.js",
     "check-links": "node check-links.js"
   },

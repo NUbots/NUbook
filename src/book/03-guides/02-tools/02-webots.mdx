@@ -185,60 +185,8 @@ While a world like `vision_collection` is self contained, most worlds require th
 
 2. Run the binary using `./b run <role_name>`. `<role_name>` is the role you built in the previous step and want to run. By default, this should connect to the robot in the simulator listening on port `10001`.
 
-3. (Optional) If you want to run `webots/robocup`, you will need [GameController](https://github.com/RoboCup-Humanoid-TC/GameController).
-
-   1. Install the ant build tool and Java Development Kit:
-
-      ```bash
-      sudo apt-get install ant default-jdk
-      ```
-
-   2. Clone the RoboCup TC GameController repo and move into the folder:
-
-      ```bash
-      cd ~
-      git clone https://github.com/RoboCup-Humanoid-TC/GameController.git
-      cd GameController
-      ```
-
-   3. Build GameController:
-
-      ```bash
-      ant
-      ```
-
-   4. Add the `JAVA_HOME` and `GAME_CONTROLLER_HOME` env variables to your `.bashrc` file:
-
-      ```bash
-      echo export JAVA_HOME=/usr/lib/jvm/default-java >> ~/.bashrc
-      echo export GAME_CONTROLLER_HOME=$(pwd) >> ~/.bashrc
-      source ~/.bashrc
-      ```
-
-      This assumes you are still in the GameController directory from the previous step.
-
-   5. (If running in the lab) GameController broadcasts to the network, so if anyone else is running an instance of GameController it will confuse the robot. It is a good idea to filter the GameController IP to prevent issues:
-
-      1. Find your IP address using:
-
-         ```bash
-         hostname -I
-         ```
-
-         Your primary IP address is often the first of the addresses in the output returned. For example, if `hostname -I` returns `10.1.0.207 10.1.0.139 172.17.0.1`, use `10.1.0.207`.
-
-      2. Open [`GameController.yaml`](module/input/GameController/data/config/GameController.yaml) in the main codebase and set `udp_filter_address` to your local IP address from step 1.
-
-   6. Open a new terminal window and run:
-
-      ```bash
-      cd ${GAME_CONTROLLER_HOME}/build/jar
-      java -jar GameController.jar
-      ```
-
-      This starts the GameController java application.
-
-      GameController will ask you to select settings for the game. Select the first team to be team 12. If you are running opponent robots, select the other team to be team 13. If you are not running opponent robots, then the second team number is not important. In most cases, select 'Normal Game'. Click 'Start' to start GameController.
+3. (Optional) If you want to run `webots/robocup`, you will need GameController.
+   Refer to the [GameController Setup](/guides/tools/gamecontroller) guide for installation and setup instructions.
 
 With the robot binary running and the simulator world running, you should see a NUgus robot in Webots move. If you encounter issues, check both the robot terminal and Webots terminal for errors.
 
