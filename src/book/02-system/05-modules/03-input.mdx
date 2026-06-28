@@ -248,3 +248,24 @@ The resulting filtered data will then be outputted as `message::input::Sensors` 
 - `message::input::ButtonMiddleDown` when button pressed.
 - `message::input::ButtonMiddleUp` when button released.
 - `message::eye::DataPoint` if log_level >= DEBUG, indicating if feet are down.
+
+## Whistle Detector
+
+### Description
+
+Reads from a microphone using ALSA, passes it through a Cooley-Tukey FFT, into a band-pass filter to filter out frequencies that aren't whistles.
+After a certain number of consecutive detections above a threshold, it is assumed a whistle event has triggered; it emits a `message::input::Whistle` message.
+The system also has a cool-down between allowed Whistle events, as well as a timer between module configuration and the first allowed Whistle event - this is because NUsense's beep likes to trigger this module.
+
+### Usage
+
+When installed, it expects a USB microphone connected to the NUgus. Not having this microphone is not fatal, however.
+This device is connected to ALSA as `plughw:0,0`. To find this on the system, run `aplay -l` (this depends on having `alsa-utils`)
+
+### Consumes
+
+- Nothing
+
+### Emits
+
+- `messages::input::Whistle` with it's confidence of the whistle event and timestamp.
