@@ -283,13 +283,23 @@ To get data back from a robot (whether this may be configs, recordings, or scrip
 ./b retrieve hostname all # retrieve everything from a hostname
 ```
 
-This script copies the modified scripts back into your local codebase, ready for committing to our GitHub.
+`retrieve` takes two positional arguments, `host` then `target`, plus one optional flag.
 
-- Recordings get copied to `recordings/`
+| Argument/Flag | Description                                                             |
+| -------------- | ------------------------------------------------------------------------ |
+| `host`         | The robot to retrieve from. Accepts `n1`-`n4`/`nugus1`-`nugus4`/`i1`-`i4`/`igus1`-`igus4` (mapped to `10.1.1.1`-`10.1.1.4`) or a raw hostname/IP |
+| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`             |
+| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                |
 
-- Configs get scanned for whether they are global or specific to a robot, then sent to the correct folder
+Depending on `target`, this script copies the following back into your local codebase, ready for committing to our GitHub.
 
-- Scripts also get scanned for locality then sent to the correct place
+- `recordings`: copied to `recordings/`
+
+- `config`: scanned for whether they are global or specific to a robot, then sent to the correct folder
+
+- `scripts`: also scanned for locality then sent to the correct place
+
+- `all`: does all three of the above
 
 <Alert type="warning">
 
