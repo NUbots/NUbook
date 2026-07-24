@@ -285,11 +285,11 @@ To get data back from a robot (whether this may be configs, recordings, or scrip
 
 `retrieve` takes two positional arguments, `host` then `target`, plus one optional flag.
 
-| Argument/Flag | Description                                                             |
-| -------------- | ------------------------------------------------------------------------ |
+| Argument/Flag  | Description                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `host`         | The robot to retrieve from. Accepts `n1`-`n4`/`nugus1`-`nugus4`/`i1`-`i4`/`igus1`-`igus4` (mapped to `10.1.1.1`-`10.1.1.4`) or a raw hostname/IP |
-| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`             |
-| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                |
+| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`                                                                                    |
+| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                                                                                        |
 
 Depending on `target`, this script copies the following back into your local codebase, ready for committing to our GitHub.
 
