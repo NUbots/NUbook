@@ -126,6 +126,7 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | install   | Install built code to the specified robot                      |
 | module    | Generate new modules                                           |
 | nbs       | For working with NBS recordings                                |
+| retrieve  | For retrieving recordings, configs, and scripts from the robot |
 | run       | Run a role locally                                             |
 | shell     | Exposes a shell in the Docker image                            |
 | target    | Select a target to work on                                     |
@@ -270,6 +271,23 @@ The `nbs` command provides a couple of subcommands to help you work with NBS dat
 | json           | Extracts selected messages from the NBS file and dumps them to `stdout` in a json format   |
 | stats          | Calculates message statistics on the provided NBS file                                     |
 | video          | Extract images from the NBS file and save them in a video file using FFmpeg                |
+
+##### Retrieve
+
+To get data back from a robot (whether this may be configs, recordings, or scripts), use the `retrieve` command of `b` in any of the following ways
+
+```bash
+./b retrieve n1 recordings # retrieve recordings from 10.1.1.1
+./b retrieve 10.1.1.67 config # retrieve configs from 10.1.1.67
+./b retrieve nugus1 scripts # retrieve scripts from nugus1
+./b retrieve hostname all # retrieve everything from a hostname
+```
+
+<Alert type="warning">
+
+Recordings can be absolutely massive files.
+
+</Alert>
 
 ##### Run
 
