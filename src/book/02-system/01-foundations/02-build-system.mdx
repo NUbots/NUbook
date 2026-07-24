@@ -283,6 +283,14 @@ To get data back from a robot (whether this may be configs, recordings, or scrip
 ./b retrieve hostname all # retrieve everything from a hostname
 ```
 
+This script copies the modified scripts back into your local codebase, ready for committing to our GitHub.
+
+- Recordings get copied to `recordings/`
+
+- Configs get scanned for whether they are global or specific to a robot, then sent to the correct folder
+
+- Scripts also get scanned for locality then sent to the correct place
+
 <Alert type="warning">
 
 Recordings can be absolutely massive files.
