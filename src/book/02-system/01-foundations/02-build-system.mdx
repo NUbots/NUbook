@@ -126,6 +126,7 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | install   | Install built code to the specified robot                      |
 | module    | Generate new modules                                           |
 | nbs       | For working with NBS recordings                                |
+| retrieve  | For retrieving recordings, configs, and scripts from the robot |
 | run       | Run a role locally                                             |
 | shell     | Exposes a shell in the Docker image                            |
 | target    | Select a target to work on                                     |
@@ -270,6 +271,41 @@ The `nbs` command provides a couple of subcommands to help you work with NBS dat
 | json           | Extracts selected messages from the NBS file and dumps them to `stdout` in a json format   |
 | stats          | Calculates message statistics on the provided NBS file                                     |
 | video          | Extract images from the NBS file and save them in a video file using FFmpeg                |
+
+##### Retrieve
+
+To get data back from a robot (whether this may be configs, recordings, or scripts), use the `retrieve` command of `b` in any of the following ways
+
+```bash
+./b retrieve n1 recordings # retrieve recordings from 10.1.1.1
+./b retrieve 10.1.1.67 config # retrieve configs from 10.1.1.67
+./b retrieve nugus1 scripts # retrieve scripts from nugus1
+./b retrieve hostname all # retrieve everything from a hostname
+```
+
+`retrieve` takes two positional arguments, `host` then `target`, plus one optional flag.
+
+| Argument/Flag  | Description                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `host`         | The robot to retrieve from. Accepts `n1`-`n4`/`nugus1`-`nugus4`/`i1`-`i4`/`igus1`-`igus4` (mapped to `10.1.1.1`-`10.1.1.4`) or a raw hostname/IP |
+| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`                                                                                    |
+| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                                                                                        |
+
+Depending on `target`, this script copies the following back into your local codebase, ready for committing to our GitHub.
+
+- `recordings`: copied to `recordings/`
+
+- `config`: scanned for whether they are global or specific to a robot, then sent to the correct folder
+
+- `scripts`: also scanned for locality then sent to the correct place
+
+- `all`: does all three of the above
+
+<Alert type="warning">
+
+Recordings can be absolutely massive files.
+
+</Alert>
 
 ##### Run
 
