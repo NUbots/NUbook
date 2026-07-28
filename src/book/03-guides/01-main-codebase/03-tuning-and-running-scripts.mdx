@@ -135,6 +135,12 @@ When you have finished making or editing your script, copy it from the robot to 
 scp nubots@<address>:<path_to_script> <path_on_your_computer>
 ```
 
+or
+
+```bash
+./b retrieve <address> scripts # and watch the magic happen as it copies the script straight back to the codebase
+```
+
 `<address>` is the address of the robot, such as `10.1.1.1` for NUgus 1. `<path_to_script>` is the path to the script. `<path_on_your_computer>` is the path you want to copy the script to on your computer. Run this command on your computer.
 
 After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `main` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git and GitHub visit the [Git guide](/guides/general/git).
