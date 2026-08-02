@@ -179,28 +179,13 @@
   <macro name="event">
     <choose>
       <if type="paper-conference speech" match="any">
-        <choose>
-          <!-- Published Conference Paper -->
-          <if variable="collection-editor container-title editor editorial-director issue page volume" match="any">
-            <group delimiter=", ">
-              <group delimiter=" ">
-                <text term="in"/>
-                <text variable="container-title" font-style="italic"/>
-              </group>
-              <text variable="event-place"/>
-            </group>
-          </if>
-          <!-- Unpublished Conference Paper -->
-          <else>
-            <group delimiter=", ">
-              <group delimiter=" ">
-                <text term="presented at"/>
-                <text variable="event"/>
-              </group>
-              <text variable="event-place"/>
-            </group>
-          </else>
-        </choose>
+        <group delimiter=", ">
+          <group delimiter=" ">
+            <text term="in"/>
+            <text variable="container-title" font-style="italic"/>
+          </group>
+          <text variable="event-place"/>
+        </group>
       </if>
     </choose>
   </macro>
