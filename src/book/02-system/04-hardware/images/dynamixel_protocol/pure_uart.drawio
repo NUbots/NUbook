@@ -1,0 +1,34 @@
+<mxfile host="Electron" modified="2024-04-27T23:32:47.380Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.6.1 Chrome/112.0.5615.204 Electron/24.6.1 Safari/537.36" etag="lJq57koblIUiPNcpYexn" version="21.6.1" type="device">
+  <diagram name="Page-1" id="0cv2G-S0-AO7ha8Dd1sW">
+    <mxGraphModel dx="574" dy="334" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WnI3qK_31gTjP33_6Msq-1" value="UART1&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="280" y="320" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-4" value="UART2&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Times New Roman;" vertex="1" parent="1">
+          <mxGeometry x="440" y="320" width="80" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-7" value="RX" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontFamily=Times New Roman;fontSize=12;fontColor=default;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="330" y="360" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Times New Roman;fontSize=12;fontColor=default;" edge="1" parent="1" source="WnI3qK_31gTjP33_6Msq-8" target="WnI3qK_31gTjP33_6Msq-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-8" value="TX" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontFamily=Times New Roman;fontSize=12;fontColor=default;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="330" y="390" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Times New Roman;fontSize=12;fontColor=default;" edge="1" parent="1" source="WnI3qK_31gTjP33_6Msq-9" target="WnI3qK_31gTjP33_6Msq-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-9" value="TX" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontFamily=Times New Roman;fontSize=12;fontColor=default;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="440" y="360" width="30" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="WnI3qK_31gTjP33_6Msq-10" value="RX" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=default;fontFamily=Times New Roman;fontSize=12;fontColor=default;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="440" y="390" width="30" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
