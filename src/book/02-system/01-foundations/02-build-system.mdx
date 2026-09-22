@@ -340,6 +340,13 @@ Generate a list of all the modules you could get a drawing of:
 ./b blackbox --list
 ```
 
+The diagram also shows you the datatypes in each file and protobuf, and will also show you whether it accesses the field in the protobuf; greying out the field if it is not accessed.
+<Alert type="warning">
+
+The method it uses to assess whether a protobuf field is accessed is an educated guess. It has a minute false-positive rate and should not be trusted as the be-all-and-end-all.
+
+</Alert>
+
 ##### Run
 
 To run roles locally on your system use the `run` command of `b` as follows
