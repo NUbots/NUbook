@@ -307,6 +307,39 @@ Recordings can be absolutely massive files.
 
 </Alert>
 
+##### Blackbox
+
+Should you want to see a black-box-ified version of a module, you can `blackbox`.
+It will generate a nice little diagram for you with all the NUClear dependencies, like the `.yaml` file on which it configures, the modules that it will react to, the protobufs it _can_ emit, and the other outputs it is configured for, such as PlotJuggler, or data streaming, like `NatNet`.
+
+```bash
+./b blackbox FieldLocalisationNLopt
+```
+
+This command will spit out the following image to `/recordings/blackbox`:
+
+![FieldLocalisationNLopt as a black-box module](./images/localisation_FieldLocalisationNLopt.png)
+
+The following syntax is also valid:
+
+Specify the specific folder the module resides in:
+
+```bash
+./b blackbox localisation/FieldLocalisationNLopt
+```
+
+Specify two or more modules to generate a drawing of:
+
+```bash
+./b blackbox Camera NatNet
+```
+
+Generate a list of all the modules you could get a drawing of:
+
+```bash
+./b blackbox --list
+```
+
 ##### Run
 
 To run roles locally on your system use the `run` command of `b` as follows
