@@ -310,8 +310,7 @@ Recordings can be absolutely massive files.
 
 ##### Blackbox
 
-Should you want to see a black-box-ified version of a module, you can `blackbox`.
-It will generate a nice little diagram for you with all the NUClear dependencies, like the `.yaml` file on which it configures, the modules that it will react to, the protobufs it _can_ emit, and the other outputs it is configured for, such as PlotJuggler, or data streaming, like `NatNet`.
+The `blackbox` command will generate a blackbox diagram of a module in the codebase.  A blackbox diagram will display all NUClear dependencies for the module, such as the associated `.yaml` configuration file, the modules that it will react to, the protobufs it _can_ emit, as well as PlotJuggler and NatNet packets.
 
 ```bash
 ./b blackbox FieldLocalisationNLopt
