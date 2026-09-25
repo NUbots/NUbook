@@ -9,6 +9,7 @@ authors:
   - Yosiah de Koeyer (@Y0sh1dk)
   - Kip Hamiltons (@KipHamiltons)
   - Trent Houliston (@TrentHouliston)
+  - Miles Punch (@miles-p)
 ---
 
 ## The NUbots Build System
@@ -304,6 +305,45 @@ Depending on `target`, this script copies the following back into your local cod
 <Alert type="warning">
 
 Recordings can be absolutely massive files.
+
+</Alert>
+
+##### Blackbox
+
+The `blackbox` command will generate a blackbox diagram of a module in the codebase. A blackbox diagram will display all NUClear dependencies for the module, such as the associated `.yaml` configuration file, the modules that it will react to, the protobufs it _can_ emit, as well as PlotJuggler and NatNet packets.
+
+```bash
+./b blackbox FieldLocalisationNLopt
+```
+
+This command will spit out the following image to `/recordings/blackbox`:
+
+![FieldLocalisationNLopt as a black-box module](./images/localisation_FieldLocalisationNLopt.png)
+
+The following syntax is also valid:
+
+Specify the specific folder the module resides in:
+
+```bash
+./b blackbox localisation/FieldLocalisationNLopt
+```
+
+Specify two or more modules to generate a drawing of:
+
+```bash
+./b blackbox Camera NatNet
+```
+
+Generate a list of all the modules you could get a drawing of:
+
+```bash
+./b blackbox --list
+```
+
+The diagram also shows you the datatypes in each file and protobuf, and will also show you whether it accesses the field in the protobuf; greying out the field if it is not accessed.
+<Alert type="warning">
+
+The method it uses to assess whether a protobuf field is accessed is an educated guess. It has a minute false-positive rate and should not be trusted as the be-all-and-end-all.
 
 </Alert>
 
