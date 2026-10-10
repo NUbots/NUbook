@@ -1,6 +1,6 @@
 /* The main cover, with the field background */
 .cover {
-  @apply bg-cover bg-center relative;
+  @apply bg-cover bg-center relative overflow-hidden;
   background-image: url('./field.jpg');
   height: 340px;
 
@@ -70,11 +70,15 @@
     height: 360px;
   }
 
+  /* Fill the gap from the text to the right edge of the viewport (past the content column) */
   @screen md {
-    background-position: bottom right;
+    left: 50%;
+    right: min(0px, calc((1280px - 100vw) / 2));
+    width: auto;
   }
 
   @screen xl {
     height: 380px;
+    left: 880px;
   }
 }
