@@ -54,7 +54,7 @@
 /* The robot image */
 .coverImage {
   @apply absolute h-full w-full bg-contain bg-no-repeat bg-bottom bottom-0 left-0 right-0;
-  background-image: url('./nugus.png');
+  background-image: url('./nugusandk1.png');
   background-size: 125%;
 
   @screen xxs {
