@@ -10,6 +10,7 @@ authors:
   - Kip Hamiltons (@KipHamiltons)
   - Trent Houliston (@TrentHouliston)
   - Miles Punch (@miles-p)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 ## The NUbots Build System
@@ -62,19 +63,15 @@ Ideally, all modules should be independent of each other and, as such, it should
 - `extension::FileWatcher`: Needed before all other modules so that the configuration and script systems can work properly
 - `support::SignalCatcher`: Catches exceptions to print out useful stack traces. Needs to come before all other modules to allow debugging during module installation
 - `support::logging::ConsoleLogHandler` or `support::logging::FileLogHandler`: Install before other modules so that log messages will get printed during module installation
-- `actuation::KinematicsConfiguration`: Needs to come before other modules that require information about the robots kinematic configuration in order to set up properly
 
 Below is an example of a role file. Any line preceded by a `#` is a comment and will be ignored.
 
 ```bash
 nuclear_role(
-  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First. KinematicsConfiguration usually goes after these
-  # and without it many roles do not run
+  # FileWatcher, ConsoleLogHandler and Signal Catcher Must Go First.
   extension::FileWatcher
   support::SignalCatcher
   support::logging::ConsoleLogHandler
-  # This must come first as it emits config which many roles depend on (e.g. SensorFilter, WalkEngine)
-  actuation::KinematicsConfiguration
   support::configuration::GlobalConfig
   # Networking
   network::NetworkForwarder
@@ -196,10 +193,6 @@ For example, to edit the DataLogging configuration file run
 
 The `edit` command uses the editor that is defined in your host shell (using the `EDITOR` environment variable). If `EDITOR` is not set then it will default to `nano`. Currently, the only supported editors are `vim` and `nano`, with `nano` used as the fallback in all cases.
 
-##### Foot down
-
-This tool uses NBS files recorded from the robot(s) to gather training and testing data to train a neural network to determine if either of the robot's feet are on the ground using leg servo and sensor data.
-
 ##### Format
 
 NUbots uses several different code formatters.
@@ -225,7 +218,7 @@ Once code is built and you are ready to install it on a robot, you can run
 ./b install [options] <robot>
 ```
 
-`<robot>` can either be a known robot designation (`n1` or `nugus1`, for instance) or an IP address of a robot.
+`<robot>` can either be a known robot designation (`b1` or `booster1`, for instance) or an IP address of a robot.
 
 `[options]` may be one, or more, of the following
 
@@ -278,19 +271,19 @@ The `nbs` command provides a couple of subcommands to help you work with NBS dat
 To get data back from a robot (whether this may be configs, recordings, or scripts), use the `retrieve` command of `b` in any of the following ways
 
 ```bash
-./b retrieve n1 recordings # retrieve recordings from 10.1.1.1
+./b retrieve b1 recordings # retrieve recordings from 10.1.2.1
 ./b retrieve 10.1.1.67 config # retrieve configs from 10.1.1.67
-./b retrieve nugus1 scripts # retrieve scripts from nugus1
+./b retrieve booster1 scripts # retrieve scripts from booster1
 ./b retrieve hostname all # retrieve everything from a hostname
 ```
 
 `retrieve` takes two positional arguments, `host` then `target`, plus one optional flag.
 
-| Argument/Flag  | Description                                                                                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `host`         | The robot to retrieve from. Accepts `n1`-`n4`/`nugus1`-`nugus4`/`i1`-`i4`/`igus1`-`igus4` (mapped to `10.1.1.1`-`10.1.1.4`) or a raw hostname/IP |
-| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`                                                                                    |
-| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                                                                                        |
+| Argument/Flag  | Description                                                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `host`         | The robot to retrieve from. Accepts `b1`-`b2`/`booster1`-`booster2` (mapped to `10.1.2.1`-`10.1.2.2`) or a raw hostname/IP |
+| `target`       | What to retrieve: `config`, `recordings`, `scripts`, or `all`                                                              |
+| `--user`, `-u` | The user to retrieve the files with. Defaults to `nubots`                                                                  |
 
 Depending on `target`, this script copies the following back into your local codebase, ready for committing to our GitHub.
 
@@ -359,7 +352,7 @@ To run roles locally on your system use the `run` command of `b` as follows
 
 Important things to note when using the `run` command
 
-- Be sure that you are using the `generic` target for this (`./b target generic`), otherwise your role will likely crash (unless your CPU happens to be the same or newer than the 12th generation Core i7 that the robots are currently using).
+- Be sure that you are using the `generic` target for this (`./b target generic`), as any non-generic code will be compiled with the Booster's ARM-based Jetson Orin NX in mind and will not run this way.
 - When using the debugging utilities you should recompile your role after setting `CMAKE_BUILD_TYPE` to either `Debug` or `RelWithDebInfo` (`./b configure -i`) otherwise you will not get file or line number information in your stack traces.
 
 </Alert>
@@ -413,18 +406,7 @@ For further information on using ASan, GDB, and valgrind check out these pages
 
 ##### Shell
 
-This is an undocumented and unsupported option.
-
-<details>
-  <summary>I know what I am doing</summary>
-
-You probably don't know what you are doing. But why would you listen to me?
-
-For some reason, if you really, really, _REALLY_ need to access a terminal inside of Docker you can run
-
-```bash
-./b shell
-```
+The `shell` command allows a user to interact with the Docker image through a Bash terminal.
 
 <Alert type="warning">
 
@@ -432,16 +414,12 @@ Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build
 
 </Alert>
 
-</details>
-
 ##### Target
 
 The `target` command of `b` allows you to build code for a different target. Support targets are
 
 - `generic`: Useful if you would like to build and run code on your local machine.
-- `nuc7i7bnh`: For use with the old nuc7i7bnh computer. This is no longer used on the robots.
-- `nuc8i7beh`: For use with the nuc8i7beh computer. This is not used on the robots.
-- `nuc12wshi7`: The current target for the robots, which use the nuc12wshi7 computer.
+- `orinnx`: To be used when compiling code for the Booster K1's Jetson board.
 
 The `target` command will download (or, if needed, build) the Docker image for the specified target and then mark that target as active.
 
@@ -503,18 +481,18 @@ eval "$(register-python-argcomplete b)"
 ## Docker Images
 
 The NUbots codebase uses Docker images to containerise the build process.
-Two images are created, one intended for running code on your local machine, named `generic`, and another intended for running code on the robots named `nuc12wshi7`.
+Two images are created, one intended for running code on your local machine, named `generic`, and another intended for running code on the robots named `orinnx`.
 Apart from flags provided to the build tools and the compiler both images are identical (that is, they contain the same programs and libraries).
 
 <Alert type="info">
 
-`nuc12wshi7` is the name Intel has given to the Intel NUC device that the NUgus robots are currently using.
+`orinnx` is named after the Jetson Orin NX, the board used by the version of the Booster K1 used by the team.
 
 </Alert>
 
 The Docker images are cached on [Docker Hub](https://hub.docker.com/r/nubots/nubots) to limit the amount of building that everyone has to do. The cache will be updated whenever the main branch is updated.
 
-The Docker images use [Arch Linux](https://www.archlinux.org/) as their operating system as it is lightweight, flexible, and up-to-date.
+The Docker images use [Ubuntu 22.04](https://releases.ubuntu.com/jammy/) as their operating system as it matches the OS used by the K1 out of the box.
 
 The [docker folder](https://github.com/NUbots/NUbots/tree/main/docker) contains the Dockerfile as well as some utility scripts to ease the burden of compiling multiple different libraries. Other files in this folder end up inside of the image and control either the behaviour of the compiler or build system, or the runtime behaviour of the libraries that are built.
 
@@ -528,13 +506,15 @@ If you need to add a new library or program to the Docker image you should add i
 
 ### Adding a new library to the robot toolchain
 
-If the intention is to have the new library running on the robot then you need to build the library from source. If the library you are building is well-behaved then it should be a simple matter of adding a line like the following to the Dockerfile
+If the intention is to have the new library running on the robot then you need to either build the library from source, or install a precompiled version of it. If the library you are building is well-behaved then it should be a simple matter of adding a line like the following to the Dockerfile:
 
 ```docker
 RUN install-from-source http://url.to.the.source.tarball.com
 ```
 
-This process generally requires some studying of either the library's documentation or build system files to determine appropriate configure and build flags.
+`install-from-source` should have support for both source code tarballs and distributed release (precompiled) tarballs.
+
+This process generally requires some studying of either the library's documentation or build system files to determine appropriate configure and build flags if building from source.
 If there are extra flags that need to be specified then modify the above command to
 
 ```docker
@@ -548,8 +528,8 @@ RUN install-from-source http://url.to.the.source.tarball.com \
 
 </Alert>
 
-If your library is not well-behaved you may need to do to a lot of googling and trawling through stackoverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
-Another good source of information is the `PKGBUILD` scripts from the Arch Linux repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, then look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
+If your library is not well-behaved and you need to compile from source, you may need to do to a lot of Googling and trawling through StackOverflow, bug reports, or github issue pages in order to find workarounds or patches to help you build your library.
+Another good source of information is the `PKGBUILD` scripts from the Arch Linux / Arch Unofficial Repository (AUR) repositories. [Search](https://www.archlinux.org/packages/) for the name of the library, then look for and click the `Source Files` link on the package page and then click on `PKGBUILD`.
 The `PKGBUILD` script will show you how Arch Linux builds the library including
 
 - necessary dependencies,
@@ -562,7 +542,7 @@ Borrowing commands from these scripts could help relieve your frustrations with 
 
 ### Adding a new build utility
 
-If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Arch Linux packages. Search for a [package here](https://www.archlinux.org/packages/) (or google "Arch Linux" and the name of the program/library) and if you meet with success add the following command to the Dockerfile at the marker near the end of the file
+If the library/program is not intended to be used on the robot, but is instead intended to run inside the Docker image as an extra utility to help build the NUbots code then your first port of call should be the Ubuntu packages. Search for a [package here](https://packages.ubuntu.com/) (or google "Ubuntu" and the name of the program/library) and if you meet with success add the following command to the Dockerfile at the marker near the end of the file:
 
 ```bash
 #######################################
@@ -571,7 +551,7 @@ If the library/program is not intended to be used on the robot, but is instead i
 RUN install-package <name of package>
 ```
 
-If a package does not exist in the Arch Linux repositories then you will need to build it from source. However, this time, you need to add it where the marker says
+If a package does not exist in the Ubuntu repositories then you will need to find a precompiled release of it online, or as a last resort, build it from source. However, this time, you need to add it where the marker says:
 
 ```bash
 ##############################################
@@ -590,9 +570,9 @@ Docker also ensures that all of the dependencies for the built libraries are eit
 To see what is currently being built and installed in the toolchain have a look at the [Dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/Dockerfile).
 
 In order to improve runtime performance on the robots, all libraries that are built as part of the toolchain (as well as the NUbots code) are compiled with optimisations targeting the CPU of the robot.
-A list of the currently used compiler flags for the `nuc12wshi7` can be seen in [generate_nuc12wshi7_toolchain.py](https://github.com/NUbots/NUbots/blob/main/docker/usr/local/toolchain/generate_nuc12wshi7_toolchain.py).
+A list of the currently used compiler flags for the `orinnx` can be seen in [generate_orinnx_toolchain.py](https://github.com/NUbots/NUbots/blob/main/docker/usr/local/toolchain/generate_orinnx_toolchain.py).
 
-If you are setting up a new toolchain targetting a robot that is using a different CPU to the `nuc12wshi7`, log on to the new robot, install `gcc` (`sudo pacman -S gcc`) and execute the following commands
+If you are setting up a new toolchain targetting a robot that is using a different CPU to the `orinnx`, log on to the new robot, install `gcc` (`sudo apt install gcc`) and execute the following commands
 
 ```bash
 target=$(gcc -march=native -Q --help=target | grep -- '-march=' | cut -f3 | head -n1)
@@ -684,27 +664,20 @@ This function may take named parameters.
 CMake needs to know where libraries are located. The `cmake/Modules/` directory contains files called `FindX.cmake`, where `X` is the name of a library. These files contain the logic for finding library files. The function `find_package(X)` is used to tell CMake to look for one of these `.cmake` files and run it.
 
 CMake can also look for build instruction files in `/lib/cmake/X/XConfig.cmake` where `X` is the name of the library.
-An example of one of these files, `FindAravis.cmake` which finds the Aravis library, is shown below
+An example of one of these files, `Findbooster_robotics_sdk.cmake` which finds the SDK used by the Booster robots, is shown below:
 
 ```cmake
 include(ToolchainLibraryFinder)
-
-find_package(glib2 REQUIRED)
-
 ToolchainLibraryFinder(
-  NAME Aravis
-  HEADER arv.h
-  LIBRARY aravis-0.8
-  PATH_SUFFIX aravis-0.8
+  NAME booster_robotics_sdk
+  HEADER booster/robot/b1/b1_api_const.hpp booster/robot/b1/b1_loco_client.hpp
+  LIBRARY booster_robotics_sdk
 )
-
-target_link_libraries(Aravis::Aravis INTERFACE glib2::glib2)
 ```
 
 The first line includes a custom function for later use.
 We have `find_package` again, as this library has its own dependency.
 Then there is `ToolchainLibraryFinder` which is the function that finds the library.
-Finally there is `target_link_libraries` which tells CMake that we have a dependency of the library.
 `ToolchainLibraryFinder` parameters:
 
 | Parameter                | Usage                                                                                                                                                                                                                               |

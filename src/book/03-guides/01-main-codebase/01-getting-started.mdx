@@ -215,7 +215,13 @@ To build the code, open a terminal and change into the NUbots code directory. Th
    Replace `<PLATFORM>` with your desired platform. The available platforms are:
 
    - `generic` - used to build the code for a "generic" computer. This will enable you to run the built binaries on the computer you're building the code on.
-   - `nuc12wshi7` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the NUgus robots.
+   - `orinnx` - used to build the code for the platform that the robots run on. This will build binaries that are optimised for the K1 robots and their CPU architecture.
+
+   <Alert type='warning'>
+
+   Note that one platform's code cannot be run on the other. This is primarily because the K1 uses an ARM-based processor, whereas most computers use the x86 CPU architecture.
+
+   </Alert>
 
    If you are following the example, use `generic`.
 
@@ -269,7 +275,7 @@ If you are following the example, run `./b run fake/keyboardwalk`.
 ### Running on a Real Robot
 
 <Alert type='warn'>
-   When running on a real robot, make sure you understand how to safely handle a robot. To make the robot's servos relax, hit the red button on the back of the robot. This is an emergency stop button to prevent harm.
+   When running on a real robot, make sure you understand how to safely handle a robot. To make the robot's servos relax, hit the button labelled 'F1' on the back of the robot. This is the K1's equivalent of an emergency stop and puts its servos into a dampened state.
 </Alert>
 
 You can skip this section if you are following the example.
@@ -285,7 +291,7 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
    Where:
 
    - `[options]` corresponds to zero, one, or multiple options as detailed in the [Build System](/system/foundations/build-system#install) page
-   - `<robot>` corresponds to the name of the robot such as `n1` or `nugus1`, or an IP address
+   - `<robot>` corresponds to the name of the robot such as `b1` or `booster1`, or an IP address
 
 2. Next, open a new terminal and `ssh` into the robot by running:
 
@@ -293,19 +299,9 @@ To run the code on a robot, you need to make sure the robot is powered on, insta
    ssh nubots@<address>
    ```
 
-   Where `<address>` is the IP address of the robot, in the form `10.1.1.x`, with `x` being the specific robot's number, i.e. `1`, `2`, or `3`.
+   Where `<address>` is the IP address of the robot, in the form `10.1.2.x`, with `x` being the specific robot's number, i.e. `1`, `2`, or `3`.
 
-3. Now you can run any role you have built and installed onto the robot. For example, if you built the `scriptrunner` role and want to make the robot stand up, you would run:
-
-   ```bash
-   ./scriptrunner Stand.yaml
-   ```
-
-   This will start the binary to run the stand script, but the robot won't move until you press the green middle button on its back.
-
-   In addition to the stand script, the `scriptrunner` role can run other scripts. These can be found in the `scripts` folder. See [Configuration and Script System](/system/foundations/config-script) for details.
-
-   You can also run other roles that are not `scriptrunner`. For example, to run the `robocup` role enter the command:
+3. Now you can run any role you have built and installed onto the robot. For example, to run the `robocup` role enter the command:
 
    ```bash
    ./robocup

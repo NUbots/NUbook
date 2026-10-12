@@ -8,6 +8,7 @@ authors:
   - Ysobel Sims (@ysims)
   - Cameron Murtagh (@CMurtagh-LGTM)
   - Thomas O'Brien (@Tom0Brien)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 The NUbots repository is the main codebase that runs on the robots. Its purpose is to control the robot during RoboCup matches. The NUbots codebase, along with all other NUbots code, is open source and can be [found on GitHub](https://github.com/NUbots/NUbots/). The primary language in the NUbots codebase is C++.
@@ -44,11 +45,9 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `fake/keyboardwalk`   | Test parts of the code without a real robot. Demonstrate basic functionality of the robot. Part of the [Getting Started](/guides/main/getting-started) example since it does not require a real robot. |
 | `fake/visualmesh`     | Test the vision system, such as detection of balls and goals, in a simulated environment.                                                                                                              |
-| `firmwareinstaller`   | Install subcontroller firmware to the robot.                                                                                                                                                           |
 | `keyboardwalk`        | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                                                                                                             |
 | `natnet`              | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.                                                                                                 |
 | `playback`            | Play back data to view in NUsight without triggering any other processes in the system.                                                                                                                |
-| `ps3walk`             | Demonstrate the robot manually with a PS3 controller, particularly in a setting without a field.                                                                                                       |
 | `robocup`             | Play RoboCup games on the real robot.                                                                                                                                                                  |
 | `scriptrunner`        | Run scripts such as the `Stand.yaml` script, which is useful to run before doing anything with the robot.                                                                                              |
 | `scripttuner`         | Tune/modify/create [scripts](/system/subsystems/motion#script-engine).                                                                                                                                 |
@@ -62,12 +61,7 @@ The following is a table of roles that exist in the NUbots codebase and possible
 | `test/plotjuggler`    | Test the connection with PlotJuggler.                                                                                                                                                                  |
 | `test/sensor`         | Test odometry (needs NUsight). Test the subcontroller and servo data without the robot moving.                                                                                                         |
 | `test/visualmesh`     | Test the vision system on a real robot.                                                                                                                                                                |
-| `webots/behaviour`    | Test behaviours in isolation within Webots.                                                                                                                                                            |
-| `webots/keyboardwalk` | Test motions in Webots with manual control.                                                                                                                                                            |
 | `test/localisation`   | Test localisation using an interface similar to keyboard walk within Webots.                                                                                                                           |
-| `webots/robocup`      | Play RoboCup games in the Webots simulator.                                                                                                                                                            |
-| `webots/scripttuner`  | Tune/modify/create [scripts](/system/subsystems/motion#script-engine) in the Webots simulator.                                                                                                         |
-| `webots/webots`       | Test the connection between the robot code and Webots.                                                                                                                                                 |
 
 In a role, you should have only one platform. Possible platforms are `platform::${SUBCONTROLLER}::HardwareIO`, `platform::HardwareSimulator` and `platform::Webots`.
 
@@ -75,11 +69,9 @@ Any code should run with `platform::HardwareSimulator`, but this is a very basic
 
 `platform::${SUBCONTROLLER}::HardwareIO` is used for the real robot. You will get a runtime error if you do not run this on a robot, as it will be unable to find the hardware needed.
 
-`platform::Webots` is used with the Webots simulator. The code will only run if an [appropriate Webots controller is running](/guides/tools/webots-setup).
-
 ## System Diagram
 
-This is a general system diagram for the `robocup` role. `Hardware Input` and `Camera` can be replaced with `Webots` when considering the `webots/robocup` role. These roles are used in the main RoboCup competition and the Virtual Season competition. Transitive edges have been removed to make the graph easier to view.
+This is a general system diagram for the `robocup` role, which is used in the main competition. Transitive edges have been removed to make the graph easier to view.
 
 ```dot
 # The system diagram for the robocup role
@@ -155,7 +147,7 @@ digraph {
 
 All modules may send information to `Data Logging` to generate NBS files, `Console Log Handler` for command line output, `NUsight` to show data in NUsight, and `PlotJuggler` to show graphs in PlotJuggler.
 
-Other roles may only have a subset of the above diagram, for testing purposes. Some roles, such as `ps3walk` and `keyboardwalk` are also for demonstration purposes and bypass the autonomous planning sections of the system with user input.
+Other roles may only have a subset of the above diagram, for testing purposes. Some roles, such as `keyboardwalk` are also for demonstration purposes and bypass the autonomous planning sections of the system with user input.
 
 ## Codedocs
 
