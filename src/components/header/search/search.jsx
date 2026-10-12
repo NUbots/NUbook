@@ -1,40 +1,41 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import '@docsearch/css'
+import React, { useEffect, useRef } from 'react'
 import './search.module.css'
-import { DocSearch } from '@docsearch/react'
 
 const Search = () => {
+  const triggerRef = useRef(null)
+  const modalRef = useRef(null)
+
+  // Pagefind's web components mutate their own children as soon as they're
+  // upgraded (e.g. pagefind-modal adds an internal <dialog>). If React
+  // renders them via JSX, that mutation happens before/during hydration and
+  // React "corrects" it by tearing the mutated children back out, breaking
+  // the modal. So they're mounted imperatively into empty wrapper divs that
+  // React never diffs into, after hydration has already settled.
+  useEffect(() => {
+    const triggerEl = triggerRef.current
+    const modalEl = modalRef.current
+
+    const trigger = document.createElement('pagefind-modal-trigger')
+    trigger.setAttribute('placeholder', 'Search NUbook...')
+    trigger.setAttribute('shortcut', 'mod+k')
+    triggerEl.appendChild(trigger)
+
+    const modal = document.createElement('pagefind-modal')
+    modal.setAttribute('reset-on-close', '')
+    modalEl.appendChild(modal)
+
+    return () => {
+      triggerEl.removeChild(trigger)
+      modalEl.removeChild(modal)
+    }
+  }, [])
+
   return (
-    // <div className={style.search}>
-    <DocSearch
-      appId='BH4D9OD16A'
-      apiKey='be16e460d9d03fa711df82d525dec3c1'
-      indexName='nubots'
-      placeholder='Search NUbook...'
-      transformItems={(items) => {
-        return items.map((item) => {
-          // Get the origin (domain + port, if any) from the result URL
-          const { origin } = new URL(item.url)
-          return {
-            ...item,
-            // Replace the origin in the result URL with our current origin,
-            // so the links work for local development and deploy previews
-            url: item.url.replace(origin, window.location.origin),
-          }
-        })
-      }}
-    />
-    // </div>
+    <>
+      <div ref={triggerRef} />
+      <div ref={modalRef} />
+    </>
   )
-}
-
-Search.propTypes = {
-  background: PropTypes.string,
-}
-
-Search.defaultProps = {
-  background: 'solid',
 }
 
 export default Search

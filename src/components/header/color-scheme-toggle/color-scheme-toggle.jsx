@@ -9,6 +9,9 @@ function setColorScheme(scheme) {
     scheme === 'light' ? 'dark' : 'light'
   )
   document.documentElement.classList.add(scheme)
+
+  // Pagefind's search UI reads this attribute to theme itself
+  document.documentElement.setAttribute('data-pf-theme', scheme)
 }
 
 function toggleColorScheme() {
