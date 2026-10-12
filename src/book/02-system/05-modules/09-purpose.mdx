@@ -428,6 +428,7 @@ Control flow:
 - Middle button (`ButtonMiddleDown`) disables idle mode after `disable_idle_delay`
 - On penalisation (`GameEvents::Penalisation` for self), purpose tasks are cancelled and localisation/servo state is reset
 - On unpenalisation, purpose and fall-recovery tasks are restarted (unless idling)
+- If in `GameState::Phase::SET` state and we hear a `Whistle` event, move to `GameState::Phase::PLAYING`.
 
 ### Consumes
 
@@ -440,6 +441,7 @@ Control flow:
 - `message::input::ButtonLeftUp`
 - `message::input::ButtonMiddleDown`
 - `message::input::ButtonMiddleUp`
+- `message::input::Whistle`
 
 ### Emits
 
