@@ -81,4 +81,14 @@
     height: 380px;
     left: 880px;
   }
+
+  /* Widen the column instead of bleeding off-screen, so text and robots stay balanced */
+  @screen 2xl {
+    left: 790px;
+    right: 0;
+  }
+
+  @screen 3xl {
+    right: -40px;
+  }
 }
