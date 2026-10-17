@@ -14,11 +14,21 @@ This module is used to ensure that the configuration that is running on a device
 
 It goes through several steps to ensure the system is set up correctly.
 
+### Hostname
+
+The robot's hostname is set by SystemConfiguration. Pass the `--hostname` argument the first time it is run on a robot:
+
+```bash
+sudo ./systemconfiguration --hostname booster1
+```
+
+This writes the hostname to `/etc/hostname` and only needs to be done once, as the change persists. The new hostname shows up the next time you SSH into the robot.
+
 ### Filesystem
 
 The system will look through each file in the `module/tools/SystemConfiguration/data/system/default` directory.
 For each of these files it will see if there is an equivalent file in the
-`module/tools/SystemConfiguration/data/system/$HOSTNAME` directory and use that, otherwise it uses the default file.
+`module/tools/SystemConfiguration/data/system/$HOSTNAME` directory (for example `system/booster1`) and use that, otherwise it uses the default file.
 Using this file it will check that the same file in the root directory is identical to this one, and if not it will copy it across.
 This will ensure that all the system configuration files match the files that are in the repository.
 
@@ -26,8 +36,6 @@ This will ensure that all the system configuration files match the files that ar
 
 The system will only look at files that exist in the `module/tools/SystemConfiguration/data/system/default` directory.
 If you have a file that will override for a specific system, you must provide a default file as well.
-After this, it will go through the list of permissions changes that are in the `SystemConfiguration.yaml` file and apply them.
-This configuration file must list the total permissions as an octal number.
 
 </Alert>
 <Alert type='info'>
@@ -36,6 +44,9 @@ SystemConfiguration will not delete files that are not in `system/default`,
 even if they have been previously installed by SystemConfiguration.
 
 </Alert>
+
+After the files are copied, it will go through the list of permissions changes that are in the `SystemConfiguration.yaml` file and apply them.
+This configuration file must list the total permissions as an octal number.
 
 After permissions are set, it will go through the list of symlinks that are in the `SystemConfiguration.yaml` and ensure they are created.
 Checks are made to ensure that the link target exists, and the link doesn't exist.
@@ -50,17 +61,46 @@ Checks are made to ensure that the link target exists, and the link doesn't exis
 
 The process is:
 
-- **Filesystem** see above.
-- **Packages** After this the system will then attempt to "upgrade" the system using the package manager, up till the date docker uses. This "upgrade" will actually be a downgrade if the robot is ahead of the date docker uses. Once this is done it will go through the list of packages in configuration and ensure that they are installed.
+- **Hostname:** If `--hostname` is passed, it is written to `/etc/hostname`. See above.
+- **Filesystem:** See above.
+- **NetworkManager:** Connection files in `/etc/NetworkManager/system-connections` are set to `0600` and reloaded with `nmcli`. The profile named by `connection` in `SystemConfiguration.yaml` is then brought up, if its `.nmconnection` file exists.
+- **Permissions and Symlinks:** See above.
+- **Packages:** The system runs `apt-get update && apt-get upgrade`, then installs any package listed under `apt` in `SystemConfiguration.yaml` that isn't already installed.
 - **Systemd:** The system will go through the list of units and ensure that they are enabled.
 - **Locale:** If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated.
-- **Grub:** If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date.
-- **Message Of The Day:** The message of the day file is regenerated to ensure it has the correct contents.
-- **Hosts and Hostname:** Both the hostname and the hosts file are regenerated with the correct contents.
+- **Message Of The Day:** The message of the day file is generated with the robot's hostname.
+- **Booster Robot Info:** The `Nickname:` line in the Booster robot info file (`robot_info_path`) is set to `<Alias> [NUbots]`, using the robot's alias from the platform aliases. If there is no alias, the hostname is used.
+- **Hosts:** The hosts file is generated with the correct contents.
 - **Groups:** The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them.
-- **ZSH:** [Zprezto](https://github.com/sorin-ionescu/prezto) is installed and the appropriate symlinks are made. The users' default shell is also changed to zsh.
+- **Bash:** The [fzf](https://github.com/junegunn/fzf) key bindings and completion scripts are sourced in the user's `~/.bashrc`.
 - **Python:** Python is updated to ensure that it will search for packages in `/usr/local`.
+- **Ownership:** The user's home directory and `/usr/local` are owned by the user so files installed as root stay usable.
+
+## Configuration
+
+`SystemConfiguration.yaml` contains:
+
+| Key               | Description                                                               |
+| :---------------- | :------------------------------------------------------------------------ |
+| `log_level`       | Set to `DEBUG` or lower to see each file being checked                    |
+| `user`            | The user on the robot (`booster`)                                         |
+| `permissions`     | Files and the octal permissions to set on them                            |
+| `apt`             | APT packages that should be installed                                     |
+| `connection`      | The NetworkManager profile to activate. Must exist in the `system` folder |
+| `systemd`         | Systemd units that should be enabled                                      |
+| `groups`          | Groups the user should be a member of                                     |
+| `links`           | Symlinks to create, as `target: name`                                     |
+| `generate_locale` | Whether to run `locale-gen`                                               |
+| `robot_info_path` | Path to the Booster robot info file that holds the robot's nickname       |
 
 ## Usage
 
-Install the `system_configuration` role then run as a superuser on the robot and this role will ensure that the system configuration on the platform matches the configuration in the repository.
+Install the `systemconfiguration` role and the toolchain onto the robot, then run it as a superuser:
+
+```bash
+./b install -t booster1
+ssh booster@<robot ip>
+sudo ./systemconfiguration --hostname booster1
+```
+
+`--hostname` can be left off on later runs. This role will ensure that the system configuration on the platform matches the configuration in the repository.
