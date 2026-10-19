@@ -1,6 +1,7 @@
 /*eslint-env node */
 
 const React = require('react')
+const { withPrefix } = require('gatsby')
 
 // Adds the dark mode class name to the html element before render,
 // using an inline script to void a flash of white in dark mode
@@ -14,6 +15,9 @@ exports.onRenderBody = ({ setHeadComponents }) => {
 
         // Add the new scheme
         document.documentElement.classList.add(scheme)
+
+        // Pagefind's search UI reads this attribute to theme itself
+        document.documentElement.setAttribute('data-pf-theme', scheme)
       }
 
       var isDarkMode =
@@ -37,6 +41,19 @@ exports.onRenderBody = ({ setHeadComponents }) => {
     <script
       key='dark-mode-script'
       dangerouslySetInnerHTML={{ __html: script }}
+    ></script>,
+    // Pagefind's search index and UI bundle are generated as a post-build
+    // step (see the `build` script), so they're loaded from the static
+    // output directory rather than bundled as an npm dependency.
+    <link
+      key='pagefind-css'
+      rel='stylesheet'
+      href={withPrefix('/pagefind/pagefind-component-ui.css')}
+    />,
+    <script
+      key='pagefind-script'
+      type='module'
+      src={withPrefix('/pagefind/pagefind-component-ui.js')}
     ></script>,
   ])
 }
