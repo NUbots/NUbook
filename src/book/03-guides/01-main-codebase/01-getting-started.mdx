@@ -70,18 +70,57 @@ To install on Ubuntu, use the [official Docker instructions](https://docs.docker
 
 1. Install Homebrew by following the instructions at [brew.sh](https://brew.sh/).
 
-2. Install Python 3 and Docker using Homebrew.
+2. Install Python 3, Docker and [Colima](https://github.com/abiosoft/colima) using Homebrew.
 
    ```bash
    brew install python3
    brew install docker-desktop
+   brew install colima
    ```
 
 3. Run the Docker Desktop app that was installed and ensure that Docker is running by checking that it shows a green dot in the app menu bar.
 
    ![Top right screenshot of a macOS system shows the Docker icon with a dropdown menu. The first line in the menu is highlighted and reads 'Docker desktop is running'.](./images/docker-running-mac.png)
 
-4. Go to **Advanced settings** in Docker Desktop's **Preferences** and increase the memory available to containers to at least 4GB. By default Docker will allocate 2GB of memory to containers, which is not enough to build the NUbots docker image.
+4. Install Rosetta, which lets Apple Silicon Macs run x86 software.
+
+   ```bash
+   softwareupdate --install-rosetta
+   ```
+
+5. Start Colima.
+
+   ```bash
+   colima start --vm-type vz --vz-rosetta --network-address --network-mode bridged --network-interface en0
+   ```
+
+   <Alert type='info'>
+
+   Colima runs the NUbots containers in a VM bridged to your network, so containers using `--network host` (such as NUsight) can reach robots on your local network. Replace `en0` with your active network interface if it differs.
+
+   </Alert>
+
+   **Setting resources**
+
+   By default Colima gives its VM 2 CPUs and 2GiB of memory, which is not enough to build the NUbots Docker image. Append resource arguments to the `colima start` command based on your Mac's compute. Check how many CPU cores and how much memory (in bytes) your Mac has with:
+
+   ```bash
+   sysctl -n hw.ncpu
+   sysctl -n hw.memsize
+   ```
+
+   Set `--cpus` and `--memory` (in GiB) to suit your Mac, giving at least 4GiB of memory. For example:
+
+   ```bash
+   colima start --vm-type vz --vz-rosetta --network-address --network-mode bridged --network-interface en0 --cpus 4 --memory 8
+   ```
+
+6. Switch Docker to use Colima and check it is selected (marked with `*`).
+
+   ```bash
+   docker context use colima
+   docker context ls
+   ```
 
 </details>
 
@@ -352,6 +391,18 @@ Open up a new terminal to run NUsight and NUbots code side by side.
    ```bash
    ./b yarn prod --address <ADDRESS>
    ```
+
+   <Alert type='warning'>
+
+   If running NUsight on macOS, you will need to append an additional argument:
+
+   ```bash
+   ./b yarn --network host prod --address <ADDRESS>
+   ```
+
+   Your device will be unable to recieve network packets from the robot without it.
+
+   </Alert>
 
    <Alert type='info'>
 
