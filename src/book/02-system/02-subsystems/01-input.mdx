@@ -14,15 +14,15 @@ Input to the system includes cameras, [GameController](/guides/tools/gamecontrol
 
 ## Cameras
 
-The Booster K1 has a stereo head-mounted RGB and depth camera, but we only use one of the two available RGB ones. The camera is owned by **BoosterOS**, which publishes frames as ROS 2 `sensor_msgs/Image` messages over **DDS** for us to subscribe to.
+The Booster K1 has a stereo head-mounted RGB and depth camera, but we only use one of the two available RGB ones. The camera is owned by **the Booster Robotics SDK**, which publishes frames as ROS 2 `sensor_msgs/Image` messages over **DDS** for us to subscribe to.
 
-Because BoosterOS drives the sensor, exposure, gain, white balance and frame rate are not ours to configure. What we do control is which topics we listen to, how frames are converted into our own [Image message](https://github.com/NUbots/NUbots/tree/main/shared/message/input/Image.proto), and which kinematics each frame is paired with.
+Because the Booster Robotics SDK drives the sensor, exposure, gain, white balance and frame rate are not ours to configure. What we do control is which topics we listen to, how frames are converted into our own [Image message](https://github.com/NUbots/NUbots/tree/main/shared/message/input/Image.proto), and which kinematics each frame is paired with.
 
 ### The Camera module
 
 The [Camera module](https://github.com/NUbots/NUbots/tree/main/module/input/Camera) subscribes to the camera topics using the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk) and emits an `Image` for every frame that arrives.
 
-Each entry under `cameras` in [`K1Camera.yaml`](https://github.com/NUbots/NUbots_K1/tree/main/module/input/K1Camera/data/config/K1Camera.yaml) sets up one subscription.
+Each entry under `cameras` in [`Camera.yaml`](https://github.com/NUbots/NUbots/tree/main/module/input/Camera/data/config/Camera.yaml) sets up one subscription.
 
 | Parameter | Type    | Description                                                                                                                                             |
 | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -51,11 +51,11 @@ The `encoding` field on the incoming message is mapped to the FOURCC code the re
 
 Frames with an encoding that isn't in this list are dropped with a warning.
 
-`NV12` is the exception to the pass-through. The K1 publishes NV12 by default, which nothing downstream understands, so K1Camera converts it to `RGB3` with OpenCV's `cvtColor`. The destination buffer is sized inside the `Image` message first and a `cv::Mat` is pointed at it, so the converted pixels are written straight into the message with no intermediate copy.
+`NV12` is the exception to the pass-through. The K1 publishes NV12 by default, which nothing downstream understands, so Camera converts it to `RGB3` with OpenCV's `cvtColor`. The destination buffer is sized inside the `Image` message first and a `cv::Mat` is pointed at it, so the converted pixels are written straight into the message with no intermediate copy.
 
 ### Lens parameters
 
-Lens parameters come from the camera rather than from config. Alongside each image topic, K1Camera reliably subscribes to `<topic>/camera_info`, which carries a `sensor_msgs/CameraInfo` with the intrinsic matrix `k` and distortion coefficients `d`. CameraInfo is low rate and we want every update, so this one is taken reliably rather than latest-only.
+Lens parameters come from the camera rather than from config. Alongside each image topic, Camera reliably subscribes to `<topic>/camera_info`, which carries a `sensor_msgs/CameraInfo` with the intrinsic matrix `k` and distortion coefficients `d`. CameraInfo is low rate and we want every update, so this one is taken reliably rather than latest-only.
 
 Those values are converted into the fields our `Image::Lens` uses. Note that both the focal length and the centre offset are **normalised by image width**, which keeps them valid if the resolution changes.
 
@@ -71,23 +71,23 @@ CameraInfo with a zero focal length or zero dimensions is ignored. Until the fir
 
 The [projection tool](https://github.com/NUbots/NUbots/tree/main/shared/utility/vision/projection.hpp), based on [panotools' fisheye projection calculations](https://wiki.panotools.org/Fisheye_Projection), uses `lens.projection` to map between rays in camera space and pixels in the image. It also supports equidistant and equisolid projections, but only the rectilinear path is exercised here.
 
-Physical mounting offsets are handled separately, by the `Hpc` transform in [K1Sensors](https://github.com/NUbots/NUbots_K1/tree/main/module/input/K1Sensors). Camera mounting varies between robots, so `Hpc` is calibrated individually for each one.
+Physical mounting offsets are handled separately, by the `Hpc` transform in [Sensors](https://github.com/NUbots/NUbots/tree/main/module/input/Sensors). Camera mounting varies between robots, so `Hpc` is calibrated individually for each one.
 
 ### Timestamps and kinematics
 
-Every image needs to be paired with where the camera was **when the shutter fired**, not when the frame reached us. K1Camera uses the capture time from the message header for this, and falls back to its own receive time when the header stamp is zero or more than a second away from our clock. A skewed stamp is usually a sign that BoosterOS and NUbots aren't sharing a clock, so the fallback logs a warning the first time it happens.
+Every image needs to be paired with where the camera was **when the shutter fired**, not when the frame reached us. The Camera module uses the capture time from the message header for this, and falls back to its own receive time when the header stamp is zero or more than a second away from our clock. A skewed stamp is usually a sign that the Booster Robotics SDK and NUbots aren't sharing a clock, so the fallback logs a warning the first time it happens.
 
-The camera-to-world transform is pulled from a buffer rather than read live. K1Camera keeps the last 500 ms of `Hcw` transforms from incoming `Sensors` messages and picks whichever buffered sample is closest in time to the frame's capture timestamp. Since `Sensors` and the camera run on independent DDS readers at different rates, this is what keeps the two lined up.
+The camera-to-world transform is pulled from a buffer rather than read live. Camera keeps the last 500 ms of `Hcw` transforms from incoming `Sensors` messages and picks whichever buffered sample is closest in time to the frame's capture timestamp. Since `Sensors` and the camera run on independent DDS readers at different rates, this is what keeps the two lined up.
 
 ### Summary
 
-K1Camera consumes:
+The Camera module consumes:
 
 - `message::input::Sensors`, to buffer recent `Hcw` transforms
 - `sensor_msgs/Image` and `sensor_msgs/CameraInfo` over DDS
 
 and emits:
 
-- [`message::input::Image`](https://github.com/NUbots/NUbots_K1/tree/main/shared/message/input/Image.proto)
+- [`message::input::Image`](https://github.com/NUbots/NUbots/tree/main/shared/message/input/Image.proto)
 
-It needs a running BoosterOS publishing the configured topics. The DDS `ChannelFactory` is a process-wide singleton shared with the other modules that talk to the robot, so K1Camera initialises it through [`ensure_channel_factory`](https://github.com/NUbots/NUbots_K1/tree/main/shared/utility/platform/Booster/channel_factory.hpp) rather than calling `Init` itself. NUClear doesn't order `on<Startup>` reactions between modules, so whichever module gets there first wins and the rest are no-ops.
+It needs a running the Booster Robotics SDK publishing the configured topics. The DDS `ChannelFactory` is a process-wide singleton shared with the other modules that talk to the robot, so the Camera module initialises it through [`ensure_channel_factory`](https://github.com/NUbots/NUbots/tree/main/shared/utility/platform/Booster/channel_factory.hpp) rather than calling `Init` itself. NUClear doesn't order `on<Startup>` reactions between modules, so whichever module gets there first wins and the rest are no-ops.

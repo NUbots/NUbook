@@ -119,7 +119,6 @@ NUClear Roles introduces the `b` command that wraps up all of the functionality 
 | build     | Build the currently configured code                            |
 | configure | Configure the CMake system for the current target              |
 | edit      | Edit configuration files                                       |
-| footdown  | Trains a neural network to detect foot down based on leg loads |
 | format    | Applies code formatting rules to the codebase                  |
 | install   | Install built code to the specified robot                      |
 | module    | Generate new modules                                           |
@@ -138,7 +137,7 @@ As one might expect, `./b build` will build all enabled roles and required depen
 ./b build test/sensor
 ```
 
-If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/nubots/build/Testing/Temporary`.
+If unit tests are enabled in the CMake configuration (`-DBUILD_TESTS=ON`) then `./b build test` can be run to execute all of the unit tests. Test logs can be accessed by running `./b shell` and navigating to `/home/booster/build/Testing/Temporary`.
 
 ##### Configure
 
@@ -380,7 +379,7 @@ ASAN_OPTIONS=option1=value1:option2=value ./b run fake/keyboardwalk
 
 <Alert type="info">
 
-If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of the Docker container that have persistent write access. The default log file location is `/home/nubots/NUbots/asan.log.PID` which corresponds to the NUbots source code directory. `PID` is the process ID of your role in the Docker container, ASan will always add this.
+If you would like to use a different path for your ASan log file be sure to specify `ASAN_OPTIONS=log_path=path/to/log/file`. However, there are very few locations inside of the Docker container that have persistent write access. The default log file location is `/home/booster/NUbots/asan.log.PID` which corresponds to the NUbots source code directory. `PID` is the process ID of your role in the Docker container, ASan will always add this.
 
 </Alert>
 
@@ -406,11 +405,13 @@ For further information on using ASan, GDB, and valgrind check out these pages
 
 ##### Shell
 
-The `shell` command allows a user to interact with the Docker image through a Bash terminal.
+The `shell` command allows a user to interact with the Docker image through a Bash terminal. Any arguments are run as a command inside the image instead of opening an interactive shell, for example `./b shell ls /home/booster/build`.
+
+The image runs Ubuntu 22.04 as the `booster` user, with passwordless `sudo`, so you can use `sudo apt install` to try out packages. Packages installed this way are lost when the shell exits; see [Docker Images](#docker-images) to add them permanently.
 
 <Alert type="warning">
 
-Any changes you make outside of the `/home/nubots/NUbots` or `/home/nubots/build` directories will not persist after exiting the Docker shell.
+Any changes you make outside of the `/home/booster/NUbots` or `/home/booster/build` directories will not persist after exiting the Docker shell.
 
 </Alert>
 

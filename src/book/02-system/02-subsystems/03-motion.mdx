@@ -9,18 +9,18 @@ authors:
   - Mithun Sivanesan (@ZeoNyph)
 ---
 
-BoosterOS, the Booster K1's firmware, currently handles all locomotion and get-up routines on the Booster K1, and exposes them through the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk).
+the Booster Robotics SDK, the Booster K1's firmware, currently handles all locomotion and get-up routines on the Booster K1, and exposes them through the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk).
 
 ```dot
 # The K1 motion pipeline.
 digraph motion {
   rankdir=LR
-  "BoosterOS" [style=dashed]
-  "PlanWalkPath" -> "K1Walk"
-  "PlanKick" -> "K1VisualKick"
-  "PlanLook" -> "K1Look"
-  "GetUpPlanner" -> "K1GetUp"
-  {"K1Walk", "K1VisualKick", "K1Look", "K1GetUp"} -> "Booster HardwareIO" -> "BoosterOS"
+  "the Booster Robotics SDK" [style=dashed]
+  "PlanWalkPath" -> "Walk"
+  "PlanKick" -> "VisualKick"
+  "PlanLook" -> "Look"
+  "GetUpPlanner" -> "GetUp"
+  {"Walk", "VisualKick", "Look", "GetUp"} -> "Booster HardwareIO" -> "the Booster Robotics SDK"
 }
 ```
 
@@ -42,11 +42,26 @@ Switching to `PREP` takes a moment. Changing into prep mid-stride makes the robo
 
 While the robot is in prep, or waiting to enter it, HardwareIO discards any movement commands.
 
-Any mode transition invalidates the odometry track, so HardwareIO resets the SDK odometry on every mode change.
+Any mode transition invalidates the odometry track, so HardwareIO resets the SDK odometry on every mode change (see [Odometry](#odometry)).
+
+## Odometry
+
+The K1 doesn't use NUbots' own kinematic odometry. the Booster Robotics SDK knows its own gait, so we take the planar odometry it publishes on `rt/odometer_state` instead.
+
+1. HardwareIO subscribes to `rt/odometer_state` and emits each sample as a [`BoosterOdometry`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterOdometry.proto) message containing `x`, `y` and `theta` in the odometry world frame.
+2. The [Sensors module](https://github.com/NUbots/NUbots/tree/main/module/input/Sensors) pairs each `RawSensors` message with the latest `BoosterOdometry`. It stores the first sample as a zero offset and subtracts it from every later sample, so odometry starts at the origin. Values below `odometry_deadband` are set to zero.
+3. Sensors builds `Hwr`, the robot's planar pose in the world frame, from the offset-corrected `x`, `y` and `theta`. Combined with the head pose from the Booster Robotics SDK, this gives the camera pose `Hcw`. Both are emitted in the `Sensors` message for [localisation](/system/subsystems/localisation) and vision to use.
+
+The odometry is reset in two cases:
+
+- **On a mode change:** HardwareIO calls the SDK's `ResetOdometry`, and Sensors captures a new zero offset from the next sample.
+- **On `ResetFieldLocalisation`:** both modules do the same, so odometry restarts from the robot's new pose. This also happens after a get-up.
+
+HardwareIO also resets the odometry on startup.
 
 ## Walking
 
-The [K1Walk module](https://github.com/NUbots/NUbots/tree/main/module/skill/K1Walk) provides the [Walk Task](https://github.com/NUbots/NUbots/blob/main/shared/message/skill/Walk.proto) in the [Director system](/system/foundations/director). It requests `SOCCER` mode when the Task starts, then forwards the commanded velocity to the SDK as a `BoosterWalk` message.
+The [Walk module](https://github.com/NUbots/NUbots/tree/main/module/skill/Walk) provides the [Walk Task](https://github.com/NUbots/NUbots/blob/main/shared/message/skill/Walk.proto) in the [Director system](/system/foundations/director). It requests `SOCCER` mode when the Task starts, then forwards the commanded velocity to the SDK as a `BoosterWalk` message.
 
 The walk command gives a vector `[x, y, z]`:
 
@@ -60,7 +75,7 @@ The robot's [behaviour](/system/subsystems/behaviour) determines the walk vector
 
 ### In-walk kick
 
-When the `kick` field on the Walk Task is set, K1Walk drives a fixed forward velocity burst for a fixed duration.
+When the `kick` field on the Walk Task is set, Walk drives a fixed forward velocity burst for a fixed duration.
 
 | Config value    | Description                                                                 |
 | --------------- | --------------------------------------------------------------------------- |
@@ -69,7 +84,7 @@ When the `kick` field on the Walk Task is set, K1Walk drives a fixed forward vel
 
 ## Kicking
 
-The [K1VisualKick module](https://github.com/NUbots/NUbots/tree/main/module/skill/K1VisualKick) provides the [Kick Task](https://github.com/NUbots/NUbots/blob/main/shared/message/skill/Kick.proto) using the SDK's visual kick. [PlanKick](https://github.com/NUbots/NUbots/tree/main/module/planning/PlanKick) decides when to kick, checking that the ball measurement is recent, the ball is close enough and roughly in front, and the robot is aligned to the target.
+The [VisualKick module](https://github.com/NUbots/NUbots/tree/main/module/skill/VisualKick) provides the [Kick Task](https://github.com/NUbots/NUbots/blob/main/shared/message/skill/Kick.proto) using the SDK's visual kick. [PlanKick](https://github.com/NUbots/NUbots/tree/main/module/planning/PlanKick) decides when to kick, checking that the ball measurement is recent, the ball is close enough and roughly in front, and the robot is aligned to the target.
 
 Starting the kick requires that the robot be in `SOCCER` mode, and that it is in visual kick mode, which puts the robot into the mode that listens for visual kick messages through the SDK.
 
@@ -87,13 +102,13 @@ The kick ends if the ball moves more than `min_ball_move_distance` from where it
 
 ## Getting up
 
-BoosterOS detects falls itself and publishes a fall state, which HardwareIO republishes as [`BoosterFallDownState`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterFallDownState.proto) with one of `IS_READY`, `IS_FALLING`, `HAS_FALLEN` or `IS_GETTING_UP`.
+the Booster Robotics SDK detects falls itself and publishes a fall state, which HardwareIO republishes as [`BoosterFallDownState`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterFallDownState.proto) with one of `IS_READY`, `IS_FALLING`, `HAS_FALLEN` or `IS_GETTING_UP`.
 
-[GetUpPlanner](https://github.com/NUbots/NUbots/tree/main/module/planning/GetUpPlanner) emits a GetUp Task when the angle between the torso's z axis and the world z axis exceeds `fallen_angle`. The [K1GetUp module](https://github.com/NUbots/NUbots/tree/main/module/skill/K1GetUp) provides that Task: if the robot has fallen and the SDK reports recovery is available, it triggers the SDK's get-up routine. It reports `Done` once the fall state returns to `IS_READY`, at which point it marks the robot as standing and resets field localisation, because the get-up invalidates odometry.
+[GetUpPlanner](https://github.com/NUbots/NUbots/tree/main/module/planning/GetUpPlanner) emits a GetUp Task when the angle between the torso's z axis and the world z axis exceeds `fallen_angle`. The [GetUp module](https://github.com/NUbots/NUbots/tree/main/module/skill/GetUp) provides that Task: if the robot has fallen and the SDK reports recovery is available, it triggers the SDK's get-up routine. It reports `Done` once the fall state returns to `IS_READY`, at which point it marks the robot as standing and resets field localisation, because the get-up invalidates odometry.
 
 ## Head motion
 
-The [K1Look module](https://github.com/NUbots/NUbots/tree/main/module/skill/K1Look) provides the Look Task. It takes a unit vector in torso space, converts it into head yaw and pitch, and emits a `BoosterHeadRot` for HardwareIO to send to the SDK.
+The [Look module](https://github.com/NUbots/NUbots/tree/main/module/skill/Look) provides the Look Task. It takes a unit vector in torso space, converts it into head yaw and pitch, and emits a `BoosterHeadRot` for HardwareIO to send to the SDK.
 
 HardwareIO clamps the result to the K1's limits before sending it:
 

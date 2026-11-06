@@ -41,29 +41,22 @@ When adding modules to the list in a role, use the syntax `path::to::module`. Fo
 
 The following is a table of roles that exist in the NUbots codebase and possible use cases for them.
 
-| Role Name             | Usage                                                                                                                                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `fake/keyboardwalk`   | Test parts of the code without a real robot. Demonstrate basic functionality of the robot. Part of the [Getting Started](/guides/main/getting-started) example since it does not require a real robot. |
-| `fake/visualmesh`     | Test the vision system, such as detection of balls and goals, in a simulated environment.                                                                                                              |
-| `keyboardwalk`        | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                                                                                                             |
-| `natnet`              | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.                                                                                                 |
-| `playback`            | Play back data to view in NUsight without triggering any other processes in the system.                                                                                                                |
-| `robocup`             | Play RoboCup games on the real robot.                                                                                                                                                                  |
-| `scriptrunner`        | Run scripts such as the `Stand.yaml` script, which is useful to run before doing anything with the robot.                                                                                              |
-| `scripttuner`         | Tune/modify/create [scripts](/system/subsystems/motion#script-engine).                                                                                                                                 |
-| `systemconfiguration` | Ensures the robot is set up with required packages, networking and more.                                                                                                                               |
-| `test/behaviour`      | Test individual behaviours in isolation.                                                                                                                                                               |
-| `test/camera`         | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).                                                                                                          |
-| `test/director`       | Tests the Director system.                                                                                                                                                                             |
-| `test/gamecontroller` | Test the connection between the robot and [GameController](/guides/tools/gamecontroller)                                                                                                               |
-| `test/localisation`   | Test localisation using an interface similar to keyboard walk.                                                                                                                                         |
-| `test/nusight`        | Test the connection with NUsight. This role only sends dummy chart data through the NUsightHarness module.                                                                                             |
-| `test/plotjuggler`    | Test the connection with PlotJuggler.                                                                                                                                                                  |
-| `test/sensor`         | Test odometry (needs NUsight). Test the subcontroller and servo data without the robot moving.                                                                                                         |
-| `test/visualmesh`     | Test the vision system on a real robot.                                                                                                                                                                |
-| `test/localisation`   | Test localisation using an interface similar to keyboard walk within Webots.                                                                                                                           |
+| Role Name             | Usage                                                                                                      |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `keyboardwalk`        | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                 |
+| `natnet`              | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.     |
+| `data/playback`       | Play back data to view in NUsight without triggering any other processes in the system.                    |
+| `robocup`             | Play RoboCup games on the real robot.                                                                      |
+| `systemconfiguration` | Ensures the robot is set up with required packages, networking and more.                                   |
+| `test/behaviour`      | Test individual behaviours in isolation.                                                                   |
+| `test/camera`         | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).              |
+| `test/gamecontroller` | Test the connection between the robot and [GameController](/guides/tools/gamecontroller)                   |
+| `test/localisation`   | Test localisation using an interface similar to keyboard walk.                                             |
+| `test/nusight`        | Test the connection with NUsight. This role only sends dummy chart data through the NUsightHarness module. |
+| `test/sensor`         | Test odometry (needs NUsight). Test sensor data without the robot moving.                                  |
+| `test/yolo`           | Test the vision system on a real robot.                                                                    |
 
-In a role, you should have only one platform. Possible platforms are `platform::${SUBCONTROLLER}::HardwareIO`, `platform::HardwareSimulator` and `platform::Webots`.
+In a role, you should have only one platform. Possible platforms are `platform::${SUBCONTROLLER}::HardwareIO` and `platform::HardwareSimulator`.
 
 Any code should run with `platform::HardwareSimulator`, but this is a very basic simulated robot and does not consider gravity - this may be useful if you want to see a motion run on the robot without the robot falling down, or if you want to test if the code runs without setting up the real robot or a simulator.
 

@@ -10,11 +10,25 @@ slug: /system/modules/input/
 
 ### Description
 
-Reads Cameras: Which are GigE Vision or U3V (Usb3 Vision, via USB3 Cable).
+Subscribes directly to the Booster K1's camera topics using the [Booster Robotics
+SDK](https://github.com/BoosterRobotics/booster_robotics_sdk) (1.7) over DDS, and emits the frames as
+`message::input::Image`.
 
 ### Usage
 
-Settings are defined in the `config/Cameras`
+`data/config/Camera.yaml` contains the following information under `cameras`:
+
+- `topic`: the DDS topic carrying `sensor_msgs/Image`. This is the ROS 2 topic path prefixed with
+  `rt/`, so ROS 2 topic `/boostercamera/head/rgb` becomes `rt/boostercamera/head/rgb`
+- `name`: name of the camera, used to differentiate between outputs
+- `id`: camera ID to differentiate between images
+
+Topics are subscribed to once at startup. Changing `topic` in the config while running will not
+re-point the subscriptions; restart the binary instead.
+
+### Consumes
+
+- `message::input::Sensors` to buffer recent `Hcw` transforms
 
 ### Emits
 
@@ -22,7 +36,9 @@ Settings are defined in the `config/Cameras`
 
 ### Dependencies
 
-- Aravis
+- [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk)
+- [OpenCV](https://opencv.org/)
+- A running BoosterOS publishing the configured camera topics
 
 ## FakeCamera
 
@@ -74,7 +90,7 @@ Hoc: # Camera to observation plane (world) homogeneous transformation
 
 Listens for RoboCup GameController UDP broadcast packets, converts them into NUClear messages, and maintains a canonical `message::input::GameState`.
 
-The module also sends periodic and state-dependent reply packets back to the GameController (alive, penalised, unpenalised).
+The module also sends periodic reply packets back to the GameController.
 
 ### Usage
 
@@ -87,7 +103,7 @@ This module is configured by `GameController.yaml` and consumes:
 At runtime it:
 
 - Listens for UDP broadcast packets on `receive_port`
-- Accepts only supported packet version `12`
+- Accepts only supported packet version `19`
 - Optionally filters incoming packets by source IP using `udp_filter_address`
 - Tracks the sender address and sends reply packets to that address on `send_port`
 - Sends `ALIVE` reply packets every 2 seconds
@@ -102,14 +118,12 @@ At runtime it:
 - `message::input::GameEvents::GoalScored`
 - `message::input::GameEvents::Penalisation`
 - `message::input::GameEvents::Unpenalisation`
-- `message::input::GameEvents::CoachMessage`
 - `message::input::GameEvents::HalfTime`
-- `message::input::GameEvents::BallKickedOut`
 - `message::input::GameEvents::KickOffTeam`
 - `message::input::GameEvents::GamePhase`
 - `message::input::GameEvents::GameMode`
 
-Also sends UDP GameController reply packets (`PENALISED`, `UNPENALISED`, `ALIVE`) via `emit<Scope::UDP>(...)`.
+Also sends UDP GameController reply packets via `emit<Scope::UDP>(...)`.
 
 ### Dependencies
 
@@ -217,34 +231,103 @@ At runtime the module:
 
 - An OptiTrack motion capture system sending packets over the network using the NatNet protocol.
 
-## Sensor Filter
+## NUSimCamera
 
 ### Description
 
-Uses a Unscented Kalman filter to filter the raw incoming data, and provide clean platform agnostic data.
+Reads the camera image out of the shared-memory segment written by **NUSim** (the
+MuJoCo simulator's `Camera` module / `SharedImageWriter`) and emits it as
+`message::input::Image`. NUSimCamera reads NUSim's VERSION 2 **lock-free seqlock** layout.
 
-We assume that the IMU (accelerometer and gyroscope) are oriented to conform with the standard coordinate system x-axis out
-the front of the robot y-axis to the left z-axis up
-
-For the accelerometer the orientation should be as follows
-x axis reports a +1g acceleration when robot is laying on its back
-y axis reports a +1g acceleration when robot is laying on its right side
-z axis reports a +1g acceleration when robot is vertical
+Use this module in `roles/nusim/*`; use `input::Camera` in the on-robot roles.
 
 ### Usage
 
-When installed, it will read incoming `message::platform::RawSensors` objects and pass them through the kalman filter.
-The resulting filtered data will then be outputted as `message::input::Sensors` to be used by the rest of the system.
+`data/config/NUSimCamera.yaml` lists, under `cameras`:
 
-### Consumes
-
-- `message::platform::RawSensors` in order to filter them.
+- `segment`: name of the [Boost](https://www.boost.org/) shared-memory segment NUSim writes
+- `id`: camera ID to differentiate between images
+- `name`: name of the camera, used to differentiate between outputs
 
 ### Emits
 
-- `message::input::Sensors` with filtered data from the input.
-- `message::input::ButtonLeftDown` when button pressed.
-- `message::input::ButtonLeftUp` when button released.
-- `message::input::ButtonMiddleDown` when button pressed.
-- `message::input::ButtonMiddleUp` when button released.
-- `message::eye::DataPoint` if log_level >= DEBUG, indicating if feet are down.
+- `message::input::Image`
+
+### Dependencies
+
+- [Boost](https://www.boost.org/)
+- NUSim writing the camera shared-memory segment (`SharedImageWriter`, VERSION 2 seqlock)
+
+## Sensors
+
+### Description
+
+Emits a `message::input::Sensors` message based on input from the K1's odometry and sensor data.
+
+### Usage
+
+When installed, it subscribes to the head pose DDS topic at startup and reacts to incoming
+`message::platform::RawSensors` to build and emit a
+`message::input::Sensors` each tick along with the odometry from the K1. Button edge transitions are also detected and emitted as separate messages.
+
+The head pose reader is also created once at startup; changing `head_pose.topic` in config after that requires a
+restart to take effect.
+
+### Consumes
+
+- `message::platform::RawSensors` to build the outgoing `Sensors` message, including servo, IMU, button, and LED
+  state.
+- `message::booster::BoosterOdometry`, paired with `RawSensors`, for the robot's odometry-derived world pose.
+- `message::booster::BoosterModeState` to detect motion mode changes and reset the odometry zero offset.
+- `message::localisation::ResetFieldLocalisation` to reset the odometry zero offset after a localisation reset.
+
+### Emits
+
+- `message::input::Sensors` with filtered/converted sensor data and odometry.
+- `message::input::ButtonLeftDown` / `ButtonLeftUp` when the left button changes state.
+- `message::input::ButtonMiddleDown` / `ButtonMiddleUp` when the middle button changes state.
+
+### Dependencies
+
+- Eigen
+- Booster Robotics SDK
+
+## WhistleDetection
+
+### Description
+
+Detects a referee whistle in real-time from the robot's microphone and emits a
+`message::input::Whistle` message when one is confirmed.
+
+The algorithm mirrors the signal-processing front-end used by the NaoDevils
+[AudioProcessing](https://github.com/NaoDevils/AudioProcessing) project (from
+which the labelled dataset was obtained):
+
+1. Capture mono audio via ALSA at 16 kHz.
+2. Accumulate samples into 1024-point windows with 50 % overlap (one new window
+   every 32 ms).
+3. Apply a Hanning window and compute the one-sided power spectrum via a
+   radix-2 Cooley-Tukey FFT.
+4. Compute the fraction of total spectral power that falls in the configurable
+   whistle frequency band (default 2–4.5 kHz).
+5. Require `confirm_frames` consecutive windows above `band_ratio_threshold` before
+   emitting, and enforce a `cooldown_ms` gap between successive events.
+
+### Usage
+
+Add the module to a role file and tune `WhistleDetection.yaml` for the deployment
+environment (primarily `band_ratio_threshold` and `min_band_energy`, which depend
+on microphone gain and background noise level).
+
+### Consumes
+
+Nothing — audio is read directly from the ALSA device.
+
+### Emits
+
+- `message::input::Whistle` — fired once per confirmed whistle with a timestamp
+  and a confidence value in [0, 1].
+
+### Dependencies
+
+- ALSA (`libasound`) — already a project-wide utility dependency.

@@ -42,7 +42,7 @@ The following steps detail how to record data. An example will be given througho
 
    **Locally in Docker:** In the same location you built the code, run the binary using the command `./b run <role_name>`.
 
-   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh nubots@<address>` and run the binary built for the role you want to record. For our example, run `./test/sensor`.
+   **On a real robot:** [SSH](https://en.wikipedia.org/wiki/Secure_Shell_Protocol) into the robot using `ssh booster@<address>` and run the binary built for the role you want to record. For our example, run `./test/sensor`.
 
 5. Stop the binary when you have finished recording by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.
 
@@ -56,14 +56,14 @@ The following steps detail how to record data. An example will be given througho
    2. Copy the file across. On the destination computer, run:
 
       ```bash
-      scp nubots@<address>:recordings/rolename/file_name path/to/destination
+      scp booster@<address>:recordings/rolename/file_name path/to/destination
       ```
 
       For our example, you could run:
 
       ```bash
       # Replace <address> with the robot's IP address
-      scp nubots@<address>:recordings/test/sensor/18072020T082100.nbs .
+      scp booster@<address>:recordings/test/sensor/18072020T082100.nbs .
       ```
 
       The file will be copied from the robot to the folder you ran the command in. The [`scp`](https://linux.die.net/man/1/scp) command is like the regular [`cp`](https://linux.die.net/man/1/cp) command, but it copies to or from another computer over SSH. The first path in the command points to the file we are copying and the second path points to where we want to copy that file to.

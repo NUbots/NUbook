@@ -77,11 +77,11 @@ If you're having errors which say that there was no such value in `b.cmake_cache
 
 ```py
 Traceback (most recent call last):
-  File "/home/nubots/NUbots/nuclear/b.py", line 113, in <module>
+  File "/home/booster/NUbots/nuclear/b.py", line 113, in <module>
     module.run(**vars(command.parse_args()))
-  File "/home/nubots/NUbots/tools/utility/dockerise/run.py", line 79, in _run
+  File "/home/booster/NUbots/tools/utility/dockerise/run.py", line 79, in _run
     func(**kwargs)
-  File "/home/nubots/NUbots/tools/run.py", line 34, in run
+  File "/home/booster/NUbots/tools/run.py", line 34, in run
     use_asan = b.cmake_cache["USE_ASAN"] == "ON"
 KeyError: 'USE_ASAN'
 ```
