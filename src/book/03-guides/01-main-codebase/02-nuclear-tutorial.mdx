@@ -233,7 +233,7 @@ on<Trigger<Ping>>().then([this](const Ping& ping) {
 });
 ```
 
-`Trigger` means that it will run when it a `Ping` message is available. We get access to this message via the `ping` parameter. Let's add in the other reaction.
+`Trigger` means that it will run when a `Ping` message is available. We get access to this message via the `ping` parameter. Let's add in the other reaction.
 
 ```cpp
 on<Trigger<Pong>>().then([this](const Pong& pong) {
@@ -323,7 +323,7 @@ Now that you understand the module, you can fill in the `README.md` file. This i
 
 - **Description:** Write in your own description of what the module does.
 - **Usage:** Since it is not dependent on other modules, the user only needs to include the module in their role to use it.
-- **Consumes:** The the `Ping` and `Pong` messages are consumed by the reactors.
+- **Consumes:** The `Ping` and `Pong` messages are consumed by the reactors.
 - **Emits:** The `Ping` and `Pong` messages are emitted by the reactors.
 - **Dependencies:** This module doesn't have any dependencies of note.
 
