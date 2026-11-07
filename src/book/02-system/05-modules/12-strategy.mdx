@@ -6,30 +6,6 @@ description: Documentation for each strategy module in the main NUbots codebase
 slug: /system/modules/strategy/
 ---
 
-## DiveToBall
-
-### Description
-
-Dives when the ball is close enough on the x-axis, diving in the direction of the ball. Intended for use by a goalie to stop the ball.
-
-### Usage
-
-Add this module to the role to dive when the ball is close enough.
-
-### Consumes
-
-- `message::strategy::DiveToBall` a Task requesting to dive to the ball when it is close enough
-- `message::localisaton::Ball` with the position of the ball
-
-### Emits
-
-- `message::skill::Dive` a Task requesting to dive in a specified direction
-
-### Dependencies
-
-- Director
-- Needs the ball location to know when to dive
-
 ## FallRecovery
 
 ### Description
@@ -105,29 +81,6 @@ Add this module and emit a `message::strategy::StandStill` Task to make the robo
 - The script utility
 - The walk engine
 
-## StartSafely
-
-### Description
-
-Use this module to make the robot move safely to a stand position.
-
-### Usage
-
-Emit the Task on Startup at the root of the Director tree.
-
-### Consumes
-
-- `message::strategy::StartSafely` Task to request the robot to start safely.
-- `message::input::Sensors` to determine the position of the motors.
-
-### Emits
-
-- `message::actuation::Body` to move the whole body to the stand position.
-
-### Dependencies
-
-- Director
-
 ## StrategiseLook
 
 ### Description
@@ -166,8 +119,6 @@ Four types of walking to the ball exist in this module.
 
 `WalkToKickBall` walks the ball with the robot positioned such that it will move the ball towards the goals. It will move behind the ball first if the robot is positioned between the ball and goals.
 
-`TackleBall` will walk to the ball perpendicularly to the opponent robot closest to the ball, tackling it off them.
-
 `PositionBehindBall` will walk behind the ball, facing the goals, and stop behind the ball without touching it. This is for penalty positioning where the ball should not be touched yet.
 
 ### Usage
@@ -178,13 +129,12 @@ Add this module and emit the Task for the desired type of walk to ball.
 
 - `message::strategy::WalkToBall` Task requesting to walk to the ball directly
 - `message::strategy::WalkToKickBall` Task requesting to walk to the ball with the goals aligned
-- `message::strategy::TackleBall` Task requesting to tackle the ball off an opponent
 - `message::strategy::PositionBehindBall` Task requesting to position behind the ball without touching the ball, in line with the goals
 - `message::localisation::Ball` information on where the ball is
 - `message::support::FieldDescription` to know where the goals are
 - `message::input::Sensors` for transforming into robot space
 - `message::localisation::Field` for calculations in field space
-- `message::localisation::Robots` used by TackleBall to find the opponent robot to tackle off
+- `message::localisation::Robots` used by WalkToBall to dribble around obstacles
 
 ### Emits
 

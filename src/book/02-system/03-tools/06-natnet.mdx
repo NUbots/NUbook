@@ -6,6 +6,7 @@ description: A tool that captures positional information from the Motive motion 
 slug: /system/tools/natnet_sdk
 authors:
   - Luke Haigh (@Dereferenced-Null)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 The NUbots NatNet module is module that works in conjunction with the [OptiTrack Motive software](https://www.optitrack.com/software/motive/) and motion tracking camera system. The purpose of the NatNet system is to record positional information about the NUgus robots in relation to the playing field and the external environment.
@@ -64,7 +65,7 @@ This is the default method for running NatNet. If you wish to output motive pack
 
 9. Exit out of the ssh of the robot.
 
-10. We now need to copy the nbs file off the robot. Use `scp nubots@10.1.1.<robot_id#>:/home/nubots/recordings/<your_program_name>/<name_of_nbs_file> ./recordings/`
+10. We now need to copy the nbs file off the robot. Use `scp booster@10.1.2.<robot_id#>:/home/booster/recordings/<your_program_name>/<name_of_nbs_file> ./recordings/`
 
 11. You now need to extract the information you want from the nbs file. We have a number of .nbs extraction tools and is recommended that you use `./b nbs extract_images <path>` for extracting images from the nbs file and `./b nbs json <path>` to extract the information into JSON format.
 
