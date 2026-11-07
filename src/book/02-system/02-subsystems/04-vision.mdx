@@ -40,7 +40,7 @@ Each image is converted to OpenCV format, padded to a square and resized to the 
 
 ### Post-Processing
 
-Detections are converted from pixel coordinates into **3D coordinates** using the camera's lens model and the camera's pose `Hcw`, which comes from [odometry](/system/subsystems/motion#odometry). To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/foundations/mathematics).
+Detections are converted from pixel coordinates into **3D coordinates** using the camera's lens model and the camera's pose `Hcw`, which comes from [odometry](/system/subsystems/odometry). To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/foundations/mathematics).
 
 The corners and centre points of each bounding box are unprojected into unit vectors (rays) in camera space. Rays are then projected onto the field plane where needed:
 
