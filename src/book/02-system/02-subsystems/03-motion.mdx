@@ -9,7 +9,7 @@ authors:
   - Mithun Sivanesan (@ZeoNyph)
 ---
 
-the Booster Robotics SDK, the Booster K1's firmware, currently handles all locomotion and get-up routines on the Booster K1, and exposes them through the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk).
+The Booster Robotics SDK, and the Booster K1's firmware, currently handles all locomotion and get-up routines on the Booster K1, and exposes them through the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk).
 
 ```dot
 # The K1 motion pipeline.
@@ -102,7 +102,7 @@ The kick ends if the ball moves more than `min_ball_move_distance` from where it
 
 ## Getting up
 
-the Booster Robotics SDK detects falls itself and publishes a fall state, which HardwareIO republishes as [`BoosterFallDownState`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterFallDownState.proto) with one of `IS_READY`, `IS_FALLING`, `HAS_FALLEN` or `IS_GETTING_UP`.
+The Booster Robotics SDK detects falls itself and publishes a fall state, which HardwareIO republishes as [`BoosterFallDownState`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterFallDownState.proto) with one of `IS_READY`, `IS_FALLING`, `HAS_FALLEN` or `IS_GETTING_UP`.
 
 [GetUpPlanner](https://github.com/NUbots/NUbots/tree/main/module/planning/GetUpPlanner) emits a GetUp Task when the angle between the torso's z axis and the world z axis exceeds `fallen_angle`. The [GetUp module](https://github.com/NUbots/NUbots/tree/main/module/skill/GetUp) provides that Task: if the robot has fallen and the SDK reports recovery is available, it triggers the SDK's get-up routine. It reports `Done` once the fall state returns to `IS_READY`, at which point it marks the robot as standing and resets field localisation, because the get-up invalidates odometry.
 
