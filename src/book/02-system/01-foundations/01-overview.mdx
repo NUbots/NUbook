@@ -41,20 +41,28 @@ When adding modules to the list in a role, use the syntax `path::to::module`. Fo
 
 The following is a table of roles that exist in the NUbots codebase and possible use cases for them.
 
-| Role Name             | Usage                                                                                                      |
-| --------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `keyboardwalk`        | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                 |
-| `natnet`              | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.     |
-| `data/playback`       | Play back data to view in NUsight without triggering any other processes in the system.                    |
-| `robocup`             | Play RoboCup games on the real robot.                                                                      |
-| `systemconfiguration` | Ensures the robot is set up with required packages, networking and more.                                   |
-| `test/behaviour`      | Test individual behaviours in isolation.                                                                   |
-| `test/camera`         | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).              |
-| `test/gamecontroller` | Test the connection between the robot and [GameController](/guides/tools/gamecontroller)                   |
-| `test/localisation`   | Test localisation using an interface similar to keyboard walk.                                             |
-| `test/nusight`        | Test the connection with NUsight. This role only sends dummy chart data through the NUsightHarness module. |
-| `test/sensor`         | Test odometry (needs NUsight). Test sensor data without the robot moving.                                  |
-| `test/yolo`           | Test the vision system on a real robot.                                                                    |
+| Role Name                 | Usage                                                                                                                                                      |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `keyboardwalk`            | Demonstrate the robot manually with a keyboard, particularly in a setting without a field.                                                                 |
+| `natnet`                  | Get motion capture data from a [Motive](https://optitrack.com/software/motive/) motion capture system.                                                     |
+| `data/logging`            | Move the robot with the keyboard while vision and localisation run, recording data with `DataLogging`.                                                     |
+| `data/playback`           | Play back data to view in NUsight without triggering any other processes in the system.                                                                    |
+| `nusim/behaviour`         | NUSim version of `test/behaviour`. Walk, kick and get up run as ONNX policies and the camera comes from NUSim.                                             |
+| `nusim/localisation`      | NUSim version of `test/localisation`. Move the robot with the keyboard and check localisation against NUSim's ground truth.                                |
+| `robocup`                 | Play RoboCup games on the real robot.                                                                                                                      |
+| `robocupconfiguration`    | Set up the robot's network and game settings before a RoboCup game. See [RoboCup Setup](/guides/general/robocup-setup).                                    |
+| `systemconfiguration`     | Ensures the robot is set up with required packages, networking and more.                                                                                   |
+| `test/behaviour`          | Test individual behaviours in isolation.                                                                                                                   |
+| `test/camera`             | Test if the cameras are working and [calibrate the cameras](/guides/main/camera-calibration).                                                              |
+| `test/gamecontroller`     | Test the connection between the robot and [GameController](/guides/tools/gamecontroller)                                                                   |
+| `test/localisation`       | Test localisation using an interface similar to keyboard walk.                                                                                             |
+| `test/nusight`            | Test the connection with NUsight. This role only sends dummy chart data through the NUsightHarness module.                                                 |
+| `test/robotcommunication` | Test communication between robots. Set `RobotCommunication`'s log level to `DEBUG` to see each message from a teammate.                                    |
+| `test/sensor`             | Test odometry (needs NUsight). Test sensor data without the robot moving.                                                                                  |
+| `test/speak`              | Test the `Say` module. Set what to say in its config.                                                                                                      |
+| `test/teambehaviour`      | Drive the robot with the keyboard while it reports the team role (attack, defend, support) and support position it would take in a game. Shown in NUsight. |
+| `test/whistle`            | Test whistle detection.                                                                                                                                    |
+| `test/yolo`               | Test the vision system on a real robot.                                                                                                                    |
 
 In a role, you should have only one platform. Possible platforms are `platform::${SUBCONTROLLER}::HardwareIO` and `platform::HardwareSimulator`.
 
