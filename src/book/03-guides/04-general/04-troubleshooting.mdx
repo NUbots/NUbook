@@ -16,7 +16,7 @@ If this page does not solve your problem, ask for help on Slack by messaging a c
 
 ### Why is `./b target generic` taking so long?
 
-If `./b target generic` (or `./b target nuc...`) is taking more than ~10 minutes and you haven't modified the Dockerfile, then something is wrong. You should see it downloading layers from DockerHub, not building everything from scratch.
+If `./b target generic` (or `./b target orinnx`) is taking more than ~10 minutes and you haven't modified the Dockerfile, then something is wrong. You should see it downloading layers from DockerHub, not building everything from scratch.
 
 A simple fix is to remove your BuildKit container.
 
@@ -98,7 +98,7 @@ find . -type f -name CMakeCache.txt -delete && find . -type d -name CMakeFiles -
 If the problem persists, try purging the build volume by running `./b configure --clean`.
 Note that purging the build volume means you'll have to rerun `./b build` to use built code.
 
-### Not enough memory in Docker? (macOS)
+### Not enough memory in Docker? (macOS/WSL)
 
 By default Docker Desktop will allocate 2GB of memory to use for building images. When building the NUbots image, this is insufficient and will result in an error. To fix this, open the Docker menu in the menu bar, go to advanced settings, and increase the memory available.
 
