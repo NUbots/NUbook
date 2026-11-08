@@ -1,0 +1,70 @@
+---
+section: System
+chapter: Subsystems
+title: Vision
+description: Vision and how it works in the NUbots codebase.
+slug: /system/subsystems/vision
+authors:
+  - Ysobel Sims (@ysims)
+---
+
+The vision system aims to convert images from a camera in the robot into useful information, such as the position of balls, goal posts, field lines and obstacles. This information is used to determine behaviour and localisation. The vision subsystem includes object detection and post-processing.
+
+The vision system previously used the Visual Mesh, which is documented in the [archive](/archive/visual-mesh/vision).
+
+## YOLO
+
+The [Yolo module](https://github.com/NUbots/NUbots/tree/main/module/vision/Yolo) runs a [YOLO](https://docs.ultralytics.com/) (You Only Look Once) object detection model on every image from the [Camera module](/system/subsystems/input). The default model, `booster.onnx`, is trained to detect the following classes:
+
+| Class                           | Emitted as                              |
+| ------------------------------- | --------------------------------------- |
+| `Ball`                          | `Balls`                                 |
+| `Goalpost`                      | `Goals`                                 |
+| `K1`                            | `Robots`                                |
+| `LCross`, `TCross` and `XCross` | `FieldIntersections` (L, T and X types) |
+| `PenaltyPoint`                  | `BoundingBoxes` only                    |
+
+Every detection is also emitted as a bounding box in a `BoundingBoxes` message, which can be viewed in NUsight. Penalty points have no dedicated message type yet, so they are only emitted as bounding boxes.
+
+### Inference
+
+Inference is run using [ONNX Runtime](https://onnxruntime.ai/). The `device` configuration value selects either the CPU, or the GPU using the TensorRT execution provider. Non-NVIDIA GPUs are not supported.
+
+<Alert type="info">
+
+The first time a model is run on a robot using TensorRT, it can take a few minutes to load while TensorRT builds an engine from the ONNX file. The built engine is cached, so later runs start quickly.
+
+</Alert>
+
+Each image is converted to OpenCV format, padded to a square and resized to the model's input size before inference. The model's output is a list of candidate boxes, each with a score for every class. Each box is given its highest-scoring class, and boxes below that class's confidence threshold are discarded. Non-maximum suppression (NMS) then removes overlapping boxes, using `nms_threshold` and `nms_score_threshold`.
+
+### Post-Processing
+
+Detections are converted from pixel coordinates into **3D coordinates** using the camera's lens model and the camera's pose `Hcw`, which comes from [odometry](/system/subsystems/odometry). To find out more about the mathematics used at NUbots, check out [the mathematics page](/system/foundations/mathematics).
+
+The corners and centre points of each bounding box are unprojected into unit vectors (rays) in camera space. Rays are then projected onto the field plane where needed:
+
+- **Balls** use the ray through the centre of the box, projected onto the field, as the ball measurement. The ball's angular radius is calculated from the bottom of the box.
+- **Goal posts** use the ray through the bottom centre of the box, projected onto the field, as the base of the post. The top and bottom of the box give the top and bottom of the post. Whether a post is a left or right post is not determined.
+- **Robots** use the ray through the bottom centre of the box, projected onto the field, as the robot's position.
+- **Field intersections** use the ray through the centre of the box, projected onto the field, and are emitted in world space.
+
+### Configuration
+
+The module is configured in [Yolo.yaml](https://github.com/NUbots/NUbots/blob/main/module/vision/Yolo/data/config/Yolo.yaml).
+
+| Field                    | Description                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| `model_path`             | The ONNX model file to load.                                   |
+| `device`                 | `cpu`, or `gpu` to use TensorRT.                               |
+| `*_confidence_threshold` | The minimum confidence for each class's detections to be kept. |
+| `nms_threshold`          | The overlap threshold for non-maximum suppression.             |
+| `nms_score_threshold`    | The minimum score for a box to be considered during NMS.       |
+
+### Testing
+
+The [test/yolo role](https://github.com/NUbots/NUbots/blob/main/roles/test/yolo.role) runs the camera, sensors and Yolo modules without any behaviour. Build and install it on a robot, run it, and watch the Vision tab in [NUsight](/system/tools/nusight) to check the detections.
+
+### COCO Model
+
+The [YoloCoco module](https://github.com/NUbots/NUbots/tree/main/module/vision/YoloCoco) runs a YOLO model trained on the [COCO dataset](https://docs.ultralytics.com/datasets/detect/coco/) instead. It only emits `BoundingBoxes`, and is not used in soccer roles.

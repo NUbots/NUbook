@@ -1,18 +1,24 @@
 ---
-section: Guides
-chapter: Main Codebase
+section: Archive
+chapter: NUgus
 title: Running and Tuning Scripts
 description: How to tune and run scripts.
-slug: /guides/main/tuning-and-running-scripts
+slug: /archive/nugus/scripts
 authors:
   - Ysobel Sims (@ysims)
 ---
 
+<Alert type="info">
+
+This page is archived. It documents the NUgus, which NUbots no longer uses as its main platform.
+
+</Alert>
+
 Scripts are static motions for the robot. By static, we mean they are preconfigured motions that won't change at runtime. They specify what joint angles to move to and how long the robot should take to go to those joint angles. For example, standing up is a small script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in a row to make the robot do more complex movements like getting up or kicking.
 
-Scripts are run using the script utility and the [Director system](/system/foundations/director). The script utility will convert a specified script yaml file into a [Sequence Task message](/system/subsystems/motion#actuation). It takes each joint position and time from the `.yaml` file and adds these frames to the Sequence of servo targets. The Sequence Provider will request a Director Task for each Group in its Sequence, and will only progress to the next Group when the previous has completed.
+Scripts are run using the script utility and the [Director system](/system/foundations/director). The script utility will convert a specified script yaml file into a [Sequence Task message](#the-script-system). It takes each joint position and time from the `.yaml` file and adds these frames to the Sequence of servo targets. The Sequence Provider will request a Director Task for each Group in its Sequence, and will only progress to the next Group when the previous has completed.
 
-More information on the script system is on the [Motion](/system/subsystems/motion#scripts) page. Information on Script Runner and Script Tuner is on the [Behaviour](/system/subsystems/behaviour#script-runner) page.
+More information on the script system, Script Runner and Script Tuner is in the [Background](#background) section below.
 
 ## Script Runner
 
@@ -144,3 +150,84 @@ or
 `<address>` is the address of the robot, such as `10.1.1.1` for NUgus 1. `<path_to_script>` is the path to the script. `<path_on_your_computer>` is the path you want to copy the script to on your computer. Run this command on your computer.
 
 After you copy the script to your computer, you should commit it to a new branch and make a pull request to merge it into the `main` branch on GitHub; unless the changes are not suitable to keep, in which case you can discard them. For information on Git and GitHub visit the [Git guide](/guides/general/git).
+
+## Background
+
+### The Script System
+
+Scripts are static motions for the robot. They specify what joint angles to move to and how long the robot should take to get to those joint angles. For example, standing up is a script telling the robot to move its joints to the stand position over one second. There can be many of these position specifications in sequence to make the robot do short movements that may be hard to dynamically implement, such as getting up.
+
+#### Execution
+
+To execute a script, we emit a Director Task message with the appropriate servo Sequence containing the script information. This script information comes from the `load_script` function in the `script` utility.
+
+The `load_script` function takes a YAML file name (eg `Stand.yaml`), finds and reads the file and creates a servo Sequence representing the script. The Sequence is returned and emitted as a Director Task. The Director Task is then executed by the Director system.
+
+```
+
+emit<Task>(load_script<BodySequence>("Stand.yaml"));
+
+```
+
+Scripts can be given a start time. If a script has a start time, it will not start execution until that time. The following would execute the `Stand` script in five seconds.
+
+```
+
+emit<Task>(load_script<BodySequence>("Stand.yaml", NUClear::clock::now() + std::chrono::seconds(5)));
+
+```
+
+#### Script files
+
+The script files are YAML files specifying a duration and list of servo targets, in a format like the following:
+
+```yaml
+- duration: 1000
+  targets:
+    - id: HEAD_YAW
+      position: 0
+      gain: 10
+      torque: 100
+    - id: HEAD_PITCH
+      position: 0.5
+      gain: 10
+      torque: 100
+    - id: R_HIP_YAW
+      position: -0.03
+      gain: 5
+      torque: 100
+```
+
+The fields are described in the table below.
+
+| Field      | Description                                                                                                                                                    |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `duration` | An integer in milliseconds.                                                                                                                                    |
+| `position` | A float representing the angle of the servo in radians.                                                                                                        |
+| `gain`     | A float representing how much effort the servo will use to get to the target position. Gain is often between 5 and 15.                                         |
+| `torque`   | A float, where 0 represents no torque and 100 represents torque being on. Torque is 100 unless you want that servo relaxed, in which case it will be 0.        |
+| `id`       | One of the servo IDs listed in [ServoID.h](https://github.com/NUbots/NUbots/blob/467f458c687419056e2487fe468c7f22d19a6965/shared/utility/input/ServoID.h#L30). |
+
+Script files can be found in the ScriptEngine module. Scripts can be specific to a robot. More on scripts can be found on the [Configuration and Script System](/system/foundations/config-script) page.
+
+### Script Runner
+
+[ScriptRunner](https://github.com/NUbots/NUbots/tree/8bfdde1ac3f51764515908dd514e653f6b38cf04/module/purpose/ScriptRunner) is a purpose-level module. It takes the name of one or more script files as arguments and attempts to run the scripts. It does not take file paths, only the file name/s of the script/s to execute.
+
+When ScriptRunner is executed, it stores the script file names passed to it as a vector of strings. When the green button on the robot is pushed, the scripts are executed in order of appearance, one after the other. ScriptRunner also provides an option to set a delay before the execution of the first script, as well as a delay between the execution of each script.
+
+An example of using ScriptRunner to run a script called `Stand.yaml` is:
+
+```bash
+./scriptrunner Stand.yaml
+```
+
+### Script Tuner
+
+[ScriptTuner](https://github.com/NUbots/NUbots/tree/0a948978ba5806ee532bc1120a76e9e58c4e6533/module/purpose/ScriptTuner) is a purpose-level module. Using a command-line argument, it can either create a new script or open an existing script for editing. It uses [curses](<https://en.wikipedia.org/wiki/Curses_(programming_library)>) to create a user interface in the terminal. Through this user interface, YAML files are created or edited that specify a script that can then be used by other modules.
+
+A script consists of frames (also called targets) which specify the position of one or more servos at a given time. The ScriptTuner interface allows for stepping through and modifying those frames. When a frame is selected in ScriptTuner, a ServoCommand for that frame will be emitted to the robot. By stepping through multiple frames, the entire script can be played back on the robot, allowing the user to preview changes to the script.
+
+ScriptTuner also allows for "locking" and "unlocking" servos on the robot. When a servo is "locked", its position can only be changed in ScriptTuner. When it is "unlocked", the servo can be moved physically on the robot, which will update the position value in the script. Locking a servo involves emitting a ServoCommand for the current position of the servo. Unlocking the servo involves emitting a ServoCommand with zero torque and gain.
+
+To learn how to use ScriptTuner, see [Script Tuner](#script-tuner) above.
