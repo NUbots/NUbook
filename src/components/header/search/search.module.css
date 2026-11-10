@@ -1,120 +1,16 @@
-*:global.DocSearch-Button {
-  backdrop-filter: blur(4px);
-  font-weight: inherit;
-  transition: all 0.2s ease-in-out;
-
-  @apply m-0 h-10 w-full pr-3 md:px-4 rounded appearance-none outline-none;
-
-  &:hover {
-    box-shadow: none;
-  }
-
-  &:focus {
-    box-shadow: none;
-  }
-}
-
-*:global.DocSearch-Button-Keys {
-  display: none;
-}
-
-*:global.DocSearch-Button-Container {
-  @apply gap-3 w-full;
-}
-
-*:global.DocSearch-Button-Placeholder {
+/* The search bar always sits on the header's dark bg (bg-gray-900),
+   regardless of the site's light/dark theme (set via data-pf-theme on
+   <html>, see gatsby-ssr.js and color-scheme-toggle.jsx), so the trigger
+   button's own styling stays constant. An element's own declarations
+   always win over an inherited value, so this overrides whatever
+   data-pf-theme cascades down regardless of the current theme. */
+pagefind-modal-trigger {
   display: block;
+  width: 100%;
 
-  @apply text-lg;
-}
-
-*:global.DocSearch-Modal {
-  box-shadow: none;
-}
-
-*:global.DocSearch-Hits {
-  mark {
-    @apply font-semibold;
-  }
-}
-
-*:global.DocSearch-Footer {
-  box-shadow: none;
-
-  *:global.DocSearch-Commands {
-    display: none;
-  }
-}
-
-*:global.DocSearch-Form {
-  box-shadow: none;
-}
-
-:global(.dark) {
-  --docsearch-container-background: rgba(115, 115, 115, 0.8);
-  --docsearch-modal-background: gray-700;
-  --docsearch-footer-background: gray-700;
-  --docsearch-hit-color: text-primary-inverted;
-  --docsearch-text-color: text-primary-inverted;
-  --docsearch-hit-background: rgba(255, 255, 255, 0.07);
-  --docsearch-hit-active-color: #000;
-  --docsearch-highlight-color: #f9a50d;
-  --docsearch-hit-shadow: none;
-
-  *:global.DocSearch-Button {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: hsla(0, 0%, 100%, 0.45);
-
-    > :global.DocSearch-Button-Container {
-      > :global.DocSearch-Search-Icon {
-        color: hsla(0, 0%, 100%, 0.45);
-      }
-    }
-
-    &:hover {
-      box-shadow: none;
-      background-color: rgba(66, 66, 66, 1);
-    }
-  }
-
-  *:global.DocSearch-Modal {
-    background-color: #222;
-  }
-
-  *:global.DocSearch-Form {
-    background-color: rgba(255, 255, 255, 0.075);
-  }
-
-  *:global.DocSearch-Hit-source {
-    background-color: #222;
-  }
-}
-
-:global(.light) {
-  --docsearch-container-background: rgba(115, 115, 115, 0.8);
-  --docsearch-highlight-color: #cc880d;
-  --docsearch-hit-active-color: #fff;
-
-  *:global.DocSearch-Button {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: hsla(0, 0%, 100%, 0.45);
-
-    > :global.DocSearch-Button-Container {
-      > :global.DocSearch-Search-Icon {
-        color: hsla(0, 0%, 100%, 0.45);
-      }
-    }
-
-    &:hover {
-      box-shadow: none;
-      background-color: rgba(255, 255, 255, 1);
-      color: rgba(50, 50, 50, 0.87);
-
-      > :global.DocSearch-Button-Container {
-        > :global.DocSearch-Search-Icon {
-          color: rgba(50, 50, 50, 0.87);
-        }
-      }
-    }
-  }
+  --pf-background: rgba(255, 255, 255, 0.15);
+  --pf-text: rgba(255, 255, 255, 0.87);
+  --pf-text-secondary: hsla(0, 0%, 100%, 0.45);
+  --pf-border: transparent;
+  --pf-border-radius: 0.25rem;
 }
