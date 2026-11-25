@@ -4,4 +4,19 @@ chapter: Subsystems
 title: Odometry
 description: Odometry and how it works in the NUbots codebase.
 slug: /system/subsystems/odometry
+authors:
+  - Mithun Sivanesan (@ZeoNyph)
 ---
+
+The K1's odometry comes from the Booster Robotics SDK, which publishes it on `rt/odometer_state`.
+
+1. The [Booster HardwareIO module](https://github.com/NUbots/NUbots/tree/main/module/platform/Booster/HardwareIO) subscribes to `rt/odometer_state` and emits each sample as a [`BoosterOdometry`](https://github.com/NUbots/NUbots/blob/main/shared/message/booster/BoosterOdometry.proto) message containing `x`, `y` and `theta` in the odometry world frame.
+2. The [Sensors module](https://github.com/NUbots/NUbots/tree/main/module/input/Sensors) pairs each `RawSensors` message with the latest `BoosterOdometry`. It stores the first sample as a zero offset and subtracts it from every later sample, so odometry starts at the origin. Values below `odometry_deadband` are set to zero.
+3. Sensors builds `Hwr`, the robot's planar pose in the world frame, from the offset-corrected `x`, `y` and `theta`. Combined with the head pose from the Booster Robotics SDK, this gives the camera pose `Hcw`. Both are emitted in the `Sensors` message for [localisation](/system/subsystems/localisation) and vision to use.
+
+The odometry is reset in two cases:
+
+- **On a [mode change](/system/subsystems/motion#motion-modes):** HardwareIO calls the SDK's `ResetOdometry`, and Sensors captures a new zero offset from the next sample.
+- **On `ResetFieldLocalisation`:** both modules do the same, so odometry restarts from the robot's new pose. This also happens after a get-up.
+
+HardwareIO also resets the odometry on startup.

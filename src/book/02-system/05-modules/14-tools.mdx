@@ -43,6 +43,8 @@ This module benchmarks the performance of the robot's field localisation system 
 
 ## NBSPlayback
 
+### Description
+
 ### Usage
 
 In order to play back the messages, you need to create a role with this module that has the modules you wish to test. You then need to enable the message types that are the input to these modules by setting them to true in the configuration (e.g. `message.input.sensors: true`). Make sure the `.nbs` file contains the messages you are trying to emit (you can check with `./b nbs stats file`).
@@ -57,26 +59,11 @@ Provide `.nbs` file paths via the command line. For example `./b run <role> reco
 
 - `nbs/Player` module
 
-## Player
-
-### Description
-
-The Playback module enables fast playback of `.nbs` files by emitting messages and skipping idle times between
-them. It adjusts the NUClear clock to ensure the timing remains accurate.
-
-### Usage
-
-Emit `message.nbs.StartPlayback` elsewhere in system to playback NBS file
-
-### Emits
-
-- `message.nbs.FinishedPlayback` Emitted when playback is finished
-
 ## OdometryBenchmark
 
 ### Description
 
-This module benchmarks the performance of the robot's odometry system (specifically `Htw` from `SensorFilter`) by comparing its estimates against ground truth data during NBS file playback. It calculates Root Mean Square Error (RMSE) for translation and rotation errors, as well as individual errors for each degree of freedom (x, y, z, roll, pitch, yaw).
+This module benchmarks the performance of the robot's odometry system (specifically `Htw` from `Sensors`) by comparing its estimates against ground truth data during NBS file playback. It calculates Root Mean Square Error (RMSE) for translation and rotation errors, as well as individual errors for each degree of freedom (x, y, z, roll, pitch, yaw).
 
 ### Usage
 
@@ -110,8 +97,8 @@ IMPORTANT: `systemconfiguration` and `robocup` roles should be built to the robo
 
 The purpose of this module is to provide a simple way to set up the robot for RoboCup games. It has an ncurses inferface that shows the current configuration of the network and certain module configuration files. The user can modify these fields to set up the robot appropriately. Note that this is designed to be run directly on the robot. To revert the affects of this module, rebuild configuration files to the robot and remove
 
-- `system/nugus<number>/etc/systemd/network/30-wifi.network`
-- `system/nugus<number>/etc/wpa_supplicant/wpa_supplicant-<wifi_interface>.conf`
+- `system/<hostname>/etc/systemd/network/30-wifi.network`
+- `system/<hostname>/etc/wpa_supplicant/wpa_supplicant-<wifi_interface>.conf`
 
 Then run `./systemconfiguration` and reboot. Alternatively you can run this module again and revert the values manually.
 
@@ -144,6 +131,12 @@ The interface has the following commands (shift-letter for uppercase)
 This module is used to ensure that the configuration that is running on a device matches what is required.
 
 It goes through several steps to ensure the system is setup correctly
+
+#### Hostname configuration
+
+Since we don't install the OS ourselves for the K1, we have to change the hostname here. This can be done by passing the `--hostname` argument, i.e. `./systemconfiguration --hostname booster1`.
+
+This only needs to be done the first time `systemconfiguration` is ever run, as the hostname change will persist.
 
 #### Filesystem
 
@@ -181,10 +174,6 @@ The system will then go through the list of configuration entries for systems an
 
 If `generate_locale` is set in the `SystemConfiguration.yaml` then `locale-gen` is called to ensure that system locales have been generated
 
-#### Grub
-
-If `generate_grub` is set in the `SystemConfiguration.yaml` then `grub-mkconfig` is called to ensure that the grub configuration file is up to date
-
 #### Message Of The Day
 
 The message of the day file is regenerated to ensure it has the correct contents
@@ -196,10 +185,6 @@ Both the hostname and the hosts file are regenerated with the correct contents
 #### Groups
 
 The user is then added to all groups listed in the `SystemConfiguration.yaml`, if the user is not currently a member of them
-
-#### ZSH
-
-Zprezto is now installed and the appropriate symlinks are made. The users' default shell is also changed to zsh
 
 #### Python
 

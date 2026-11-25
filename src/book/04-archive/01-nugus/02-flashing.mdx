@@ -1,9 +1,9 @@
 ---
-section: Guides
-chapter: Hardware
-title: Flashing a Robot
+section: Archive
+chapter: NUgus
+title: Flashing a NUgus
 description: How to install a new operating system on a robot
-slug: /guides/hardware/flashing
+slug: /archive/nugus/flashing
 authors:
   - Alex Biddulph (@Bidski)
   - Cameron Murtagh (@CMurtagh-LGTM)
@@ -11,13 +11,19 @@ authors:
   - Mithun Sivanesan (@ZeoNyph)
 ---
 
+<Alert type="info">
+
+This page is archived. It documents the NUgus, which NUbots no longer uses as its main platform.
+
+</Alert>
+
 ## Flashing a Robot
 
 To install Arch Linux (our OS of choice) on to a robot perform the following instructions. Make sure you know the robot number for this NUC before beginning.
 
 <!--- ↓↓↓ UPDATE MIRRORS HERE ↓↓↓ -->
 
-1. Find the arch linux archive date in the [mirrorlist for our dockerfile](https://github.com/NUbots/NUbots/blob/main/docker/etc/pacman.d/mirrorlist), go to that date in the [Arch Linux Archive ISO page](https://archive.archlinux.org/iso/), download `archlinux-x86_64.iso` and burn it onto a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
+1. Find the arch linux archive date in the [mirrorlist for our dockerfile](https://github.com/NUbots/NUbots/blob/763bab80c6adda85731b3d4113d77b63acf5b9c2/docker/etc/pacman.d/mirrorlist), go to that date in the [Arch Linux Archive ISO page](https://archive.archlinux.org/iso/), download `archlinux-x86_64.iso` and burn it onto a [USB thumb drive](https://wiki.archlinux.org/index.php/USB_flash_installation_media#In_GNU/Linux) using the following instructions
 
    - Find the USB drive in your system. This will vary from one system to another and choosing the wrong drive will cause irreversible data loss.
      - Use `sudo fdisk -l`, or the `Disks` GUI program to find your USB drive. It will probably be `/dev/sdX`, where `X` is a letter of the alphabet.
@@ -59,7 +65,7 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
      curl -L https://git.io/JeWaF -o ./arch_install.sh
      chmod +x ./arch_install.sh
      ```
-   - The installation script is located in the NUbots repository at [doc/ArchInstall/arch_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch_install.sh)
+   - The installation script is located in the NUbots repository at [doc/ArchInstall/arch_install.sh](https://github.com/NUbots/NUbots/blob/763bab80c6adda85731b3d4113d77b63acf5b9c2/doc/ArchInstall/arch_install.sh)
 
 6. Execute the script and follow the instructions
 
@@ -102,7 +108,7 @@ To install Arch Linux (our OS of choice) on to a robot perform the following ins
 
    This command will end by rebooting the robot. When this happens be sure to remove the USB installation drive from robot so that you may boot into the new system.
 
-   The other two scripts can be found at [doc/ArchInstall/arch-chroot_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-chroot_install.sh) and [doc/ArchInstall/arch-post_install.sh](https://github.com/NUbots/NUbots/blob/main/doc/ArchInstall/arch-post_install.sh)
+   The other two scripts can be found at [doc/ArchInstall/arch-chroot_install.sh](https://github.com/NUbots/NUbots/blob/763bab80c6adda85731b3d4113d77b63acf5b9c2/doc/ArchInstall/arch-chroot_install.sh) and [doc/ArchInstall/arch-post_install.sh](https://github.com/NUbots/NUbots/blob/763bab80c6adda85731b3d4113d77b63acf5b9c2/doc/ArchInstall/arch-post_install.sh)
 
 9. Finally, we need to run the `SystemConfigurator`.
 

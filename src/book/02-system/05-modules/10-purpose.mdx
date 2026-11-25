@@ -25,7 +25,6 @@ Designed to be used by one robot as the main attacker.
 ### Emits
 
 - `message::strategy::WalkToKickBall` when dribbling towards the goal.
-- `message::strategy::TackleBall` when tackling the ball off an opponent.
 
 ### Dependencies
 
@@ -65,7 +64,7 @@ A general soccer field player - not the goalie.
 
 ### Description
 
-In the `READY` mode, the player will dynamically position based on the number of team mates on each side. One robot (closest to the field centre on the left side) will position either inside or just outside of the centre circle for kick off.
+In the `READY` mode, the player will dynamically position based on the number of team mates on each side. One robot (closest to the field center on the left side) will position either inside or just outside of the center circle for kick off.
 
 The FieldPlayer will find the ball if it can't see it, and it will look at the ball if it can.
 
@@ -117,7 +116,7 @@ Play soccer in the goalie position.
 
 In the ready state, walks to the goals.
 
-In the playing state, the goalie will typically stay within the goals unless the ball enters the defending third. In this case, it will either kick it back out (if the closest player) or it will stay between the ball and goals if another player is closer. In penalty states, it will freeze when appropriate and position for attacking if the ball is in the defending third and it is the closest to the ball.
+In the playing state, the goalie will typically stay within the goals unless the ball enters our half. In this case, it will either kick it back out (if the closest player) or it will stay between the ball and goals if another player is closer. In penalty states, it will freeze when appropriate and position for attacking if the ball is in our half and it is the closest to the ball.
 
 If there are no teammates, it will act as a normal FieldPlayer.
 
@@ -132,7 +131,7 @@ Add this module to the role and emit a Goalie Task.
 - `message::strategy::Goalie` a Task requesting to play as a Goalie
 - `message::input::GameState` to get information about the state of the game, including penalties
 - `message::input::GameState::Phase` to get specific information about the current game phase (initial, ready, set, playing, etc).
-- `message::localisation::Ball` for determining if the ball is in the defending third, and act appropriately.
+- `message::localisation::Ball` for determining if the ball is in our half, and act appropriately.
 - `message::localisation::Robots` to determine where team mates are.
 - `message::input::Sensors` to include ourself in possession and distance calculations
 - `message::localisation::Field` to calculate in field space.
@@ -201,92 +200,6 @@ Include this in your role to start the Director tree to run KeyboardWalk.
 - Director
 - ncurses
 
-## PenaltyShootout
-
-### Description
-
-This module handles penalty shootout scenarios in robot soccer. It manages the robot's behaviour during penalty kicks, with different actions depending on whether the robot is taking the penalty shot or acting as a goalkeeper.
-
-When it's the robot's kick off (taking the penalty), the robot will search for the ball, walk to it, and attempt to kick it into the goal. When it's the opponent's kick off (acting as goalkeeper), the robot remains stationary on the goal line and tracks the ball with its head, as per RoboCup rules that prevent goalkeepers from moving off the line during penalty kicks.
-
-### Usage
-
-Include this module in a role and execute during penalty shootout game phases. The module automatically activates when the game state indicates a penalty shootout scenario. Press the middle button after robot placement for penalty taker or goalie to reset localisation.
-
-### Consumes
-
-- `message::input::GameState` to determine if it's our kick off or the opponent's
-- `message::input::GameState::Phase` to specifically check for the playing phase during penalty shootouts
-- `message::localisation::Ball` for ball detection and tracking during penalty execution
-- `message::input::ButtonMiddleDown` and `message::input::ButtonMiddleUp` for localisation reset
-- `message::support::FieldDescription` to calculate penalty mark and goal positions for localisation
-
-### Emits
-
-- `message::behaviour::state::Stability` initial stability state on startup
-- `message::behaviour::state::WalkState` initial walk state on startup
-- `message::skill::Walk` for basic walking and standing
-- `message::skill::Look` for looking forward when idle and tracking the ball
-- `message::planning::LookAround` when the ball cannot be found within the timeout period
-- `message::strategy::WalkToKickBall` when it's our kick off, to approach and kick the ball
-- `message::strategy::LookAtBall` to track the ball with the head
-- `message::strategy::FallRecovery` to handle falls
-- `message::localisation::PenaltyReset` for resetting robot position when middle button is pressed
-- `message::output::Buzzer` for audio feedback when middle button is released
-
-### Dependencies
-
-- Director
-
-## PS3Walk
-
-### Description
-
-Starts the Director graph for manual teleoperation using a PS3 controller.
-
-`PS3Walk` reads joystick events from `/dev/input/js0` and publishes walk, look, kick, and optional script tasks.
-It also applies acceleration limiting to walk commands for smoother velocity changes.
-
-### Usage
-
-Include this module in a role and connect a PS3-compatible joystick device.
-
-Key behaviour:
-
-- `START`: toggle walking on/off
-- Left stick: forward/back + rotation command
-- `SELECT`: toggle head lock/unlock
-- Right stick (when unlocked): control head yaw/pitch
-- Right stick button: toggle script execution on/off
-- Face/DPAD/L1/R1 buttons: run mapped scripts or configured kick actions (when scripts are enabled)
-
-Default script/kick mapping is configured in `PS3Walk.yaml` via `button_scripts`.
-
-#### Configuration
-
-- `maximum_forward_velocity`: max forward velocity command (m/s)
-- `maximum_rotational_velocity`: max rotational velocity command (rad/s)
-- `max_acceleration`: max change in velocity per second
-- `button_scripts`: map button names to script files or kick actions (`LEFT_LEG_KICK`, `RIGHT_LEG_KICK`)
-
-### Consumes
-
-- `extension::Configuration` from `PS3Walk.yaml`
-- Joystick device events from Linux input (`/dev/input/js0`)
-
-### Emits
-
-- `message::behaviour::state::Stability` (initialised to `UNKNOWN` on startup)
-- `message::behaviour::state::WalkState` (initialised to `STOPPED` on startup)
-- `message::skill::Look` (head control)
-- `message::skill::Walk` (teleoperation walk command)
-- `message::skill::Kick` (when `L1`/`R1` map to kick actions)
-- `message::actuation::LimbsSequence` (for configured button scripts)
-
-### Dependencies
-
-- Linux joystick device interface (`/dev/input/js*`)
-
 ## ReadyAttack
 
 An attacking player who can't attack yet, and must get ready.
@@ -320,80 +233,6 @@ Include this module and emit a ReadyAttack task if the robot cannot attack due t
 
 - Director
 - `utility::math::euler::pos_rpy_to_transform` for field position matrix creation.
-
-## Script Runner
-
-### Description
-
-Allows scripts to be run from the command line.
-
-### Usage
-
-ScriptRunner will attempt to run each command line parameter as a script. Once
-the first script has completed it will run the next, and so on until all are
-finished at which point it terminates the program.
-
-### Consumes
-
-- `NUClear::message::CommandLineArguments` containing the list of scripts from the command line
-
-### Emits
-
-- `message::actuation::LimbsSequence` through the Script utility, which populates the requested Script/s into LimbsSequences.
-
-### Dependencies
-
-- Director
-- Script system
-
-## Script Tuner
-
-### Description
-
-Provides a curses interface for creating, editing and tweaking scripts.
-
-### Usage
-
-The program must be started with the name of a script file to edit as its sole
-command line argument. If the file does not exist then a new blank script is
-started and the file will be created when it is saved.
-
-The keyboard controls are as follows:
-
-- Up/Down arrow: Select servo
-- Left/right arrow: Select angle or gain
-- , (comma): Go to previous frame
-- . (period): Go to next frame
-- Enter: Edit selected field
-- Space: Toggle motor lock
-- : (colon): List available commands
-- A: Save script as
-- G: Allows multiple gain edits at once
-- I: Delete current frame
-- J: "jump" to frame without the robot moving
-- M: Mirror script - flip about sagittal plane
-- N: Insert a new frame before the current frame
-- R: Refresh the view
-- S: Save script
-- T: edit frame duration
-- X: Shutdown powerplant/stop binary
-
-### Consumes
-
-- `NUClear::message::CommandLineArguments` containing the name of the script to edit
-- `module::behaviour::tools::LockServo` (internal to this class only) to trigger servo lock event
-- `message::platform::RawSensors` to get position of specific servo when locking it
-
-### Emits
-
-- `message::actuation::ServoTarget` to control currently selected servo when locked or unlocked
-- `message::actuation::ServoTargets` to control all servos when transitioning between frames
-- `message::actuation::LimbsSequence` to play the script
-- `module::behaviour::tools::LockServo` (internal to this class only) to trigger servo lock event
-
-### Dependencies
-
-- libncurses is used for the user interface
 
 ## Soccer
 
@@ -486,6 +325,44 @@ Include this module and emit a Support Director task to have the robot act as a 
 
 - Director
 - `utility::math::euler::pos_rpy_to_transform` to change the position and orientation into a homogenous transformation matrix.
+
+## TeamBehaviourTester
+
+### Description
+
+Drives the FieldPlayer team behaviour logic for the `test/teambehaviour` role without letting it control the
+robot.
+
+Every tick it synthesises a "we are playing a normal game" `GameState` (PLAYING phase, not stopped,
+unpenalised) and requests the `FieldPlayer` purpose. This makes `FieldPlayer` run its real in-game decision
+logic - based on the localised ball, teammates and field - and emit the `Purpose` (the role it would take:
+attack, defend, support, etc.) and, when supporting, a `SupportPosition`. Both are forwarded to NUsight for
+visualisation.
+
+The robot itself is still driven around manually by `KeyboardWalk`. `FieldPlayer`'s own locomotion tasks
+(Attack, Defend, Support, ...) are deliberately left without providers in the role, so they are inert and the
+robot never moves on its own - this module only reports what role the robot _would_ take if it were in a real
+game.
+
+### Usage
+
+Include this module in a role alongside `purpose::FieldPlayer`, `extension::Director`, localisation and
+`purpose::KeyboardWalk`. See `roles/test/teambehaviour.role`.
+
+### Consumes
+
+- `message::input::GameState` and `message::input::GameState::Phase` to trigger the FieldPlayer decision logic.
+
+### Emits
+
+- `message::input::GameState` - a synthetic PLAYING game state.
+- `message::input::GameState::Phase` - the PLAYING phase guard read by FieldPlayer.
+- `message::purpose::FieldPlayer` as a Task to activate the field player purpose.
+
+### Dependencies
+
+- `extension::Director`
+- `module::purpose::FieldPlayer`
 
 ## Tester
 

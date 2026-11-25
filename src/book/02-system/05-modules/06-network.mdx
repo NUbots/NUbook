@@ -96,9 +96,11 @@ In multicast mode you set either an IPv4 or IPv6 multicast address.
 Then provided your network correctly routes multicast packets it will connect to all other NUClearNet nodes that share the same multicast address.
 The default address for this is `239.226.152.162`
 
-### Port
+The base config uses broadcast on the robot subnet. The `nusim/behaviour` and `nusim/localisation` roles override this with the multicast group (`config/bin/nusim/<role>/NUClearNet.yaml`), since under NUSim the stack runs on the same machine as NUsight.
 
-The default port for NUClearNet is 7447.
+#### Port
+
+The default port is 7467, as a Booster process already uses 7447 on the K1.
 You can use different ports if you want to make several distinct NUClearNet networks on the same device.
 
 ### Consumes
@@ -114,7 +116,7 @@ You can use different ports if you want to make several distinct NUClearNet netw
 
 ### Description
 
-This module allows for sending data from NUbots to [PlotJuggler](https://github.com/PlotJuggler/PlotJuggler) for plotting in real time. It does this by listening for `DataPoint` messages (what we use for plotting in NUsight), transforming them to a suitable format and sending them to PlotJuggler via UDP.
+This module allows for sending data from NUbots to [PlotJuggler](https://www.plotjuggler.io) for plotting in real time. It does this by listening for `DataPoint` messages (what we use for plotting in NUsight), transforming them to a suitable format and sending them to PlotJuggler via UDP.
 
 ### Usage
 
@@ -192,13 +194,16 @@ UDP messages that have been emitted by the receiving robot are filtered out.
 
 The information that has been received over UDP is then emitted locally.
 
+Team messages are sent on port `10000 + team_number` with a maximum payload size of 512 bytes. Messages are counted only during
+Ready, Set, and Playing game states toward the 12000 message budget per game.
+
 ### Usage
 
 Add this module to get information about other robots.
 
 ### Consumes
 
-- `message::input::RoboCup` which contains data about the robot, including its state, current position, projected position and its view of the other robots.
+- `message::input::RoboCup` which contains data about the robot, including its state, current position and projected position.
 - `message::behaviour::state::WalkState` which contains data about the robot's current movement.
 - `message::input::GameState` which contains the current state of the game and penalised robots.
 - `message::input::Sensors` which contains data from the robot's sensors, used to calculate its world position.
@@ -213,4 +218,4 @@ Add this module to get information about other robots.
 
 ### Dependencies
 
-- [Eigen Linear Algebra Library](https://libeigen.gitlab.io/eigen/docs-nightly/)
+- [Eigen Linear Algebra Library](https://eigen.tuxfamily.org/index.php)

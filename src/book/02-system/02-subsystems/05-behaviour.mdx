@@ -1,0 +1,111 @@
+---
+section: System
+chapter: Subsystems
+title: Behaviour
+description: Behaviour and how it works in the NUbots codebase.
+slug: /system/subsystems/behaviour
+authors:
+  - Ysobel Sims (@ysims)
+  - Mithun Sivanesan (@ZeoNyph)
+---
+
+The behaviour subsystem includes the purpose, strategy and planning layers of the system. These utilise the Director system and will be made up of Providers and Tasks. The behaviour subsystem is responsible for the high-level decision making of the robot.
+
+## Planning
+
+The planning layer is given a straightforward goal and uses mathematics to determine how to achieve that goal using skills. These skills are generally [motions](/system/subsystems/motion), such as kicking, walking and getting up. Examples of planners are the [walk path planner](#walk-path-planner) and the [kick planner](#kick-planner).
+
+### Walk Path Planner
+
+There are three main walk path planners. Each are Providers and emit `WalkProposal` Tasks, which are smoothed and adjusted for the gait's dead zone before being emitted as a `Walk` Task.
+
+- `WalkTo`: This planner is given a vector position and heading to walk to in robot space. When far from the position, it faces it and walks forward. As it approaches the position, it moves omnidirectionally, decelerates so it stops smoothly, and rotates to reach the given heading. It walks around any robots in its path.
+- `TurnOnSpot`: This planner is given a direction to rotate (clockwise or anti-clockwise) and rotates in that direction on the spot.
+- `PivotAroundPoint`: This planner pivots around a point in front of the robot, such as the ball, so that the ball is still in front of the robot. It is given a direction to rotate (clockwise or anti-clockwise). This is useful for aligning the robot with the ball and a target, ie the ball or a teammate.
+
+### Kick Planner
+
+The kick planner checks if the ball is close enough to kick and if we are aligned towards our target, ie goal or teammate. When these conditions are satisifed, it emits a `Kick` Task.
+
+### Look Planner
+
+Looking does not often need planning functionality behind it, as a vector to look to can be given directly to the skill. We do implement a `LookAround` planner that oscillates between points given from the module's configuration file. This is useful for looking around the field for the ball.
+
+## Strategy
+
+The strategy modules contain a high-level request that utilises environment information and the planning layer to achieve its goal. The `module/strategy` folder contains these strategies. We list some of these with their functions below.
+
+- `StandStill`: emits a zero walk command to stand still.
+- `FindBall`: if the ball is not visible, uses the look and walk planners to find it
+- `WalkToBall`: uses ball localisation to emit a Task to the walk path planner.
+- `LookAtBall`: uses ball localisation to emit a Task to the look planner to look at the ball.
+- `WalkToKickBall`: walks to the ball positioned so that it will move the ball towards the goal.
+- `PositionBehindBall`: walks behind the ball, facing the goal, without touching it. Used for penalty positioning.
+- `FallRecovery`: gets up when the robot has fallen.
+
+## Purpose
+
+The purpose layer determines the overall goal of the robot. For soccer-playing, it contains the logic for soccer positions. These modules form the root of the Director tree.
+
+### Soccer
+
+The Soccer purpose uses GameController information to determine how to act. If it is penalised, then it stands still. If it is not penalised, it plays as either a goalie or a field player. Field players determine whether to attack, defend or support based on their own and their teammates' positions.
+
+- Attack: The robot closest to the ball attempts to score goals by dribbling the ball towards the goal, or tackling it off an opponent.
+- Defend: The robot closest to our goal that isn't attacking stays at the edge of the penalty box, in line with the ball and our goal.
+- Support: Any other robot stays level with the ball, ready to take over as the attacker.
+- Goalie: A defensive position that stays in the goal area unless the ball enters our half, in which case it either kicks the ball away or stays between the ball and the goal.
+
+### Keyboard Walk
+
+The [keyboardwalk module](https://github.com/NUbots/NUbots/tree/main/module/purpose/KeyboardWalk) is a purpose-level module used for **testing** and **demonstration** purposes.
+
+Keyboard walk uses **keyboard inputs** to control the robot. The inputs available are detailed in the following table.
+
+| Command      | Description                                                                      |
+| ------------ | -------------------------------------------------------------------------------- |
+| <kbd>e</kbd> | Toggles the walk on and off. Initially it is off.                                |
+| <kbd>w</kbd> | Adds 0.01 to the walk command x-value. This value is in meters/second.           |
+| <kbd>s</kbd> | Adds -0.01 to the walk command x-value. This value is in meters/second.          |
+| <kbd>a</kbd> | Adds 0.01 to the walk command y-value. This value is in meters/second.           |
+| <kbd>d</kbd> | Adds -0.01 to the walk command y-value. This value is in meters/second.          |
+| <kbd>z</kbd> | Adds 0.1 to the walk command rotational value. This value is in radians/second.  |
+| <kbd>x</kbd> | Adds -0.1 to the walk command rotational value. This value is in radians/second. |
+| <kbd>,</kbd> | Runs the kick with the left foot.                                                |
+| <kbd>.</kbd> | Runs the kick with the right foot.                                               |
+| <kbd>←</kbd> | Head turns to the left.                                                          |
+| <kbd>→</kbd> | Head turns to the right.                                                         |
+| <kbd>↑</kbd> | Head turns upwards.                                                              |
+| <kbd>↓</kbd> | Head turns downwards.                                                            |
+| <kbd>r</kbd> | Resets keyboardwalk. Head rotation is set to 0. Walk command is set to 0.        |
+| <kbd>q</kbd> | Quits keyboardwalk.                                                              |
+
+To use KeyboardWalk, build the [keyboardwalk role](https://github.com/NUbots/NUbots/blob/main/roles/keyboardwalk.role) and run the binary.
+
+## RoboCup Rules
+
+<Alert type="warning">
+
+This section is out of date. It describes the 2024 Humanoid League rules, and needs to be updated to the current rules the K1 competes under.
+
+</Alert>
+
+[Currently up to date with the 2024 competition rules.](https://humanoid.robocup.org/wp-content/uploads/RC-HL-2024-Rules.pdf)
+
+The latest competition rules as well as previous years' rules can be found on the [RoboCup Humanoid League website](https://humanoid.robocup.org/rules/).
+
+### Play-States and Penalty Considerations
+
+There are unique states in the game where the robots need to behave differently to regular play. For example, if the opposing team has been granted a free kick, we might need to stand still, or move out of the way for the duration of the kick.
+
+All free kicks are taken from the place where the offence occurred, except:
+
+- **Indirect free kicks to the attacking team for an offence inside the opponent's penalty area** are taken from the nearest point on the penalty area line which runs parallel to the goal line.
+
+- In the physical competition, **free kicks to the defending team in their goal area may be taken from anywhere in that area**
+
+Until the ball is in play all opponents must remain:
+
+- **0.75m for KidSize and 1.5m for AdultSize from the ball until it is in play**, unless they are on their own goal line between the goalposts
+
+- Outside the penalty area for free kicks inside the opponent's penalty area

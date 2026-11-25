@@ -8,6 +8,7 @@ authors:
   - Ysobel Sims (@ysims)
   - Alex Biddulph (@Bidski)
   - Cameron Murtagh (@CMurtagh-LGTM)
+  - Mithun Sivanesan (@ZeoNyph)
 ---
 
 The NUbots codebase uses specific mathematical concepts and notation that are relevant to the field of robotics. In the codebase there are many uses of vectors, matrices, spaces, and transforms between spaces. A specific notation is used for these transforms for better readability. This page details how these concepts and notations are implemented in the codebase.
@@ -370,7 +371,7 @@ Given a set of data points, often we want to find a function that contains all t
 
 ### Splines
 
-Rather than have one global polynomial, it can be useful to use piecewise polynomials, connected at their edges. These so-called [**splines**](<https://en.wikipedia.org/wiki/Spline_(mathematics)>) are all defined locally around the interpolation points, and can avoid Runge's phenomenon. Splines are used in the [Quintic Walk Engine](/system/subsystems/motion#walk-engine).
+Rather than have one global polynomial, it can be useful to use piecewise polynomials, connected at their edges. These so-called [**splines**](<https://en.wikipedia.org/wiki/Spline_(mathematics)>) are all defined locally around the interpolation points, and can avoid Runge's phenomenon.
 
 ![2D graph plot of a piecewise polynomial function that passes through specific highlighted points.](./images/maths-spline.svg 'Spline. Interpolation points are in blue.')
 

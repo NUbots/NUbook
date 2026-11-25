@@ -1,0 +1,221 @@
+---
+section: System
+chapter: Modules
+title: Skill
+description: Documentation for each skill module in the main NUbots codebase
+slug: /system/modules/skill/
+---
+
+## Getup
+
+### Description
+
+A Behaviour module that will run the appropriate getup script for the robot. First a StandStill task is emitted, then the getup task is delayed so that the robot can settle into it's final position to improve side detection accuracy. Additionally, if after the delay the robot detects that it is on its left/right side, another delay will be emitted.
+
+### Usage
+
+Include this module to allow the robot to get up after it has fallen over.
+
+### Consumes
+
+- `message::skill::GetUp` as a Task to trigger execution
+- `message::input::Sensors` to determine which get up script to execute
+
+### Emits
+
+- `message::behaviour::state::Stability` to update the stability when starting and finishing getting up
+- `message::actuation::BodySequence` as a Task containing the script sequence for getting up
+
+### Dependencies
+
+- Director
+- The `Script` extension to convert scripts into BodySequences
+
+## GPT
+
+### Description
+
+A module that integrates with OpenAI's GPT-3.5 model to send text prompts and receive generated responses.
+
+### Usage
+
+Include this module to allow your system to interact with OpenAI's GPT for natural language processing tasks.
+
+### Consumes
+
+- `message::skill::GPTChatRequest`: A request containing text that needs to be processed by GPT.
+
+### Emits
+
+- `message::skill::Say`: A Task requesting to speak using the output of the GPT model based on the input request.
+
+### Dependencies
+
+- Director
+- **nlohmann::json**: For JSON data serialisation and deserialisation.
+- **utility::openai::openai**: A utility to interface with the OpenAI API.
+
+## KickWalk
+
+### Description
+
+Allows the robot to perform kicks while walking. This module emits a modified walk command, making the walk engine take a single large step when a kick task is emitted. These kicks integrate seamlessly with the robot's regular walk.
+
+### Usage
+
+Include this module to allow the robot to kick while walking. This is useful for dynamic soccer gameplay where the robot needs to kick the ball while maintaining movement.
+
+### Consumes
+
+- `message::skill::Kick` Task requesting the robot to kick
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target and a boolean indicating whether to kick.
+
+### Emits
+
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target and a boolean indicating whether to kick.
+
+### Dependencies
+
+- Director
+
+## Look
+
+### Description
+
+Converts head look-at commands into head rotation commands for the Booster Robotics SDK, to move the K1's
+head using its built-in head control.
+
+Takes the look direction from a `message::skill::Look` task, optionally smooths it with an exponential
+filter, converts it into head yaw/pitch angles, and emits a `message::booster::BoosterHeadRot` for the
+Booster HardwareIO to forward to the SDK.
+
+### Usage
+
+Include this module to allow the robot to look in a given direction on the K1. Use in place of
+`skill::Look`, which instead drives the head via the NUbots servo/kinematics stack.
+
+### Consumes
+
+- `message::skill::Look` A Task requesting to look in a direction, containing the vector `rPCt` (camera to
+  target, in torso space) and a `smooth` flag.
+
+### Emits
+
+- `message::booster::BoosterHeadRot` containing the desired head yaw/pitch rotation, consumed by the
+  Booster HardwareIO.
+
+### Dependencies
+
+- Director
+- Eigen
+
+## Say
+
+### Description
+
+Module that enables the robot to vocalise specified text using a text-to-speech tool and optionally perform a nodding gesture to indicate speaking.
+
+### Usage
+
+Include this module whenever the robot needs to vocalise or acknowledge messages via speech-like actions.
+
+### Consumes
+
+- `message::skill::Say`: A Task requesting to vocalise a text string. Contains the text to be spoken and an optional nod gesture request.
+
+### Emits
+
+- `message::actuation::HeadSequence`: A Task to instruct the robot's head to perform specific sequences, such as a nodding gesture.
+
+### Dependencies
+
+- Director
+- **mimic3**: External python based command-line text-to-speech tool.
+- **aplay**: Command-line sound player for Linux.
+
+## SimK1Walk
+
+Runs the mujoco_playground K1 joystick walk policy (79-obs / 22-action ONNX) on the
+robot side at 50 Hz and streams the resulting joint position targets to
+`platform::Booster::HardwareIO` as `message::booster::BoosterLowCmd`, which forwards
+them to the Booster SDK `rt/joint_ctrl` topic (honoured in CUSTOM mode).
+
+It is the walk used by the `nusim/*` roles: NUSim ignores the firmware `Move()` RPC that
+`skill::Walk` drives, so in sim locomotion inference lives in the NUbots stack and the
+simulator only tracks servo joint commands. The robot roles use `skill::Walk`.
+
+### Consumes
+
+- `message::skill::Walk` (Director task) with the target velocity
+- `message::platform::RawSensors` for joint feedback, gyro and the IMU attitude
+- `message::booster::BoosterHeadRot` for the head targets (the policy does not own the head)
+- `message::booster::BoosterModeState` (cached, optional) — logged with every observation
+  so a capture can be segmented by the mode the robot was actually in
+
+### Emits
+
+- `message::booster::BoosterLowCmd` (22 motors, SDK JointIndexK1 serial order)
+- `message::booster::BoosterMode` (CUSTOM) when the walk task starts
+- `message::behaviour::state::WalkState`
+
+### Contract
+
+The observation/action layout is pinned in NUSim `docs/OBS_ACTION_CONTRACT.md`.
+
+Two things are instrumented for hardware bring-up:
+
+- At `log_level: TRACE` every tick emits `WALKOBS <tick> mode=<K1Mode> t=<s> dt=<s>` plus
+  all 79 observations.
+- Commanded joint positions are clamped to `joint_lower`/`joint_upper` (the trained model's
+  ranges) and any clamp is logged at WARN
+
+## VisualKick
+
+### Description
+
+Sends a command to the Booster Robotics SDK to initiate a visual kick, along with a kick
+reference to aim it. Starting the visual kick switches the robot into a mode that accepts kick
+references on the SDK's `rt/kick_ball` topic, so the reference is sent immediately after the
+start command.
+
+### Usage
+
+Emit a Kick message when wanting to kick.
+
+### Consumes
+
+- `message::skill::Kick` a request to kick. `direction` sets the kick direction (robot-relative) and power (magnitude); `target` sets the field-space point to aim at; `leg` is unused as the SDK chooses its own leg
+- `message::input::Sensors` used with `Field` to compute the robot's field-space pose for the kick reference
+- `message::localisation::Field` used with `Sensors` to compute the robot's field-space pose for the kick reference
+
+### Emits
+
+- `message::booster::BoosterVisualKick` which the Booster `HardwareIO` forwards to the SDK via `booster_client.VisualKick(start, version)`.
+- `message::booster::BoosterKick` which the Booster `HardwareIO` publishes to the SDK's `rt/kick_ball` topic, carrying the robot's field-space pose and the goal target to aim at.
+
+### Dependencies
+
+- Director
+
+## Walk
+
+### Description
+
+Routes walk calls to the Booster Robotics SDK to use the K1's built-in locomotion.
+
+### Usage
+
+Include this module to allow the robot to walk.
+
+### Consumes
+
+- `message::skill::Walk` A Task requesting to walk, containing a vector with the desired velocity target.
+
+### Emits
+
+- `message::behaviour::state::Stability` to indicate when the robot is walking (dynamically stable) and standing.
+
+### Dependencies
+
+- Director
+- Eigen

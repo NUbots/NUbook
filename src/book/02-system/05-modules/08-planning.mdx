@@ -1,0 +1,154 @@
+---
+section: System
+chapter: Modules
+title: Planning
+description: Documentation for each planning module in the main NUbots codebase
+slug: /system/modules/planning/
+---
+
+## GetUpPlanner
+
+### Description
+
+The GetUpPlanner module is used to automatically trigger a get up when the robot has fallen over.
+It monitors the angle of the robot with the world z axis to see when it falls past a set threshold angle (the "fallen_angle"), and then triggers a getup action.
+
+### Usage
+
+Emit a `message::plan::GetUpWhenFallen` as a Task.
+Make sure that it has higher challenge priority than other recovery related tasks such as falling relax!
+If relax has higher priority it may trigger mid getup
+
+### Consumes
+
+- `message::input::Sensors` to determine when the robot is in an appropriate state to get up
+- `message::plan::GetUpWhenFallen` as a Task to activate this module to watch for when to run a getup
+
+### Emits
+
+- `message::skill::GetUp` as a task to trigger a get up action when appropriate
+
+### Dependencies
+
+- Director
+- A module that can provide GetUp
+
+## PlanKick
+
+### Description
+
+The module plans when to kick the ball, using information about the position of the ball relative to the robot and where the robot would like to kick to. It only uses recent ball measurements.
+
+It checks
+
+1. If the robot is close enough to the ball.
+2. If the robot is facing the ball.
+3. If the robot is facing the target to kick to.
+
+If these checks pass, it will emit a Kick Task.
+
+There are configuration values that allow some flexibility with this method.
+
+1. The third check can be skipped with the `align` configuration value.
+
+### Usage
+
+Emit a KickTo Task with the position to kick to. The contents of the message (position to kick to) is not important if the `align` configuration value is set to `false`. The reaction requires localisation ball measurements.
+
+### Consumes
+
+- `message::planning::KickTo` a signal to kick the ball when conditions are met, with the location to kick the ball to in the message.
+- `message::localisation::Ball` for information on where the ball is.
+- `message::input::Sensors` for the robot's pose, used to compute robot-relative ball position and kick direction.
+- `message::localisation::Field` for the robot's field-space pose, used to compute the kick direction.
+- `message::support::FieldDescription` (at startup) to compute the field-space goal target position (offset shared with WalkToBall's config).
+
+### Emits
+
+- `message::skill::Kick` a signal to execute a kick movement: `target` (the field-space point behind the goal line) and `direction` (a robot-relative unit vector from the ball toward that target).
+
+### Dependencies
+
+- Director
+- The reaction will not run without localisation ball messages.
+
+## PlanLook
+
+### Description
+
+Plans how to look around. Follows a search pattern to find objects.
+
+### Usage
+
+Add this module to your role to make the robot look around when requested.
+
+### Consumes
+
+- `message::planning::LookAround` a Task requesting to run the search pattern to look around
+
+### Emits
+
+- `message::skill::Look` a Task requesting to look in a direction
+- `message::planning::LookAround` a Task requesting to run the search pattern to look around the environment
+
+### Dependencies
+
+- Director
+
+## PlanWalkPath
+
+### Description
+
+Plans walk velocity commands for the Booster K1, whose gait is the SDK's built-in closed-loop RL
+locomotion policy (commands flow PlanWalkPath → `skill::Walk` → Walk → HardwareIO `Move(vx, vy, vtheta)`).
+The structure follows the planners other K1 teams run (Booster robocup_demo, HTWK Firmware-Salvador).
+
+Three types of walk path planning are in this module:
+
+1. Walking towards a target pose, using a two-regime proportional controller:
+   - **Far** (beyond `max_align_radius`): face the target and drive forward only — the RL gait is
+     fastest and most stable walking forward. Forward speed is proportional to distance and gated by
+     the heading error, so the robot rotates on the spot when badly misaligned and slows while turning.
+   - **Near**: omnidirectional proportional approach, decelerating to zero at the target and blending
+     the commanded heading from "face the target" to the final desired heading.
+     It avoids robots by finding the first robot that intersects with the path, grouping it with any
+     close by robots, then walking to a spot to the left or right of the group. Once it's cleared the
+     group, it continues on to either avoid another robot or walk straight to the target.
+2. Turn on the spot. Without moving translationally, turn on the spot. Supports both directions.
+3. Pivot around a point (the ball). Orbits a point `pivot_radius` ahead while facing it, using the
+   orbit kinematics `vy = -vtheta * pivot_radius`. Supports both directions.
+
+All three emit a `WalkProposal` Task, which this module re-consumes at a fixed rate to apply
+per-axis exponential smoothing (`tau`) followed by dead-zone compensation: the RL policy does not
+respond to very small commands, so nonzero commands are bumped up to `min_velocity`, while commands
+below `zero_tolerance` are snapped to zero. The result is emitted as the `skill::Walk` Task.
+
+The smoother is reset when the robot recovers from a fall (Stability transition to DYNAMIC) so a
+stale command cannot produce a velocity spike on resume.
+
+### Usage
+
+Include this module in the role and emit the provide Task for either reaction. The reactions cannot
+run at the same time, since they all Need the Walk.
+
+### Consumes
+
+- `message::planning::WalkTo` Task requesting to walk towards a given pose in robot space.
+- `message::planning::TurnOnSpot` Task requesting to turn on the spot.
+- `message::planning::PivotAroundPoint` Task requesting to rotate around the ball, to align with a direction.
+- `message::planning::WalkProposal` its own intermediate velocity proposal, re-consumed for smoothing and dead-zone compensation.
+- `message::localisation::Robots` to find any robots to avoid when path planning to a target.
+- `message::input::Sensors` to transform robot points into (our own) robot space.
+- `message::behaviour::state::Stability` to reset the command smoother after a fall.
+
+### Emits
+
+- `message::planning::WalkProposal` Task carrying the raw planned velocity before smoothing.
+- `message::skill::Walk` Task requesting to run the walk, giving the xy velocity (m/s) and rotational velocity (radians/s).
+- `message::planning::WalkToDebug` and NUsight DataPoints ("Walk Proposal", "Smoothed Walk Command", "Walk Smoothing Difference", "Walk Command") for visualisation.
+
+### Dependencies
+
+- Director
+- The Walk skill (or another consumer of `skill::Walk`)
+- Mathematics intersection utility

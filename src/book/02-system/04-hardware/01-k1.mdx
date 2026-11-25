@@ -1,0 +1,66 @@
+---
+section: System
+chapter: Hardware
+title: K1 Specification
+description: Specification and overview for the Booster K1 robot used by NUbots.
+slug: /system/hardware/k1
+authors:
+  - Mithun Sivanesan (@ZeoNyph)
+---
+
+The [Booster K1](https://www.booster.tech/) is a kid-size humanoid robot made by Booster Robotics, and is the robot NUbots currently competes with. The previous robot, the NUgus, is documented in the [archive](/archive/nugus/specification).
+
+Unlike the NUgus, the K1 ships with its own firmware, **BoosterOS**, which handles low-level control, walking and getting up. Our code talks to BoosterOS through the [Booster Robotics SDK](https://github.com/BoosterRobotics/booster_robotics_sdk). See the [Motion](/system/subsystems/motion) page for how this fits together.
+
+## Overview
+
+| Specification      | Value                                     |
+| ------------------ | ----------------------------------------- |
+| Height             | ~95 cm                                    |
+| Weight             | ~19.5 kg                                  |
+| Degrees of freedom | 22 (6 per leg, 4 per arm, 2 in the head)  |
+| Max. peak torque   | 60 N·m                                    |
+| Joint encoders     | Dual encoders                             |
+| Battery            | 5 Ah, ~80 min runtime walking at 0.4 m/s  |
+| Computer           | NVIDIA Jetson Orin NX                     |
+| Operating system   | Ubuntu 22.04                              |
+| Camera             | Head-mounted stereo depth camera          |
+| IMU                | 9-axis                                    |
+| Audio              | Circular 6-microphone array and a speaker |
+| Networking         | Gigabit Ethernet, Wi-Fi 6, Bluetooth 5.2  |
+| Buttons            | 1 power button and 3 interaction buttons  |
+
+The specifications are from Booster's datasheet, apart from the computer and operating system, which are those of the team's robots.
+
+## Joints
+
+The joint limits below are from Booster's official K1 model, [`K1_22dof.urdf`](https://github.com/BoosterRobotics/booster_assets/blob/38a0ae84b17743a8aa21511f69ed38e7d22d1664/robots/K1/K1_22dof.urdf) in the `booster_assets` repository. Limits are given for the left side; the right side's hip roll and elbow yaw ranges are mirrored.
+
+| Joint          | Range (°)   | Max. effort (N·m) | Max. velocity (rad/s) |
+| -------------- | ----------- | ----------------- | --------------------- |
+| Head yaw       | -58 to 58   | 6                 | 7.85                  |
+| Head pitch     | -18 to 45   | 6                 | 7.85                  |
+| Shoulder pitch | -168 to 69  | 14                | 33.51                 |
+| Shoulder roll  | -94 to 93   | 14                | 33.51                 |
+| Elbow pitch    | -108 to 108 | 14                | 33.51                 |
+| Elbow yaw      | -128 to 47  | 14                | 33.51                 |
+| Hip pitch      | -169 to 128 | 68                | 14.66                 |
+| Hip roll       | -21 to 88   | 43                | 12.57                 |
+| Hip yaw        | -58 to 58   | 38.3              | 17.59                 |
+| Knee pitch     | 0 to 133    | 112               | 12.57                 |
+| Ankle pitch    | -50 to 20   | 38.3              | 17.59                 |
+| Ankle roll     | -20 to 20   | 38.3              | 17.59                 |
+
+## Camera
+
+The K1's head has a stereo depth camera. We only use one of its RGB streams, which BoosterOS publishes over DDS. See the [Input](/system/subsystems/input) page for details.
+
+## Computing
+
+The K1 used by the team runs an NVIDIA Jetson Orin NX. Code for it is built with the `orinnx` target; see the [Build System](/system/foundations/build-system) page. The Orin NX's GPU runs the [YOLO](/system/subsystems/vision) vision model using TensorRT.
+
+When connecting to the robot, the username is `booster`.
+
+## Buttons
+
+Two of the interaction buttons, left and middle, are read by the [Sensors module](https://github.com/NUbots/NUbots/tree/main/module/input/Sensors), which emits button up and down messages that behaviours can use.
